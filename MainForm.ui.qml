@@ -6,19 +6,11 @@ Rectangle {
 
     width: 360
     height: 360
+    property alias image: image
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-
-        Image {
-            id: image
-            x: 79
-            y: 110
-            width: 100
-            height: 100
-            source: "image://cvimg/yellow"
-        }
     }
 
     TextEdit {
@@ -34,5 +26,14 @@ Rectangle {
             color: "transparent"
             border.width: 1
         }
+    }
+
+    Image {
+        id: image
+        x: 32
+        y: 94
+        width: 302
+        height: 236
+        source: "image://cvimg/red"
     }
 }

@@ -7,17 +7,17 @@ Window {
     height: 480
     title: qsTr("Hello World")
 
-    Image { source: "image://cvimg/red" }
-
     MainForm {
+
         anchors.fill: parent
         mouseArea.onClicked: {
             console.log(qsTr('Clicked on background. Text: "' + textEdit.text + '"'))
         }
+        Timer {
+            interval: 10; running: true; repeat: true
+            onTriggered: {parent.image.cache=0;parent.image.source="";parent.image.source="image://cvimg/red"}
+        }
     }
 
-    Timer {
-        interval: 500; running: true; repeat: true
-        onTriggered: ;//        }//backend.updateImage()//console.log(Date().toString())
-    }
+
 }
