@@ -1,34 +1,25 @@
 #ifndef BACKEND_H
 #define BACKEND_H
 
-#include <QObject>
+#include <QQuickImageProvider>
 #include <QString>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 using namespace cv;
 
-class BackEnd : public QObject
+class BackEnd : public QQuickImageProvider
 {
-    Q_OBJECT
-    Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
-
 public:
-    explicit BackEnd(QObject *parent = nullptr);
+    BackEnd();
 
-    int setupCV();
+    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
-    QString userName();
-    void setUserName(const QString &userName);
-
-public slots:
-    void updateImage();
-
-signals:
-    void userNameChanged();
+    void setupCV();
 
 private:
+    bool is_initialized = false;
+    QPixmap buf;
     VideoCapture* stream1 = NULL;
-    QString m_userName;
 };
 
 #endif // BACKEND_H

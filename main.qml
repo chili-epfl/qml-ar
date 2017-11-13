@@ -1,6 +1,5 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
-import io.qt.opencv_backend 1.0
 
 Window {
     visible: true
@@ -8,9 +7,7 @@ Window {
     height: 480
     title: qsTr("Hello World")
 
-    BackEnd {
-        id: backend
-    }
+    Image { source: "image://cvimg/red" }
 
     MainForm {
         anchors.fill: parent
@@ -21,6 +18,6 @@ Window {
 
     Timer {
         interval: 500; running: true; repeat: true
-        onTriggered: backend.updateImage()//console.log(Date().toString())
+        onTriggered: ;//        }//backend.updateImage()//console.log(Date().toString())
     }
 }

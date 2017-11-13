@@ -10,6 +10,15 @@ Rectangle {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
+
+        Image {
+            id: image
+            x: 79
+            y: 110
+            width: 100
+            height: 100
+            source: "image://cvimg/yellow"
+        }
     }
 
     TextEdit {
