@@ -1,6 +1,55 @@
 QT += quick
 CONFIG += c++11
-LIBS += -lopencv_stitching -lopencv_superres -lopencv_videostab -lopencv_photo -lopencv_aruco -lopencv_bgsegm -lopencv_bioinspired -lopencv_ccalib -lopencv_dpm -lopencv_face -lopencv_freetype -lopencv_fuzzy -lopencv_img_hash -lopencv_line_descriptor -lopencv_optflow -lopencv_reg -lopencv_rgbd -lopencv_saliency -lopencv_stereo -lopencv_structured_light -lopencv_phase_unwrapping -lopencv_surface_matching -lopencv_tracking -lopencv_datasets -lopencv_text -lopencv_dnn -lopencv_plot -lopencv_xfeatures2d -lopencv_shape -lopencv_video -lopencv_ml -lopencv_ximgproc -lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio -lopencv_flann -lopencv_xobjdetect -lopencv_imgcodecs -lopencv_objdetect -lopencv_xphoto -lopencv_imgproc -lopencv_core
+
+linux:!android {
+    # using pkg-config
+    QT_CONFIG -= no-pkg-config
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv
+}
+
+android {
+    # full path to OpenCV Android SDK
+    OPENCV_PATH = /home/opt/opencv-android
+
+    INCLUDEPATH += $${OPENCV_PATH}/sdk/native/jni/include/
+
+    LIBS += -L$${OPENCV_PATH}/sdk/native/libs/armeabi-v7a \
+            -Wl,--start-group\
+            -lopencv_calib3d\
+            -lopencv_core\
+            -lopencv_dnn\
+            -lopencv_features2d\
+            -lopencv_flann\
+            -lopencv_highgui\
+            -lopencv_imgcodecs\
+            -lopencv_imgproc\
+            -lopencv_ml\
+            -lopencv_objdetect\
+            -lopencv_photo\
+            -lopencv_shape\
+            -lopencv_stitching\
+            -lopencv_superres\
+            -lopencv_video\
+            -lopencv_videoio\
+            -lopencv_videostab\
+            -Wl,--end-group\
+
+
+    LIBS += -L$${OPENCV_PATH}/sdk/native/3rdparty/libs/armeabi-v7a \
+            -Wl,--start-group\
+            -lcpufeatures\
+            -lIlmImf\
+            -llibjasper\
+            -llibjpeg\
+            -llibpng\
+            -llibprotobuf\
+            -llibtiff\
+            -llibwebp\
+            -ltbb\
+            -ltegra_hal\
+            -Wl,--end-group\
+}
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings

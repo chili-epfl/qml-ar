@@ -1,2 +1,10 @@
+*.o
+Makefile
+.qmake.stash
+*.json
+app_process
+*.so
+android-build
+qrc_qml.cpp
 *.swp
 *.pro.user
