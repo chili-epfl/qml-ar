@@ -5,14 +5,11 @@ Window {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("Qt + OpenCV test")
 
     MainForm {
 
         anchors.fill: parent
-        mouseArea.onClicked: {
-            console.log(qsTr('Clicked on background. Text: "' + textEdit.text + '"'))
-        }
         Timer {
             interval: 20; running: true; repeat: true
             onTriggered: {parent.image.cache=0;parent.image.source="";parent.image.source="image://camera/raw"}

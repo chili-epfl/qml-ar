@@ -1,3 +1,5 @@
+TARGET=qtcvtest
+
 QT += quick
 QT += multimedia
 CONFIG += c++11
