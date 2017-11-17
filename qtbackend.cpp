@@ -13,7 +13,15 @@ QtCameraBackEnd::QtCameraBackEnd() : QQuickImageProvider(QQuickImageProvider::Pi
 
 QPixmap QtCameraBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    return QPixmap::fromImage(buf);
+    if(id == "raw")
+    {
+        return QPixmap::fromImage(buf);
+    }
+}
+
+QtCameraBackEnd::~QtCameraBackEnd() {
+    delete camera;
+    delete frameGrabber;
 }
 
 void QtCameraBackEnd::handleFrame(QImage img)

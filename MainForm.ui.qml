@@ -34,6 +34,6 @@ Rectangle {
         y: 94
         width: 302
         height: 236
-        source: "image://cvimg/red"
+        source: ""
     }
 }

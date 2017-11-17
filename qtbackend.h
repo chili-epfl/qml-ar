@@ -6,7 +6,7 @@
 #include <QtMultimedia/QCamera>
 #include "cameraframegrabber.h"
 
-class QtCameraBackEnd : public QQuickImageProvider, QObject
+class QtCameraBackEnd : public QObject, public QQuickImageProvider
 { Q_OBJECT
 public:
     QtCameraBackEnd();

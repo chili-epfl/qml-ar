@@ -14,8 +14,8 @@ Window {
             console.log(qsTr('Clicked on background. Text: "' + textEdit.text + '"'))
         }
         Timer {
-            interval: 10; running: true; repeat: true
-            onTriggered: {parent.image.cache=0;parent.image.source="";parent.image.source="image://cvimg/red"}
+            interval: 20; running: true; repeat: true
+            onTriggered: {parent.image.cache=0;parent.image.source="";parent.image.source="image://camera/raw"}
         }
     }
 
