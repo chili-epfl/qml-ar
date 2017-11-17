@@ -1,5 +1,5 @@
-#ifndef BACKEND_H
-#define BACKEND_H
+#ifndef CV_BACKEND_H
+#define CV_BACKEND_H
 
 #include <QQuickImageProvider>
 #include <QString>
@@ -7,10 +7,10 @@
 #include <opencv2/imgproc/imgproc.hpp>
 using namespace cv;
 
-class BackEnd : public QQuickImageProvider
+class OpenCVCameraBackEnd : public QQuickImageProvider
 {
 public:
-    BackEnd();
+    OpenCVCameraBackEnd();
 
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
@@ -22,4 +22,4 @@ private:
     VideoCapture* stream1 = NULL;
 };
 
-#endif // BACKEND_H
+#endif // CV_BACKEND_H

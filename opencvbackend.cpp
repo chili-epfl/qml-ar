@@ -2,12 +2,12 @@
 #include "opencvbackend.h"
 using namespace std;
 
-BackEnd::BackEnd()
+OpenCVCameraBackEnd::OpenCVCameraBackEnd()
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
 }
 
-QPixmap BackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+QPixmap OpenCVCameraBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
     if(!is_initialized)
         setupCV();
@@ -19,7 +19,7 @@ QPixmap BackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requ
     return(pm);
 }
 
-void BackEnd::setupCV() {
+void OpenCVCameraBackEnd::setupCV() {
     stream1 = new VideoCapture(0);   //0 is the id of video device.0 if you have only one camera.
 
     if (!stream1->isOpened()) { //check if video device has been initialised

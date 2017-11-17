@@ -1,4 +1,5 @@
 QT += quick
+QT += multimedia
 CONFIG += c++11
 
 linux:!android {
@@ -63,7 +64,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-    opencvbackend.cpp
+    opencvbackend.cpp \
+    qtbackend.cpp \
+    cameraframegrabber.cpp
 
 RESOURCES += qml.qrc
 
@@ -79,4 +82,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    opencvbackend.h
+    opencvbackend.h \
+    qtbackend.h \
+    cameraframegrabber.h
