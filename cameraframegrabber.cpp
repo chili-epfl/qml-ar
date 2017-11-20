@@ -1,4 +1,7 @@
 #include "cameraframegrabber.h"
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
+#include <QOpenGLFramebufferObject>
 
 CameraFrameGrabber::CameraFrameGrabber(QObject *parent) :
     QAbstractVideoSurface(parent)
@@ -45,16 +48,57 @@ QList<QVideoFrame::PixelFormat> CameraFrameGrabber::supportedPixelFormats(QAbstr
 
 bool CameraFrameGrabber::present(const QVideoFrame &frame)
 {
-    if (frame.isValid()) {
-        QVideoFrame cloneFrame(frame);
-        cloneFrame.map(QAbstractVideoBuffer::ReadOnly);
-        const QImage image(cloneFrame.bits(),
-                           cloneFrame.width(),
-                           cloneFrame.height(),
-                           QVideoFrame::imageFormatFromPixelFormat(cloneFrame .pixelFormat()));
-        emit frameAvailable(image);
-        cloneFrame.unmap();
+    if (frame.handleType() == QAbstractVideoBuffer::GLTextureHandle) {
+        // Slow and inefficient path. Ideally what's on the GPU should remain on the GPU, instead of readbacks like this.
+        QImage img(frame.width(), frame.height(), QImage::Format_RGBA8888);
+        QOpenGLContext *ctx = new QOpenGLContext(this);
+        ctx->create();
+        //ctx->makeCurrent((QObject*) this);
+
+        GLuint textureId = frame.handle().toUInt();
+        QOpenGLFunctions *f = ctx->functions();
+        GLuint fbo;
+        f->glGenFramebuffers(1, &fbo);
+        GLuint prevFbo;
+        f->glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *) &prevFbo);
+        f->glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        f->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0);
+        f->glReadPixels(0, 0, frame.width(), frame.height(), GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
+        f->glBindFramebuffer(GL_FRAMEBUFFER, prevFbo);
+        emit frameAvailable(img);
         return true;
     }
+    else
+    {
+        if (!frame.isValid())
+        {
+            qWarning("imageFromVideoFrame: No mapped image data available for read");
+            return false;
+        }
+
+        QImage::Format fmt = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
+        if (fmt != QImage::Format_Invalid)
+        {
+            QVideoFrame cloneFrame(frame);
+            cloneFrame.map(QAbstractVideoBuffer::ReadOnly);
+            QImage image = VideoFrameToImage(cloneFrame);
+            emit frameAvailable(image);
+            cloneFrame.unmap();
+            return true;
+        }
+
+        qWarning("imageFromVideoFrame: No matching QImage format");
+        return false;
+    }
+
     return false;
+}
+
+QImage CameraFrameGrabber::VideoFrameToImage(QVideoFrame &cloneFrame)
+{
+    QImage image(cloneFrame.bits(),
+                       cloneFrame.width(),
+                       cloneFrame.height(),
+                       QVideoFrame::imageFormatFromPixelFormat(cloneFrame.pixelFormat()));
+    return(image);
 }

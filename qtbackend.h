@@ -4,6 +4,7 @@
 #include <QQuickImageProvider>
 #include <QString>
 #include <QtMultimedia/QCamera>
+#include <QtMultimedia/QVideoProbe>
 #include "cameraframegrabber.h"
 
 class QtCameraBackEnd : public QObject, public QQuickImageProvider
@@ -19,6 +20,7 @@ private:
     QImage buf;
     QCamera* camera;
     CameraFrameGrabber* frameGrabber;
+    QVideoProbe* probe;
 public slots:
     void handleFrame(QImage img);
 };

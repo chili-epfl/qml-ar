@@ -1,8 +1,9 @@
 TARGET=qtcvtest
 
 QT += quick
-QT += multimedia
+QT += multimedia opengl
 CONFIG += c++11
+QT += multimediawidgets
 
 linux:!android {
     # using pkg-config
@@ -68,7 +69,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     opencvbackend.cpp \
     qtbackend.cpp \
-    cameraframegrabber.cpp
+    cameraframegrabber.cpp \
+    voidviewfinder.cpp
 
 RESOURCES += qml.qrc
 
@@ -86,4 +88,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     opencvbackend.h \
     qtbackend.h \
-    cameraframegrabber.h
+    cameraframegrabber.h \
+    voidviewfinder.h
