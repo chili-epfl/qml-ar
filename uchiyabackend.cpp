@@ -1,16 +1,47 @@
 #include "uchiyabackend.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
-UchiyaBackEnd::UchiyaBackEnd() : QtCameraBackEnd()
+using namespace cv;
+
+UchiyaBackEnd::UchiyaBackEnd() : QtCameraBackEnd(0)
 {
-    md = new UchiyaMarkerDetection(camera->viewfinderSettings().resolution().height(), camera->viewfinderSettings().resolution().width());
+    md = NULL;
 }
 
-QImage UchiyaBackEnd::processUchiya(QImage temp)
+QImage UchiyaBackEnd::processUchiya(QImage src)
 {
-    cv::Mat mat(temp.height(),temp.width(),CV_8UC3,(uchar*)temp.bits(),temp.bytesPerLine());
-    IplImage ipltemp = mat;
-    cvCopy(&ipltemp, (IplImage*) md->getimg());
-    return temp;
+    if(src.height() > 0)
+    {
+        QImage temp = src.rgbSwapped();
+        if(md == NULL)
+            md = new UchiyaMarkerDetection(temp.width(), temp.height());
+        cv::Mat mat(temp.width(),temp.height(),CV_8UC3,(uchar*)temp.bits(),temp.bytesPerLine());
+        IplImage* src_ipl = new IplImage(mat);
+        IplImage* dst_ipl = (IplImage*) md->getimg();
+
+
+        QString s;
+        QTextStream ss(&s);
+        for(int i = 0; i < 10; i++)
+            ss << (int) ((char*) src_ipl->imageData)[i] << " ";
+
+        ss.flush();
+
+        qDebug() << "img data " << s;
+
+        cvCopy(src_ipl, dst_ipl);
+        //md->process();
+
+        cv::Mat res = cv::cvarrToMat(dst_ipl);
+        qDebug() << dst_ipl->height << dst_ipl->width;
+
+        namedWindow( "Display window", WINDOW_AUTOSIZE );
+        imshow( "Display window", res );
+        //return QImage(res.data, res.cols, res.rows, res.step, QImage::Format_RGB888);
+
+    }
+    return src;
 }
 
 QPixmap UchiyaBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)

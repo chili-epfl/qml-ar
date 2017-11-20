@@ -5,11 +5,12 @@
 #include <QElapsedTimer>
 #include "voidviewfinder.h"
 
-QtCameraBackEnd::QtCameraBackEnd() : QQuickImageProvider(QQuickImageProvider::Pixmap)
+QtCameraBackEnd::QtCameraBackEnd(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
     timer.start();
     buf = QImage();
-    QCamera* camera = new QCamera(QCameraInfo::availableCameras().at(0));
+    qDebug() << "Number of cameras:" << QCameraInfo::availableCameras().size();
+    camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
 
 #ifdef Q_OS_ANDROID
     camera->setCaptureMode(QCamera::CaptureStillImage);
@@ -23,6 +24,8 @@ QtCameraBackEnd::QtCameraBackEnd() : QQuickImageProvider(QQuickImageProvider::Pi
 #elif defined Q_OS_LINUX
     frameGrabber = new CameraFrameGrabber();
     camera->setViewfinder(frameGrabber);
+    camera->viewfinderSettings().setMaximumFrameRate(0);
+    camera->viewfinderSettings().setMinimumFrameRate(0);
     connect(frameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(handleFrame(QImage)));
 #else
     #error "OS must be either Android or Linux, camera is unsupported on other systems"

@@ -74,11 +74,11 @@ QImage CameraFrameGrabber::VideoFrameToImage(const QVideoFrame &frameOriginal)
 
     QElapsedTimer timer;
     timer.start();
-    qDebug() << "[00] started" << timer.elapsed();
+    //qDebug() << "[00] started" << timer.elapsed();
     QVideoFrame frame(frameOriginal);
     frame.map(QAbstractVideoBuffer::ReadOnly);
 
-    qDebug() << "[01] mapped" << timer.elapsed();
+    //qDebug() << "[01] mapped" << timer.elapsed();
 
     uchar* img = (uchar*) frame.bits();
     bool need_delete_img = false;
@@ -87,12 +87,12 @@ QImage CameraFrameGrabber::VideoFrameToImage(const QVideoFrame &frameOriginal)
 
     if(frame.pixelFormat() == QVideoFrame::Format_NV21)
     {
-        qDebug() << "[02] convert start" << timer.elapsed();
+        //qDebug() << "[02] convert start" << timer.elapsed();
         nv21_to_rgb(rgb, img, frame.width(), frame.height());
         img = rgb;
         fmt = QImage::Format_RGB888;
         //need_delete_img = true;
-        qDebug() << "[03] convert end" << timer.elapsed();
+        //qDebug() << "[03] convert end" << timer.elapsed();
     }
 
     if(fmt == QImage::Format_Invalid)
@@ -104,7 +104,7 @@ QImage CameraFrameGrabber::VideoFrameToImage(const QVideoFrame &frameOriginal)
                  frame.width(),
                  frame.height(), fmt);
 
-    qDebug() << "[10] image created" << timer.elapsed();
+    //qDebug() << "[10] image created" << timer.elapsed();
 
     /*QString bytes_img;
     QTextStream bytes_img_stream(&bytes_img);
@@ -126,7 +126,7 @@ QImage CameraFrameGrabber::VideoFrameToImage(const QVideoFrame &frameOriginal)
     if(need_delete_img)
         delete img;
 
-    qDebug() << "[99] done" << timer.elapsed();
+    //qDebug() << "[99] done" << timer.elapsed();
 
     return(image);
 }

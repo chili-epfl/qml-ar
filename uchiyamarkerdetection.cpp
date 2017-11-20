@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <uchiya/mylib/mytimer.h>
+#include <QDebug>
 
 UchiyaMarkerDetection::UchiyaMarkerDetection(int h, int w)
 {
@@ -9,8 +10,11 @@ UchiyaMarkerDetection::UchiyaMarkerDetection(int h, int w)
     trackingInit();		// tracking initialization
 }
 
-void UchiyaMarkerDetection::camInit(int h, int w)
+void UchiyaMarkerDetection::camInit(int h_, int w_)
 {
+    qDebug() << "init " << h_ << w_;
+    int w = w_;
+    int h = h_;
     m_camimg.Init(w, h);		// allocate image
     m_img.Init(w, h);			// allocate image
 }
@@ -45,45 +49,35 @@ void UchiyaMarkerDetection::drawCG()
     }
 }
 
-MyImage UchiyaMarkerDetection::getimg() {
+IplImage* UchiyaMarkerDetection::getimg() {
     // get image
     // push the image to m_camimg
+    qDebug() << m_camimg.h << m_camimg.w;
     return m_camimg;
 }
 
 void UchiyaMarkerDetection::showimg() {
     // show image
-    if(m_binarymode){
-        m_llah.DrawBinary(m_camimg);
+    m_img.Resize(m_camimg);
+    m_llah.DrawBinary(m_img);
+    m_llah.DrawPts(m_img);
 
-        if(m_ptmode){
-            m_llah.DrawPts(m_camimg);
-        }
-    }
-
-    // result in m_camimg
-    //drawimg();
-
-    if(m_viewmode && !m_binarymode){
-        drawCG();
-    }
+    drawCG();
 }
 
 void UchiyaMarkerDetection::process()
 {
-    m_img.Resize(m_camimg);
-
     MyTimer::Push("Time");
 
+    m_llah.Extract(m_camimg);
+
     m_llah.SetPts();
-    m_llah.CoordinateTransform(static_cast<double>(m_img.h));
+    m_llah.CoordinateTransform(static_cast<double>(m_camimg.h));
 
     m_llah.RetrievebyTracking();
-    m_viewmode = m_llah.FindPaper(4);
+    m_llah.FindPaper(4);
     m_llah.RetrievebyMatching();
-    m_viewmode |= m_llah.FindPaper(8);
-
-    m_llah.Extract(m_img);
+    m_llah.FindPaper(8);
 
     showimg();
 

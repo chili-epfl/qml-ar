@@ -11,10 +11,6 @@ private:
     MyImage m_img;
     LLAH m_llah;
 
-    bool m_binarymode = false;
-    bool m_stopmode = false;
-    bool m_viewmode = false;
-    bool m_ptmode = false;
     void showimg();
     void camInit(int h, int w);
     void trackingInit();
@@ -22,7 +18,7 @@ private:
 public:
     UchiyaMarkerDetection(int h, int w);
     void process();
-    MyImage getimg();
+    IplImage *getimg();
 };
 
 #endif // UCHIYAMARKERDETECTION_H

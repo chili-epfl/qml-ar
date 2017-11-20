@@ -12,7 +12,7 @@
 class QtCameraBackEnd : public QObject, public QQuickImageProvider
 { Q_OBJECT
 public:
-    QtCameraBackEnd();
+    QtCameraBackEnd(int cam_id = 0);
 
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
