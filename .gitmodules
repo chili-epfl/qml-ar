@@ -1,3 +1,6 @@
 [submodule "yuv2rgb"]
 	path = yuv2rgb
 	url = git@github.com:andrechen/yuv2rgb.git
+[submodule "uchiya"]
+	path = uchiya
+	url = ssh://git@c4science.ch/source/uchiya.git

@@ -73,7 +73,23 @@ SOURCES += main.cpp \
     qtbackend.cpp \
     cameraframegrabber.cpp \
     voidviewfinder.cpp \
-    yuv2rgb/yuv2rgb.cpp
+    yuv2rgb/yuv2rgb.cpp \
+    uchiya/blob.cpp \
+    uchiya/bloblist.cpp \
+    uchiya/hashtable.cpp \
+    uchiya/llah.cpp \
+    uchiya/llahparam.cpp \
+    uchiya/paper.cpp \
+    uchiya/paperlist.cpp \
+    uchiya/window.cpp \
+    uchiya/mylib/combination.cpp \
+    uchiya/mylib/mycam.cpp \
+    uchiya/mylib/myimage.cpp \
+    uchiya/mylib/mylabel.cpp \
+    uchiya/mylib/mymat.cpp \
+    uchiya/mylib/mytimer.cpp \
+    uchiyamarkerdetection.cpp \
+    uchiyabackend.cpp
 
 RESOURCES += qml.qrc
 
@@ -93,4 +109,22 @@ HEADERS += \
     qtbackend.h \
     cameraframegrabber.h \
     voidviewfinder.h \
-    yuv2rgb/yuv2rgb.h
+    yuv2rgb/yuv2rgb.h \
+    uchiya/blob.h \
+    uchiya/bloblist.h \
+    uchiya/hashtable.h \
+    uchiya/llah.h \
+    uchiya/llahparam.h \
+    uchiya/paper.h \
+    uchiya/paperlist.h \
+    uchiya/window.h \
+    uchiya/mylib/combination.h \
+    uchiya/mylib/mycam.h \
+    uchiya/mylib/myimage.h \
+    uchiya/mylib/mylabel.h \
+    uchiya/mylib/mymat.h \
+    uchiya/mylib/mytimer.h \
+    uchiya/mylib/opencvpath.h \
+    uchiyamarkerdetection.h \
+    uchiyabackend.h
+

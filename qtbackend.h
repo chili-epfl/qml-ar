@@ -18,7 +18,7 @@ public:
 
     virtual ~QtCameraBackEnd();
 
-private:
+protected:
     QImage buf;
     QCamera* camera;
     CameraFrameGrabber* frameGrabber;
