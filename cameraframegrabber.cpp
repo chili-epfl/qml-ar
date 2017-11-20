@@ -48,6 +48,8 @@ QList<QVideoFrame::PixelFormat> CameraFrameGrabber::supportedPixelFormats(QAbstr
 
 bool CameraFrameGrabber::present(const QVideoFrame &frame)
 {
+    // source: http://code.qt.io/cgit/qt/qtmultimedia.git/commit/?id=a3879c70b30d80e33f135e8247f8e33846aaaba1
+
     if (frame.handleType() == QAbstractVideoBuffer::GLTextureHandle) {
         // Slow and inefficient path. Ideally what's on the GPU should remain on the GPU, instead of readbacks like this.
         QImage img(frame.width(), frame.height(), QImage::Format_RGBA8888);
