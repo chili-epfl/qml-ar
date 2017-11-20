@@ -1,0 +1,3 @@
+[submodule "yuv2rgb"]
+	path = yuv2rgb
+	url = git@github.com:andrechen/yuv2rgb.git

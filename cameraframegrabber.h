@@ -28,13 +28,14 @@ public:
 
     bool present(const QVideoFrame &frame);
 
-    static QImage VideoFrameToImage(QVideoFrame &frame);
+    static QImage VideoFrameToImage(const QVideoFrame &frame);
 
 signals:
     void frameAvailable(QImage frame);
 
 public slots:
-
+private:
+    static const int MAX_SIZE = 4000000;
 };
 
 #endif // CAMERAFRAMEGRABBER_H

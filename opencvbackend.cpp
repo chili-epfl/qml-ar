@@ -1,4 +1,3 @@
-#include <iostream>
 #include "opencvbackend.h"
 using namespace std;
 
@@ -23,7 +22,7 @@ void OpenCVCameraBackEnd::setupCV() {
     stream1 = new VideoCapture(0);   //0 is the id of video device.0 if you have only one camera.
 
     if (!stream1->isOpened()) { //check if video device has been initialised
-        throw "cannot open camera";
+        qFatal("cannot open camera");
     }
 
     is_initialized = true;

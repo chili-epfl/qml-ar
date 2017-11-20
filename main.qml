@@ -11,7 +11,7 @@ Window {
 
         anchors.fill: parent
         Timer {
-            interval: 1000; running: true; repeat: true
+            interval: 100; running: true; repeat: true
             onTriggered: {parent.image.cache=0;parent.image.source="";parent.image.source="image://camera/raw"}
         }
     }

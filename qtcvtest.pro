@@ -53,6 +53,8 @@ android {
             -ltbb\
             -ltegra_hal\
             -Wl,--end-group\
+
+#    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions
 }
 
 # The following define makes your compiler emit warnings if you use
@@ -70,7 +72,8 @@ SOURCES += main.cpp \
     opencvbackend.cpp \
     qtbackend.cpp \
     cameraframegrabber.cpp \
-    voidviewfinder.cpp
+    voidviewfinder.cpp \
+    yuv2rgb/yuv2rgb.cpp
 
 RESOURCES += qml.qrc
 
@@ -89,4 +92,5 @@ HEADERS += \
     opencvbackend.h \
     qtbackend.h \
     cameraframegrabber.h \
-    voidviewfinder.h
+    voidviewfinder.h \
+    yuv2rgb/yuv2rgb.h
