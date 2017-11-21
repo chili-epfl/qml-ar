@@ -6,17 +6,10 @@
 
 UchiyaMarkerDetection::UchiyaMarkerDetection(int h, int w)
 {
-    camInit(h, w);			// camera initialization
-    trackingInit();		// tracking initialization
-}
-
-void UchiyaMarkerDetection::camInit(int h_, int w_)
-{
-    qDebug() << "init " << h_ << w_;
-    int w = w_;
-    int h = h_;
+    qDebug() << "init" << h << w;
     m_camimg.Init(w, h);		// allocate image
     m_img.Init(w, h);			// allocate image
+    trackingInit();		// tracking initialization
 }
 
 void UchiyaMarkerDetection::trackingInit()
@@ -50,16 +43,18 @@ void UchiyaMarkerDetection::drawCG()
 }
 
 IplImage* UchiyaMarkerDetection::getimg() {
-    // get image
-    // push the image to m_camimg
-    qDebug() << m_camimg.h << m_camimg.w;
     return m_camimg;
+}
+
+IplImage *UchiyaMarkerDetection::getres()
+{
+    return m_img;
 }
 
 void UchiyaMarkerDetection::showimg() {
     // show image
     m_img.Resize(m_camimg);
-    m_llah.DrawBinary(m_img);
+    //m_llah.DrawBinary(m_img);
     m_llah.DrawPts(m_img);
 
     drawCG();

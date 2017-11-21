@@ -19,6 +19,7 @@ public:
     UchiyaMarkerDetection(int h, int w);
     void process();
     IplImage *getimg();
+    IplImage *getres();
 };
 
 #endif // UCHIYAMARKERDETECTION_H
