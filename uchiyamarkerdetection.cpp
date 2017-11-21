@@ -3,6 +3,7 @@
 #include <iostream>
 #include <uchiya/mylib/mytimer.h>
 #include <QDebug>
+#include <QElapsedTimer>
 
 UchiyaMarkerDetection::UchiyaMarkerDetection(int h, int w)
 {
@@ -28,7 +29,7 @@ void UchiyaMarkerDetection::trackingInit()
 #endif
         snprintf(name,sizeof(name),fn_template,i);
         m_llah.AddPaper(name);
-        std::cout << name << " loaded" << std::endl;
+        qDebug() << "Uchiya" << name << "loaded";
     }
 
 }
@@ -40,7 +41,7 @@ void UchiyaMarkerDetection::drawCG()
     // for detected papers
     for(visible::iterator itpa=(*papers).begin(); itpa!=(*papers).end(); itpa++)
     {
-        printf("Paper ID: %d\n",(*itpa)->id);
+        qDebug() << "Uchiya Paper ID" << (*itpa)->id;
         // position: (*itpa)->H
         // color: (*itpa)->r, (*itpa)->g, (*itpa)->b
 
@@ -59,7 +60,7 @@ IplImage *UchiyaMarkerDetection::getDstPtr()
 void UchiyaMarkerDetection::showimg() {
     // show image
     m_img.Resize(m_camimg);
-    //m_llah.DrawBinary(m_img);
+    m_llah.DrawBinary(m_img);
     m_llah.DrawPts(m_img);
 
     drawCG();
@@ -67,7 +68,8 @@ void UchiyaMarkerDetection::showimg() {
 
 void UchiyaMarkerDetection::process()
 {
-    MyTimer::Push("Time");
+    QElapsedTimer timer;
+    timer.start();
 
     m_llah.Extract(m_camimg);
 
@@ -81,5 +83,5 @@ void UchiyaMarkerDetection::process()
 
     showimg();
 
-    MyTimer::Pop();
+    qDebug() << "Uchiya dt" << timer.elapsed() << "ms";
 }

@@ -151,10 +151,12 @@ HEADERS += uchiya/blob.h \
 # android: installing UchiyaMarkers
 # .txt files to device
 # See https://stackoverflow.com/questions/20573838/qt-5-2-including-external-file-into-an-android-package
+# https://forum.qt.io/topic/69946/qt-android-assets/4
+# https://falsinsoft.blogspot.ch/2017/01/qt-creator-include-additional-files.html
 android {
     # From: http://community.kde.org/Necessitas/Assets
     markerdata.path = /assets/data
-    markerdata.files += ./uchiya/data
+    markerdata.files += $$PWD/uchiya/data/*
     markerdata.depends += FORCE
 
     INSTALLS += markerdata
