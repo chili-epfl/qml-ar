@@ -7,6 +7,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 using namespace cv;
 
+// OpenCV camera backend for QML
+// Uses cv::VideoCapture
+
 class OpenCVCameraBackEnd : public QQuickImageProvider
 {
 public:

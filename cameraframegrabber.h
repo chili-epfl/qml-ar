@@ -16,25 +16,32 @@
  *
  */
 
-
-
 class CameraFrameGrabber : public QAbstractVideoSurface
 {
     Q_OBJECT
 public:
     explicit CameraFrameGrabber(QObject *parent = 0);
 
+    // dummy function returning a list
     QList<QVideoFrame::PixelFormat> supportedPixelFormats(QAbstractVideoBuffer::HandleType handleType) const;
 
+    // callback for the parent object
+    // should be called on each new frame (e.g. by QCamera)
     bool present(const QVideoFrame &frame);
 
+    // convert QVideoFrame to QImage
+    // supports Android nv21 format (uses yuv2rgb library)
     static QImage VideoFrameToImage(const QVideoFrame &frame);
 
 signals:
+    // this will be emited after present() was called
+    // and the image was successfully obtained
     void frameAvailable(QImage frame);
 
 public slots:
+
 private:
+    // maximum size for nv21_to_rgb buffer
     static const int MAX_SIZE = 4000000;
 };
 

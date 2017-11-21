@@ -10,7 +10,7 @@
 
 CameraFrameGrabber::CameraFrameGrabber(QObject *parent) :
     QAbstractVideoSurface(parent)
-{
+{ Q_UNUSED(parent);
 }
 
 QList<QVideoFrame::PixelFormat> CameraFrameGrabber::supportedPixelFormats(QAbstractVideoBuffer::HandleType handleType) const
@@ -70,21 +70,32 @@ bool CameraFrameGrabber::present(const QVideoFrame &frame)
 
 QImage CameraFrameGrabber::VideoFrameToImage(const QVideoFrame &frameOriginal)
 {
+    // buffer for nv21 -> rgb conversion
     static uchar* rgb = new uchar[MAX_SIZE];
 
+    // timer for debug output
     QElapsedTimer timer;
     timer.start();
+
     //qDebug() << "[00] started" << timer.elapsed();
+
+    // mapping frame to memory
     QVideoFrame frame(frameOriginal);
     frame.map(QAbstractVideoBuffer::ReadOnly);
 
     //qDebug() << "[01] mapped" << timer.elapsed();
 
+    // bits of the image as byte array
     uchar* img = (uchar*) frame.bits();
+
+    // set this to true to delete img at the end
     bool need_delete_img = false;
 
+    // format of the resulting QImage
     QImage::Format fmt = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
 
+    // QImage cannot work with NV21 (Android)
+    // this call to yuv2rgb library converts it to RGB888
     if(frame.pixelFormat() == QVideoFrame::Format_NV21)
     {
         //qDebug() << "[02] convert start" << timer.elapsed();
@@ -95,23 +106,27 @@ QImage CameraFrameGrabber::VideoFrameToImage(const QVideoFrame &frameOriginal)
         //qDebug() << "[03] convert end" << timer.elapsed();
     }
 
+    // if format is still invalid, the application stops
     if(fmt == QImage::Format_Invalid)
     {
         qFatal("Cannot determine output format");
     }
 
+    // the resulting QImage
     QImage image(img,
                  frame.width(),
                  frame.height(), fmt);
 
     //qDebug() << "[10] image created" << timer.elapsed();
 
+    // printing bytes of the image
     /*QString bytes_img;
     QTextStream bytes_img_stream(&bytes_img);
     for(int i = 0; i < 10; i++)
         bytes_img_stream << (int) img[i] << " ";
 
     bytes_img_stream.flush();
+    // printing additional output
     qDebug() << " image: bytes=" << frame.mappedBytes()
              << " planeCount=" << frame.planeCount()
              << " width=" << frame.width()
@@ -121,8 +136,11 @@ QImage CameraFrameGrabber::VideoFrameToImage(const QVideoFrame &frameOriginal)
              << " handleType=" << frame.handleType()
              << " imageFormat=" << fmt;*/
 
+    // unmapping source from memory
     frame.unmap();
 
+    // deleting img if it was created in this context
+    // e.g. if NV21 format was used
     if(need_delete_img)
         delete img;
 

@@ -7,35 +7,54 @@
 
 QtCameraBackEnd::QtCameraBackEnd(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
+    // starting dirty hack timer
     timer.start();
+
+    // initial buffer value is an empty image
     buf = QImage();
+
+    // initializing camera
     qDebug() << "Number of cameras:" << QCameraInfo::availableCameras().size();
     camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
 
+    // installing camera callback
+    // has different implementations for Android/Linux
+    // since Android camera is poorly supported in Android NDS (Nov'17)
 #ifdef Q_OS_ANDROID
-    camera->setCaptureMode(QCamera::CaptureStillImage);
+    // setting up a viewfinder which does nothing
     viewfinder = new VoidViewFinder;
     camera->setViewfinder(viewfinder);
+
+    // this object does image grabbing
     probe = new QVideoProbe(this);
+
+    // installing callback
     if(probe->setSource((QMediaObject *) camera))
-        connect(probe, SIGNAL(videoFrameProbed(const QVideoFrame &)), this, SLOT(handleFrameFrame(const QVideoFrame &)));
+        connect(probe, SIGNAL(videoFrameProbed(const QVideoFrame &)), this, SLOT(processQVideoFrame(const QVideoFrame &)));
     else
         qFatal("Can't connect probe to camera");
+
 #elif defined Q_OS_LINUX
+    // using custom class as a viewfinder
     frameGrabber = new CameraFrameGrabber();
     camera->setViewfinder(frameGrabber);
+
+    // this option is required for the Logitech webcam to work
     camera->viewfinderSettings().setMaximumFrameRate(0);
     camera->viewfinderSettings().setMinimumFrameRate(0);
-    connect(frameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(handleFrame(QImage)));
+
+    // installing callback
+    connect(frameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(processQImage(QImage)));
 #else
     #error "OS must be either Android or Linux, camera is unsupported on other systems"
 #endif
 
+    // starting camera thread
     camera->start();
 }
 
 QPixmap QtCameraBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{
+{ Q_UNUSED(size) Q_UNUSED(requestedSize)
     if(id == "raw")
         return QPixmap::fromImage(buf);
 
@@ -49,18 +68,20 @@ QtCameraBackEnd::~QtCameraBackEnd() {
     delete frameGrabber;
 }
 
-void QtCameraBackEnd::handleFrame(QImage img)
+void QtCameraBackEnd::processQImage(QImage img)
 {
+    qDebug() << "Updating image";
     buf = img;
 }
 
-void QtCameraBackEnd::handleFrameFrame(const QVideoFrame &frame)
+void QtCameraBackEnd::processQVideoFrame(const QVideoFrame &frame)
 {
     qDebug() << "Elapsed " << timer.elapsed();
-    if(timer.elapsed() > 20)
+
+    // updating the buffer if enough time has passed
+    if(timer.elapsed() > update_ms)
     {
-        qDebug() << "Updating image";
-        buf = CameraFrameGrabber::VideoFrameToImage(frame).copy();
+        processQImage(CameraFrameGrabber::VideoFrameToImage(frame).copy());
         timer.start();
     }
 }

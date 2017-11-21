@@ -7,7 +7,7 @@ OpenCVCameraBackEnd::OpenCVCameraBackEnd()
 }
 
 QPixmap OpenCVCameraBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{
+{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
     if(!is_initialized)
         setupCV();
 

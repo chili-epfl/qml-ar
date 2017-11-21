@@ -47,7 +47,7 @@ QImage UchiyaBackEnd::processUchiya(QImage src)
 }
 
 QPixmap UchiyaBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{
+{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
     return QPixmap::fromImage(processUchiya(buf));
 }
 
