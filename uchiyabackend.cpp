@@ -34,6 +34,9 @@ QImage UchiyaBackEnd::processUchiya(QImage src)
     IplImage src2mat2ipl = src2mat;
     cvCopy(&src2mat2ipl, md->getimg());
 
+    // run Uchiya pipeline
+    md->process();
+
     // obtaining Uchiya image dst and returning it
     IplImage dst = *(md->getres());
     cv::Mat dst2mat = cv::cvarrToMat(&dst, false); // second parameter disables data copying
