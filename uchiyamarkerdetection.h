@@ -30,11 +30,11 @@ public:
     void process();
 
     // return pointer to source image
-    IplImage *getimg();
+    IplImage *getSrcPtr();
 
     // return pointer to resulting image
     // (dots/markers)
-    IplImage *getres();
+    IplImage *getDstPtr();
 };
 
 #endif // UCHIYAMARKERDETECTION_H

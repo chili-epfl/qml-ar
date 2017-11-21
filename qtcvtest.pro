@@ -28,6 +28,56 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+##### SOURCES/HEADERS (this project)
+SOURCES += main.cpp \
+    opencvbackend.cpp \
+    qtbackend.cpp \
+    cameraframegrabber.cpp \
+    voidviewfinder.cpp \
+    uchiya/blob.cpp \
+    uchiya/bloblist.cpp \
+    uchiya/hashtable.cpp \
+    uchiya/llah.cpp \
+    uchiya/llahparam.cpp \
+    uchiya/paper.cpp \
+    uchiya/paperlist.cpp \
+    uchiya/window.cpp \
+    uchiya/mylib/combination.cpp \
+    uchiya/mylib/mycam.cpp \
+    uchiya/mylib/myimage.cpp \
+    uchiya/mylib/mylabel.cpp \
+    uchiya/mylib/mymat.cpp \
+    uchiya/mylib/mytimer.cpp \
+    uchiyamarkerdetection.cpp \
+    uchiyabackend.cpp \
+    qvideoframehelpers.cpp
+
+HEADERS += \
+    opencvbackend.h \
+    qtbackend.h \
+    cameraframegrabber.h \
+    voidviewfinder.h \
+    uchiya/blob.h \
+    uchiya/bloblist.h \
+    uchiya/hashtable.h \
+    uchiya/llah.h \
+    uchiya/llahparam.h \
+    uchiya/paper.h \
+    uchiya/paperlist.h \
+    uchiya/window.h \
+    uchiya/mylib/combination.h \
+    uchiya/mylib/mycam.h \
+    uchiya/mylib/myimage.h \
+    uchiya/mylib/mylabel.h \
+    uchiya/mylib/mymat.h \
+    uchiya/mylib/mytimer.h \
+    uchiya/mylib/opencvpath.h \
+    uchiyamarkerdetection.h \
+    uchiyabackend.h \
+    qvideoframehelpers.h
+
+RESOURCES += qml.qrc
+
 ##### LIBRARIES
 # QtOpenCV library
 QT_OPENCV_PATH = $$PWD/QtOpenCV
@@ -94,51 +144,3 @@ android {
 # YUV2RGB library
 SOURCES += yuv2rgb/yuv2rgb.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
-
-##### SOURCES/HEADERS (this project)
-SOURCES += main.cpp \
-    opencvbackend.cpp \
-    qtbackend.cpp \
-    cameraframegrabber.cpp \
-    voidviewfinder.cpp \
-    uchiya/blob.cpp \
-    uchiya/bloblist.cpp \
-    uchiya/hashtable.cpp \
-    uchiya/llah.cpp \
-    uchiya/llahparam.cpp \
-    uchiya/paper.cpp \
-    uchiya/paperlist.cpp \
-    uchiya/window.cpp \
-    uchiya/mylib/combination.cpp \
-    uchiya/mylib/mycam.cpp \
-    uchiya/mylib/myimage.cpp \
-    uchiya/mylib/mylabel.cpp \
-    uchiya/mylib/mymat.cpp \
-    uchiya/mylib/mytimer.cpp \
-    uchiyamarkerdetection.cpp \
-    uchiyabackend.cpp
-
-HEADERS += \
-    opencvbackend.h \
-    qtbackend.h \
-    cameraframegrabber.h \
-    voidviewfinder.h \
-    uchiya/blob.h \
-    uchiya/bloblist.h \
-    uchiya/hashtable.h \
-    uchiya/llah.h \
-    uchiya/llahparam.h \
-    uchiya/paper.h \
-    uchiya/paperlist.h \
-    uchiya/window.h \
-    uchiya/mylib/combination.h \
-    uchiya/mylib/mycam.h \
-    uchiya/mylib/myimage.h \
-    uchiya/mylib/mylabel.h \
-    uchiya/mylib/mymat.h \
-    uchiya/mylib/mytimer.h \
-    uchiya/mylib/opencvpath.h \
-    uchiyamarkerdetection.h \
-    uchiyabackend.h
-
-RESOURCES += qml.qrc

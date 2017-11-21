@@ -32,13 +32,13 @@ QImage UchiyaBackEnd::processUchiya(QImage src)
     // putting camera src image to Uchiya pipeline
     cv::Mat src2mat = QtOcv::image2Mat(src, CV_8UC3);
     IplImage src2mat2ipl = src2mat;
-    cvCopy(&src2mat2ipl, md->getimg());
+    cvCopy(&src2mat2ipl, md->getSrcPtr());
 
     // run Uchiya pipeline
     md->process();
 
     // obtaining Uchiya image dst and returning it
-    IplImage dst = *(md->getres());
+    IplImage dst = *(md->getDstPtr());
     cv::Mat dst2mat = cv::cvarrToMat(&dst, false); // second parameter disables data copying
     QImage dst2mat2qimg = QtOcv::mat2Image(dst2mat);
 

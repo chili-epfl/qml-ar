@@ -3,6 +3,7 @@
 #include <QVideoProbe>
 #include <QException>
 #include <QElapsedTimer>
+#include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
 
 QtCameraBackEnd::QtCameraBackEnd(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
@@ -81,7 +82,7 @@ void QtCameraBackEnd::processQVideoFrame(const QVideoFrame &frame)
     // updating the buffer if enough time has passed
     if(timer.elapsed() > update_ms)
     {
-        processQImage(CameraFrameGrabber::VideoFrameToImage(frame).copy());
+        processQImage(QVideoFrameHelpers::VideoFrameToImage(frame).copy());
         timer.start();
     }
 }

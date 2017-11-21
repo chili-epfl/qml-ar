@@ -42,11 +42,11 @@ void UchiyaMarkerDetection::drawCG()
     }
 }
 
-IplImage* UchiyaMarkerDetection::getimg() {
+IplImage* UchiyaMarkerDetection::getSrcPtr() {
     return m_camimg;
 }
 
-IplImage *UchiyaMarkerDetection::getres()
+IplImage *UchiyaMarkerDetection::getDstPtr()
 {
     return m_img;
 }
