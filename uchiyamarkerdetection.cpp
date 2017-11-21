@@ -21,7 +21,12 @@ void UchiyaMarkerDetection::trackingInit()
     int nummarker = 10;
 
     for(int i=0;i<nummarker;i++){
-        snprintf(name,sizeof(name),"./data/%d.txt",i);
+#ifdef Q_OS_ANDROID
+        const char* fn_template = "assets:/data/%d.txt";
+#else
+        const char* fn_template = "./data/%d.txt";
+#endif
+        snprintf(name,sizeof(name),fn_template,i);
         m_llah.AddPaper(name);
         std::cout << name << " loaded" << std::endl;
     }
