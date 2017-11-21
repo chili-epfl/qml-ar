@@ -4,3 +4,6 @@
 [submodule "uchiya"]
 	path = uchiya
 	url = ssh://git@c4science.ch/source/uchiya.git
+[submodule "QtOpenCV"]
+	path = QtOpenCV
+	url = git@github.com:dbzhang800/QtOpenCV.git

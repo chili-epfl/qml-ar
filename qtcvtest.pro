@@ -1,10 +1,42 @@
+##### QT
+# Name of the application
 TARGET=qtcvtest
 
-QT += quick
-QT += multimedia opengl
+# Qt configuration for Quick applications
+QT += quick multimedia opengl multimediawidgets
 CONFIG += c++11
-QT += multimediawidgets
 
+# Additional import path used to resolve QML modules in Qt Creator's code model
+QML_IMPORT_PATH =
+
+# Additional import path used to resolve QML modules just for Qt Quick Designer
+QML_DESIGNER_IMPORT_PATH =
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
+
+# The following define makes your compiler emit warnings if you use
+# any feature of Qt which as been marked deprecated (the exact warnings
+# depend on your compiler). Please consult the documentation of the
+# deprecated API in order to know how to port your code away from it.
+DEFINES += QT_DEPRECATED_WARNINGS
+
+# You can also make your code fail to compile if you use deprecated APIs.
+# In order to do so, uncomment the following line.
+# You can also select to disable deprecated APIs only up to a certain version of Qt.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+##### LIBRARIES
+# QtOpenCV library
+QT_OPENCV_PATH = $$PWD/QtOpenCV
+INCLUDEPATH += $${QT_OPENCV_PATH}/
+DEPENDPATH += $${QT_OPENCV_PATH}/
+HEADERS += $${QT_OPENCV_PATH}/cvmatandqimage.h
+SOURCES += $${QT_OPENCV_PATH}/cvmatandqimage.cpp
+
+# OpenCV for Linux (not Android) library
 linux:!android {
     # using pkg-config
     QT_CONFIG -= no-pkg-config
@@ -12,9 +44,10 @@ linux:!android {
     PKGCONFIG += opencv
 }
 
+# OpenCV for Android library
 android {
     # full path to OpenCV Android SDK
-    OPENCV_PATH = /home/opt/opencv-android
+    OPENCV_PATH = $$PWD/opencv-android
 
     INCLUDEPATH += $${OPENCV_PATH}/sdk/native/jni/include/
 
@@ -54,26 +87,20 @@ android {
             -ltegra_hal\
             -Wl,--end-group\
 
+# neon instructions (for yuv2rgb)
 #    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions
 }
 
-# The following define makes your compiler emit warnings if you use
-# any feature of Qt which as been marked deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
+# YUV2RGB library
+SOURCES += yuv2rgb/yuv2rgb.cpp
+HEADERS += yuv2rgb/yuv2rgb.h
 
-# You can also make your code fail to compile if you use deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
+##### SOURCES/HEADERS (this project)
 SOURCES += main.cpp \
     opencvbackend.cpp \
     qtbackend.cpp \
     cameraframegrabber.cpp \
     voidviewfinder.cpp \
-    yuv2rgb/yuv2rgb.cpp \
     uchiya/blob.cpp \
     uchiya/bloblist.cpp \
     uchiya/hashtable.cpp \
@@ -91,25 +118,11 @@ SOURCES += main.cpp \
     uchiyamarkerdetection.cpp \
     uchiyabackend.cpp
 
-RESOURCES += qml.qrc
-
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
-
-# Additional import path used to resolve QML modules just for Qt Quick Designer
-QML_DESIGNER_IMPORT_PATH =
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
-
 HEADERS += \
     opencvbackend.h \
     qtbackend.h \
     cameraframegrabber.h \
     voidviewfinder.h \
-    yuv2rgb/yuv2rgb.h \
     uchiya/blob.h \
     uchiya/bloblist.h \
     uchiya/hashtable.h \
@@ -128,3 +141,4 @@ HEADERS += \
     uchiyamarkerdetection.h \
     uchiyabackend.h
 
+RESOURCES += qml.qrc
