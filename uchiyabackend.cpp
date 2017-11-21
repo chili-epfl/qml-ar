@@ -1,7 +1,6 @@
 #include "uchiyabackend.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include "cv.h"
 #include "QtOpenCV/cvmatandqimage.h"
 
 using namespace cv;
