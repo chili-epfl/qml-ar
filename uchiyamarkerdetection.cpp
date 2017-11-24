@@ -43,6 +43,7 @@ void UchiyaMarkerDetection::drawCG()
     {
         qDebug() << "Uchiya Paper ID" << (*itpa)->id;
         // position: (*itpa)->H
+        (*itpa)->H.Print();
         // color: (*itpa)->r, (*itpa)->g, (*itpa)->b
 
     }
@@ -60,7 +61,7 @@ IplImage *UchiyaMarkerDetection::getDstPtr()
 void UchiyaMarkerDetection::showimg() {
     // show image
     m_img.Resize(m_camimg);
-    m_llah.DrawBinary(m_img);
+    //m_llah.DrawBinary(m_img);
     m_llah.DrawPts(m_img);
 
     drawCG();
