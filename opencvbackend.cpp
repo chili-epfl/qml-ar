@@ -19,7 +19,7 @@ QPixmap OpenCVCameraBackEnd::requestPixmap(const QString &id, QSize *size, const
 }
 
 void OpenCVCameraBackEnd::setupCV() {
-    stream1 = new VideoCapture(0);   //0 is the id of video device.0 if you have only one camera.
+    stream1 = new VideoCapture(1);   //0 is the id of video device.0 if you have only one camera.
 
     if (!stream1->isOpened()) { //check if video device has been initialised
         qFatal("cannot open camera");

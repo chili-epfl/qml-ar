@@ -1,6 +1,6 @@
 ##### QT
 # Name of the application
-TARGET=qtcvtest
+TARGET=cellulo-ar
 
 # Qt configuration for Quick applications
 QT += quick multimedia opengl multimediawidgets

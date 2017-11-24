@@ -6,11 +6,13 @@
 
 // backend for QML for UchiyaMarkers detection
 // uses QtCameraBackEnd class as base
+// this class is a decorator on top of the camera
 
-class UchiyaBackEnd : public QtCameraBackEnd
+class UchiyaBackEnd : public QObject, public QQuickImageProvider
 {
 public:
-    UchiyaBackEnd();
+    // decorate camera
+    UchiyaBackEnd(QQuickImageProvider* image_provider);
 
     // obtain processed image
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
@@ -23,6 +25,9 @@ private:
 
     // marker detection pipeline
     UchiyaMarkerDetection* md;
+
+    // image provider
+    QQuickImageProvider* provider;
 };
 
 #endif // UCHIYABACKEND_H

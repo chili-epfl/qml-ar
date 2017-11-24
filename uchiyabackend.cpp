@@ -5,8 +5,9 @@
 
 using namespace cv;
 
-UchiyaBackEnd::UchiyaBackEnd() : QtCameraBackEnd(0)
+UchiyaBackEnd::UchiyaBackEnd(QQuickImageProvider *image_provider) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
+    provider = image_provider;
     md = NULL;
 }
 
@@ -47,7 +48,8 @@ QImage UchiyaBackEnd::processUchiya(QImage src)
 
 QPixmap UchiyaBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
-    return QPixmap::fromImage(processUchiya(buf));
+    QPixmap input = provider->requestPixmap("raw", size, requestedSize);
+    return QPixmap::fromImage(processUchiya(input.toImage()));
 }
 
 UchiyaBackEnd::~UchiyaBackEnd()
