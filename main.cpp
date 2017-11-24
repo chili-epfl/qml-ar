@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // creating provider connected to the actual camera
+    // using OpenCV for Linux
+    // And Qt for Android
     QQuickImageProvider* provider = NULL;
 #ifdef Q_OS_ANDROID
     provider = new QtCameraBackEnd();
@@ -19,7 +21,7 @@ int main(int argc, char *argv[])
     #error "OS other than Android and Linux are not supported"
 #endif
 
-    // adding UchiyaBackEnd
+    // adding UchiyaBackEnd (decorating camera object)
     engine.addImageProvider(QLatin1String("camera"), new UchiyaBackEnd(provider));
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
