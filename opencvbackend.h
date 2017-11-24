@@ -13,16 +13,27 @@ using namespace cv;
 class OpenCVCameraBackEnd : public QQuickImageProvider
 {
 public:
-    OpenCVCameraBackEnd();
+    // initialize with camera_id
+    OpenCVCameraBackEnd(int cam_id = 0);
 
+    // get image from the camera
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
+private:
+    // open the camera
     void setupCV();
 
-private:
+    // id of the camera in VideoCapture(...)
+    int camera_id;
+
+    // camera opened?
     bool is_initialized = false;
+
+    // buffer for the image
     QPixmap buf;
-    VideoCapture* stream1 = NULL;
+
+    // CV VideoCapture
+    VideoCapture* stream = NULL;
 };
 
 #endif // CV_BACKEND_H

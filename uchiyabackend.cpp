@@ -30,7 +30,7 @@ QImage UchiyaBackEnd::processUchiya(QImage src)
     }
 
     // putting camera src image to Uchiya pipeline
-    cv::Mat src2mat = QtOcv::image2Mat(src.rgbSwapped(), CV_8UC3);
+    cv::Mat src2mat = QtOcv::image2Mat(src, CV_8UC3);
     IplImage src2mat2ipl = src2mat;
     cvCopy(&src2mat2ipl, md->getSrcPtr());
 

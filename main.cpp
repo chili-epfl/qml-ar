@@ -16,13 +16,16 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     provider = new QtCameraBackEnd();
 #elif defined Q_OS_LINUX
-    provider = new OpenCVCameraBackEnd();
+    // using 1 as camera id
+    provider = new OpenCVCameraBackEnd(1);
 #else
     #error "OS other than Android and Linux are not supported"
 #endif
 
     // adding UchiyaBackEnd (decorating camera object)
     engine.addImageProvider(QLatin1String("camera"), new UchiyaBackEnd(provider));
+
+    // loading qml
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     if (engine.rootObjects().isEmpty())

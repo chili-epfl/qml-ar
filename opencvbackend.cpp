@@ -1,9 +1,11 @@
 #include "opencvbackend.h"
+#include "QtOpenCV/cvmatandqimage.h"
 using namespace std;
 
-OpenCVCameraBackEnd::OpenCVCameraBackEnd()
+OpenCVCameraBackEnd::OpenCVCameraBackEnd(int cam_id)
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
+    camera_id = cam_id;
 }
 
 QPixmap OpenCVCameraBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
@@ -11,17 +13,23 @@ QPixmap OpenCVCameraBackEnd::requestPixmap(const QString &id, QSize *size, const
     if(!is_initialized)
         setupCV();
 
+    // reading the image
     Mat mat;
-    stream1->read(mat);
+    stream->read(mat);
 
-    QPixmap pm = QPixmap::fromImage(QImage((unsigned char*) mat.data, mat.cols, mat.rows, QImage::Format_RGB888));
+    // converting the matrix to qimage and then to pixmap
+    QPixmap pm = QPixmap::fromImage(QtOcv::mat2Image(mat));
+
     return(pm);
 }
 
 void OpenCVCameraBackEnd::setupCV() {
-    stream1 = new VideoCapture(1);   //0 is the id of video device.0 if you have only one camera.
+    // opening the camera
+    stream = new VideoCapture(camera_id);
 
-    if (!stream1->isOpened()) { //check if video device has been initialised
+    // cannot continue on error
+    // check if video device has been initialised
+    if (!stream->isOpened()) {
         qFatal("cannot open camera");
     }
 
