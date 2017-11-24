@@ -5,6 +5,7 @@ using namespace std;
 OpenCVCameraBackEnd::OpenCVCameraBackEnd(int cam_id)
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
+    // copy id to object property
     camera_id = cam_id;
 }
 

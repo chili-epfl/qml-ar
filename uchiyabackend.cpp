@@ -8,6 +8,8 @@ using namespace cv;
 UchiyaBackEnd::UchiyaBackEnd(QQuickImageProvider *image_provider) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
     provider = image_provider;
+
+    // marker detection init will be done on first valid image request
     md = NULL;
 }
 
@@ -47,12 +49,15 @@ QImage UchiyaBackEnd::processUchiya(QImage src)
 }
 
 QPixmap UchiyaBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
+{ Q_UNUSED(id)
+    // obtain input image from camera
     QPixmap input = provider->requestPixmap("raw", size, requestedSize);
+
+    // process image and return the result
     return QPixmap::fromImage(processUchiya(input.toImage()));
 }
 
 UchiyaBackEnd::~UchiyaBackEnd()
 {
-    delete md;
+    if(md != NULL) delete md;
 }

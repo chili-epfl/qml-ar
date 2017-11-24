@@ -5,6 +5,9 @@
 #include <QDebug>
 #include <QElapsedTimer>
 
+// see main.cpp and main.h from
+// UchiyaMarkers project
+
 UchiyaMarkerDetection::UchiyaMarkerDetection(int h, int w)
 {
     qDebug() << "init" << h << w;
