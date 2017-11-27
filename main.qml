@@ -13,22 +13,12 @@ Window {
 
         Timer {
             interval: 100; running: true; repeat: true
-            onTriggered: {image.cache=0;image.source="";image.source="image://camera/raw"}
+            onTriggered: {image.cache=0;image.source="";image.source="image://camera/raw";}
         }
 
         id: scene
         anchors.fill: parent
         anchors.margins: 0
-        color: "darkRed"
-
-        transform: Rotation {
-            id: sceneRotation
-            axis.x: 1
-            axis.y: 0
-            axis.z: 0
-            origin.x: scene.width / 2
-            origin.y: scene.height / 2
-        }
 
         Image {
             id: image

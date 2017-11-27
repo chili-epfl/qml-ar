@@ -10,13 +10,7 @@ Entity {
 
     Camera {
         id: camera
-        projectionType: CameraLens.PerspectiveProjection
-        fieldOfView: 45
-        nearPlane : 0.1
-        farPlane : 1000.0
-        position: Qt.vector3d( 0.0, 0.0, 40.0 )
-        upVector: Qt.vector3d( 0.0, 1.0, 0.0 )
-        viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
+        projectionMatrix: md.Hmatrix
     }
 
     FirstPersonCameraController { camera: camera }
@@ -35,21 +29,24 @@ Entity {
         id: material
     }
 
-    Transform {
-        id: torusTransform
-        scale3D: Qt.vector3d(1.5, 1, 0.5)
-        rotation: fromAxisAndAngle(Qt.vector3d(1, 0, 0), 30)
-    }
-
     Entity {
         id: torusEntity
-        components: [ material, torusTransform, cubeMesh ]
+        components: [ material, transform, cubeMesh ]
+    }
+
+    Transform {
+        id: transform
+        matrix: {
+            var m = Qt.matrix4x4();
+            m.translate(Qt.vector3d(300, 300, 1));
+            return m;
+        }
     }
 
     CuboidMesh {
         id: cubeMesh
-        xExtent: 10
-        yExtent: 10
-        zExtent: 10
+        xExtent: 600
+        yExtent: 600
+        zExtent: 0.001
     }
 }

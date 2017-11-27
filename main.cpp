@@ -1,5 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickView>
+#include <QQmlContext>
 #include "opencvbackend.h"
 #include "qtbackend.h"
 #include "uchiyabackend.h"
@@ -23,7 +25,11 @@ int main(int argc, char *argv[])
 #endif
 
     // adding UchiyaBackEnd (decorating camera object)
-    engine.addImageProvider(QLatin1String("camera"), new UchiyaBackEnd(provider));
+
+    UchiyaBackEnd* backend = new UchiyaBackEnd(provider);
+
+    engine.rootContext()->setContextProperty("md", backend);
+    engine.addImageProvider(QLatin1String("camera"), backend);
 
     // loading qml
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

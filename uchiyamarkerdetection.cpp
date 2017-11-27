@@ -4,6 +4,7 @@
 #include <uchiya/mylib/mytimer.h>
 #include <QDebug>
 #include <QElapsedTimer>
+#include <QMatrix4x4>
 
 // see main.cpp and main.h from
 // UchiyaMarkers project
@@ -47,6 +48,8 @@ void UchiyaMarkerDetection::drawCG()
         qDebug() << "Uchiya Paper ID" << (*itpa)->id;
         // position: (*itpa)->H
         (*itpa)->H.Print();
+        H.Clone((*itpa)->H);
+        isHValid = true;
         // color: (*itpa)->r, (*itpa)->g, (*itpa)->b
 
     }
@@ -59,6 +62,27 @@ IplImage* UchiyaMarkerDetection::getSrcPtr() {
 IplImage *UchiyaMarkerDetection::getDstPtr()
 {
     return m_img;
+}
+
+QMatrix4x4 UchiyaMarkerDetection::getOrthoMatrix()
+{
+    //                glOrtho(0, m_cam.w, 0, m_cam.h, -1, 1);
+    /*void glOrtho(GLdouble  Left,
+         GLdouble  Right,
+         GLdouble  Bottom,
+         GLdouble  Top,
+         GLdouble  Near,
+         GLdouble  Far)    */
+
+    float l = 0, r = m_camimg.w, bot = 0, top = m_camimg.h, near = -1, far = 1;
+
+    float tx = -(r + l)/(r - l);
+    float ty = -(top + bot) / (top - bot);
+    float tz = -(far + near) / (far - near);
+
+    const float a[] = {2 / (r - l), 0.0f, 0.0f, tx, 0.0f, 2 / (top - bot), 0.0f, ty, 0.0f, 0.0f, -2/(far-near), tz, 0.0f, 0.0f, 1.0f};
+
+    return QMatrix4x4(a);
 }
 
 void UchiyaMarkerDetection::showimg() {

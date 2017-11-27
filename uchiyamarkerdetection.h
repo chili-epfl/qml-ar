@@ -3,6 +3,9 @@
 
 #include <uchiya/mylib/myimage.h>
 #include <uchiya/llah.h>
+#include "uchiya/mylib/mymat.h"
+
+#include <QMatrix4x4>
 
 // Wrapper around C-style UchiyaMarkers project
 // obtained from main.cpp file from UchiyaMarkers project
@@ -35,6 +38,12 @@ public:
     // return pointer to resulting image
     // (dots/markers)
     IplImage *getDstPtr();
+
+    // last blob matrix
+    MyMat H;
+    bool isHValid = false;
+
+    QMatrix4x4 getOrthoMatrix();
 };
 
 #endif // UCHIYAMARKERDETECTION_H
