@@ -66,32 +66,7 @@ UchiyaBackEnd::~UchiyaBackEnd()
 
 QMatrix4x4 UchiyaBackEnd::getProjectionMatrix()
 {
-    QMatrix4x4 dst;
-    if(md == NULL || !md->isHValid) return dst;
-    MyMat src = md->H;
-    dst.data()[0] = src(0,0);
-    dst.data()[1] = src(1,0);
-    dst.data()[2] = 0.0f;
-    dst.data()[3] = src(2,0);
-
-    dst.data()[4] = src(0,1);
-    dst.data()[5] = src(1,1);
-    dst.data()[6] = 0.0f;
-    dst.data()[7] = src(2,1);
-
-    dst.data()[8] = 0.0f;
-    dst.data()[9] = 0.0f;
-    dst.data()[10] = 1.0f;
-    dst.data()[11] = 0.0f;
-
-    dst.data()[12] = src(0,2);
-    dst.data()[13] = src(1,2);
-    dst.data()[14] = 0.0f;
-    dst.data()[15] = src(2,2);
-
-    QMatrix4x4 res = md->getOrthoMatrix() * dst;
-
-    qDebug() << "getproj" << res;
-
-    return res;
+    if(md == NULL) return QMatrix4x4();
+    return md->H;
 }
+

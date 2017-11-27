@@ -71,13 +71,13 @@ QtCameraBackEnd::~QtCameraBackEnd() {
 
 void QtCameraBackEnd::processQImage(QImage img)
 {
-    qDebug() << "Updating image";
+    //qDebug() << "Updating image";
     buf = img;
 }
 
 void QtCameraBackEnd::processQVideoFrame(const QVideoFrame &frame)
 {
-    qDebug() << "Elapsed " << timer.elapsed();
+    //qDebug() << "Elapsed " << timer.elapsed();
 
     // updating the buffer if enough time has passed
     if(timer.elapsed() > update_ms)

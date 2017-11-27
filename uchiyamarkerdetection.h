@@ -24,6 +24,9 @@ private:
     void camInit(int h, int w);
     void trackingInit();
     void drawCG();
+
+    QMatrix4x4 getOrthoMatrix();
+    QMatrix4x4 getProjectionMatrix(MyMat src);
 public:
     // initialize given height and width of the image
     UchiyaMarkerDetection(int h, int w);
@@ -40,10 +43,7 @@ public:
     IplImage *getDstPtr();
 
     // last blob matrix
-    MyMat H;
-    bool isHValid = false;
-
-    QMatrix4x4 getOrthoMatrix();
+    QMatrix4x4 H;
 };
 
 #endif // UCHIYAMARKERDETECTION_H

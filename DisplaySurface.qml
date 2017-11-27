@@ -38,15 +38,15 @@ Entity {
         id: transform
         matrix: {
             var m = Qt.matrix4x4();
-            m.translate(Qt.vector3d(300, 300, 1));
+            m.translate(Qt.vector3d(0.5, 0.5, 1));
             return m;
         }
     }
 
     CuboidMesh {
         id: cubeMesh
-        xExtent: 600
-        yExtent: 600
+        xExtent: 1
+        yExtent: 2
         zExtent: 0.001
     }
 }
