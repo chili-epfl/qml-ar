@@ -31,6 +31,11 @@ void Marker::setId(int id_)
     id = id_;
 }
 
+void Marker::setSizeMM(double size_)
+{
+    size_mm = size_;
+}
+
 const QVector2D Marker::getPositionMM()
 {
     return position_mm;
@@ -41,6 +46,7 @@ QString Marker::toString()
     QString res;
     QTextStream ts(&res);
     ts << "Marker [" << name << "] #" << id << " position ("
-       << position_mm.x() << ", " << position_mm.y() << ") mm";
+       << position_mm.x() << ", " << position_mm.y() << ") mm"
+       << " size " << size_mm;
     return(res);
 }

@@ -34,12 +34,12 @@ void MarkerStorage::populate(QString data)
         int id = marker.value("id").toInt();
         double x_mm = marker.value("x_mm").toDouble();
         double y_mm = marker.value("y_mm").toDouble();
-
-        //qDebug() << "Adding marker" << name << id << x_mm << y_mm;
+        double size_mm = marker.value("size_mm").toDouble();
 
         markers[id] = Marker(x_mm, y_mm);
         markers[id].setName(name);;
         markers[id].setId(id);
+        markers[id].setSizeMM(size_mm);
 
         qDebug() << markers[id].toString();
     }

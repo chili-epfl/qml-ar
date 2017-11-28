@@ -1,0 +1,25 @@
+{
+  "markers": [
+    {
+      "name": "big",
+      "id": 7,
+      "x_mm": 9.5,
+      "y_mm": 7.9,
+      "size_mm": 150
+    },
+    {
+      "name": "small",
+      "id": 6,
+      "x_mm": 147,
+      "y_mm": 229,
+      "size_mm": 60
+    },
+    {
+      "name": "medium",
+      "id": 1,
+      "x_mm": 13.4,
+      "y_mm": 161.9,
+      "size_mm": 100
+    }
+  ]
+}

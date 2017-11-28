@@ -22,6 +22,9 @@ private:
     // in millimetres
     QVector2D position_mm;
 
+    // size in mm
+    double size_mm;
+
     void setPositionMM(QVector2D position_mm_);
 public:
     Marker();
@@ -30,6 +33,7 @@ public:
 
     void setName(QString name_);
     void setId(int id_);
+    void setSizeMM(double size_);
 
     const QVector2D getPositionMM();
 
