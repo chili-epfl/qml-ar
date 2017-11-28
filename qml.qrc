@@ -2,5 +2,10 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>DisplaySurface.qml</file>
+        <file>RenderableEntity.qml</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>./assets/diffuse.webp</file>
+        <file>./assets/Chest.obj</file>
     </qresource>
 </RCC>

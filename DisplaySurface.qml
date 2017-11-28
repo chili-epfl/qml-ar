@@ -29,11 +29,6 @@ Entity {
         id: material
     }
 
-    Entity {
-        id: torusEntity
-        components: [ material, transform, cubeMesh ]
-    }
-
     Transform {
         id: transform
         matrix: {
@@ -49,4 +44,20 @@ Entity {
         yExtent: 2
         zExtent: 0.001
     }
+
+/*
+    RenderableEntity {
+        id: chest
+        source: "/assets/Chest.obj"
+        position: Qt.vector3d(0, 0, 0)
+        scale: 1
+
+        material: DiffuseMapMaterial {
+            id: material
+            diffuse: TextureLoader { source: "/assets/diffuse.webp" }
+            specular: Qt.rgba( 0.2, 0.2, 0.2, 1.0 )
+            shininess: 2.0
+        }
+    }
+*/
 }
