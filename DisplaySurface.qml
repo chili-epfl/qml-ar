@@ -25,39 +25,40 @@ Entity {
         InputSettings { }
     ]
 
-    PhongMaterial {
-        id: material
-    }
+
+    Entity {components: [transform, material, cubeMesh, chest]}
 
     Transform {
         id: transform
         matrix: {
             var m = Qt.matrix4x4();
-            m.translate(Qt.vector3d(0.5, 0.5, 1));
+            m.translate(Qt.vector3d(0, 0, -0.5));
+            m.m33 = 10;
             return m;
         }
     }
 
     CuboidMesh {
         id: cubeMesh
-        xExtent: 1
-        yExtent: 2
+        xExtent: 600
+        yExtent: 600
         zExtent: 0.001
     }
 
-/*
+
     RenderableEntity {
         id: chest
         source: "/assets/Chest.obj"
-        position: Qt.vector3d(0, 0, 0)
+        position: Qt.vector3d(0, 0, 0.5)
+        rotationAngle: 10
         scale: 1
 
         material: DiffuseMapMaterial {
             id: material
             diffuse: TextureLoader { source: "/assets/diffuse.webp" }
-            specular: Qt.rgba( 0.2, 0.2, 0.2, 1.0 )
-            shininess: 2.0
+            specular: Qt.rgba( 1, 0.2, 0.2, 1.0 )
+            shininess: 10.0
         }
     }
-*/
+
 }
