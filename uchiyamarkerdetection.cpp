@@ -102,14 +102,15 @@ void UchiyaMarkerDetection::drawCG()
                                        0, 0, 0, 1};
 
         /*QMatrix4x4 m = getOrthoMatrix() * getProjectionMatrix((*itpa)->H) *
-                  QMatrix4x4(translate_arr) * QMatrix4x4(scale_arr);*/
+                  QMatrix4x4(translate_arr) */
 
         QMatrix4x4 m = getOrthoMatrix() * getProjectionMatrix((*itpa)->H) *
-        QMatrix4x4({300, 0, 0, 0,
-                    0, 300, 0, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 1});
-
+                /*QMatrix4x4(scale_arr) **/ QMatrix4x4({
+                            1.f, 0.f, 0.f, 0.f,
+                            0.f, 1.f, 0.f, 0.f,
+                            0.f, 0.f, 1.f, 0.f,
+                            0.f, 0.f, 0.f, 1.f,
+                            });
 
         if(id == 8) H = m;
 
@@ -150,7 +151,10 @@ QMatrix4x4 UchiyaMarkerDetection::getOrthoMatrix()
     float ty = -(top + bot) / (top - bot);
     float tz = -(far + near) / (far - near);
 
-    const float a[] = {2 / (r - l), 0.0f, 0.0f, tx, 0.0f, 2 / (top - bot), 0.0f, ty, 0.0f, 0.0f, -2/(far-near), tz, 0.0f, 0.0f, 1.0f};
+    const float a[] = {2 / (r - l), 0.0f, 0.0f, tx,
+                       0.0f, 2 / (top - bot), 0.0f, ty,
+                       0.0f, 0.0f, -2/(far-near), tz,
+                       0.0f, 0.0f, 0.0f, 1.0f};
 
     return QMatrix4x4(a);
 }
