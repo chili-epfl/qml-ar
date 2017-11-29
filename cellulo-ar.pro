@@ -3,7 +3,7 @@
 TARGET=cellulo-ar
 
 # Qt configuration for Quick applications
-QT += quick multimedia opengl multimediawidgets 3dinput
+QT += quick multimedia opengl multimediawidgets 3dinput 3drender
 CONFIG += c++11
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

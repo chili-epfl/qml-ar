@@ -1,3 +1,4 @@
+#include <QCameraLens>
 #include "markerdetector.h"
 
 MarkerDetector::MarkerDetector()
@@ -19,21 +20,14 @@ QMatrix4x4 MarkerDetector::getInitialProjectionMatrix()
         return QMatrix4x4();
     }
 
-    // https://www.ibm.com/support/knowledgecenter/ssw_aix_72/com.ibm.aix.opengl/doc/openglrf/glOrtho.htm
-    // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml
+    Qt3DRender::QCameraLens lens;
 
-    float l = 0, r = input_buffer.width(), bot = 0, top = input_buffer.height(), near = -1, far = 1;
+    // for orthographic projection
+    lens.setOrthographicProjection(0, input_buffer.width(), 0, input_buffer.height(), -1, 1);
 
-    float tx = -(r + l)/(r - l);
-    float ty = -(top + bot) / (top - bot);
-    float tz = -(far + near) / (far - near);
-
-    const float a[] = {2 / (r - l), 0.0f, 0.0f, tx,
-                       0.0f, 2 / (top - bot), 0.0f, ty,
-                       0.0f, 0.0f, -2/(far-near), tz,
-                       0.0f, 0.0f, 0.0f, 1.0f};
-
-    return QMatrix4x4(a);
+    // for perspective projection
+    // lens.setPerspectiveProjection(45, 1, -1, 1);
+    return lens.projectionMatrix();
 }
 
 void MarkerDetector::setInput(QImage camera)
