@@ -2,14 +2,14 @@
 #include "QtOpenCV/cvmatandqimage.h"
 using namespace std;
 
-OpenCVCameraBackEnd::OpenCVCameraBackEnd(int cam_id)
+OpenCVCameraBackend::OpenCVCameraBackend(int cam_id)
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
     // copy id to object property
     camera_id = cam_id;
 }
 
-QPixmap OpenCVCameraBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+QPixmap OpenCVCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
     if(!is_initialized)
         setupCV();
@@ -24,7 +24,7 @@ QPixmap OpenCVCameraBackEnd::requestPixmap(const QString &id, QSize *size, const
     return(pm);
 }
 
-void OpenCVCameraBackEnd::setupCV() {
+void OpenCVCameraBackend::setupCV() {
     // opening the camera
     stream = new VideoCapture(camera_id);
 

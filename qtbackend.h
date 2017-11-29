@@ -12,17 +12,17 @@
 // QCamera backend for QML
 // works on Linux and Android
 
-class QtCameraBackEnd : public QObject, public QQuickImageProvider
+class QtCameraBackend : public QObject, public QQuickImageProvider
 { Q_OBJECT
 
 public:
     // cam_id indicates the camera index in QCameraInfo::availableCameras()
-    QtCameraBackEnd(int cam_id = 0);
+    QtCameraBackend(int cam_id = 0);
 
     // callback for main thread
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
-    virtual ~QtCameraBackEnd();
+    virtual ~QtCameraBackend();
 
 protected:
     // image buffer

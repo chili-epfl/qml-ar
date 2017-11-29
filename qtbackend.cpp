@@ -6,7 +6,7 @@
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
 
-QtCameraBackEnd::QtCameraBackEnd(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
+QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
     // starting dirty hack timer
     timer.start();
@@ -54,7 +54,7 @@ QtCameraBackEnd::QtCameraBackEnd(int cam_id) : QQuickImageProvider(QQuickImagePr
     camera->start();
 }
 
-QPixmap QtCameraBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+QPixmap QtCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(size) Q_UNUSED(requestedSize)
     if(id == "raw")
         return QPixmap::fromImage(buf);
@@ -64,18 +64,18 @@ QPixmap QtCameraBackEnd::requestPixmap(const QString &id, QSize *size, const QSi
     return QPixmap();
 }
 
-QtCameraBackEnd::~QtCameraBackEnd() {
+QtCameraBackend::~QtCameraBackend() {
     delete camera;
     delete frameGrabber;
 }
 
-void QtCameraBackEnd::processQImage(QImage img)
+void QtCameraBackend::processQImage(QImage img)
 {
     //qDebug() << "Updating image";
     buf = img;
 }
 
-void QtCameraBackEnd::processQVideoFrame(const QVideoFrame &frame)
+void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     //qDebug() << "Elapsed " << timer.elapsed();
 

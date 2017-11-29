@@ -10,11 +10,11 @@ using namespace cv;
 // OpenCV camera backend for QML
 // Uses cv::VideoCapture
 
-class OpenCVCameraBackEnd : public QQuickImageProvider
+class OpenCVCameraBackend : public QQuickImageProvider
 {
 public:
     // initialize with camera_id
-    OpenCVCameraBackEnd(int cam_id = 0);
+    OpenCVCameraBackend(int cam_id = 0);
 
     // get image from the camera
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);

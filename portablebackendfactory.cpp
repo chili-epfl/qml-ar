@@ -27,11 +27,11 @@ QQuickImageProvider *PortableCameraBackendFactory::getBackend(int camera_id)
     // And Qt for Android
     QQuickImageProvider* provider = NULL;
 #ifdef Q_OS_ANDROID
-    provider = new QtCameraBackEnd(camera_id);
+    provider = new QtCameraBackend(camera_id);
     qDebug() << "Using Android camera backend";
 #elif defined Q_OS_LINUX
     // using 1 as camera id
-    provider = new OpenCVCameraBackEnd(camera_id);
+    provider = new OpenCVCameraBackend(camera_id);
     qDebug() << "Using Linux camera backend";
 #else
     #error "OS other than Android and Linux are not supported"
