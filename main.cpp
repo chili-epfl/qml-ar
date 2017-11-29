@@ -3,26 +3,27 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include "portablebackendfactory.h"
-#include "uchiyabackend.h"
+#include "markerbackend.h"
 #include "markerstorage.h"
+#include "uchiyamarkerdetector.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    // loading marker positions
-    MarkerStorage ms;
-    ms.populateFromFile("markers.json");
-
     // creating a camera backend object
     QQuickImageProvider* provider = PortableCameraBackendFactory::getBackend(1);
 
-    // adding UchiyaBackEnd (decorating camera object)
-    UchiyaBackEnd* backend = new UchiyaBackEnd(provider);
+    // creating Uchiya marker detector
+    UchiyaMarkerDetector* detector = new UchiyaMarkerDetector;
+    detector->loadMarkerPositions("markers.json");
 
-    // adding marker detection as a backend
-    engine.rootContext()->setContextProperty("md", backend);
+    // adding UchiyaBackEnd (decorating camera object)
+    MarkerBackEnd* backend = new MarkerBackEnd(provider, detector);
+
+    // adding marker detector as a backend
+    engine.rootContext()->setContextProperty("detector", detector);
     engine.addImageProvider(QLatin1String("camera"), backend);
 
     // loading qml

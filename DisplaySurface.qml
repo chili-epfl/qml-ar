@@ -10,7 +10,7 @@ Entity {
 
     Camera {
         id: camera
-        projectionMatrix: md.Hmatrix
+        projectionMatrix: detector.projector
     }
 
     FirstPersonCameraController { camera: camera }

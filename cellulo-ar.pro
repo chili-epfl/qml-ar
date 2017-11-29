@@ -34,12 +34,13 @@ SOURCES += main.cpp \
     qtbackend.cpp \
     cameraframegrabber.cpp \
     voidviewfinder.cpp \
-    uchiyamarkerdetection.cpp \
-    uchiyabackend.cpp \
     qvideoframehelpers.cpp \
     marker.cpp \
     markerstorage.cpp \
-    portablebackendfactory.cpp
+    portablebackendfactory.cpp \
+    markerdetector.cpp \
+    uchiyamarkerdetector.cpp \
+    markerbackend.cpp
 
 HEADERS += \
     opencvbackend.h \
@@ -47,11 +48,12 @@ HEADERS += \
     cameraframegrabber.h \
     voidviewfinder.h \
     qvideoframehelpers.h \
-    uchiyamarkerdetection.h \
-    uchiyabackend.h \
     marker.h \
     markerstorage.h \
-    portablebackendfactory.h
+    portablebackendfactory.h \
+    markerdetector.h \
+    uchiyamarkerdetector.h \
+    markerbackend.h
 
 RESOURCES += qml.qrc
 
