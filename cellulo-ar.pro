@@ -40,7 +40,8 @@ SOURCES += main.cpp \
     portablebackendfactory.cpp \
     markerdetector.cpp \
     uchiyamarkerdetector.cpp \
-    markerbackend.cpp
+    markerbackend.cpp \
+    imagebackend.cpp
 
 HEADERS += \
     opencvbackend.h \
@@ -53,7 +54,8 @@ HEADERS += \
     portablebackendfactory.h \
     markerdetector.h \
     uchiyamarkerdetector.h \
-    markerbackend.h
+    markerbackend.h \
+    imagebackend.h
 
 RESOURCES += qml.qrc
 
