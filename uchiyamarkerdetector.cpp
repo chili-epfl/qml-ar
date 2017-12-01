@@ -88,7 +88,9 @@ QMatrix4x4 UchiyaMarkerDetector::getProjectionMatrixFromMarkerUchiya(MyMat src)
 
     dst.data()[8] = 0.0f;
     dst.data()[9] = 0.0f;
-    dst.data()[10] = 1.0f;
+
+    // z axis now also has values -600...600
+    dst.data()[10] = 1.0f / marker_size_pixels;
     dst.data()[11] = 0.0f;
 
     dst.data()[12] = src(0,2);
@@ -106,9 +108,13 @@ void UchiyaMarkerDetector::recomputeProjectorUchiya()
     // for detected papers
     for(visible::iterator itpa=(*papers).begin(); itpa!=(*papers).end(); itpa++)
     {
+        QMatrix4x4 scaler_to_pixels = QMatrix4x4();
+        scaler_to_pixels.scale(marker_size_pixels);
+
         if((*itpa)->id == 8)
             projection_matrix = getInitialProjectionMatrix() *
                 getProjectionMatrixFromMarkerUchiya((*itpa)->H);
+                    //* scaler_to_pixels;
     }
 
 }

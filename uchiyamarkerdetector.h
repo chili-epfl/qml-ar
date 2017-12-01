@@ -20,6 +20,9 @@ private:
     MyImage m_img;
     LLAH m_llah;
 
+    // one side of a square marker in pixels
+    const double marker_size_pixels = 600.0f;
+
     // are the images allocated?
     bool is_initialized;
 
