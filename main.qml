@@ -4,12 +4,28 @@ import Cellulo 1.0
 import QtQuick.Scene3D 2.0
 
 Window {
+    id: window
     visible: true
-    width: 640
-    height: 480
+    width: 100
+    height: 100
     title: qsTr("Qt + OpenCV test")
 
     Rectangle {
+
+        Timer {
+            interval: 100; running: true; repeat: false;
+            onTriggered: {
+                var w = image.sourceSize.width;
+                var h = image.sourceSize.height;
+                if(w * h > 0)
+                {
+                    console.log("Resizing main window")
+                    window.width = w;
+                    window.height = h;
+                    running = false;
+                }
+            }
+        }
 
         Timer {
             interval: 100; running: true; repeat: true
