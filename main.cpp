@@ -3,6 +3,7 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include "portablebackendfactory.h"
+#include "imagebackend.h"
 #include "markerbackend.h"
 #include "markerstorage.h"
 #include "uchiyamarkerdetector.h"
@@ -14,6 +15,7 @@ int main(int argc, char *argv[])
 
     // creating a camera backend object
     QQuickImageProvider* provider = PortableCameraBackendFactory::getBackend(1);
+    //QQuickImageProvider* provider = new ImageBackend("image.jpg");
 
     // creating Uchiya marker detector
     UchiyaMarkerDetector* detector = new UchiyaMarkerDetector;
