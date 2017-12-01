@@ -8,7 +8,7 @@ Window {
     visible: true
     width: 100
     height: 100
-    title: qsTr("Qt + OpenCV test")
+    title: qsTr("Cellulo-AR")
 
     Rectangle {
 
