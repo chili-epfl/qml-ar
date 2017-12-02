@@ -41,7 +41,7 @@ Entity {
                 id: transform
                 matrix: {
                     var m = Qt.matrix4x4();
-                    m.translate(Qt.vector3d(0, 0, -120));
+                    m.translate(Qt.vector3d(0, 0, -100));
                     return m;
                 }
             },

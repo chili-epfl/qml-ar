@@ -28,7 +28,6 @@ void MarkerDetector::recomputeProjector()
     {
         projection_matrix = getInitialProjectionMatrix() *
                 (new_projection_matrix / detected_markers_n);
-        qDebug() << "Detected" << detected_markers_n << "markers";
         emit newProjector();
     }
 }
