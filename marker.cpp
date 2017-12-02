@@ -9,6 +9,7 @@ void Marker::setPositionMM(QVector2D position_mm_)
 Marker::Marker()
 {
     setPositionMM(QVector2D(0, 0));
+    resetH();
 }
 
 Marker::Marker(double x_mm, double y_mm)
@@ -41,9 +42,25 @@ const QVector2D Marker::getPositionMM()
     return position_mm;
 }
 
-const double Marker::getSizeMM()
+double Marker::getSizeMM()
 {
     return size_mm;
+}
+
+void Marker::setH(QMatrix4x4 H_)
+{
+    H = H_;
+}
+
+QMatrix4x4 Marker::getH()
+{
+    return H;
+}
+
+void Marker::resetH()
+{
+    //H.fill(0.0f);
+    H = QMatrix4x4();
 }
 
 QString Marker::toString()

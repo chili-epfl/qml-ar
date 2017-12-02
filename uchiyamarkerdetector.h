@@ -42,8 +42,7 @@ private:
     // convert preview image to QImage
     void preparePreview();
 
-    // a hack which uses UchiyaMarkers projection matrix
-    void recomputeProjectorUchiya();
+    // return 4x4 matrix from 3x3 one
     QMatrix4x4 getProjectionMatrixFromMarkerUchiya(MyMat src);
 public:
     // initialize given height and width of the image

@@ -45,6 +45,13 @@ void MarkerStorage::populate(QString data)
     }
 }
 
+void MarkerStorage::resetH()
+{
+    QMap<int, Marker>::iterator it;
+    for(it = markers.begin(); it != markers.end(); it++)
+        (*it).resetH();
+}
+
 void MarkerStorage::populate(QIODevice &input)
 {
     if(!input.isReadable())
@@ -54,12 +61,28 @@ void MarkerStorage::populate(QIODevice &input)
     populate(data);
 }
 
-Marker MarkerStorage::get(int marker_id)
+Marker* MarkerStorage::getPointer(int marker_id)
 {
     if(markers.contains(marker_id))
-        return(markers.value(marker_id));
+        return(&markers[marker_id]);
     else
+    {
         qFatal("Marker %d does not exist in storage", marker_id);
+        return(NULL);
+    }
+}
 
-    return Marker(0, 0);
+Marker MarkerStorage::get(int marker_id)
+{
+    return *getPointer(marker_id);
+}
+
+QMap<int, Marker>::iterator MarkerStorage::begin()
+{
+    return markers.begin();
+}
+
+QMap<int, Marker>::iterator MarkerStorage::end()
+{
+    return markers.end();
 }

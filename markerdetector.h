@@ -53,6 +53,10 @@ public:
     // obtain resulting projection matrix
     QMatrix4x4 getProjectionMatrix();
 
+    // iterators for going through the map
+    QMap<int, Marker>::iterator begin();
+    QMap<int, Marker>::iterator end();
+
 signals:
     // emitted when a new projection matrix is available
     void newProjector();

@@ -48,12 +48,35 @@ void UchiyaMarkerDetector::initMarkers()
 
 void UchiyaMarkerDetector::extractMarkers()
 {
+    // list of detected markers
     visible *papers = m_llah.GetVisiblePaper();
+
+    // resetting projection matrices for markers
+    markers.resetH();
 
     // for detected papers
     for(visible::iterator itpa=(*papers).begin(); itpa!=(*papers).end(); itpa++)
     {
-        int id = (*itpa)->id;
+        // id of the marker in Uchiya library
+        int id = (*itpa)->id - 1;
+
+        // marker in the storage
+        Marker* m = markers.getPointer(id);
+
+        // scaling by marker size in MM
+        QMatrix4x4 scaler_to_pixels = QMatrix4x4();
+        scaler_to_pixels.scale(marker_size_pixels / m->getSizeMM());
+
+        // translating by the position of the marker
+        QMatrix4x4 translate_to_marker = QMatrix4x4();
+        translate_to_marker.translate(-m->getPositionMM().x(), m->getSizeMM() + m->getPositionMM().y(), 0);
+
+        // resulting projection matrix
+        projection_matrix = getProjectionMatrixFromMarkerUchiya((*itpa)->H)
+                * scaler_to_pixels * translate_to_marker;
+
+        // setting it to the marker object
+        m->setH(projection_matrix);
     }
 }
 
@@ -99,29 +122,6 @@ QMatrix4x4 UchiyaMarkerDetector::getProjectionMatrixFromMarkerUchiya(MyMat src)
     dst.data()[15] = src(2,2);
 
     return(dst);
-}
-
-void UchiyaMarkerDetector::recomputeProjectorUchiya()
-{
-    visible *papers = m_llah.GetVisiblePaper();
-
-    // for detected papers
-    for(visible::iterator itpa=(*papers).begin(); itpa!=(*papers).end(); itpa++)
-    {
-        QMatrix4x4 scaler_to_pixels = QMatrix4x4();
-        QMatrix4x4 translate_to_marker = QMatrix4x4();
-        Marker m = markers.get((*itpa)->id - 1);
-        scaler_to_pixels.scale(marker_size_pixels / m.getSizeMM());
-        translate_to_marker.translate(-m.getPositionMM().y(), m.getSizeMM() + m.getPositionMM().x(), 0);
-
-        if((*itpa)->id == 8) {
-            projection_matrix = getInitialProjectionMatrix() *
-                getProjectionMatrixFromMarkerUchiya((*itpa)->H)
-                    * scaler_to_pixels * translate_to_marker;
-            //qDebug() << projection_matrix;
-        }
-    }
-
 }
 
 void UchiyaMarkerDetector::prepareInput()
@@ -174,11 +174,6 @@ void UchiyaMarkerDetector::process()
 
     // obtaining Uchiya image dst and returning it
     preparePreview();
-
-    // TODO
-    // this method call would be removed after
-    // recomputeProjector() is implemented
-    recomputeProjectorUchiya();
 
     // tell the parent to recompute projection matrix
     recomputeProjector();

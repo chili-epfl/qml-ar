@@ -1,4 +1,5 @@
 #include <QCameraLens>
+#include "marker.h"
 #include "markerdetector.h"
 
 MarkerDetector::MarkerDetector()
@@ -8,8 +9,28 @@ MarkerDetector::MarkerDetector()
 
 void MarkerDetector::recomputeProjector()
 {
-    // projection_matrix = ...
-    emit newProjector();
+    QMap<int, Marker>::iterator it;
+
+    QMatrix4x4 new_projection_matrix;
+    new_projection_matrix.fill(0.0f);
+    int detected_markers_n = 0;
+
+    for(it = markers.begin(); it != markers.end(); it++)
+    {
+        if(!(*it).getH().isIdentity())
+        {
+            new_projection_matrix += (*it).getH();
+            detected_markers_n    += 1;
+        }
+    }
+
+    if(detected_markers_n > 0)
+    {
+        projection_matrix = getInitialProjectionMatrix() *
+                (new_projection_matrix / detected_markers_n);
+        qDebug() << "Detected" << detected_markers_n << "markers";
+        emit newProjector();
+    }
 }
 
 QMatrix4x4 MarkerDetector::getInitialProjectionMatrix()
@@ -53,4 +74,14 @@ QImage MarkerDetector::getPreview()
 QMatrix4x4 MarkerDetector::getProjectionMatrix()
 {
     return projection_matrix;
+}
+
+QMap<int, Marker>::iterator MarkerDetector::begin()
+{
+    return markers.begin();
+}
+
+QMap<int, Marker>::iterator MarkerDetector::end()
+{
+    return markers.end();
 }

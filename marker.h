@@ -8,6 +8,7 @@
 
 #include <QVector2D>
 #include <QString>
+#include <QMatrix4x4>
 
 class Marker
 {
@@ -25,6 +26,10 @@ private:
     // size in mm
     double size_mm;
 
+    // homography
+    // res * [X Y 0 1]' -> [x y 0 1]
+    QMatrix4x4 H;
+
     void setPositionMM(QVector2D position_mm_);
 public:
     Marker();
@@ -36,7 +41,11 @@ public:
     void setSizeMM(double size_);
 
     const QVector2D getPositionMM();
-    const double getSizeMM();
+    double getSizeMM();
+
+    void setH(QMatrix4x4 H_);
+    QMatrix4x4 getH();
+    void resetH();
 
     QString toString();
 };

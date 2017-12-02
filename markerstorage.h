@@ -53,10 +53,18 @@ public:
     // fill with data from the string
     void populate(QString data);
 
+    // resets projection matrices for each marker
+    void resetH();
+
     // obtain a marker
     // calls qFatal on missing key
     Marker get(int marker_id);
 
+    // iterators for going through the map
+    QMap<int, Marker>::iterator begin();
+    QMap<int, Marker>::iterator end();
+
+    Marker *getPointer(int marker_id);
 };
 
 #endif // MARKERSTORAGE_H
