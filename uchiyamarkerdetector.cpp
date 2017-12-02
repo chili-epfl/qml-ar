@@ -111,10 +111,12 @@ void UchiyaMarkerDetector::recomputeProjectorUchiya()
         QMatrix4x4 scaler_to_pixels = QMatrix4x4();
         scaler_to_pixels.scale(marker_size_pixels);
 
-        if((*itpa)->id == 8)
+        if((*itpa)->id == 8) {
             projection_matrix = getInitialProjectionMatrix() *
-                getProjectionMatrixFromMarkerUchiya((*itpa)->H);
-                    //* scaler_to_pixels;
+                getProjectionMatrixFromMarkerUchiya((*itpa)->H)
+                    * scaler_to_pixels;
+            //qDebug() << projection_matrix;
+        }
     }
 
 }
