@@ -41,15 +41,15 @@ Entity {
                 id: transform
                 matrix: {
                     var m = Qt.matrix4x4();
-                    m.translate(Qt.vector3d(0, 0, -0.9));
+                    m.translate(Qt.vector3d(0, 0, -120));
                     return m;
                 }
             },
             CuboidMesh {
                 id: cubeMesh
-                xExtent: 1
-                yExtent: 1
-                zExtent: 0.001
+                xExtent: 150
+                yExtent: 150
+                zExtent: 0.15
             }
         ]
     }
@@ -60,7 +60,7 @@ Entity {
         id: light
         components: [
             Transform {
-                translation: Qt.vector3d(0.0, 0, 1)
+                translation: Qt.vector3d(0.0, 0, 150)
             },
             PointLight {
                 color: "white"
@@ -85,7 +85,7 @@ Entity {
         id: light1
         components: [
             Transform {
-                translation: Qt.vector3d(0.0, 0, -1.5)
+                translation: Qt.vector3d(0.0, 0, -225)
             },
             PointLight {
                 color: "white"
@@ -100,9 +100,9 @@ Entity {
     RenderableEntity {
         id: chest
         source: "/assets/Chest.obj"
-        position: Qt.vector3d(0, 0, -1)
+        position: Qt.vector3d(210, -297, -150)
         rotationAngle: 0
-        scale: 0.0083
+        scale: 1
 
         material: DiffuseMapMaterial {
             id: material

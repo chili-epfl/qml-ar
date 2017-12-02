@@ -36,6 +36,7 @@ public:
     void setSizeMM(double size_);
 
     const QVector2D getPositionMM();
+    const double getSizeMM();
 
     QString toString();
 };

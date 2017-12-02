@@ -41,6 +41,11 @@ const QVector2D Marker::getPositionMM()
     return position_mm;
 }
 
+const double Marker::getSizeMM()
+{
+    return size_mm;
+}
+
 QString Marker::toString()
 {
     QString res;

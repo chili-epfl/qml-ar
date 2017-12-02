@@ -109,12 +109,15 @@ void UchiyaMarkerDetector::recomputeProjectorUchiya()
     for(visible::iterator itpa=(*papers).begin(); itpa!=(*papers).end(); itpa++)
     {
         QMatrix4x4 scaler_to_pixels = QMatrix4x4();
-        scaler_to_pixels.scale(marker_size_pixels);
+        QMatrix4x4 translate_to_marker = QMatrix4x4();
+        Marker m = markers.get((*itpa)->id - 1);
+        scaler_to_pixels.scale(marker_size_pixels / m.getSizeMM());
+        translate_to_marker.translate(-m.getPositionMM().y(), m.getSizeMM() + m.getPositionMM().x(), 0);
 
         if((*itpa)->id == 8) {
             projection_matrix = getInitialProjectionMatrix() *
                 getProjectionMatrixFromMarkerUchiya((*itpa)->H)
-                    * scaler_to_pixels;
+                    * scaler_to_pixels * translate_to_marker;
             //qDebug() << projection_matrix;
         }
     }
