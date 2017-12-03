@@ -19,7 +19,12 @@ int main(int argc, char *argv[])
 
     // creating Uchiya marker detector
     UchiyaMarkerDetector* detector = new UchiyaMarkerDetector;
-    detector->loadMarkerPositions("markers.json");
+
+#ifdef Q_OS_ANDROID
+        detector->loadMarkerPositions("assets:/markers.json");
+#else
+        detector->loadMarkerPositions(":/assets/markers.json");
+#endif
 
     // adding UchiyaBackEnd (decorating camera object)
     MarkerBackEnd* backend = new MarkerBackEnd(provider, detector);

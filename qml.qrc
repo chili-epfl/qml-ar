@@ -7,5 +7,6 @@
     <qresource prefix="/">
         <file>./assets/diffuse.webp</file>
         <file>./assets/Chest.obj</file>
+        <file>./assets/markers.json</file>
     </qresource>
 </RCC>
