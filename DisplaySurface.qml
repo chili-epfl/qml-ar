@@ -14,6 +14,10 @@ import QtQuick 2.0 as QQ2
 Entity {
     id: sceneRoot
 
+    property real robotx: 100
+    property real roboty: 100
+    property real robot_theta: 0
+
     Camera {
         id: camera
         projectionMatrix: detector.projector
@@ -30,6 +34,24 @@ Entity {
         },
         InputSettings { }
     ]
+
+    // cellulo robot visual
+    Entity {
+        id: celluloDirection
+        components: [
+            PhongMaterial {
+            },
+            Transform {
+                rotation: fromAxisAndAngle(Qt.vector3d(0, 0, 1), sceneRoot.robot_theta)
+                translation: Qt.vector3d(sceneRoot.robotx, sceneRoot.roboty, -100);
+            },
+            CuboidMesh {
+                xExtent: 50
+                yExtent: 2
+                zExtent: 2
+            }
+        ]
+    }
 
     Entity {
         id: cuboid
