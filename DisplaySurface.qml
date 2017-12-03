@@ -85,11 +85,11 @@ Entity {
         id: light1
         components: [
             Transform {
-                translation: Qt.vector3d(0.0, 0, -225)
+                translation: Qt.vector3d(0.0, 100, -225)
             },
             PointLight {
                 color: "white"
-                intensity: 1
+                intensity: 2
                 constantAttenuation: 1.0
                 linearAttenuation: 0.0
                 quadraticAttenuation: 0
@@ -100,7 +100,7 @@ Entity {
     RenderableEntity {
         id: chest
         source: "/assets/Chest.obj"
-        position: Qt.vector3d(210, -297, -150)
+        position: Qt.vector3d(210, 297, -150)
         rotationAngle: 0
         scale: 1
 

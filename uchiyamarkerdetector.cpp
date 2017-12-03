@@ -74,9 +74,14 @@ void UchiyaMarkerDetector::extractMarkers()
         QMatrix4x4 translate_to_marker = QMatrix4x4();
         translate_to_marker.translate(-m->getPositionMM().x(), m->getSizeMM() + m->getPositionMM().y(), 0);
 
+        // flipping y axis
+        QMatrix4x4 flip_y = QMatrix4x4();
+        flip_y.scale(1, -1, 1);
+
         // resulting projection matrix
         projection_matrix = getProjectionMatrixFromMarkerUchiya((*itpa)->H)
-                * scaler_to_pixels * translate_to_marker;
+                * scaler_to_pixels * translate_to_marker * flip_y;
+
 
         // setting it to the marker object
         m->setH(projection_matrix);
