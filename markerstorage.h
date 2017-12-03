@@ -64,6 +64,8 @@ public:
     QMap<int, Marker>::iterator begin();
     QMap<int, Marker>::iterator end();
 
+    // obtain a pointer to Marker
+    // returns NULL on missing key
     Marker *getPointer(int marker_id);
 };
 

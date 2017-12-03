@@ -73,7 +73,7 @@ Entity {
                     from: 0.8; to: 1;
                     running: true
                     loops: Animation.Infinite
-                    duration: 100
+                    duration: 1000
                     easing.type: Easing.CosineCurve
                 }
             }

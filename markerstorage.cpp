@@ -67,14 +67,20 @@ Marker* MarkerStorage::getPointer(int marker_id)
         return(&markers[marker_id]);
     else
     {
-        qFatal("Marker %d does not exist in storage", marker_id);
+        qDebug() << "Marker" << marker_id << "does not exist in storage";
         return(NULL);
     }
 }
 
 Marker MarkerStorage::get(int marker_id)
 {
-    return *getPointer(marker_id);
+    Marker* marker = getPointer(marker_id);
+    if(marker == NULL)
+    {
+        qFatal("Marker %d does not exist in storage", marker_id);
+        return Marker();
+    }
+    return *marker;
 }
 
 QMap<int, Marker>::iterator MarkerStorage::begin()

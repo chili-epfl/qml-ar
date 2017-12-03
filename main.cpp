@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // creating a camera backend object
-    QQuickImageProvider* provider = PortableCameraBackendFactory::getBackend(1);
+    QQuickImageProvider* provider = PortableCameraBackendFactory::getBackend();
     //QQuickImageProvider* provider = new ImageBackend("image.jpg");
 
     // creating Uchiya marker detector
