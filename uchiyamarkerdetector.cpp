@@ -68,7 +68,7 @@ void UchiyaMarkerDetector::extractMarkers()
         // scaling by marker size in MM
         QMatrix4x4 scaler_to_pixels = QMatrix4x4();
         scaler_to_pixels.scale(marker_size_pixels / m->getSizeMM(),
-                               marker_size_pixels / m->getSizeMM(), 0);
+                               marker_size_pixels / m->getSizeMM(), 1);
 
         // translating by the position of the marker
         QMatrix4x4 translate_to_marker = QMatrix4x4();
