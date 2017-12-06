@@ -69,7 +69,8 @@ void UchiyaMarkerDetector::extractMarkers()
         // z axis now also has values -600...600
         QMatrix4x4 scaler_to_pixels = QMatrix4x4();
         scaler_to_pixels.scale(marker_size_pixels / m->getSizeMM(),
-                               marker_size_pixels / m->getSizeMM(), 1. / marker_size_pixels);
+                               marker_size_pixels / m->getSizeMM(),
+                               1. / marker_size_pixels);
 
         // translating by the position of the marker
         QMatrix4x4 translate_to_marker = QMatrix4x4();

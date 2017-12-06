@@ -26,10 +26,13 @@ void MarkerDetector::recomputeCameraMatrix()
 
     if(detected_markers_n > 0)
     {
+        //qDebug() << getProjectionMatrix();
         camera_matrix = getProjectionMatrix() *
                 (new_projection_matrix / detected_markers_n);
 
-        qDebug() << camera_matrix;
+        qDebug() << camera_matrix.map(QVector4D(0, 0, 0, 1))
+                << camera_matrix.map(QVector4D(210, 297, 0, 1))
+                << camera_matrix.map(QVector4D(210, 297, 100, 1));
 
         emit newCameraMatrix();
     }
@@ -45,11 +48,15 @@ QMatrix4x4 MarkerDetector::getProjectionMatrix()
 
     float f = 1;
     float n = -1;
+    float l = 0;
+    float r = input_buffer.width();
+    float b = 0;
+    float t = input_buffer.height();
 
     Qt3DRender::QCameraLens lens;
 
     // for orthographic projection
-    lens.setOrthographicProjection(0, input_buffer.width(), 0, input_buffer.height(), n, f);
+    lens.setOrthographicProjection(l, r, b, t, n, f);
 
     // for perspective projection
     //lens.setPerspectiveProjection(45, 1, n, f);
@@ -69,8 +76,10 @@ QMatrix4x4 MarkerDetector::getProjectionMatrix()
     res(3, 3) = 0;
     res(2, 3) = -2 * f * n / (f - n);
     res(3, 2) = -1;
+    res(0, 2) = (r + l) / (r - l);
+    res(1, 2) = (t + b) / (t - b);
 
-    return res;
+    return res.transposed();
 }
 
 void MarkerDetector::setInput(QImage camera)
