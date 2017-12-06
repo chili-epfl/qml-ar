@@ -20,7 +20,7 @@ Entity {
 
     Camera {
         id: camera
-        projectionMatrix: detector.projector
+        projectionMatrix: detector.camera_matrix
     }
 
     FirstPersonCameraController { camera: camera }
@@ -122,7 +122,7 @@ Entity {
     RenderableEntity {
         id: chest
         source: "/assets/Chest.obj"
-        position: Qt.vector3d(210, 297, -150)
+        position: Qt.vector3d(210, 297, 0)
         rotationAngle: 0
         scale: 1
 

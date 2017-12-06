@@ -15,16 +15,24 @@ int main(int argc, char *argv[])
 
     // creating a camera backend object
     QQuickImageProvider* provider = PortableCameraBackendFactory::getBackend();
-    //QQuickImageProvider* provider = new ImageBackend("image.jpg");
+    //QQuickImageProvider* provider = new ImageBackend("images/image.jpg");
 
     // creating Uchiya marker detector
     UchiyaMarkerDetector* detector = new UchiyaMarkerDetector;
 
 #ifdef Q_OS_ANDROID
-        detector->loadMarkerPositions("assets:/markers.json");
+    detector->loadMarkerPositions("assets:/markers.json");
 #else
-        detector->loadMarkerPositions(":/assets/markers.json");
+    detector->loadMarkerPositions(":/assets/markers.json");
 #endif
+
+    float c_p_m_[] = {5.9740803084926324e+02, 0., 3.2367345813470314e+02,
+                      0., 5.9740803084926324e+02, 2.5857594808156688e+02,
+                      0., 0., 1. };
+    QMatrix3x3 c_p_m(c_p_m_);
+    c_p_m *= 1e-10;
+    //c_p_m(2, 2) = 1;
+    detector->setCameraProjectionMatrix(c_p_m);
 
     // adding UchiyaBackEnd (decorating camera object)
     MarkerBackEnd* backend = new MarkerBackEnd(provider, detector);

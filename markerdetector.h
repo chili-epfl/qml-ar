@@ -13,10 +13,10 @@
  */
 
 class MarkerDetector: public QObject
-{ Q_OBJECT Q_PROPERTY(QMatrix4x4 projector READ getProjectionMatrix NOTIFY newProjector)
+{ Q_OBJECT Q_PROPERTY(QMatrix4x4 camera_matrix READ getCameraMatrix NOTIFY newCameraMatrix)
 public slots:
     // children call it when a new matrix should be computed
-    void recomputeProjector();
+    void recomputeCameraMatrix();
 
 protected:
     // marker positions
@@ -29,10 +29,13 @@ protected:
     QImage output_buffer;
 
     // resulting projection matrix
-    QMatrix4x4 projection_matrix;
+    QMatrix4x4 camera_matrix;
 
     // get initial projection matrix
-    QMatrix4x4 getInitialProjectionMatrix();
+    QMatrix4x4 getProjectionMatrix();
+
+    // initial camera calibration matrix
+    QMatrix3x3 camera_projection_matrix;
     virtual QVector2D getMarkerPosition(int marker_id);
 public:
     MarkerDetector();
@@ -51,15 +54,17 @@ public:
     QImage getPreview();
 
     // obtain resulting projection matrix
-    QMatrix4x4 getProjectionMatrix();
+    QMatrix4x4 getCameraMatrix();
 
     // iterators for going through the map
     QMap<int, Marker>::iterator begin();
     QMap<int, Marker>::iterator end();
 
+    void setCameraProjectionMatrix(QMatrix3x3 mat);
+
 signals:
     // emitted when a new projection matrix is available
-    void newProjector();
+    void newCameraMatrix();
 };
 
 #endif // MARKERDETECTOR_H

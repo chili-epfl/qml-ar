@@ -43,7 +43,7 @@ private:
     void preparePreview();
 
     // return 4x4 matrix from 3x3 one
-    QMatrix4x4 getProjectionMatrixFromMarkerUchiya(MyMat src);
+    QMatrix4x4 homography2Dto3D(MyMat src);
 public:
     // initialize given height and width of the image
     UchiyaMarkerDetector();

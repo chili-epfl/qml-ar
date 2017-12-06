@@ -7,7 +7,7 @@ MarkerDetector::MarkerDetector()
 
 }
 
-void MarkerDetector::recomputeProjector()
+void MarkerDetector::recomputeCameraMatrix()
 {
     QMap<int, Marker>::iterator it;
 
@@ -26,13 +26,16 @@ void MarkerDetector::recomputeProjector()
 
     if(detected_markers_n > 0)
     {
-        projection_matrix = getInitialProjectionMatrix() *
+        camera_matrix = getProjectionMatrix() *
                 (new_projection_matrix / detected_markers_n);
-        emit newProjector();
+
+        qDebug() << camera_matrix;
+
+        emit newCameraMatrix();
     }
 }
 
-QMatrix4x4 MarkerDetector::getInitialProjectionMatrix()
+QMatrix4x4 MarkerDetector::getProjectionMatrix()
 {
     if(input_buffer.width() * input_buffer.height() == 0)
     {
@@ -40,14 +43,34 @@ QMatrix4x4 MarkerDetector::getInitialProjectionMatrix()
         return QMatrix4x4();
     }
 
+    float f = 1;
+    float n = -1;
+
     Qt3DRender::QCameraLens lens;
 
     // for orthographic projection
-    lens.setOrthographicProjection(0, input_buffer.width(), 0, input_buffer.height(), -1, 1);
+    lens.setOrthographicProjection(0, input_buffer.width(), 0, input_buffer.height(), n, f);
 
     // for perspective projection
-    // lens.setPerspectiveProjection(45, 1, -1, 1);
+    //lens.setPerspectiveProjection(45, 1, n, f);
     return lens.projectionMatrix();
+
+    // get matrix from the camera projection matrix (calibrated)
+    // see http://kgeorge.github.io/2014/03/08/calculating-opengl-perspective-matrix-from-opencv-intrinsic-matrix
+    float alpha = camera_projection_matrix(0, 0);
+    float beta  = camera_projection_matrix(1, 1);
+    float c_x   = camera_projection_matrix(0, 2);
+    float c_y   = camera_projection_matrix(1, 2);
+
+    QMatrix4x4 res;
+    res(0, 0) = alpha / c_x;
+    res(1, 1) = beta / c_y;
+    res(2, 2) = -(f + n)/(f - n);
+    res(3, 3) = 0;
+    res(2, 3) = -2 * f * n / (f - n);
+    res(3, 2) = -1;
+
+    return res;
 }
 
 void MarkerDetector::setInput(QImage camera)
@@ -70,9 +93,9 @@ QImage MarkerDetector::getPreview()
     return output_buffer;
 }
 
-QMatrix4x4 MarkerDetector::getProjectionMatrix()
+QMatrix4x4 MarkerDetector::getCameraMatrix()
 {
-    return projection_matrix;
+    return camera_matrix;
 }
 
 QMap<int, Marker>::iterator MarkerDetector::begin()
@@ -83,4 +106,9 @@ QMap<int, Marker>::iterator MarkerDetector::begin()
 QMap<int, Marker>::iterator MarkerDetector::end()
 {
     return markers.end();
+}
+
+void MarkerDetector::setCameraProjectionMatrix(QMatrix3x3 mat)
+{
+    camera_projection_matrix = mat;
 }

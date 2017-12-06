@@ -66,9 +66,10 @@ void UchiyaMarkerDetector::extractMarkers()
         if(m == NULL) continue;
 
         // scaling by marker size in MM
+        // z axis now also has values -600...600
         QMatrix4x4 scaler_to_pixels = QMatrix4x4();
         scaler_to_pixels.scale(marker_size_pixels / m->getSizeMM(),
-                               marker_size_pixels / m->getSizeMM(), 1);
+                               marker_size_pixels / m->getSizeMM(), 1. / marker_size_pixels);
 
         // translating by the position of the marker
         QMatrix4x4 translate_to_marker = QMatrix4x4();
@@ -79,12 +80,12 @@ void UchiyaMarkerDetector::extractMarkers()
         flip_y.scale(1, -1, 1);
 
         // resulting projection matrix
-        projection_matrix = getProjectionMatrixFromMarkerUchiya((*itpa)->H)
+        camera_matrix = homography2Dto3D((*itpa)->H)
                 * scaler_to_pixels * translate_to_marker * flip_y;
 
 
         // setting it to the marker object
-        m->setH(projection_matrix);
+        m->setH(camera_matrix);
     }
 }
 
@@ -104,7 +105,7 @@ void UchiyaMarkerDetector::preparePreview()
     output_buffer = QtOcv::mat2Image(dst2mat);
 }
 
-QMatrix4x4 UchiyaMarkerDetector::getProjectionMatrixFromMarkerUchiya(MyMat src)
+QMatrix4x4 UchiyaMarkerDetector::homography2Dto3D(MyMat src)
 {
     QMatrix4x4 dst;
     dst.data()[0] = src(0,0);
@@ -120,8 +121,7 @@ QMatrix4x4 UchiyaMarkerDetector::getProjectionMatrixFromMarkerUchiya(MyMat src)
     dst.data()[8] = 0.0f;
     dst.data()[9] = 0.0f;
 
-    // z axis now also has values -600...600
-    dst.data()[10] = 1.0f / marker_size_pixels;
+    dst.data()[10] = 1.0f;
     dst.data()[11] = 0.0f;
 
     dst.data()[12] = src(0,2);
@@ -184,7 +184,7 @@ void UchiyaMarkerDetector::process()
     preparePreview();
 
     // tell the parent to recompute projection matrix
-    recomputeProjector();
+    recomputeCameraMatrix();
 
     qDebug() << "Uchiya dt" << timer.elapsed() << "ms";
 }
