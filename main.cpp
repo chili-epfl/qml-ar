@@ -26,13 +26,10 @@ int main(int argc, char *argv[])
     detector->loadMarkerPositions(":/assets/markers.json");
 #endif
 
-    float c_p_m_[] = {5.9740803084926324e+02, 0., 3.2367345813470314e+02,
+    float camera_calibration[] = {5.9740803084926324e+02, 0., 3.2367345813470314e+02,
                       0., 5.9740803084926324e+02, 2.5857594808156688e+02,
                       0., 0., 1. };
-    QMatrix3x3 c_p_m(c_p_m_);
-    c_p_m *= 1e-10;
-    //c_p_m(2, 2) = 1;
-    detector->setCameraProjectionMatrix(c_p_m);
+    detector->setCameraProjectionMatrix(QMatrix3x3(camera_calibration));
 
     // adding UchiyaBackEnd (decorating camera object)
     MarkerBackEnd* backend = new MarkerBackEnd(provider, detector);
