@@ -173,7 +173,8 @@ android {
 }
 
 
-textures.path = /assets
-textures.files += $$PWD/assets/*
-textures.depends += FORCE
-INSTALLS += textures
+# adding assets/ folder
+assets.path = /assets
+assets.files += $$PWD/assets/*
+assets.depends += FORCE
+INSTALLS += assets
