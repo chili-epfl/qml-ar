@@ -27,12 +27,14 @@ void MarkerDetector::recomputeCameraMatrix()
     if(detected_markers_n > 0)
     {
         //qDebug() << getProjectionMatrix();
-        camera_matrix = getProjectionMatrix() *
-                (new_projection_matrix / detected_markers_n);
 
-        qDebug() << camera_matrix.map(QVector4D(0, 0, 0, 1))
-                << camera_matrix.map(QVector4D(210, 297, 0, 1))
-                << camera_matrix.map(QVector4D(210, 297, 100, 1));
+        QMatrix4x4 homography_projection_matrix = (new_projection_matrix / detected_markers_n);
+
+        camera_matrix = getProjectionMatrix() * homography_projection_matrix;
+
+        qDebug() << homography_projection_matrix.map(QVector4D(105, 148, 0, 1))
+                << homography_projection_matrix.map(QVector4D(210, 297, 0, 1))
+                << homography_projection_matrix.map(QVector4D(210, 297, 100, 1));
 
         emit newCameraMatrix();
     }
@@ -46,8 +48,14 @@ QMatrix4x4 MarkerDetector::getProjectionMatrix()
         return QMatrix4x4();
     }
 
-    float f = 1;
+    qDebug() << input_buffer.width() << input_buffer.height();
+
+    /*float n = 0.01;
+    float f = 10;*/
+
     float n = -1;
+    float f = 1;
+
     float l = 0;
     float r = input_buffer.width();
     float b = 0;
@@ -58,8 +66,9 @@ QMatrix4x4 MarkerDetector::getProjectionMatrix()
     // for orthographic projection
     lens.setOrthographicProjection(l, r, b, t, n, f);
 
+
     // for perspective projection
-    //lens.setPerspectiveProjection(45, 1, n, f);
+    //lens.setFrustumProjection(l, r, b, t, n, f);
     return lens.projectionMatrix();
 
     // get matrix from the camera projection matrix (calibrated)
