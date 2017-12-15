@@ -32,7 +32,7 @@ void MarkerDetector::recomputeCameraMatrix()
 
         camera_matrix = getProjectionMatrix() * homography_projection_matrix;
 
-        qDebug() << homography_projection_matrix.map(QVector4D(105, 148, 0, 1))
+        qDebug() << camera_matrix.map(QVector4D(105, 148, -100, 1))
                 << homography_projection_matrix.map(QVector4D(210, 297, 0, 1))
                 << homography_projection_matrix.map(QVector4D(210, 297, 100, 1));
 
@@ -53,42 +53,52 @@ QMatrix4x4 MarkerDetector::getProjectionMatrix()
     /*float n = 0.01;
     float f = 10;*/
 
-    float n = -1;
-    float f = 1;
+    float n = 0.1;
+    float f = 1000;
 
     float l = 0;
     float r = input_buffer.width();
     float b = 0;
     float t = input_buffer.height();
 
-    Qt3DRender::QCameraLens lens;
-
-    // for orthographic projection
-    lens.setOrthographicProjection(l, r, b, t, n, f);
-
-
     // for perspective projection
     //lens.setFrustumProjection(l, r, b, t, n, f);
-    return lens.projectionMatrix();
+    //return lens.projectionMatrix();
 
     // get matrix from the camera projection matrix (calibrated)
     // see http://kgeorge.github.io/2014/03/08/calculating-opengl-perspective-matrix-from-opencv-intrinsic-matrix
     float alpha = camera_projection_matrix(0, 0);
     float beta  = camera_projection_matrix(1, 1);
-    float c_x   = camera_projection_matrix(0, 2);
-    float c_y   = camera_projection_matrix(1, 2);
+    float c_x   = -camera_projection_matrix(0, 2);
+    float c_y   = -camera_projection_matrix(1, 2);
+    float s     = camera_projection_matrix(0, 1);
 
-    QMatrix4x4 res;
-    res(0, 0) = alpha / c_x;
-    res(1, 1) = beta / c_y;
-    res(2, 2) = -(f + n)/(f - n);
-    res(3, 3) = 0;
-    res(2, 3) = -2 * f * n / (f - n);
-    res(3, 2) = -1;
-    res(0, 2) = (r + l) / (r - l);
-    res(1, 2) = (t + b) / (t - b);
+    QMatrix4x4 persp;
+    persp(0, 0) = alpha;
+    persp(0, 1) = s;
+    persp(0, 2) = c_x;
+    persp(0, 3) = 0;
 
-    return res.transposed();
+    persp(1, 0) = 0;
+    persp(1, 1) = beta;
+    persp(1, 2) = c_y;
+    persp(1, 3) = 0;
+
+    persp(2, 0) = 0;
+    persp(2, 1) = 0;
+    persp(2, 2) = n + f;
+    persp(2, 3) = n * f;
+
+    persp(3, 0) = 0;
+    persp(3, 1) = 0;
+    persp(3, 2) = -1;
+    persp(3, 3) = 0;
+
+    Qt3DRender::QCameraLens lens;
+    // for orthographic projection
+    lens.setOrthographicProjection(l, r, b, t, n, f);
+
+    return lens.projectionMatrix() * persp;
 }
 
 void MarkerDetector::setInput(QImage camera)
