@@ -41,7 +41,8 @@ SOURCES += main.cpp \
     markerdetector.cpp \
     uchiyamarkerdetector.cpp \
     markerbackend.cpp \
-    imagebackend.cpp
+    imagebackend.cpp \
+    mymatconverter.cpp
 
 HEADERS += \
     opencvbackend.h \
@@ -55,7 +56,8 @@ HEADERS += \
     markerdetector.h \
     uchiyamarkerdetector.h \
     markerbackend.h \
-    imagebackend.h
+    imagebackend.h \
+    mymatconverter.h
 
 RESOURCES += qml.qrc
 

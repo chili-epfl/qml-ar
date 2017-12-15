@@ -122,7 +122,7 @@ Entity {
     RenderableEntity {
         id: chest
         source: "/assets/Chest.obj"
-        position: Qt.vector3d(210, 297, -200)
+        position: Qt.vector3d(210, 297, -700)
         rotationAngle: 0
         scale: 1
 

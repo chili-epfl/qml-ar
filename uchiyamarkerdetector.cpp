@@ -6,6 +6,12 @@
 #include <QElapsedTimer>
 #include <QMatrix4x4>
 #include "QtOpenCV/cvmatandqimage.h"
+#include "opencv2/core.hpp"
+#include <vector>
+#include <opencv2/calib3d.hpp>
+#include "mymatconverter.h"
+
+using std::vector;
 
 // see main.cpp and main.h from
 // UchiyaMarkers project
@@ -107,6 +113,38 @@ void UchiyaMarkerDetector::preparePreview()
 
 QMatrix4x4 UchiyaMarkerDetector::homography2Dto3D(MyMat src)
 {
+    MyMat intrinsic(3, 3);
+
+    intrinsic(0, 0) = 5.9740803084926324e+02;
+    intrinsic(0, 1) = 0;
+    intrinsic(0, 2) = 3.2367345813470314e+02;
+
+    intrinsic(1, 0) = 0;
+    intrinsic(1, 1) = 5.9740803084926324e+02;
+    intrinsic(1, 2) = 2.5857594808156688e+02;
+
+    intrinsic(2, 0) = 0;
+    intrinsic(2, 1) = 0;
+    intrinsic(2, 2) = 1;
+
+    MyMat r(3, 3);
+    MyMat t(3, 1);
+
+    MyMat invintrinsic(3, 3);
+    invintrinsic.Inv(intrinsic);
+
+    src.RtfromH(invintrinsic, r, t);
+
+    QMatrix4x4 modelMatrix;
+
+    modelMatrix.rotate(QQuaternion::fromRotationMatrix(MyMatConverter::convert3x3(r)));
+    modelMatrix.translate(MyMatConverter::convert3x1(r));
+
+    return modelMatrix;
+}
+
+/*QMatrix4x4 UchiyaMarkerDetector::homography2Dto3D(MyMat src)
+{
     QMatrix4x4 dst;
     dst.data()[0] = src(0,0);
     dst.data()[1] = src(1,0);
@@ -130,7 +168,9 @@ QMatrix4x4 UchiyaMarkerDetector::homography2Dto3D(MyMat src)
     dst.data()[15] = src(2,2);
 
     return(dst);
-}
+}*/
+
+
 
 void UchiyaMarkerDetector::prepareInput()
 {

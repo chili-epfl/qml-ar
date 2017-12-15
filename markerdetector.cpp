@@ -53,13 +53,13 @@ QMatrix4x4 MarkerDetector::getProjectionMatrix()
     /*float n = 0.01;
     float f = 10;*/
 
-    float n = 0.1;
+    float n = 5;
     float f = 1000;
 
     float l = 0;
-    float r = input_buffer.width();
+    float r = input_buffer.width() / 100;
     float b = 0;
-    float t = input_buffer.height();
+    float t = input_buffer.height() / 100;
 
     // for perspective projection
     //lens.setFrustumProjection(l, r, b, t, n, f);
