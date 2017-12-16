@@ -1,21 +1,29 @@
 ##### QT
 # Name of the application
-TARGET=cellulo-ar
+TARGET=celluloarplugin
 
 # Qt configuration for Quick applications
-QT += quick multimedia opengl multimediawidgets 3dinput 3drender
-CONFIG += c++11
+QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender
+TEMPLATE = lib
+CONFIG += qt plugin c++11 staticlib
+CONFIG -= android_install
 
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+TARGET = $$qtLibraryTarget($$TARGET)
+uri = CelluloAR
 
-# Additional import path used to resolve QML modules just for Qt Quick Designer
-QML_DESIGNER_IMPORT_PATH =
+#File installation
+qmldir.files = qmldir
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+OTHER_FILES += qmldir.files
+
+unix {
+    installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
+    qmldir.path = $$installPath
+    javascript.path = $$installPath
+    qml.path = $$installPath
+    target.path = $$installPath
+    INSTALLS += target qmldir javascript qml
+}
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -29,8 +37,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 ##### SOURCES/HEADERS (this project)
-SOURCES += main.cpp \
-    opencvbackend.cpp \
+SOURCES += opencvbackend.cpp \
     qtbackend.cpp \
     cameraframegrabber.cpp \
     voidviewfinder.cpp \
@@ -56,8 +63,6 @@ HEADERS += \
     uchiyamarkerdetector.h \
     markerbackend.h \
     imagebackend.h
-
-RESOURCES += qml.qrc
 
 ##### LIBRARIES
 # QtOpenCV library
@@ -158,23 +163,5 @@ HEADERS += uchiya/blob.h \
     uchiya/mylib/mytimer.h \
     uchiya/mylib/opencvpath.h
 
-# android: installing UchiyaMarkers
-# .txt files to device
-# See https://stackoverflow.com/questions/20573838/qt-5-2-including-external-file-into-an-android-package
-# https://forum.qt.io/topic/69946/qt-android-assets/4
-# https://falsinsoft.blogspot.ch/2017/01/qt-creator-include-additional-files.html
-android {
-    # From: http://community.kde.org/Necessitas/Assets
-    markerdata.path = /assets/data
-    markerdata.files += $$PWD/uchiya/data/*
-    markerdata.depends += FORCE
-
-    INSTALLS += markerdata
-}
-
-
-# adding assets/ folder
-assets.path = /assets
-assets.files += $$PWD/assets/*
-assets.depends += FORCE
-INSTALLS += assets
+DISTFILES += \
+    qmlfile
