@@ -28,5 +28,7 @@ void CalibratedCameraFileStorage::readConfig(QJsonObject config)
     }
 
     // copying data to member variable
-    A = result_matrix;
+    // transpose required since QMatrix3x3.data()
+    // is in column-major order
+    A = result_matrix.transposed();
 }
