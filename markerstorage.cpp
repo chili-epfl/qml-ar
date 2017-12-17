@@ -3,7 +3,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QFile>
 #include <QDebug>
 
 MarkerStorage::MarkerStorage()
@@ -11,20 +10,8 @@ MarkerStorage::MarkerStorage()
     markers.clear();
 }
 
-void MarkerStorage::populateFromFile(QString filename)
+void MarkerStorage::readConfig(QJsonObject config)
 {
-    QFile file;
-    file.setFileName(filename);
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    populate(file);
-    file.close();
-}
-
-void MarkerStorage::populate(QString data)
-{
-    QJsonDocument document = QJsonDocument::fromJson(data.toUtf8());
-    QJsonObject config = document.object();
-
     QJsonArray markers_obj = config.value("markers").toArray();
     for(QJsonArray::iterator it = markers_obj.begin(); it != markers_obj.end(); it++)
     {
@@ -50,15 +37,6 @@ void MarkerStorage::resetH()
     QMap<int, Marker>::iterator it;
     for(it = markers.begin(); it != markers.end(); it++)
         (*it).resetH();
-}
-
-void MarkerStorage::populate(QIODevice &input)
-{
-    if(!input.isReadable())
-        qFatal("Error reading marker config");
-
-    QString data = input.readAll();
-    populate(data);
 }
 
 Marker* MarkerStorage::getPointer(int marker_id)

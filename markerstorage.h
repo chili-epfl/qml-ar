@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QIODevice>
 #include "marker.h"
+#include "configjson.h"
 
 /*
  * This class stores the set of used markers
@@ -35,7 +36,7 @@
  *
  */
 
-class MarkerStorage
+class MarkerStorage : public ConfigJSON
 {
 private:
     // stored markers
@@ -44,14 +45,8 @@ public:
     // initialize empty storage
     MarkerStorage();
 
-    // fill with data from a file/other QIODevice
-    void populate(QIODevice &input);
-
-    // fill with data from file
-    void populateFromFile(QString filename);
-
-    // fill with data from the string
-    void populate(QString data);
+    // fill with data from object
+    void readConfig(QJsonObject data);
 
     // resets projection matrices for each marker
     void resetH();
