@@ -44,7 +44,11 @@ SOURCES += main.cpp \
     imagebackend.cpp \
     calibratedcamera.cpp \
     calibratedcamerafilestorage.cpp \
-    configjson.cpp
+    configjson.cpp \
+    markerimageaugmenter.cpp \
+    mvpprovider.cpp \
+    markermvpprovider.cpp \
+    worldpointimages.cpp
 
 HEADERS += \
     opencvbackend.h \
@@ -61,7 +65,11 @@ HEADERS += \
     imagebackend.h \
     calibratedcamera.h \
     calibratedcamerafilestorage.h \
-    configjson.h
+    configjson.h \
+    imageaugmenter.h \
+    mvpprovider.h \
+    markermvpprovider.h \
+    worldpointimages.h
 
 RESOURCES += qml.qrc
 

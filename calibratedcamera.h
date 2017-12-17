@@ -12,9 +12,12 @@ class CalibratedCamera
 {
 protected:
     QMatrix3x3 A;
+
 public:
-    CalibratedCamera();
+    CalibratedCamera(int h, int w);
     QMatrix3x3 getMatrix();
+
+    QMatrix4x4 getPerspectiveMatrix(float n, float f, float l, float r, float b, float t);
 };
 
 #endif // CALIBRATEDCAMERA_H

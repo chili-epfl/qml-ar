@@ -13,20 +13,20 @@
 class Marker
 {
 private:
-    // number of the marker in Uchiya library
+    // number of the marker
     int id;
 
     // name of the marker
     QString name;
 
     // postition of the marker in the activity sheet
-    // in millimetres
+    // top-left corner, in millimetres
     QVector2D position_mm;
 
-    // size in mm
+    // size of the single side in mm
     double size_mm;
 
-    // homography
+    // rotation + translation matrix
     // res * [X Y 0 1]' -> [x y 0 1]
     QMatrix4x4 H;
 
