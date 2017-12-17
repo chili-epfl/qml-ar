@@ -7,9 +7,11 @@
 #include "markerbackend.h"
 #include "markerstorage.h"
 #include "uchiyamarkerdetector.h"
+#include "calibratedcamerafilestorage.h"
 
 int main(int argc, char *argv[])
 {
+    // default Qt + QML init
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
@@ -20,16 +22,24 @@ int main(int argc, char *argv[])
     // creating Uchiya marker detector
     UchiyaMarkerDetector* detector = new UchiyaMarkerDetector;
 
+    // creating Calibrated Camera
+    CalibratedCameraFileStorage* camera_matrix = new CalibratedCameraFileStorage;
+
+    // setting up assets path (os-dependent)
 #ifdef Q_OS_ANDROID
-    detector->loadMarkerPositions("assets:/markers.json");
+    QString ASSETS_PATH = "assets:/";
 #else
-    detector->loadMarkerPositions(":/assets/markers.json");
+    QString ASSETS_PATH = ":/assets/";
 #endif
 
-    float camera_calibration[] = {5.9740803084926324e+02, 0., 3.2367345813470314e+02,
-                      0., 5.9740803084926324e+02, 2.5857594808156688e+02,
-                      0., 0., 1. };
-    detector->setCameraProjectionMatrix(QMatrix3x3(camera_calibration));
+    // loading marker positions
+    detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
+
+    // loading camera matrix
+    camera_matrix->populateFromFile(ASSETS_PATH + "camera_matrix.json");
+
+    // setting camera matrix
+    detector->setCameraProjectionMatrix(camera_matrix->getMatrix());
 
     // adding UchiyaBackEnd (decorating camera object)
     MarkerBackEnd* backend = new MarkerBackEnd(provider, detector);
@@ -41,6 +51,7 @@ int main(int argc, char *argv[])
     // loading qml
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
+    // starting the app
     if (engine.rootObjects().isEmpty())
         return -1;
 

@@ -41,7 +41,10 @@ SOURCES += main.cpp \
     markerdetector.cpp \
     uchiyamarkerdetector.cpp \
     markerbackend.cpp \
-    imagebackend.cpp
+    imagebackend.cpp \
+    calibratedcamera.cpp \
+    calibratedcamerafilestorage.cpp \
+    configjson.cpp
 
 HEADERS += \
     opencvbackend.h \
@@ -55,7 +58,10 @@ HEADERS += \
     markerdetector.h \
     uchiyamarkerdetector.h \
     markerbackend.h \
-    imagebackend.h
+    imagebackend.h \
+    calibratedcamera.h \
+    calibratedcamerafilestorage.h \
+    configjson.h
 
 RESOURCES += qml.qrc
 
