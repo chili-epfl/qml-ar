@@ -6,6 +6,12 @@
 #include <QElapsedTimer>
 #include <QMatrix4x4>
 #include "QtOpenCV/cvmatandqimage.h"
+#include "opencv2/core.hpp"
+#include <vector>
+#include <opencv2/calib3d.hpp>
+#include "mymatconverter.h"
+
+using std::vector;
 
 // see main.cpp and main.h from
 // UchiyaMarkers project

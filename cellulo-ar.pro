@@ -48,7 +48,8 @@ SOURCES += main.cpp \
     markerimageaugmenter.cpp \
     mvpprovider.cpp \
     markermvpprovider.cpp \
-    worldpointimages.cpp
+    worldpointimages.cpp \
+    mymatconverter.cpp
 
 HEADERS += \
     opencvbackend.h \
@@ -69,7 +70,8 @@ HEADERS += \
     imageaugmenter.h \
     mvpprovider.h \
     markermvpprovider.h \
-    worldpointimages.h
+    worldpointimages.h \
+    mymatconverter.h
 
 RESOURCES += qml.qrc
 

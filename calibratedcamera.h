@@ -18,6 +18,8 @@ public:
     QMatrix3x3 getMatrix();
 
     QMatrix4x4 getPerspectiveMatrix(float n, float f, float l, float r, float b, float t);
+    QMatrix4x4 getPerspectiveMatrixMethod1(float n, float f, float l, float r, float b, float t);
+    QMatrix4x4 getPerspectiveMatrixMethod2(float n, float f, float l, float r, float b, float t);
 };
 
 #endif // CALIBRATEDCAMERA_H
