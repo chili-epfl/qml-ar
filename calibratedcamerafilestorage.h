@@ -28,7 +28,11 @@
 class CalibratedCameraFileStorage : public CalibratedCamera, public ConfigJSON
 {
 public:
-    CalibratedCameraFileStorage();
+    // empty constructor (need to populate later)
+    CalibratedCameraFileStorage() : CalibratedCamera() {}
+
+    // read config on creation
+    CalibratedCameraFileStorage(QString filename);
 
     // fill with data from a file/other QIODevice
     void readConfig(QJsonObject config);

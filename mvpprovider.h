@@ -13,7 +13,7 @@
 
 class MVPProvider : public QObject
 { Q_OBJECT Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
-private:
+protected:
     QMatrix4x4 mvp_matrix;
 public:
     MVPProvider();

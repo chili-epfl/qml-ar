@@ -7,12 +7,13 @@ MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, CalibratedCamera* c)
     Q_ASSERT(c != NULL);
     detector = d;
     camera = c;
-    connect(detector, SIGNAL(markersUpdated()), this, SLOT(recompute()));
+    connect(detector, SIGNAL(markersUpdated()), (MarkerMVPProvider*) this, SLOT(recompute()));
 }
 
 QMatrix4x4 MarkerMVPProvider::getMV()
 {
-    return QMatrix4x4();
+    // obtain ModelView matrix from Marker correspondences
+    return detector->getCorrespondences().computePnP();
 }
 
 QMatrix4x4 MarkerMVPProvider::getP()
@@ -52,8 +53,25 @@ QMatrix4x4 MarkerMVPProvider::getP()
 
 void MarkerMVPProvider::recompute()
 {
+    // do nothing if no markers were detected
+    if(detector->getCorrespondences().size() <= 0)
+        return;
+
+    // obtain Projection matrix
     QMatrix4x4 p = getP();
+
+    // obtain ModelView matrix
     QMatrix4x4 mv = getMV();
-    mvp_matrix = p * mv;
-    emit newMVPMatrix();
+
+    // calculate new MVP matrix
+    QMatrix4x4 new_mvp_matrix = p * mv;
+
+    // if it's different, save it and
+    // notify listeners
+    if(new_mvp_matrix != mvp_matrix)
+    {
+        qDebug() << "RECOMPUTE";
+        mvp_matrix = p * mv;
+        emit newMVPMatrix();
+    }
 }

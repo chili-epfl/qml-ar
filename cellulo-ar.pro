@@ -45,7 +45,6 @@ SOURCES += main.cpp \
     calibratedcamera.cpp \
     calibratedcamerafilestorage.cpp \
     configjson.cpp \
-    markerimageaugmenter.cpp \
     mvpprovider.cpp \
     markermvpprovider.cpp \
     worldpointimages.cpp \
@@ -67,7 +66,6 @@ HEADERS += \
     calibratedcamera.h \
     calibratedcamerafilestorage.h \
     configjson.h \
-    imageaugmenter.h \
     mvpprovider.h \
     markermvpprovider.h \
     worldpointimages.h \

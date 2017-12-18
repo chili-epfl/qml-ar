@@ -14,7 +14,7 @@ protected:
     QMatrix3x3 A;
 
 public:
-    CalibratedCamera(int h, int w);
+    CalibratedCamera();
     QMatrix3x3 getMatrix();
 
     QMatrix4x4 getPerspectiveMatrix(float n, float f, float l, float r, float b, float t);

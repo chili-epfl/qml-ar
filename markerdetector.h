@@ -14,7 +14,7 @@
  */
 
 class MarkerDetector: public QObject
-{
+{ Q_OBJECT
 signals:
     // children call it when a new matrix should be computed
     void markersUpdated();
@@ -28,10 +28,9 @@ protected:
 
     // preview image
     QImage output_buffer;
-
-    virtual QVector2D getMarkerPosition(int marker_id);
 public:
-    MarkerDetector(QQuickImageProvider* provider);
+    MarkerDetector();
+    virtual ~MarkerDetector() {}
 
     // get marker positions from a json file
     // see MarkerStorage for an example
@@ -52,6 +51,9 @@ public:
     // iterators for going through the map
     QMap<int, Marker>::iterator begin();
     QMap<int, Marker>::iterator end();
+
+    // return all of the 3D-2D correspondences
+    WorldPointImages getCorrespondences();
 };
 
 #endif // MARKERDETECTOR_H

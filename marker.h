@@ -36,15 +36,25 @@ public:
     Marker(double x_mm, double y_mm);
     Marker(QVector2D position_mm_);
 
+    // setters
     void setName(QString name_);
     void setId(int id_);
     void setSizeMM(double size_);
 
+    // get position of top-left corner in the world
+    // Cellulo coordinate system
     const QVector2D getPositionMM();
+
+    // size in millimeters of a single edge
     double getSizeMM();
 
+    // add single point to correspondences 3D-2D
     void addCorrespondence(QVector3D world_point, QVector2D image_point);
+
+    // return 3D-2D correspondences
     WorldPointImages& getCorrespondences();
+
+    // forget marker being detected
     void undetect();
 
     QString toString();

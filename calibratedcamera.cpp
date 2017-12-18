@@ -20,6 +20,12 @@ QMatrix4x4 CalibratedCamera::getPerspectiveMatrixMethod1(float n, float f, float
 {
     // get matrix from the camera projection matrix (calibrated)
     // see http://ksimek.github.io/2013/06/03/calibrated_cameras_in_opengl/
+    float alpha = A(0, 0);
+    float beta  = A(1, 1);
+    float s     = A(0, 1);
+    float c_x   = A(0, 2);
+    float c_y   = A(1, 2);
+
     QMatrix4x4 persp;
     persp(0, 0) = alpha;
     persp(0, 1) = s;

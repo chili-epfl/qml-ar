@@ -1,9 +1,8 @@
 #include "marker.h"
 #include "markerdetector.h"
 
-MarkerDetector::MarkerDetector(QQuickImageProvider *provider)
+MarkerDetector::MarkerDetector()
 {
-    Q_ASSERT(provider != NULL);
 }
 
 void MarkerDetector::setInput(QImage camera)
@@ -14,11 +13,6 @@ void MarkerDetector::setInput(QImage camera)
 void MarkerDetector::loadMarkerPositions(QString filename)
 {
     markers.populateFromFile(filename);
-}
-
-QVector2D MarkerDetector::getMarkerPosition(int marker_id)
-{ Q_UNUSED(marker_id)
-    return QVector2D(0, 0);
 }
 
 QImage MarkerDetector::getPreview()
@@ -39,4 +33,16 @@ QMap<int, Marker>::iterator MarkerDetector::begin()
 QMap<int, Marker>::iterator MarkerDetector::end()
 {
     return markers.end();
+}
+
+WorldPointImages MarkerDetector::getCorrespondences()
+{
+    WorldPointImages result;
+    result.clear();
+
+    QMap<int, Marker>::iterator it;
+    for(it = markers.begin(); it != markers.end(); it++)
+        result.join((*it).getCorrespondences());
+
+    return result;
 }

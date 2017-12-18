@@ -15,7 +15,7 @@
  */
 
 class MarkerMVPProvider : public MVPProvider
-{
+{ Q_OBJECT
 private:
     CalibratedCamera* camera;
     MarkerDetector* detector;

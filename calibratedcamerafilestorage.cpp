@@ -1,9 +1,9 @@
 #include "calibratedcamerafilestorage.h"
 #include <QJsonArray>
 
-CalibratedCameraFileStorage::CalibratedCameraFileStorage() : CalibratedCamera()
+CalibratedCameraFileStorage::CalibratedCameraFileStorage(QString filename)
 {
-
+    populateFromFile(filename);
 }
 
 void CalibratedCameraFileStorage::readConfig(QJsonObject config)

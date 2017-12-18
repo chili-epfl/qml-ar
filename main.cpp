@@ -5,9 +5,9 @@
 #include "portablebackendfactory.h"
 #include "imagebackend.h"
 #include "markerbackend.h"
-#include "markerstorage.h"
 #include "uchiyamarkerdetector.h"
 #include "calibratedcamerafilestorage.h"
+#include "markermvpprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,9 +22,6 @@ int main(int argc, char *argv[])
     // creating Uchiya marker detector
     UchiyaMarkerDetector* detector = new UchiyaMarkerDetector;
 
-    // creating Calibrated Camera
-    CalibratedCameraFileStorage* camera_matrix = new CalibratedCameraFileStorage;
-
     // setting up assets path (os-dependent)
 #ifdef Q_OS_ANDROID
     QString ASSETS_PATH = "assets:/";
@@ -36,16 +33,16 @@ int main(int argc, char *argv[])
     detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
 
     // loading camera matrix
-    camera_matrix->populateFromFile(ASSETS_PATH + "camera_matrix.json");
-
-    // setting camera matrix
-    detector->setCameraProjectionMatrix(camera_matrix->getMatrix());
+    CalibratedCamera* camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");
 
     // adding UchiyaBackEnd (decorating camera object)
     MarkerBackEnd* backend = new MarkerBackEnd(provider, detector);
 
+    // creating a ModelView provider
+    MVPProvider* mvp_matrix = new MarkerMVPProvider(detector, camera_matrix);
+
     // adding marker detector as a backend
-    engine.rootContext()->setContextProperty("detector", detector);
+    engine.rootContext()->setContextProperty("mvp", mvp_matrix);
     engine.addImageProvider(QLatin1String("camera"), backend);
 
     // loading qml

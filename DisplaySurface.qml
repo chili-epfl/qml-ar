@@ -20,7 +20,7 @@ Entity {
 
     Camera {
         id: camera
-        projectionMatrix: detector.camera_matrix
+        projectionMatrix: mvp.mvp_matrix
     }
 
     FirstPersonCameraController { camera: camera }
