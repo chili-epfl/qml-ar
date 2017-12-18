@@ -1,12 +1,13 @@
 #include "mymatconverter.h"
-#include <QVector3D>
 
-QMatrix3x3 MyMatConverter::convert3x3(MyMat m)
+QMatrix4x4 MyMatConverter::convert3x3(MyMat m)
 {
-    QMatrix3x3 result;
+    QMatrix4x4 result;
+    result.fill(0);
     for(int i = 0; i < 3; i++)
         for(int j = 0; j < 3; j++)
             result(i, j) = m(i, j);
+
     return result;
 }
 

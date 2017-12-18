@@ -32,7 +32,7 @@ void MarkerStorage::readConfig(QJsonObject config)
     }
 }
 
-void MarkerStorage::resetH()
+void MarkerStorage::undetect()
 {
     QMap<int, Marker>::iterator it;
     for(it = markers.begin(); it != markers.end(); it++)

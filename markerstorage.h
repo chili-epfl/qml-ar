@@ -49,7 +49,7 @@ public:
     void readConfig(QJsonObject data);
 
     // resets projection matrices for each marker
-    void resetH();
+    void undetect();
 
     // obtain a marker
     // calls qFatal on missing key
