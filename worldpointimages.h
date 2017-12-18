@@ -3,6 +3,7 @@
 
 #include <QVector3D>
 #include <QVector2D>
+#include "calibratedcamera.h"
 #include <QVector>
 
 /*
@@ -37,7 +38,7 @@ public:
     // number of correspondences
     int size();
 
-    QMatrix4x4 computePnP();
+    QMatrix4x4 computePnP(CalibratedCamera* camera);
 };
 
 #endif // WORLDPOINTIMAGES_H

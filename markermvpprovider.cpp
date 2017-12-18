@@ -13,7 +13,7 @@ MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, CalibratedCamera* c)
 QMatrix4x4 MarkerMVPProvider::getMV()
 {
     // obtain ModelView matrix from Marker correspondences
-    return detector->getCorrespondences().computePnP();
+    return detector->getCorrespondences().computePnP(camera);
 }
 
 QMatrix4x4 MarkerMVPProvider::getP()
