@@ -65,28 +65,8 @@ void UchiyaMarkerDetector::extractMarkers()
 
         if(m == NULL) continue;
 
-        // scaling by marker size in MM
-        // z axis now also has values -600...600
-        QMatrix4x4 scaler_to_pixels = QMatrix4x4();
-        scaler_to_pixels.scale(marker_size_pixels / m->getSizeMM(),
-                               marker_size_pixels / m->getSizeMM(),
-                               1. / marker_size_pixels);
-
-        // translating by the position of the marker
-        QMatrix4x4 translate_to_marker = QMatrix4x4();
-        translate_to_marker.translate(-m->getPositionMM().x(), m->getSizeMM() + m->getPositionMM().y(), 0);
-
-        // flipping y axis
-        QMatrix4x4 flip_y = QMatrix4x4();
-        flip_y.scale(1, -1, 1);
-
-        // resulting projection matrix
-        camera_matrix = homography2Dto3D((*itpa)->H)
-                * scaler_to_pixels * translate_to_marker * flip_y;
-
-
-        // setting it to the marker object
-        m->setH(camera_matrix);
+        MyMat homography = (*itpa)->H;
+        m->addCorrespondence(QVector3D(0, 0, 0), QVector2D(0, 0));
     }
 }
 

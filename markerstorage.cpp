@@ -36,7 +36,7 @@ void MarkerStorage::resetH()
 {
     QMap<int, Marker>::iterator it;
     for(it = markers.begin(); it != markers.end(); it++)
-        (*it).resetH();
+        (*it).undetect();
 }
 
 Marker* MarkerStorage::getPointer(int marker_id)

@@ -20,6 +20,7 @@ public:
     WorldPointImages();
 
     void add(QVector3D world_point, QVector2D image_point);
+    void clear();
 };
 
 #endif // WORLDPOINTIMAGES_H
