@@ -16,10 +16,14 @@ QMatrix4x4 MarkerMVPProvider::getMV()
     // obtain ModelView matrix from Marker correspondences
     WorldImageCorrespondences correspondences = detector->getCorrespondences();
     Pose pose = CameraPoseEstimatorCorrespondences::estimate(camera, &correspondences);
+
     if(pose.isValid())
     {
-        qDebug() << pose.getTranslation();
-        qDebug() << pose.getRotation();
+        QVector3D t = pose.getTranslation();
+        QMatrix3x3 r = pose.getRotation();
+        qDebug() << t << r;
+
+        return pose.get4Matrx();
     }
 
     return QMatrix4x4();
@@ -39,8 +43,8 @@ QMatrix4x4 MarkerMVPProvider::getP()
     /*float n = 0.01;
     float f = 10;*/
 
-    float n = 0.01;
-    float f = 1000;
+    float n = 500;
+    float f = 10;
 
     float l = 0;
     float r = input_buffer.width();
@@ -49,6 +53,12 @@ QMatrix4x4 MarkerMVPProvider::getP()
 
     // get matrix from the camera projection matrix (calibrated)
     return camera->getPerspectiveMatrix(n, f, l, r, b, t);
+
+    Qt3DRender::QCameraLens lens;
+
+    lens.setOrthographicProjection(l, r, b, t, n, f);
+
+    return lens.projectionMatrix();
 }
 
 void MarkerMVPProvider::recompute()
@@ -62,6 +72,8 @@ void MarkerMVPProvider::recompute()
 
     // obtain ModelView matrix
     QMatrix4x4 mv = getMV();
+
+    qDebug() << mv.map(QVector4D(0, 0, 0, 1));
 
     // calculate new MVP matrix
     QMatrix4x4 new_mvp_matrix = p * mv;

@@ -51,19 +51,31 @@ Pose CameraPoseEstimatorCorrespondences::estimate(CalibratedCamera *camera, Worl
     // if failed, return invalid pose
     if(!res) return Pose();
 
+    // rotation matrix
+    cv::Mat rmat;
+
+    rvec.at<double>(1) *= -1;
+
+    // compute rotation matrix
+    cv::Rodrigues(rvec, rmat, cv::noArray());
+
+    rmat.inv();
+
     // translation vector (Qt)
     QVector3D tvec_qt;
     for(int i = 0; i < 3; i++)
         tvec_qt[i] = tvec.at<double>(i, 0);
 
-    // rotation vector (Qt)
-    QVector4D rvec_qt;
-    for(int i = 0; i < 4; i++)
-        rvec_qt[i] = rvec.at<double>(i, 0);
+    // rotation matrix (Qt)
+    QMatrix3x3 rmat_qt;
+    for(int i = 0; i < 3; i++)
+        for(int j = 0; j < 3; j++)
+            rmat_qt(i, j) = rmat.at<double>(i, j);
 
     // mirroring translation
-    tvec_qt = -tvec_qt;
+    //tvec_qt.setY(-tvec_qt.y());
+    tvec_qt.setZ(-tvec_qt.z());
 
     // returning pose
-    return Pose(tvec_qt, rvec_qt);
+    return Pose(tvec_qt, rmat_qt);
 }

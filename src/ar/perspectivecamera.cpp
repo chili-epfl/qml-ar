@@ -47,6 +47,16 @@ QMatrix4x4 PerspectiveCamera::getPerspectiveMatrixMethod1(float n, float f, floa
     return lens.projectionMatrix() * persp;
 }
 
+QMatrix4x4 PerspectiveCamera::getPerspectiveMatrixMethod3()
+{
+    QMatrix4x4 res;
+    res.fill(0);
+    for(int i = 0; i < 3; i++)
+        for(int j = 0; j < 3; j++)
+            res(i, j) = A(i, j);
+    return res;
+}
+
 QMatrix4x4 PerspectiveCamera::getPerspectiveMatrixMethod2(float n, float f, float l, float r, float b, float t)
 {
     // get matrix from the camera projection matrix (calibrated)

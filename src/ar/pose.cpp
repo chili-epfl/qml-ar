@@ -1,11 +1,12 @@
 #include "pose.h"
+#include <QMatrix4x4>
 
 Pose::Pose()
 {
     is_valid = false;
 }
 
-Pose::Pose(QVector3D t, QVector4D r)
+Pose::Pose(QVector3D t, QMatrix3x3 r)
 {
     translation = t;
     rotation = r;
@@ -21,7 +22,23 @@ QVector3D Pose::getTranslation()
     return translation;
 }
 
-QVector4D Pose::getRotation()
+QMatrix3x3 Pose::getRotation()
 {
     return rotation;
+}
+
+QMatrix4x4 Pose::get4Matrx()
+{
+    QMatrix4x4 res;
+    res.fill(0);
+    for(int i = 0; i < 3; i++)
+    {
+        res(i, 3) = translation[i];
+        for(int j = 0; j < 3; j++)
+            res(i, j) = rotation(i, j);
+    }
+
+    res(3, 3) = 1;
+
+    return res;
 }

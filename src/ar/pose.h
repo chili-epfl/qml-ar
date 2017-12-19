@@ -2,7 +2,7 @@
 #define POSE_H
 
 #include <QVector3D>
-#include <QVector4D>
+#include <QMatrix3x3>
 
 /*
  * This class holds the pose (Translation+Rotation)
@@ -13,14 +13,14 @@ class Pose
 {
 private:
     QVector3D translation;
-    QVector4D rotation;
+    QMatrix3x3 rotation;
     bool is_valid;
 public:
     // construct invalid pose
     Pose();
 
     // construct valid pose with translation and rotation
-    Pose(QVector3D t, QVector4D r);
+    Pose(QVector3D t, QMatrix3x3 r);
 
     // is pose valid
     bool isValid();
@@ -29,7 +29,10 @@ public:
     QVector3D getTranslation();
 
     // return rotation vector
-    QVector4D getRotation();
+    QMatrix3x3 getRotation();
+
+    // return rotation + translation
+    QMatrix4x4 get4Matrx();
 };
 
 #endif // POSE_H

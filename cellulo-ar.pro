@@ -49,9 +49,11 @@ SOURCES += main.cpp \
     src/utils/configjson.cpp \
     src/ar/mvpprovider.cpp \
     src/ar/markermvpprovider.cpp \
-    src/ar/worldpointimages.cpp \
     src/utils/mymatconverter.cpp \
-    src/ar/perspectivecamera.cpp
+    src/ar/perspectivecamera.cpp \
+    src/ar/pose.cpp \
+    src/ar/posecamerapnp.cpp \
+    src/ar/worldimage.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -71,9 +73,11 @@ HEADERS += \
     src/utils/configjson.h \
     src/ar/mvpprovider.h \
     src/ar/markermvpprovider.h \
-    src/ar/worldpointimages.h \
     src/utils/mymatconverter.h \
-    src/ar/perspectivecamera.h
+    src/ar/perspectivecamera.h \
+    src/ar/pose.h \
+    src/ar/posecamerapnp.h \
+    src/ar/worldimage.h
 
 RESOURCES += qml.qrc
 
