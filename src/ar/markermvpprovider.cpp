@@ -2,10 +2,12 @@
 #include "posecamerapnp.h"
 #include <QCameraLens>
 
-MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c)
+MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c) : MVPProvider()
 {
     Q_ASSERT(d != NULL);
     Q_ASSERT(c != NULL);
+
+    // save detector and camera
     detector = d;
     camera = c;
 
@@ -70,14 +72,26 @@ void MarkerMVPProvider::recompute()
     //
     // NOTICE: MV transform is done in world space, not in OpenGL space
     //         since MV is used before P
+    //
 
 
-    // do nothing if no markers were detected
+    // hide objects if no markers were detected
     if(detector->getCorrespondences().size() <= 0)
+    {
+        reset();
         return;
+    }
 
     // obtain Projection matrix
     QMatrix4x4 p = getP();
+
+    // if P matrix is invalid
+    if(p.isIdentity())
+    {
+        // hide all objects
+        reset();
+        return;
+    }
 
     // obtain ModelView matrix
     QMatrix4x4 mv = getMV();
@@ -91,5 +105,11 @@ void MarkerMVPProvider::recompute()
     {
         mvp_matrix = new_mvp_matrix;
         emit newMVPMatrix();
+    }
+    else
+    {
+        // hide all objects
+        reset();
+        return;
     }
 }

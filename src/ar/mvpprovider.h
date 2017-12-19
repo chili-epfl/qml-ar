@@ -26,6 +26,9 @@ public:
     // return MVP matrix
     QMatrix4x4 getMVPMatrix();
 
+    // invalidate matrix
+    // makes all objects invisible
+    void reset();
 signals:
 
     // emitted when new MVP matrix is available
