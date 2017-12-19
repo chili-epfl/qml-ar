@@ -56,6 +56,22 @@ QMatrix4x4 MarkerMVPProvider::getP(double n, double f)
 
 void MarkerMVPProvider::recompute()
 {
+    // coordinate systems:
+    // original points from QML model (OpenGL):
+    //  ---> Cellulo coordinate system (x right, y down, z to the table)
+    //                                  origin at top-left corner of the sheet
+    // after ModelView matrix
+    //  ---> OpenCV coordinate system (x right, y down, z from reader)
+    //                                 origin at the camera, z parallel to camera axiss
+    //
+    // after P matrix
+    //  ---> OpenGL clip coordinates -1 <= x, y, z <= 1, w > 0, x right, y up,
+    //                                      -z to computer screen
+    //
+    // NOTICE: MV transform is done in world space, not in OpenGL space
+    //         since MV is used before P
+
+
     // do nothing if no markers were detected
     if(detector->getCorrespondences().size() <= 0)
         return;
