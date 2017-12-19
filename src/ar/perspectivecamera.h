@@ -8,6 +8,16 @@
 /*
  * This class extends CalibratedCamera
  * by allowing to get Perspective Projection matrix
+ *
+ * INPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
+ *
+ * OUTPUT COORDINATE SYSTEM (OpenGL)
+ * x right
+ * y up
+ * z to reader
  */
 
 class PerspectiveCamera : public CalibratedCamera

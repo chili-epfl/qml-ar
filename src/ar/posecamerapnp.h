@@ -8,6 +8,11 @@
 /*
  * This class converts camera + 3D-2D correspondences
  * to a camera pose
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 class CameraPoseEstimatorCorrespondences

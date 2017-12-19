@@ -10,6 +10,17 @@
  * using pose from a detected markers,
  * a calibrated camera's matrix
  * multiplies them and outputs MVP
+ *
+ * INPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
+ *
+ * OUTPUT COORDINATE SYSTEM (OpenGL)
+ * x right
+ * y up
+ * z to reader
+ *
  */
 
 class MarkerMVPProvider : public MVPProvider

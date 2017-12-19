@@ -12,6 +12,11 @@
  * Wrapper around C-style UchiyaMarkers project
  * obtained from main.cpp file from UchiyaMarkers project
  * Notice: some functionality was removed
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 class UchiyaMarkerDetector: public MarkerDetector

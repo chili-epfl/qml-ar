@@ -11,6 +11,12 @@
  * loads them from a file and outputs
  * the coordinates of each of them
  * on a request
+ * coordinates: top-left corner
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 /*

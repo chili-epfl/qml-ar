@@ -7,6 +7,11 @@
 /*
  * This class holds the pose (Translation+Rotation)
  * of the camera
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 class Pose

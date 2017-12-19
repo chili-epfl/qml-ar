@@ -11,6 +11,11 @@
 /*
  * This class stores a common interface for
  * marker detectors
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 class MarkerDetector: public QObject

@@ -9,6 +9,12 @@
 /*
  * This class holds the position in the sheet
  * of a single marker
+ * coordinates: top-left corner
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 class Marker

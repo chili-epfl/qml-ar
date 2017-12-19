@@ -11,6 +11,11 @@
  * This class stores the correspondences
  * between Real World 3D points
  * and projected points on camera image
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 class WorldImageCorrespondences

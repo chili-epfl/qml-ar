@@ -7,6 +7,11 @@
 /*
  * This class represents a QML interface
  * to provide ModelViewProjection matrix
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 class MVPProvider : public QObject
