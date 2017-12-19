@@ -1,4 +1,5 @@
 #include "markermvpprovider.h"
+#include "posecamerapnp.h"
 #include <QCameraLens>
 
 MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c)
@@ -13,7 +14,15 @@ MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c)
 QMatrix4x4 MarkerMVPProvider::getMV()
 {
     // obtain ModelView matrix from Marker correspondences
-    return detector->getCorrespondences().computePnP(camera);
+    WorldImageCorrespondences correspondences = detector->getCorrespondences();
+    Pose pose = CameraPoseEstimatorCorrespondences::estimate(camera, &correspondences);
+    if(pose.isValid())
+    {
+        qDebug() << pose.getTranslation();
+        qDebug() << pose.getRotation();
+    }
+
+    return QMatrix4x4();
 }
 
 QMatrix4x4 MarkerMVPProvider::getP()

@@ -4,7 +4,7 @@
 #include <QVector2D>
 #include <QString>
 #include <QMatrix4x4>
-#include "worldpointimages.h"
+#include "worldimage.h"
 
 /*
  * This class holds the position in the sheet

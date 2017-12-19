@@ -4,6 +4,7 @@
 #include <QVector3D>
 #include <QVector2D>
 #include "calibratedcamera.h"
+#include "pose.h"
 #include <QVector>
 
 /*
@@ -38,9 +39,11 @@ public:
     // number of correspondences
     int size();
 
-    // return 4x4 ModelView matrix from point correspondences
-    // and a calibrated camera matrix
-    QMatrix4x4 computePnP(CalibratedCamera* camera);
+    // returns world point at index i
+    QVector3D getWorldPoint(int index);
+
+    // returns image point at index i
+    QVector3D getImagePoint(int index);
 };
 
 #endif // WORLDIMAGECORRESPONDENCES_H
