@@ -52,7 +52,7 @@ void Marker::addCorrespondence(QVector3D world_point, QVector2D image_point)
     correspondences.add(world_point, image_point);
 }
 
-WorldPointImages &Marker::getCorrespondences()
+WorldImageCorrespondences &Marker::getCorrespondences()
 {
     return correspondences;
 }

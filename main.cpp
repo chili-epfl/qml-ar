@@ -7,6 +7,7 @@
 #include "markerbackend.h"
 #include "uchiyamarkerdetector.h"
 #include "calibratedcamerafilestorage.h"
+#include "perspectivecamera.h"
 #include "markermvpprovider.h"
 
 int main(int argc, char *argv[])
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
     detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
 
     // loading camera matrix
-    CalibratedCamera* camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");
+    PerspectiveCamera* camera_matrix = new PerspectiveCamera(new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json"));
 
     // adding UchiyaBackEnd (decorating camera object)
     MarkerBackEnd* backend = new MarkerBackEnd(provider, detector);

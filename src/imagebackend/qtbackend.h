@@ -9,8 +9,10 @@
 #include "cameraframegrabber.h"
 #include "voidviewfinder.h"
 
-// QCamera backend for QML
-// works on Linux and Android
+/*
+ *  QCamera backend for QML
+ *  works on Linux and Android
+ */
 
 class QtCameraBackend : public QObject, public QQuickImageProvider
 { Q_OBJECT

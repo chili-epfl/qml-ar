@@ -1,5 +1,5 @@
-#ifndef WORLDPOINTIMAGES_H
-#define WORLDPOINTIMAGES_H
+#ifndef WORLDIMAGECORRESPONDENCES_H
+#define WORLDIMAGECORRESPONDENCES_H
 
 #include <QVector3D>
 #include <QVector2D>
@@ -12,7 +12,7 @@
  * and projected points on camera image
  */
 
-class WorldPointImages
+class WorldImageCorrespondences
 {
 private:
     // points in 3D
@@ -24,13 +24,13 @@ private:
     // check if internal structure is valid
     void assertValid();
 public:
-    WorldPointImages();
+    WorldImageCorrespondences();
 
     // add a single correspondence
     void add(QVector3D world_point, QVector2D image_point);
 
     // merge with another list of correspondences
-    void join(WorldPointImages& that);
+    void join(WorldImageCorrespondences& that);
 
     // remove all correspondences
     void clear();
@@ -38,7 +38,9 @@ public:
     // number of correspondences
     int size();
 
+    // return 4x4 ModelView matrix from point correspondences
+    // and a calibrated camera matrix
     QMatrix4x4 computePnP(CalibratedCamera* camera);
 };
 
-#endif // WORLDPOINTIMAGES_H
+#endif // WORLDIMAGECORRESPONDENCES_H

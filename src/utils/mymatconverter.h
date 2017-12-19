@@ -6,10 +6,8 @@
 #include "uchiya/mylib/mymat.h"
 
 /*
- *
  * This class converts Uchiya MyMat
  * to QVector/QMatrix
- *
  */
 
 class MyMatConverter

@@ -1,7 +1,7 @@
 #include "markermvpprovider.h"
 #include <QCameraLens>
 
-MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, CalibratedCamera* c)
+MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c)
 {
     Q_ASSERT(d != NULL);
     Q_ASSERT(c != NULL);

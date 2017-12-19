@@ -35,9 +35,9 @@ QMap<int, Marker>::iterator MarkerDetector::end()
     return markers.end();
 }
 
-WorldPointImages MarkerDetector::getCorrespondences()
+WorldImageCorrespondences MarkerDetector::getCorrespondences()
 {
-    WorldPointImages result;
+    WorldImageCorrespondences result;
     result.clear();
 
     QMap<int, Marker>::iterator it;

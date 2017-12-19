@@ -5,24 +5,24 @@
 #include <opencv2/core.hpp>
 #include <QtOpenCV/cvmatandqimage.h>
 
-WorldPointImages::WorldPointImages()
+WorldImageCorrespondences::WorldImageCorrespondences()
 {
 
 }
 
-void WorldPointImages::assertValid()
+void WorldImageCorrespondences::assertValid()
 {
     Q_ASSERT(world_points.size() == image_points.size());
 }
 
-void WorldPointImages::add(QVector3D world_point, QVector2D image_point)
+void WorldImageCorrespondences::add(QVector3D world_point, QVector2D image_point)
 {
     world_points.append(world_point);
     image_points.append(image_point);
     assertValid();
 }
 
-void WorldPointImages::join(WorldPointImages &that)
+void WorldImageCorrespondences::join(WorldImageCorrespondences &that)
 {
     int length = that.world_points.size();
     for(int i = 0; i < length; i++)
@@ -33,19 +33,19 @@ void WorldPointImages::join(WorldPointImages &that)
     assertValid();
 }
 
-void WorldPointImages::clear()
+void WorldImageCorrespondences::clear()
 {
     world_points.clear();
     image_points.clear();
     assertValid();
 }
 
-int WorldPointImages::size()
+int WorldImageCorrespondences::size()
 {
     return world_points.size();
 }
 
-QMatrix4x4 WorldPointImages::computePnP(CalibratedCamera* camera)
+QMatrix4x4 WorldImageCorrespondences::computePnP(CalibratedCamera* camera)
 {
     Q_ASSERT(camera != NULL);
     Q_ASSERT(size() > 0);

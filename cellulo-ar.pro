@@ -50,7 +50,8 @@ SOURCES += main.cpp \
     src/ar/mvpprovider.cpp \
     src/ar/markermvpprovider.cpp \
     src/ar/worldpointimages.cpp \
-    src/utils/mymatconverter.cpp
+    src/utils/mymatconverter.cpp \
+    src/ar/perspectivecamera.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -71,7 +72,8 @@ HEADERS += \
     src/ar/mvpprovider.h \
     src/ar/markermvpprovider.h \
     src/ar/worldpointimages.h \
-    src/utils/mymatconverter.h
+    src/utils/mymatconverter.h \
+    src/ar/perspectivecamera.h
 
 RESOURCES += qml.qrc
 

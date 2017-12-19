@@ -5,8 +5,10 @@
 #include <QAbstractVideoSurface>
 #include <QList>
 
-// A ViewFinder for QCamera which does nothing
-// when frames do arrive
+/*
+ * A ViewFinder for QCamera which does nothing
+ * when frames do arrive
+ */
 
 class VoidViewFinder : public QAbstractVideoSurface
 {

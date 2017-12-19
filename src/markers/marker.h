@@ -1,15 +1,15 @@
 #ifndef MARKER_H
 #define MARKER_H
 
-/*
- * This class holds the position in the sheet
- * of a single marker
- */
-
 #include <QVector2D>
 #include <QString>
 #include <QMatrix4x4>
 #include "worldpointimages.h"
+
+/*
+ * This class holds the position in the sheet
+ * of a single marker
+ */
 
 class Marker
 {
@@ -28,7 +28,7 @@ private:
     double size_mm;
 
     // correspondences 2D -> 3D
-    WorldPointImages correspondences;
+    WorldImageCorrespondences correspondences;
 
     void setPositionMM(QVector2D position_mm_);
 public:
@@ -52,7 +52,7 @@ public:
     void addCorrespondence(QVector3D world_point, QVector2D image_point);
 
     // return 3D-2D correspondences
-    WorldPointImages& getCorrespondences();
+    WorldImageCorrespondences& getCorrespondences();
 
     // forget marker being detected
     void undetect();

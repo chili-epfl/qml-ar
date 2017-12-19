@@ -53,7 +53,7 @@ public:
     QMap<int, Marker>::iterator end();
 
     // return all of the 3D-2D correspondences
-    WorldPointImages getCorrespondences();
+    WorldImageCorrespondences getCorrespondences();
 };
 
 #endif // MARKERDETECTOR_H

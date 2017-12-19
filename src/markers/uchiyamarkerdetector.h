@@ -8,9 +8,11 @@
 
 #include <QMatrix4x4>
 
-// Wrapper around C-style UchiyaMarkers project
-// obtained from main.cpp file from UchiyaMarkers project
-// some functionality was removed
+/*
+ * Wrapper around C-style UchiyaMarkers project
+ * obtained from main.cpp file from UchiyaMarkers project
+ * Notice: some functionality was removed
+ */
 
 class UchiyaMarkerDetector: public MarkerDetector
 {
