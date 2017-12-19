@@ -78,12 +78,21 @@ void UchiyaMarkerDetector::extractMarkers()
 
         // homography matrix from Uchiya library
         // top-left 3x3 submatrix is used
+        // warning: matrix uses mirrored y axis
         QMatrix4x4 homography = MyMatConverter::convert3x3((*itpa)->H);
+
+        // Basic idea:
+        // 1. Need: correspondences world <-> image
+        // 2. Homography * Uchiya Coordinates (0-600 x 0-600) = Image coordinates of corners
+        // 3. Obtaining world coordinates of marker corners from MarkerStorage
+        // 4. Adding pairs (world corner, image corner) to Marker as a correspondence
 
         // get marker size in mm
         double marker_size = m->getSizeMM();
 
         // fill in the marker corners in the actual sheet (mm)
+        // corners (in order): top-left, bottom-left, top-right, bottom-right
+        // positioning (mm)    (0, 0)    (0, s)       (s, 0)     (s, s)
         QVector3D marker_tl = m->getPositionMM();
         QVector3D marker_bl = marker_tl;
         QVector3D marker_tr = marker_tl;
@@ -93,6 +102,12 @@ void UchiyaMarkerDetector::extractMarkers()
         marker_tr += QVector3D(marker_size, 0          , 0);
         marker_br += QVector3D(marker_size, marker_size, 0);
 
+        // marker coordinate system (marker has size 600)
+        QVector3D marker_uchiya_tl_aeffine = QVector3D(0  , 600, 0);
+        QVector3D marker_uchiya_bl_aeffine = QVector3D(0  , 0  , 0);
+        QVector3D marker_uchiya_tr_aeffine = QVector3D(600, 600, 0);
+        QVector3D marker_uchiya_br_aeffine = QVector3D(600, 0  , 0);
+
         // add all of the points to a vector
         QVector<QVector3D> marker_corners;
         marker_corners.append(marker_tl);
@@ -100,20 +115,29 @@ void UchiyaMarkerDetector::extractMarkers()
         marker_corners.append(marker_tr);
         marker_corners.append(marker_br);
 
+        // all of the marker corners corresponding to real world corners
+        QVector<QVector3D> marker_uchiya_affine_corners;
+        marker_uchiya_affine_corners.push_back(marker_uchiya_tl_aeffine);
+        marker_uchiya_affine_corners.push_back(marker_uchiya_bl_aeffine);
+        marker_uchiya_affine_corners.push_back(marker_uchiya_tr_aeffine);
+        marker_uchiya_affine_corners.push_back(marker_uchiya_br_aeffine);
+
+        // length should be equal since number of corners is the same
+        Q_ASSERT(marker_uchiya_affine_corners.size() == marker_corners.size());
+
         // go through the vector, compute image point and
         // add a correspondence
-        for(QVector<QVector3D>::iterator it = marker_corners.begin();
-            it != marker_corners.end(); it++)
+        for(int i = 0; i < marker_corners.size(); i++)
         {
             // obtain current marker point in the world coordinates
-            QVector3D world_marker_point = (*it);
+            QVector3D world_marker_point = marker_corners[i];
 
-            // transform marker point to 2D form (ignore z)
-            QVector4D world_marker_point_affine = world_marker_point;
-            world_marker_point_affine.setZ(1);
+            // get uchiya marker coordinates point to 2D form (ignore z)
+            QVector4D uchiya_marker_point_affine = marker_uchiya_affine_corners[i];
+            uchiya_marker_point_affine.setZ(1);
 
             // obtain marker image point using homography matrix
-            QVector4D image_marker_point_affine = homography.map(world_marker_point_affine);
+            QVector4D image_marker_point_affine = homography.map(uchiya_marker_point_affine);
 
             // check if the z dimension is nonzero
             // otherwise, perspective division is impossible
@@ -124,11 +148,30 @@ void UchiyaMarkerDetector::extractMarkers()
             QVector2D image_marker_point = QVector2D(image_marker_point_affine.x() / image_marker_point_affine.z(),
                                                      image_marker_point_affine.y() / image_marker_point_affine.z());
 
+            // Uchiya library mirrors y axis
+            image_marker_point.setY(m_img.h - image_marker_point.y());
+
+            // coloring marker corners
+            if(i == 0) {
+                m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, 255, 0, 0);
+            }
+            else if(i == 1) {
+                m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, 0, 255, 0);
+            }
+            else if(i == 2) {
+                m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, 0, 0, 255);
+            }
+            else if(i == 3) {
+                m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, 255, 255, 255);
+            }
+
+            /*
             qDebug() << homography;
             qDebug() << world_marker_point;
-            qDebug() << world_marker_point_affine;
+            qDebug() << uchiya_marker_point_affine;
             qDebug() << image_marker_point_affine;
             qDebug() << image_marker_point;
+            */
 
             // add the calculated correspondence
             m->addCorrespondence(world_marker_point, image_marker_point);
