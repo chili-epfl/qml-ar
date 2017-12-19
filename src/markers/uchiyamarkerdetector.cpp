@@ -125,6 +125,15 @@ void UchiyaMarkerDetector::extractMarkers()
         // length should be equal since number of corners is the same
         Q_ASSERT(marker_uchiya_affine_corners.size() == marker_corners.size());
 
+        Q_ASSERT(marker_uchiya_affine_corners.size() == 4);
+
+        // colors for the corners
+        QVector<QVector3D> colors;
+        colors.append(QVector3D(255, 0, 0));
+        colors.append(QVector3D(0, 255, 0));
+        colors.append(QVector3D(0, 0, 255));
+        colors.append(QVector3D(255, 255, 255));
+
         // go through the vector, compute image point and
         // add a correspondence
         for(int i = 0; i < marker_corners.size(); i++)
@@ -151,27 +160,9 @@ void UchiyaMarkerDetector::extractMarkers()
             // Uchiya library mirrors y axis
             image_marker_point.setY(m_img.h - image_marker_point.y());
 
-            // coloring marker corners
-            if(i == 0) {
-                m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, 255, 0, 0);
-            }
-            else if(i == 1) {
-                m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, 0, 255, 0);
-            }
-            else if(i == 2) {
-                m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, 0, 0, 255);
-            }
-            else if(i == 3) {
-                m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, 255, 255, 255);
-            }
-
-            /*
-            qDebug() << homography;
-            qDebug() << world_marker_point;
-            qDebug() << uchiya_marker_point_affine;
-            qDebug() << image_marker_point_affine;
-            qDebug() << image_marker_point;
-            */
+            // draw the corner with its own color
+            QVector3D color = colors[i];
+            m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, color.x(), color.y(), color.z());
 
             // add the calculated correspondence
             m->addCorrespondence(world_marker_point, image_marker_point);
@@ -191,7 +182,8 @@ void UchiyaMarkerDetector::drawPreview() {
 void UchiyaMarkerDetector::preparePreview()
 {
     IplImage dst = *(IplImage*) m_img;
-    cv::Mat dst2mat = cv::cvarrToMat(&dst, false); // second parameter disables data copying
+    // second parameter disables data copying
+    cv::Mat dst2mat = cv::cvarrToMat(&dst, false);
     output_buffer = QtOcv::mat2Image(dst2mat);
 }
 

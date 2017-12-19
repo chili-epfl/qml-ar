@@ -54,12 +54,8 @@ Pose CameraPoseEstimatorCorrespondences::estimate(CalibratedCamera *camera, Worl
     // rotation matrix
     cv::Mat rmat;
 
-    rvec.at<double>(1) *= -1;
-
     // compute rotation matrix
     cv::Rodrigues(rvec, rmat, cv::noArray());
-
-    rmat.inv();
 
     // translation vector (Qt)
     QVector3D tvec_qt;
@@ -71,10 +67,6 @@ Pose CameraPoseEstimatorCorrespondences::estimate(CalibratedCamera *camera, Worl
     for(int i = 0; i < 3; i++)
         for(int j = 0; j < 3; j++)
             rmat_qt(i, j) = rmat.at<double>(i, j);
-
-    // mirroring translation
-    //tvec_qt.setY(-tvec_qt.y());
-    tvec_qt.setZ(-tvec_qt.z());
 
     // returning pose
     return Pose(tvec_qt, rmat_qt);

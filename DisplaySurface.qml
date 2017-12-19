@@ -43,7 +43,7 @@ Entity {
             },
             Transform {
                 rotation: fromAxisAndAngle(Qt.vector3d(0, 0, 1), sceneRoot.robot_theta)
-                translation: Qt.vector3d(sceneRoot.robotx, sceneRoot.roboty, -100);
+                translation: Qt.vector3d(sceneRoot.robotx, sceneRoot.roboty, -50);
             },
             CuboidMesh {
                 xExtent: 50
@@ -63,15 +63,15 @@ Entity {
                 id: transform
                 matrix: {
                     var m = Qt.matrix4x4();
-                    m.translate(Qt.vector3d(0, 0, -100));
+                    m.translate(Qt.vector3d(0, 0, 0));
                     return m;
                 }
             },
             CuboidMesh {
                 id: cubeMesh
-                xExtent: 150
-                yExtent: 150
-                zExtent: 0.15
+                xExtent: 50
+                yExtent: 50
+                zExtent: 10
             }
         ]
     }
@@ -82,7 +82,7 @@ Entity {
         id: light
         components: [
             Transform {
-                translation: Qt.vector3d(0.0, 0, 150)
+                translation: Qt.vector3d(0.0, 0, -200)
             },
             PointLight {
                 color: "white"
@@ -107,7 +107,7 @@ Entity {
         id: light1
         components: [
             Transform {
-                translation: Qt.vector3d(0.0, 100, -225)
+                translation: Qt.vector3d(0.0, 100, -100)
             },
             PointLight {
                 color: "white"
@@ -122,8 +122,8 @@ Entity {
     RenderableEntity {
         id: chest
         source: "/assets/Chest.obj"
-        position: Qt.vector3d(210, 297, -700)
-        rotationAngle: 0
+        position: Qt.vector3d(210, 297, 0)
+        rotationAngle: -90
         scale: 1
 
         material: DiffuseMapMaterial {

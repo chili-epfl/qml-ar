@@ -20,7 +20,8 @@ private:
 public:
     MarkerMVPProvider(MarkerDetector *d, PerspectiveCamera *c);
 
-    QMatrix4x4 getP();
+    // near and far are in millimeters (positive)
+    QMatrix4x4 getP(double n = 1, double f = 1000);
     QMatrix4x4 getMV();
 public slots:
     void recompute();

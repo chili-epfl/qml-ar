@@ -8,6 +8,8 @@ MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c)
     Q_ASSERT(c != NULL);
     detector = d;
     camera = c;
+
+    // recompute MVP on each markers update
     connect(detector, SIGNAL(markersUpdated()), (MarkerMVPProvider*) this, SLOT(recompute()));
 }
 
@@ -17,19 +19,17 @@ QMatrix4x4 MarkerMVPProvider::getMV()
     WorldImageCorrespondences correspondences = detector->getCorrespondences();
     Pose pose = CameraPoseEstimatorCorrespondences::estimate(camera, &correspondences);
 
+    // if got valid pose
     if(pose.isValid())
     {
-        QVector3D t = pose.getTranslation();
-        QMatrix3x3 r = pose.getRotation();
-        qDebug() << t << r;
-
+        // return 4x4 MV matrix
         return pose.get4Matrx();
     }
 
     return QMatrix4x4();
 }
 
-QMatrix4x4 MarkerMVPProvider::getP()
+QMatrix4x4 MarkerMVPProvider::getP(double n, double f)
 {
     QImage input_buffer = detector->getLastInput();
     if(input_buffer.width() * input_buffer.height() == 0)
@@ -38,27 +38,20 @@ QMatrix4x4 MarkerMVPProvider::getP()
         return QMatrix4x4();
     }
 
-    qDebug() << input_buffer.width() << input_buffer.height();
-
-    /*float n = 0.01;
-    float f = 10;*/
-
-    float n = 500;
-    float f = 10;
-
-    float l = 0;
-    float r = input_buffer.width();
-    float b = 0;
-    float t = input_buffer.height();
-
     // get matrix from the camera projection matrix (calibrated)
-    return camera->getPerspectiveMatrix(n, f, l, r, b, t);
+    QMatrix4x4 project = camera->getPerspectiveMatrix(n, f);
 
-    Qt3DRender::QCameraLens lens;
+    // translate to clip coordinates: [-1, 1], [-1, 1]
+    QMatrix4x4 translate_m1;
+    translate_m1.translate(-1, 1, 0);
 
-    lens.setOrthographicProjection(l, r, b, t, n, f);
+    // scale to get to clip coordinates
+    // y axis points UP in OpenGL -> -1
+    QMatrix4x4 scaler;
+    scaler.scale(2. / input_buffer.width(), -2. / input_buffer.height(), 1);
 
-    return lens.projectionMatrix();
+    // resulting projection
+    return translate_m1 * scaler * project;
 }
 
 void MarkerMVPProvider::recompute()
@@ -73,8 +66,6 @@ void MarkerMVPProvider::recompute()
     // obtain ModelView matrix
     QMatrix4x4 mv = getMV();
 
-    qDebug() << mv.map(QVector4D(0, 0, 0, 1));
-
     // calculate new MVP matrix
     QMatrix4x4 new_mvp_matrix = p * mv;
 
@@ -82,8 +73,7 @@ void MarkerMVPProvider::recompute()
     // notify listeners
     if(new_mvp_matrix != mvp_matrix)
     {
-        qDebug() << "RECOMPUTE";
-        mvp_matrix = p * mv;
+        mvp_matrix = new_mvp_matrix;
         emit newMVPMatrix();
     }
 }

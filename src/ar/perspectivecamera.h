@@ -17,13 +17,8 @@ public:
     PerspectiveCamera(CalibratedCamera* camera);
 
     // returns perspective projection matrix obtained from camera matrix
-    QMatrix4x4 getPerspectiveMatrix(float n, float f, float l, float r, float b, float t);
-
-    // method I for getPerspectiveMatrix
-    QMatrix4x4 getPerspectiveMatrixMethod1(float n, float f, float l, float r, float b, float t);
-
-    // method II for getPerspectiveMatrix
-    QMatrix4x4 getPerspectiveMatrixMethod2(float n, float f, float l, float r, float b, float t);
+    // near in far in world units
+    QMatrix4x4 getPerspectiveMatrix(double n, double f);
 };
 
 #endif // PERSPECTIVECAMERA_H
