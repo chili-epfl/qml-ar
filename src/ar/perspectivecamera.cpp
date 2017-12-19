@@ -25,6 +25,10 @@ QMatrix4x4 PerspectiveCamera::getPerspectiveMatrix(double n, double f)
     res(3, 2) = 1;
 
     // mapping z values to clipping space
+    // required for proper texture mapping
+    // using z-depth buffer
+    // equation: resulting_z = (res(2, 2) * source_z + res(2, 3)) / source_z
+
     res(2, 2) = (f + n) / (f - n);
     res(2, 3) = -2 * n * f / (f - n);
     return res;
