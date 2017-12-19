@@ -13,7 +13,7 @@ QMatrix3x3 CalibratedCamera::getMatrix()
 
 QMatrix4x4 CalibratedCamera::getPerspectiveMatrix(float n, float f, float l, float r, float b, float t)
 {
-    return getPerspectiveMatrixMethod1(n, f, l, r, b, t);
+    return getPerspectiveMatrixMethod2(n, f, l, r, b, t);
 }
 
 QMatrix4x4 CalibratedCamera::getPerspectiveMatrixMethod1(float n, float f, float l, float r, float b, float t)

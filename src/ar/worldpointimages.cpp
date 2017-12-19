@@ -91,8 +91,8 @@ QMatrix4x4 WorldPointImages::computePnP(CalibratedCamera* camera)
     qDebug() << rvec_qt << tvec_qt;
 
     QMatrix4x4 result;
+    result.translate(-tvec_qt);
     result.rotate(QQuaternion(rvec_qt));
-    result.translate(tvec_qt);
 
     return result;
 }
