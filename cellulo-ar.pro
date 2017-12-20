@@ -4,6 +4,8 @@ TARGET=celluloarplugin
 
 # Qt configuration for Quick applications
 QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender
+CONFIG += c++11
+
 TEMPLATE = lib
 CONFIG += qt plugin c++11 staticlib
 CONFIG -= android_install
