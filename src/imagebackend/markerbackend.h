@@ -2,13 +2,14 @@
 #define UCHIYABACKEND_H
 
 #include <QMatrix4x4>
-
 #include "qtbackend.h"
 #include "markerdetector.h"
 
-// backend for QML for marker detection preview
-// this class is a decorator on top of the camera
-// with a marker detector as a parameter
+/*
+ * A backend for QML for marker detection preview
+ * this class is a decorator on top of the camera
+ * with a marker detector as a parameter
+ */
 
 class MarkerBackEnd : public QObject, public QQuickImageProvider
 { Q_OBJECT

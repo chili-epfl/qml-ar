@@ -4,12 +4,19 @@
 #include <QMap>
 #include <QIODevice>
 #include "marker.h"
+#include "configjson.h"
 
 /*
  * This class stores the set of used markers
  * loads them from a file and outputs
  * the coordinates of each of them
  * on a request
+ * coordinates: top-left corner
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
  */
 
 /*
@@ -35,7 +42,7 @@
  *
  */
 
-class MarkerStorage
+class MarkerStorage : public ConfigJSON
 {
 private:
     // stored markers
@@ -44,17 +51,11 @@ public:
     // initialize empty storage
     MarkerStorage();
 
-    // fill with data from a file/other QIODevice
-    void populate(QIODevice &input);
-
-    // fill with data from file
-    void populateFromFile(QString filename);
-
-    // fill with data from the string
-    void populate(QString data);
+    // fill with data from object
+    void readConfig(QJsonObject data);
 
     // resets projection matrices for each marker
-    void resetH();
+    void undetect();
 
     // obtain a marker
     // calls qFatal on missing key

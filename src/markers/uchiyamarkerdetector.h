@@ -8,9 +8,16 @@
 
 #include <QMatrix4x4>
 
-// Wrapper around C-style UchiyaMarkers project
-// obtained from main.cpp file from UchiyaMarkers project
-// some functionality was removed
+/*
+ * Wrapper around C-style UchiyaMarkers project
+ * obtained from main.cpp file from UchiyaMarkers project
+ * Notice: some functionality was removed
+ *
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * x right
+ * y down
+ * z from reader
+ */
 
 class UchiyaMarkerDetector: public MarkerDetector
 {
@@ -41,9 +48,6 @@ private:
 
     // convert preview image to QImage
     void preparePreview();
-
-    // return 4x4 matrix from 3x3 one
-    QMatrix4x4 homography2Dto3D(MyMat src);
 public:
     // initialize given height and width of the image
     UchiyaMarkerDetector();

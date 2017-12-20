@@ -37,32 +37,54 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 ##### SOURCES/HEADERS (this project)
-SOURCES += opencvbackend.cpp \
-    qtbackend.cpp \
-    cameraframegrabber.cpp \
-    voidviewfinder.cpp \
-    qvideoframehelpers.cpp \
-    marker.cpp \
-    markerstorage.cpp \
-    portablebackendfactory.cpp \
-    markerdetector.cpp \
-    uchiyamarkerdetector.cpp \
-    markerbackend.cpp \
-    imagebackend.cpp
+INCLUDEPATH += src/markers src/utils src/imagebackend src/ar src/camera
+
+SOURCES += src/imagebackend/opencvbackend.cpp \
+    src/imagebackend/qtbackend.cpp \
+    src/camera/cameraframegrabber.cpp \
+    src/camera/voidviewfinder.cpp \
+    src/utils/qvideoframehelpers.cpp \
+    src/markers/marker.cpp \
+    src/markers/markerstorage.cpp \
+    src/camera/portablebackendfactory.cpp \
+    src/markers/markerdetector.cpp \
+    src/markers/uchiyamarkerdetector.cpp \
+    src/imagebackend/markerbackend.cpp \
+    src/imagebackend/imagebackend.cpp \
+    src/camera/calibratedcamera.cpp \
+    src/camera/calibratedcamerafilestorage.cpp \
+    src/utils/configjson.cpp \
+    src/ar/mvpprovider.cpp \
+    src/ar/markermvpprovider.cpp \
+    src/utils/mymatconverter.cpp \
+    src/ar/perspectivecamera.cpp \
+    src/ar/pose.cpp \
+    src/ar/posecamerapnp.cpp \
+    src/ar/worldimage.cpp
 
 HEADERS += \
-    opencvbackend.h \
-    qtbackend.h \
-    cameraframegrabber.h \
-    voidviewfinder.h \
-    qvideoframehelpers.h \
-    marker.h \
-    markerstorage.h \
-    portablebackendfactory.h \
-    markerdetector.h \
-    uchiyamarkerdetector.h \
-    markerbackend.h \
-    imagebackend.h
+    src/imagebackend/opencvbackend.h \
+    src/imagebackend/qtbackend.h \
+    src/camera/cameraframegrabber.h \
+    src/camera/voidviewfinder.h \
+    src/utils/qvideoframehelpers.h \
+    src/markers/marker.h \
+    src/markers/markerstorage.h \
+    src/camera/portablebackendfactory.h \
+    src/markers/markerdetector.h \
+    src/markers/uchiyamarkerdetector.h \
+    src/imagebackend/markerbackend.h \
+    src/imagebackend/imagebackend.h \
+    src/camera/calibratedcamera.h \
+    src/camera/calibratedcamerafilestorage.h \
+    src/utils/configjson.h \
+    src/ar/mvpprovider.h \
+    src/ar/markermvpprovider.h \
+    src/utils/mymatconverter.h \
+    src/ar/perspectivecamera.h \
+    src/ar/pose.h \
+    src/ar/posecamerapnp.h \
+    src/ar/worldimage.h
 
 ##### LIBRARIES
 # QtOpenCV library

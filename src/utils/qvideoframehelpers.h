@@ -4,7 +4,9 @@
 #include <QList>
 #include <QVideoFrame>
 
-// helpers for QVideoFrame used in this project
+/*
+ * Helpers for QVideoFrame used in this project
+ */
 
 class QVideoFrameHelpers
 {

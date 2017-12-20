@@ -9,7 +9,7 @@ void Marker::setPositionMM(QVector2D position_mm_)
 Marker::Marker()
 {
     setPositionMM(QVector2D(0, 0));
-    resetH();
+    undetect();
 }
 
 Marker::Marker(double x_mm, double y_mm)
@@ -47,20 +47,19 @@ double Marker::getSizeMM()
     return size_mm;
 }
 
-void Marker::setH(QMatrix4x4 H_)
+void Marker::addCorrespondence(QVector3D world_point, QVector2D image_point)
 {
-    H = H_;
+    correspondences.add(world_point, image_point);
 }
 
-QMatrix4x4 Marker::getH()
+WorldImageCorrespondences &Marker::getCorrespondences()
 {
-    return H;
+    return correspondences;
 }
 
-void Marker::resetH()
+void Marker::undetect()
 {
-    //H.fill(0.0f);
-    H = QMatrix4x4();
+    correspondences.clear();
 }
 
 QString Marker::toString()
