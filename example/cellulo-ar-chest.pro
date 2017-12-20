@@ -90,7 +90,7 @@ android {
 android {
     # From: http://community.kde.org/Necessitas/Assets
     markerdata.path = /assets/data
-    markerdata.files += $$PWD/uchiya/data/*
+    markerdata.files += $$PWD/../uchiya/data/*
     markerdata.depends += FORCE
 
     INSTALLS += markerdata

@@ -1,3 +1,4 @@
+*.a
 .ipynb_checkpoints
 images
 opencv-android
