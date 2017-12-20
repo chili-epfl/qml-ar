@@ -106,10 +106,5 @@ void MarkerMVPProvider::recompute()
         mvp_matrix = new_mvp_matrix;
         emit newMVPMatrix();
     }
-    else
-    {
-        // hide all objects
-        reset();
-        return;
-    }
+
 }
