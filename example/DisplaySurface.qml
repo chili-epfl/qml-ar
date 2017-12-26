@@ -8,9 +8,7 @@ import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
-
 import QtQuick 2.0 as QQ2
-
 import CelluloAR 1.0
 
 Entity {
@@ -20,7 +18,10 @@ Entity {
     property real roboty: 100
     property real robot_theta: 0
 
-    CelluloAR.camera_id: -1
+    Component.onCompleted: {
+        CelluloAR.camera_id = 0
+        //CelluloAR.image_filename = "assets/dots.sample.png"
+    }
 
     Camera {
         id: camera

@@ -24,63 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 ##### SOURCES/HEADERS (this project)
 SOURCES += main.cpp
-
 RESOURCES += qml.qrc
-
-# OpenCV for Linux (not Android) library
-linux:!android {
-    # using pkg-config
-    QT_CONFIG -= no-pkg-config
-    CONFIG += link_pkgconfig
-    PKGCONFIG += opencv
-}
-
-# OpenCV for Android library
-android {
-    # full path to OpenCV Android SDK
-    OPENCV_PATH = $$PWD/opencv-android
-
-    INCLUDEPATH += $${OPENCV_PATH}/sdk/native/jni/include/
-
-    LIBS += -L$${OPENCV_PATH}/sdk/native/libs/armeabi-v7a \
-            -Wl,--start-group\
-            -lopencv_calib3d\
-            -lopencv_core\
-            -lopencv_dnn\
-            -lopencv_features2d\
-            -lopencv_flann\
-            -lopencv_highgui\
-            -lopencv_imgcodecs\
-            -lopencv_imgproc\
-            -lopencv_ml\
-            -lopencv_objdetect\
-            -lopencv_photo\
-            -lopencv_shape\
-            -lopencv_stitching\
-            -lopencv_superres\
-            -lopencv_video\
-            -lopencv_videoio\
-            -lopencv_videostab\
-            -Wl,--end-group\
-
-
-    LIBS += -L$${OPENCV_PATH}/sdk/native/3rdparty/libs/armeabi-v7a \
-            -Wl,--start-group\
-            -lcpufeatures\
-            -lIlmImf\
-            -llibjasper\
-            -llibjpeg\
-            -llibpng\
-            -llibprotobuf\
-            -llibtiff\
-            -llibwebp\
-            -ltbb\
-            -ltegra_hal\
-            -Wl,--end-group\
-
-# neon instructions (for yuv2rgb)
-#    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions
-}
 
 # android: installing UchiyaMarkers
 # .txt files to device
