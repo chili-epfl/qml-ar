@@ -14,8 +14,10 @@
 class MarkerBackEnd : public QObject, public QQuickImageProvider
 { Q_OBJECT
 public:
+    MarkerBackEnd();
+
     // decorate camera and marker detector object
-    MarkerBackEnd(QQuickImageProvider* image_provider, MarkerDetector* marker_detector);
+    void initialize(QQuickImageProvider* image_provider, MarkerDetector* marker_detector);
 
     // obtain processed image
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);

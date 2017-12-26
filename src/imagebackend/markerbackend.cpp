@@ -5,7 +5,13 @@
 
 using namespace cv;
 
-MarkerBackEnd::MarkerBackEnd(QQuickImageProvider *image_provider, MarkerDetector* marker_detector) : QQuickImageProvider(QQuickImageProvider::Pixmap)
+MarkerBackEnd::MarkerBackEnd() : QQuickImageProvider(QQuickImageProvider::Pixmap)
+{
+    provider = NULL;
+    detector = NULL;
+}
+
+void MarkerBackEnd::initialize(QQuickImageProvider *image_provider, MarkerDetector* marker_detector)
 {
     provider = image_provider;
     detector = marker_detector;
@@ -13,6 +19,8 @@ MarkerBackEnd::MarkerBackEnd(QQuickImageProvider *image_provider, MarkerDetector
 
 QPixmap MarkerBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(id)
+    if(provider == NULL)
+        return QPixmap();
     // obtain input image from camera
     QPixmap input = provider->requestPixmap("raw", size, requestedSize);
 
