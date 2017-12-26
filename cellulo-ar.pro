@@ -1,12 +1,13 @@
 ##### QT
 # Name of the application
-TARGET=celluloarplugin
 
 # Qt configuration for Quick applications
 QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender
+CONFIG += qt plugin c++11 nostrip
 
 TEMPLATE = lib
-CONFIG += qt plugin c++11 staticlib
+TARGET = celluloarplugin
+CONFIG += plugin
 CONFIG -= android_install
 
 TARGET = $$qtLibraryTarget($$TARGET)
@@ -14,7 +15,6 @@ uri = CelluloAR
 
 #File installation
 qmldir.files = qmldir
-
 OTHER_FILES += qmldir.files
 
 unix {
@@ -187,6 +187,3 @@ HEADERS += uchiya/blob.h \
     uchiya/mylib/mymat.h \
     uchiya/mylib/mytimer.h \
     uchiya/mylib/opencvpath.h
-
-DISTFILES += \
-    qmlfile
