@@ -4,7 +4,6 @@ TARGET=celluloarplugin
 
 # Qt configuration for Quick applications
 QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender
-CONFIG += c++11
 
 TEMPLATE = lib
 CONFIG += qt plugin c++11 staticlib
@@ -21,10 +20,8 @@ OTHER_FILES += qmldir.files
 unix {
     installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
     qmldir.path = $$installPath
-    javascript.path = $$installPath
-    qml.path = $$installPath
     target.path = $$installPath
-    INSTALLS += target qmldir javascript qml
+    INSTALLS += qmldir target
 }
 
 # The following define makes your compiler emit warnings if you use
