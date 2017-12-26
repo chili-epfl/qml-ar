@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import Cellulo 1.0
 import QtQuick.Scene3D 2.0
+import CelluloAR 1.0
 
 Window {
     id: window
@@ -29,7 +30,7 @@ Window {
 
         Timer {
             interval: 100; running: true; repeat: true
-            onTriggered: {image.cache=0;image.source="";image.source="image://camera/raw";}
+            onTriggered: {image.cache=0;image.source="";image.source="image://CelluloARMarkers/raw";}
         }
 
         id: scene

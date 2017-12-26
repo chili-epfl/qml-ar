@@ -62,7 +62,9 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/ar/perspectivecamera.cpp \
     src/ar/pose.cpp \
     src/ar/posecamerapnp.cpp \
-    src/ar/worldimage.cpp
+    src/ar/worldimage.cpp \
+    src/celluloar.cpp \
+    src/celluloarqmlplugin.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -86,7 +88,9 @@ HEADERS += \
     src/ar/perspectivecamera.h \
     src/ar/pose.h \
     src/ar/posecamerapnp.h \
-    src/ar/worldimage.h
+    src/ar/worldimage.h \
+    src/celluloar.h \
+    src/celluloarqmlplugin.h
 
 ##### LIBRARIES
 # QtOpenCV library

@@ -11,6 +11,8 @@ import Qt3D.Extras 2.0
 
 import QtQuick 2.0 as QQ2
 
+import CelluloAR 1.0
+
 Entity {
     id: sceneRoot
 
@@ -18,9 +20,11 @@ Entity {
     property real roboty: 100
     property real robot_theta: 0
 
+    CelluloAR.camera_id: -1
+
     Camera {
         id: camera
-        projectionMatrix: mvp.mvp_matrix
+        projectionMatrix: CelluloAR.mvp_matrix
     }
 
     FirstPersonCameraController { camera: camera }
