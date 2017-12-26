@@ -16,10 +16,10 @@ class CelluloARQMLPlugin : public QQmlExtensionPlugin
   Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
+    // register CelluloAR singleton
     void registerTypes(const char *uri);
-    void initializeEngine(QQmlEngine *engine, const char *uri);
 
-    // Second, define the singleton type provider function (callback).
+    // Define the singleton type provider function (callback).
     static QObject* get_cellulo_ar(QQmlEngine *engine, QJSEngine *scriptEngine);
 };
 
