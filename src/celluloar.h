@@ -82,7 +82,7 @@ private:
 
     // marker backend for visualizing
     // detected markers
-    MarkerBackEnd* marker_backend;
+    MarkerBackEnd marker_backend;
 
     // ModelViewProjection matrix
     // provider

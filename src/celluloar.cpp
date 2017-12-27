@@ -6,6 +6,7 @@ CelluloAR::CelluloAR()
     is_initialized = false;
     camera_id = -2;
     image_filename = "";
+    raw_provider = NULL;
 }
 
 int CelluloAR::getCameraId()
@@ -17,6 +18,7 @@ int CelluloAR::getCameraId()
 void CelluloAR::setCameraId(int camera_id)
 {
     Q_ASSERT(!is_initialized);
+    qDebug() << "setCameraId";
     this->camera_id = camera_id;
     raw_provider = PortableCameraBackendFactory::getBackend(camera_id);
     initialize();
@@ -25,6 +27,7 @@ void CelluloAR::setCameraId(int camera_id)
 void CelluloAR::setImageFilename(QString filename)
 {
     Q_ASSERT(!is_initialized);
+    qDebug() << "setImageFilename";
     image_filename = filename;
     raw_provider = new ImageBackend(filename);
     initialize();
@@ -32,7 +35,7 @@ void CelluloAR::setImageFilename(QString filename)
 
 QMatrix4x4 CelluloAR::getMVPMatrix()
 {
-    Q_ASSERT(is_initialized);
+    if(!is_initialized) return QMatrix4x4();
     return mvp_provider->getMVPMatrix();
 }
 
@@ -45,7 +48,7 @@ void CelluloAR::newMVPMatrixSlot()
 QQuickImageProvider *CelluloAR::getImageProvider()
 {
     Q_ASSERT(is_initialized);
-    return marker_backend;
+    return &marker_backend;
 }
 
 QString CelluloAR::getImageFilename()
@@ -56,6 +59,7 @@ QString CelluloAR::getImageFilename()
 
 void CelluloAR::initialize()
 {
+    Q_ASSERT(raw_provider != NULL);
     // creating Uchiya marker detector
     UchiyaMarkerDetector* detector = new UchiyaMarkerDetector;
 
@@ -77,7 +81,7 @@ void CelluloAR::initialize()
     perspective_camera = new PerspectiveCamera(camera_matrix);
 
     // adding UchiyaBackEnd (decorating camera object)
-    marker_backend = new MarkerBackEnd(raw_provider, detector);
+    marker_backend.initialize(raw_provider, detector);
 
     // creating a ModelView provider
     mvp_provider = new MarkerMVPProvider(detector, perspective_camera);
