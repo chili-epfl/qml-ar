@@ -61,7 +61,8 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/ar/posecamerapnp.cpp \
     src/ar/worldimage.cpp \
     src/celluloar.cpp \
-    src/celluloarqmlplugin.cpp
+    src/celluloarqmlplugin.cpp \
+    src/utils/timelogger.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -87,7 +88,9 @@ HEADERS += \
     src/ar/posecamerapnp.h \
     src/ar/worldimage.h \
     src/celluloar.h \
-    src/celluloarqmlplugin.h
+    src/celluloarqmlplugin.h \
+    src/config.h \
+    src/utils/timelogger.h
 
 ##### LIBRARIES
 # QtOpenCV library
