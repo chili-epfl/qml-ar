@@ -19,6 +19,12 @@ class MVPProvider : public QObject
 protected:
     // last ModelViewProjection matrix
     QMatrix4x4 mvp_matrix;
+
+    // valid = corresponds to a real mvp matrix
+    bool is_valid;
+
+    // set MVP matrix internally
+    void setMVPMatrix(QMatrix4x4 mat);
 public:
     // initialize with eye matrix
     MVPProvider();

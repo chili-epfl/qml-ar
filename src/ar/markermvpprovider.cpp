@@ -99,12 +99,6 @@ void MarkerMVPProvider::recompute()
     // calculate new MVP matrix
     QMatrix4x4 new_mvp_matrix = p * mv;
 
-    // if it's different, save it and
     // notify listeners
-    if(new_mvp_matrix != mvp_matrix)
-    {
-        mvp_matrix = new_mvp_matrix;
-        emit newMVPMatrix();
-    }
-
+    setMVPMatrix(new_mvp_matrix);
 }
