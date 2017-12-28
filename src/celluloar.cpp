@@ -1,4 +1,5 @@
 #include "celluloar.h"
+#include "timelogger.h"
 
 CelluloAR::CelluloAR()
 {
@@ -18,7 +19,7 @@ int CelluloAR::getCameraId()
 void CelluloAR::setCameraId(int camera_id)
 {
     Q_ASSERT(!is_initialized);
-    qDebug() << "setCameraId";
+    TimeLoggerLog("Using camera %d", camera_id);
     this->camera_id = camera_id;
     raw_provider = PortableCameraBackendFactory::getBackend(camera_id);
     initialize();
@@ -47,7 +48,6 @@ void CelluloAR::newMVPMatrixSlot()
 
 QQuickImageProvider *CelluloAR::getImageProvider()
 {
-    Q_ASSERT(is_initialized);
     return &marker_backend;
 }
 
