@@ -1,6 +1,7 @@
 #include "portablebackendfactory.h"
 #include "qtbackend.h"
 #include "opencvbackend.h"
+#include "timelogger.h"
 #include <QtCore>
 
 int PortableCameraBackendFactory::getDefaultCameraId()
@@ -28,11 +29,11 @@ QQuickImageProvider *PortableCameraBackendFactory::getBackend(int camera_id)
     QQuickImageProvider* provider = NULL;
 #ifdef Q_OS_ANDROID
     provider = new QtCameraBackend(camera_id);
-    qDebug() << "Using Android camera backend";
+    TimeLoggerLog("%s", "Using Android camera backend");
 #elif defined Q_OS_LINUX
     // using 1 as camera id
     provider = new OpenCVCameraBackend(camera_id);
-    qDebug() << "Using Linux camera backend";
+    TimeLoggerLog("%s", "Using Linux camera backend");
 #else
     #error "OS other than Android and Linux are not supported"
 #endif

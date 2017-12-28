@@ -28,7 +28,7 @@ void CelluloAR::setCameraId(int camera_id)
 void CelluloAR::setImageFilename(QString filename)
 {
     Q_ASSERT(!is_initialized);
-    qDebug() << "setImageFilename";
+    TimeLoggerLog("Opening image %s", filename.toStdString().c_str());
     image_filename = filename;
     raw_provider = new ImageBackend(filename);
     initialize();

@@ -10,6 +10,7 @@
 #include <vector>
 #include <opencv2/calib3d.hpp>
 #include "mymatconverter.h"
+#include "timelogger.h"
 #include <QGenericMatrix>
 
 using std::vector;
@@ -25,7 +26,7 @@ UchiyaMarkerDetector::UchiyaMarkerDetector(): MarkerDetector()
 void UchiyaMarkerDetector::initialize(int h, int w)
 {
     Q_ASSERT(is_initialized == false);
-    qDebug() << "init" << h << w;
+    TimeLoggerLog("init %d %d", h, w);
     m_camimg.Init(w, h);		// allocate image
     m_img.Init(w, h);			// allocate image
     initMarkers();		// tracking initialization
@@ -48,7 +49,7 @@ void UchiyaMarkerDetector::initMarkers()
 #endif
         snprintf(name,sizeof(name),fn_template,i);
         m_llah.AddPaper(name);
-        qDebug() << "Uchiya" << name << "loaded";
+        TimeLoggerLog("Marker %s loaded", name);
     }
 
 }
@@ -200,7 +201,7 @@ void UchiyaMarkerDetector::process()
     // this happens at the start of the application
     if(input_buffer.height() * input_buffer.width() <= 0)
     {
-        qDebug() << "Empty image";
+        TimeLoggerLog("%s", "Empty image");
         return;
     }
 
@@ -208,7 +209,7 @@ void UchiyaMarkerDetector::process()
     // when we know the camera image size
     if(!is_initialized)
     {
-        qDebug() << "Initializing UchiyaMarkerDetector";
+        TimeLoggerLog("%s", "Initializing UchiyaMarkerDetector");
         initialize(input_buffer.height(), input_buffer.width());
     }
 
@@ -241,5 +242,5 @@ void UchiyaMarkerDetector::process()
     // tell the parent to recompute projection matrix
     emit markersUpdated();
 
-    qDebug() << "Uchiya dt" << timer.elapsed() << "ms";
+    TimeLoggerLog("Uchiya dt %d ms", timer.elapsed());
 }

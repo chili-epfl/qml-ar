@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
+#include "timelogger.h"
 
 MarkerStorage::MarkerStorage()
 {
@@ -28,7 +29,7 @@ void MarkerStorage::readConfig(QJsonObject config)
         markers[id].setId(id);
         markers[id].setSizeMM(size_mm);
 
-        qDebug() << markers[id].toString();
+        TimeLoggerLog("%s", markers[id].toString().toStdString().c_str())
     }
 }
 
@@ -45,7 +46,7 @@ Marker* MarkerStorage::getPointer(int marker_id)
         return(&markers[marker_id]);
     else
     {
-        qDebug() << "Marker" << marker_id << "does not exist in storage";
+        TimeLoggerLog("Marker %d does not exist in storage", marker_id);
         return(NULL);
     }
 }

@@ -5,6 +5,7 @@
 #include <QElapsedTimer>
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
+#include "timelogger.h"
 
 QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
@@ -15,7 +16,7 @@ QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImagePr
     buf = QImage();
 
     // initializing camera
-    qDebug() << "Number of cameras:" << QCameraInfo::availableCameras().size();
+    TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
     camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
 
     // installing camera callback
@@ -71,14 +72,11 @@ QtCameraBackend::~QtCameraBackend() {
 
 void QtCameraBackend::processQImage(QImage img)
 {
-    //qDebug() << "Updating image";
     buf = img;
 }
 
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
-    //qDebug() << "Elapsed " << timer.elapsed();
-
     // updating the buffer if enough time has passed
     if(timer.elapsed() > update_ms)
     {

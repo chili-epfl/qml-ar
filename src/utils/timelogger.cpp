@@ -6,18 +6,21 @@
 
 void TimeLogger::log(QString filename, int line_number, QString function, const char* format, ...)
 {
+    static qint64 last_timestamp = 0;
+    qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
+
     // adding data to res
     QString res;
     QTextStream s(&res);
 
     // timestamp
-    s << QDateTime::currentMSecsSinceEpoch() << " ";
+    s << timestamp << "\t+" << timestamp - last_timestamp << " ms\t";
 
     // thread id
-    s << ((int64_t) QThread::currentThreadId()) << " ";
+    //s << ((int64_t) QThread::currentThreadId()) << " ";
 
     // function-file-line
-    s << "[" << function << "@" << filename << ":" << line_number << "] ";
+    s << "[" << function << "@" << filename << ":" << line_number << "]\t";
 
     // printf-like style implementation
     va_list argptr;
@@ -34,6 +37,8 @@ void TimeLogger::log(QString filename, int line_number, QString function, const 
 
     // result
     print(res);
+
+    last_timestamp = timestamp;
 }
 
 void TimeLogger::print(QString str)

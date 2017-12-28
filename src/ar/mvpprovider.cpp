@@ -1,11 +1,12 @@
 #include "mvpprovider.h"
+#include "timelogger.h"
 
 void MVPProvider::setMVPMatrix(QMatrix4x4 mat)
 {
     if(mat != mvp_matrix)
     {
         if(!is_valid)
-            qDebug() << "Matrix available";
+            TimeLoggerLog("%s", "Matrix available");
 
         mvp_matrix = mat;
         is_valid = 1;
@@ -28,7 +29,7 @@ void MVPProvider::reset()
 {
     if(is_valid)
     {
-        qDebug() << "Hiding objects";
+        TimeLoggerLog("%s", "Hiding objects");
         mvp_matrix.fill(0);
         is_valid = 0;
         emit newMVPMatrix();

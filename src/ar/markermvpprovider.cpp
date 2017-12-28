@@ -1,6 +1,7 @@
 #include "markermvpprovider.h"
 #include "posecamerapnp.h"
 #include <QCameraLens>
+#include "timelogger.h"
 
 MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c) : MVPProvider()
 {
@@ -36,7 +37,7 @@ QMatrix4x4 MarkerMVPProvider::getP(double n, double f)
     QImage input_buffer = detector->getLastInput();
     if(input_buffer.width() * input_buffer.height() == 0)
     {
-        qDebug() << "Empty image";
+        TimeLoggerLog("%s", "Empty image");
         return QMatrix4x4();
     }
 
