@@ -19,7 +19,7 @@ Entity {
     property real robot_theta: 0
 
     Component.onCompleted: {
-        CelluloAR.camera_id = 0
+        CelluloAR.camera_id = -1
         //CelluloAR.image_filename = "assets/dots.sample.png"
     }
 
