@@ -197,6 +197,10 @@ void UchiyaMarkerDetector::prepareInput()
 
 void UchiyaMarkerDetector::process()
 {
+    // measuring processing time
+    QElapsedTimer timer;
+    timer.start();
+
     // if the image is invalid, no need for marker detection
     // this happens at the start of the application
     if(input_buffer.height() * input_buffer.width() <= 0)
@@ -217,10 +221,6 @@ void UchiyaMarkerDetector::process()
 
     // putting camera src image to Uchiya pipeline
     prepareInput();
-
-    // measuring processing time
-    QElapsedTimer timer;
-    timer.start();
 
     // extracting dots
     m_llah.Extract(m_camimg);
