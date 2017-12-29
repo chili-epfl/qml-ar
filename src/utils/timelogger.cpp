@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <QThread>
 #include <QTextStream>
+#include <QDebug>
 #include <QDateTime>
 
 void TimeLogger::log(QString filename, int line_number, QString function, const char* format, ...)
@@ -43,5 +44,5 @@ void TimeLogger::log(QString filename, int line_number, QString function, const 
 
 void TimeLogger::print(QString str)
 {
-    fprintf(stderr, str.toStdString().c_str());
+    qDebug() << str.toStdString().c_str();
 }
