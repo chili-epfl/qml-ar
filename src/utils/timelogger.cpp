@@ -34,7 +34,7 @@ void TimeLogger::log(QString filename, int line_number, QString function, const 
     va_end(argptr);
 
     // appending newline
-    s << "\n";
+    //s << "\n";
 
     // result
     print(res);
