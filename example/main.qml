@@ -14,7 +14,7 @@ Window {
     Rectangle {
 
         Timer {
-            interval: 100; running: true; repeat: false;
+            interval: 100; running: true; repeat: true;
             onTriggered: {
                 var w = image.sourceSize.width;
                 var h = image.sourceSize.height;
@@ -29,7 +29,7 @@ Window {
         }
 
         Timer {
-            interval: 100; running: true; repeat: true
+            interval: 1000; running: true; repeat: true
             onTriggered: {image.cache=0;image.source="";image.source="image://CelluloARMarkers/raw";}
         }
 
