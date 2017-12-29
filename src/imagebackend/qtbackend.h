@@ -28,7 +28,7 @@ public:
 
 protected:
     // image buffer
-    // is written in processQImage signal
+    // is written in processQImage slot
     // is read in requestPixmap
     // TODO: thread safety (now can crash randomly)
     QImage buf;

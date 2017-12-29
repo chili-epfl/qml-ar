@@ -3,6 +3,7 @@
 #include <QList>
 #include <QVideoFrame>
 #include "yuv2rgb/yuv2rgb.h"
+#include "config.h"
 
 QList<QVideoFrame::PixelFormat> QVideoFrameHelpers::supportedPixelFormats()
 {
@@ -118,6 +119,8 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
         delete img;
 
     //qDebug() << "[99] done" << timer.elapsed();
+
+    TimeLoggerProfile("%s", "Converted image to RGB");
 
     return(image);
 }

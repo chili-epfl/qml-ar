@@ -6,6 +6,7 @@
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
 #include "timelogger.h"
+#include "config.h"
 
 QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
@@ -21,7 +22,7 @@ QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImagePr
 
     // installing camera callback
     // has different implementations for Android/Linux
-    // since Android camera is poorly supported in Android NDS (Nov'17)
+    // since Android camera is poorly supported in Android NDK (Nov'17)
 #ifdef Q_OS_ANDROID
     // setting up a viewfinder which does nothing
     viewfinder = new VoidViewFinder;
@@ -80,6 +81,7 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
     // updating the buffer if enough time has passed
     if(timer.elapsed() > update_ms)
     {
+        TimeLoggerProfile("%s", "Received image from camera");
         processQImage(QVideoFrameHelpers::VideoFrameToImage(frame).copy());
         timer.start();
     }

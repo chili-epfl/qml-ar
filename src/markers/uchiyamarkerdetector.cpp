@@ -11,6 +11,7 @@
 #include <opencv2/calib3d.hpp>
 #include "mymatconverter.h"
 #include "timelogger.h"
+#include "config.h"
 #include <QGenericMatrix>
 
 using std::vector;
@@ -197,9 +198,7 @@ void UchiyaMarkerDetector::prepareInput()
 
 void UchiyaMarkerDetector::process()
 {
-    // measuring processing time
-    QElapsedTimer timer;
-    timer.start();
+    TimeLoggerProfile("%s", "Start marker detection");
 
     // if the image is invalid, no need for marker detection
     // this happens at the start of the application
@@ -239,8 +238,8 @@ void UchiyaMarkerDetector::process()
     // obtaining Uchiya image dst and returning it
     preparePreview();
 
+    TimeLoggerProfile("%s", "End marker detection");
+
     // tell the parent to recompute projection matrix
     emit markersUpdated();
-
-    TimeLoggerLog("Uchiya dt %d ms", timer.elapsed());
 }

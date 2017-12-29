@@ -2,6 +2,7 @@
 #include "posecamerapnp.h"
 #include <QCameraLens>
 #include "timelogger.h"
+#include "config.h"
 
 MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c) : MVPProvider()
 {
@@ -102,4 +103,6 @@ void MarkerMVPProvider::recompute()
 
     // notify listeners
     setMVPMatrix(new_mvp_matrix);
+
+    TimeLoggerProfile("%s", "Calculated MVP matrix");
 }
