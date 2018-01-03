@@ -10,23 +10,38 @@
 
 QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
+    // initializing camera
+    TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
+    camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
+    need_viewfinder = 1;
+    init();
+}
+
+QtCameraBackend::QtCameraBackend(QCamera *cam) : QQuickImageProvider(QQuickImageProvider::Pixmap)
+{
+    camera = cam;
+    need_viewfinder = 0;
+    init();
+}
+
+void QtCameraBackend::init()
+{
     // starting dirty hack timer
     timer.start();
 
     // initial buffer value is an empty image
     buf = QImage();
 
-    // initializing camera
-    TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
-    camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
-
     // installing camera callback
     // has different implementations for Android/Linux
     // since Android camera is poorly supported in Android NDK (Nov'17)
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined QT_BACKEND_FORCE_VIDEOPROBE
     // setting up a viewfinder which does nothing
-    viewfinder = new VoidViewFinder;
-    camera->setViewfinder(viewfinder);
+    if(need_viewfinder)
+    {
+        viewfinder = new VoidViewFinder;
+        camera->setViewfinder(viewfinder);
+    }
 
     // this object does image grabbing
     probe = new QVideoProbe(this);

@@ -21,6 +21,9 @@ public:
     // cam_id indicates the camera index in QCameraInfo::availableCameras()
     QtCameraBackend(int cam_id = 0);
 
+    // initialize from an existing QCamera
+    QtCameraBackend(QCamera* cam);
+
     // callback for main thread
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
@@ -53,6 +56,12 @@ protected:
 
     // only updating image each update_ms
     static const int update_ms = 20;
+
+    // initialize the object after setting camera ptr
+    void init();
+
+    // if set to true, will install a void viewfinder
+    bool need_viewfinder;
 
 public slots:
     void processQImage(QImage img);

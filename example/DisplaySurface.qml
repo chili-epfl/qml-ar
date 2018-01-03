@@ -10,25 +10,17 @@ import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
 import QtQuick 2.0 as QQ2
 import CelluloAR 1.0
+import QtMultimedia 5.5 as MM
 
 Entity {
-    id: sceneRoot
+    id: ar_scene
 
-    property real robotx: 100
-    property real roboty: 100
-    property real robot_theta: 0
-
-    Component.onCompleted: {
-        CelluloAR.camera_id = -1
-        //CelluloAR.image_filename = "assets/dots.sample.png"
-    }
+    property var robotList
 
     Camera {
         id: camera
         projectionMatrix: CelluloAR.mvp_matrix
     }
-
-    FirstPersonCameraController { camera: camera }
 
     components: [
         RenderSettings {
@@ -47,8 +39,8 @@ Entity {
             PhongMaterial {
             },
             Transform {
-                rotation: fromAxisAndAngle(Qt.vector3d(0, 0, 1), sceneRoot.robot_theta)
-                translation: Qt.vector3d(sceneRoot.robotx, sceneRoot.roboty, -50);
+                rotation: fromAxisAndAngle(Qt.vector3d(0, 0, 1), ar_scene.robot_theta)
+                translation: Qt.vector3d(ar_scene.robotx, ar_scene.roboty, -50);
             },
             CuboidMesh {
                 xExtent: 50

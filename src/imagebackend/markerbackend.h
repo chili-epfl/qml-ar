@@ -17,7 +17,7 @@ public:
     MarkerBackEnd();
 
     // decorate camera and marker detector object
-    void initialize(QQuickImageProvider* image_provider, MarkerDetector* marker_detector);
+    void initialize(MarkerDetector* marker_detector);
 
     // obtain processed image
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
@@ -26,9 +26,6 @@ public:
 private:
     // marker detection pipeline
     MarkerDetector* detector;
-
-    // image provider
-    QQuickImageProvider* provider;
 };
 
 #endif // UCHIYABACKEND_H

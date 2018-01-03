@@ -3,47 +3,37 @@ import QtQuick.Window 2.2
 import Cellulo 1.0
 import QtQuick.Scene3D 2.0
 import CelluloAR 1.0
+import QtMultimedia 5.4
 
 Window {
     id: window
     visible: true
-    width: 100
-    height: 100
     title: qsTr("Cellulo-AR")
 
+    Camera {
+        id: camera
+        deviceId: "1"
+        objectName: "camera"
+    }
+
+    Component.onCompleted: {
+        //CelluloAR.camera_id = 0
+        CelluloAR.qml_camera = camera
+        CelluloAR.update_ms = 50
+        //CelluloAR.image_filename = "assets/dots.sample.png"
+    }
+
     Rectangle {
-
-        Timer {
-            interval: 100; running: true; repeat: true;
-            onTriggered: {
-                var w = image.sourceSize.width;
-                var h = image.sourceSize.height;
-                if(w * h > 0)
-                {
-                    console.log("Resizing main window")
-                    window.width = w;
-                    window.height = h;
-                    running = false;
-                }
-            }
-        }
-
-        Timer {
-            interval: 1000; running: true; repeat: true
-            onTriggered: {image.cache=0;image.source="";image.source="image://CelluloARMarkers/raw";}
-        }
-
         id: scene
         anchors.fill: parent
         anchors.margins: 0
 
-        Image {
-            id: image
+        VideoOutput {
+            id: viewfinder
+            source: camera
+            autoOrientation: true
             anchors.fill: parent
-            visible: true
-            clip: false
-            transformOrigin: Item.Center
-            source: ""
+            anchors.margins: 0
         }
 
         Scene3D {
@@ -54,7 +44,9 @@ Window {
             aspects: ["input", "logic"]
             cameraAspectRatioMode: Scene3D.AutomaticAspectRatio
 
-            DisplaySurface {id: ds}
+            DisplaySurface {
+                robotList: robotListId
+            }
         }
     }
 
@@ -66,11 +58,12 @@ Window {
         onMacAddrChanged:           console.log("robot1.onMacAddrChanged()")
 
         onBootCompleted:            console.log("robot1.bootCompleted()")
+        // @disable-check M306
         onConnectionStatusChanged:  console.log("robot1.connectionStatusChanged(" + CelluloBluetoothEnums.ConnectionStatusString(connectionStatus) + ")")
+        // @disable-check M306
         onGestureChanged:           console.log("robot1.gestureChanged(" + CelluloBluetoothEnums.GestureString(gesture) + ")")
         onKidnappedChanged:         console.log("robot1.kidnappedChanged(" + kidnapped + ")")
-        onPoseChanged:              {ds.robotx = x; ds.roboty = y; ds.robot_theta = theta;
-            console.log("robot1.pc(" + x.toFixed(2) + "," + y.toFixed(2) + "," + theta.toFixed(2) + ")")}
+        onPoseChanged:              console.log("robot1.pc(" + x.toFixed(2) + "," + y.toFixed(2) + "," + theta.toFixed(2) + ")")
         onTrackingGoalReached:      console.log("robot1.trackingGoalReached()")
     }
 

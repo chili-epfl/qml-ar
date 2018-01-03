@@ -34,6 +34,16 @@ void CelluloAR::setImageFilename(QString filename)
     initialize();
 }
 
+void CelluloAR::setQMLCamera(QObject *camera)
+{
+    Q_ASSERT(camera != NULL);
+    TimeLoggerLog("%s", "Setting camera from QML camera");
+    QCamera* camera_ = qvariant_cast<QCamera*>(camera->property("mediaObject"));
+    raw_provider = new QtCameraBackend(camera_);
+    this->qml_camera = camera;
+    initialize();
+}
+
 QMatrix4x4 CelluloAR::getMVPMatrix()
 {
     if(!is_initialized) return QMatrix4x4();
@@ -49,6 +59,38 @@ void CelluloAR::newMVPMatrixSlot()
 QQuickImageProvider *CelluloAR::getImageProvider()
 {
     return &marker_backend;
+}
+
+void CelluloAR::update()
+{
+    if(raw_provider == NULL) return;
+    // obtain input image from camera
+    QSize sz;
+    sz.setWidth(600);
+    QPixmap input = raw_provider->requestPixmap("raw", &sz, sz);
+    if(input.isNull()) return;
+
+    // send input to marker detector
+    detector->setInput(input.toImage().scaledToWidth(600));
+
+    // detect markers
+    detector->process();
+}
+
+double CelluloAR::getUpdateMS()
+{
+    return timer.interval();
+}
+
+void CelluloAR::setUpdateMS(double value)
+{
+    timer.start(value);
+    connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+}
+
+QObject *CelluloAR::getQMLCamera()
+{
+    return qml_camera;
 }
 
 QString CelluloAR::getImageFilename()
@@ -81,7 +123,7 @@ void CelluloAR::initialize()
     perspective_camera = new PerspectiveCamera(camera_matrix);
 
     // adding UchiyaBackEnd (decorating camera object)
-    marker_backend.initialize(raw_provider, detector);
+    marker_backend.initialize(detector);
 
     // creating a ModelView provider
     mvp_provider = new MarkerMVPProvider(detector, perspective_camera);

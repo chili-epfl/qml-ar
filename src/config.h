@@ -10,6 +10,9 @@
 // Define to enable time output at each important step
 #define PROFILE_PIPELINE
 
+// Define to force usage of QVideoProbe
+#define QT_BACKEND_FORCE_VIDEOPROBE
+
 // implementation of PROFILE_PIPELINE
 #ifdef PROFILE_PIPELINE
     #define TimeLoggerProfile(...) TimeLoggerLog(__VA_ARGS__)
