@@ -28,6 +28,7 @@ void MarkerStorage::readConfig(QJsonObject config)
         markers[id].setName(name);;
         markers[id].setId(id);
         markers[id].setSizeMM(size_mm);
+        markers[id].setConfig(marker);
 
         TimeLoggerLog("%s", markers[id].toString().toStdString().c_str())
     }
