@@ -31,4 +31,11 @@ void CalibratedCameraFileStorage::readConfig(QJsonObject config)
     // transpose required since QMatrix3x3.data()
     // is in column-major order
     A = result_matrix.transposed();
+
+    // obtaining width and height
+    calibration_w = config.value("width").toInt();
+    calibration_h = config.value("height").toInt();
+
+    Q_ASSERT(calibration_w != 0);
+    Q_ASSERT(calibration_h != 0);
 }

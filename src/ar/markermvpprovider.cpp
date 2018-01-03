@@ -35,12 +35,8 @@ QMatrix4x4 MarkerMVPProvider::getMV()
 
 QMatrix4x4 MarkerMVPProvider::getP(double n, double f)
 {
+    // obtain current frame from detector
     QImage input_buffer = detector->getLastInput();
-    if(input_buffer.width() * input_buffer.height() == 0)
-    {
-        TimeLoggerLog("%s", "Empty image");
-        return QMatrix4x4();
-    }
 
     // get matrix from the camera projection matrix (calibrated)
     QMatrix4x4 project = camera->getPerspectiveMatrix(n, f);
@@ -76,11 +72,22 @@ void MarkerMVPProvider::recompute()
     //         since MV is used before P
     //
 
-
     // hide objects if no markers were detected
     if(detector->getCorrespondences().size() <= 0)
     {
         reset();
+        return;
+    }
+
+    // Set image resolution if the frame is ready
+    QImage input_buffer = detector->getLastInput();
+    if(input_buffer.width() * input_buffer.height() > 0)
+    {
+        camera->setResolution(input_buffer.width(), input_buffer.height());
+    }
+    else
+    {
+        TimeLoggerLog("%s", "Empty image");
         return;
     }
 

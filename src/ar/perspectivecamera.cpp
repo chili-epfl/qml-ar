@@ -15,11 +15,13 @@ QMatrix4x4 PerspectiveCamera::getPerspectiveMatrix(double n, double f)
 
     // z depth information is lost
 
+    QMatrix3x3 camera_matrix = getMatrix();
+
     QMatrix4x4 res;
     res.fill(0);
     for(int i = 0; i < 3; i++)
         for(int j = 0; j < 3; j++)
-            res(i, j) = A(i, j);
+            res(i, j) = camera_matrix(i, j);
 
     res(2, 2) = 0;
     res(3, 2) = 1;
