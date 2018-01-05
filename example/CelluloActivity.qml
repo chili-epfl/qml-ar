@@ -1,26 +1,15 @@
-import Qt3D.Core 2.0
-import Qt3D.Render 2.0
-import Qt3D.Input 2.0
-import Qt3D.Extras 2.0
-
 import QtQuick 2.1
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
-import QtQuick 2.0 as QQ2
+
 import CelluloAR 1.0
-import QtMultimedia 5.5 as MM
 
 Entity {
-    id: ar_scene
-
     property var robotList
 
-    Camera {
-        id: camera
-        projectionMatrix: CelluloAR.mvp_matrix
-    }
+    id: activity
 
     components: [
         RenderSettings {
@@ -32,30 +21,42 @@ Entity {
         InputSettings { }
     ]
 
-    // cellulo robot visual
-    Entity {
-        id: celluloDirection
-        components: [
-            PhongMaterial {
-            },
-            Transform {
-                rotation: fromAxisAndAngle(Qt.vector3d(0, 0, 1), ar_scene.robot_theta)
-                translation: Qt.vector3d(ar_scene.robotx, ar_scene.roboty, -50);
-            },
-            CuboidMesh {
-                xExtent: 50
-                yExtent: 2
-                zExtent: 2
-            }
-        ]
+    property var robotObjects
+
+    function updatePositions() {
+        for(var robotId in robotList) {
+            var robot = robotList[robotId];
+            var robotObject = robotObjects[robotId];
+            robotObject.x = robot.x;
+            robotObject.y = robot.y;
+            robotObject.theta = robot.theta;
+        }
     }
 
+    Component.onCompleted: {
+        robotObjects = [];
+        var component = Qt.createComponent("CelluloRobot.qml");
+        for(var robotId in robotList) {
+            var robotObject = component.createObject(activity);
+            robotObjects.push(robotObject);
+        }
+        updatePositions();
+    }
+
+    // ModelViewProjection matrix
+    Camera {
+        id: camera
+        projectionMatrix: CelluloAR.mvp_matrix
+    }
+
+    // cuboid on top-left corner
     Entity {
         id: cuboid
         components: [
             PhongMaterial {
                 id: materialPhong
             },
+            // @disable-check M300
             Transform {
                 id: transform
                 matrix: {
@@ -73,36 +74,11 @@ Entity {
         ]
     }
 
-
-    // Point Light (pulsing)
-    Entity {
-        id: light
-        components: [
-            Transform {
-                translation: Qt.vector3d(0.0, 0, -200)
-            },
-            PointLight {
-                color: "white"
-                intensity: 1
-                constantAttenuation: 1.0
-                linearAttenuation: 0.0
-                quadraticAttenuation: 0
-
-                NumberAnimation on intensity {
-                    from: 0.8; to: 1;
-                    running: true
-                    loops: Animation.Infinite
-                    duration: 1000
-                    easing.type: Easing.CosineCurve
-                }
-            }
-        ]
-    }
-
     // Point Light (constant)
     Entity {
         id: light1
         components: [
+            // @disable-check M300
             Transform {
                 translation: Qt.vector3d(0.0, 100, -100)
             },
@@ -116,6 +92,7 @@ Entity {
         ]
     }
 
+    // chest on bottom-down corner
     RenderableEntity {
         id: chest
         source: "/assets/Chest.obj"
@@ -125,10 +102,10 @@ Entity {
 
         material: DiffuseMapMaterial {
             id: material
+            // @disable-check M16
             diffuse: TextureLoader { source: "/assets/diffuse.webp" }
             specular: Qt.rgba( 0.5, .5, .5, 1.0 )
             shininess: 2.0
         }
     }
-
 }

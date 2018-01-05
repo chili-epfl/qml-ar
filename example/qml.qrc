@@ -1,13 +1,12 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>DisplaySurface.qml</file>
+        <file>CelluloActivity.qml</file>
         <file>RenderableEntity.qml</file>
-    </qresource>
-    <qresource prefix="/">
-        <file>./assets/diffuse.webp</file>
-        <file>./assets/Chest.obj</file>
-        <file>./assets/markers.json</file>
-        <file>./assets/camera_matrix.json</file>
+        <file>assets/diffuse.webp</file>
+        <file>assets/Chest.obj</file>
+        <file>assets/markers.json</file>
+        <file>assets/camera_matrix.json</file>
+        <file>CelluloRobot.qml</file>
     </qresource>
 </RCC>

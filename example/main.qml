@@ -89,28 +89,27 @@ Window {
             aspects: ["input", "logic"]
             cameraAspectRatioMode: Scene3D.AutomaticAspectRatio
 
-            DisplaySurface {
-                robotList: window.robotList
+            CelluloActivity {
+                id: ds
+                robotList: [robot1]
             }
         }
     }
 
-    property var robotList : [robot1]
-
-    CelluloBluetooth{
+    CelluloBluetooth {
         id: robot1
-        macAddr : "00:06:66:74:43:01"
+        macAddr : "00:06:66:74:40:E4"
         onMacAddrChanged:           console.log("robot1.onMacAddrChanged()")
-
         onBootCompleted:            console.log("robot1.bootCompleted()")
         // @disable-check M306
         onConnectionStatusChanged:  console.log("robot1.connectionStatusChanged(" + CelluloBluetoothEnums.ConnectionStatusString(connectionStatus) + ")")
         // @disable-check M306
         onGestureChanged:           console.log("robot1.gestureChanged(" + CelluloBluetoothEnums.GestureString(gesture) + ")")
         onKidnappedChanged:         console.log("robot1.kidnappedChanged(" + kidnapped + ")")
-        onPoseChanged:              console.log("robot1.pc(" + x.toFixed(2) + "," + y.toFixed(2) + "," + theta.toFixed(2) + ")")
+        onPoseChanged:              {
+            console.log("robot1.pc(" + x.toFixed(2) + "," + y.toFixed(2) + "," + theta.toFixed(2) + ")");
+            ds.updatePositions();
+        }
         onTrackingGoalReached:      console.log("robot1.trackingGoalReached()")
     }
-
-
 }
