@@ -4,6 +4,7 @@
 #include <QVector2D>
 #include <QString>
 #include <QMatrix4x4>
+#include <QJsonObject>
 #include "worldimage.h"
 
 /*
@@ -36,6 +37,9 @@ private:
     // correspondences 2D -> 3D
     WorldImageCorrespondences correspondences;
 
+    // configuration of a marker
+    QJsonObject config;
+
     void setPositionMM(QVector2D position_mm_);
 public:
     Marker();
@@ -46,6 +50,7 @@ public:
     void setName(QString name_);
     void setId(int id_);
     void setSizeMM(double size_);
+    void setConfig(const QJsonObject value);
 
     // get position of top-left corner in the world
     // Cellulo coordinate system
@@ -59,6 +64,9 @@ public:
 
     // return 3D-2D correspondences
     WorldImageCorrespondences& getCorrespondences();
+
+    // return config of the marker
+    QJsonObject getConfig() const;
 
     // forget marker being detected
     void undetect();

@@ -13,6 +13,7 @@
 #include "timelogger.h"
 #include "config.h"
 #include <QGenericMatrix>
+#include <QJsonArray>
 
 using std::vector;
 
@@ -38,21 +39,36 @@ void UchiyaMarkerDetector::initMarkers()
 {
     m_llah.Init(m_img.w, m_img.h);		// set image size
 
-    // load markers
-    char name[256];
-    int nummarker = 10;
+    // going through all markers
+    QMap<int, Marker>::iterator marker_in_map;
+    for(marker_in_map = markers.begin(); marker_in_map != markers.end(); marker_in_map++)
+    {
+        // will write marker config here
+        QString s;
+        QTextStream ss(&s);
 
-    for(int i=0;i<nummarker;i++){
-#ifdef Q_OS_ANDROID
-        const char* fn_template = "assets:/data/%d.txt";
-#else
-        const char* fn_template = "./data/%d.txt";
-#endif
-        snprintf(name,sizeof(name),fn_template,i);
-        m_llah.AddPaper(name);
-        TimeLoggerLog("Marker %s loaded", name);
+        // dots as json array
+        QJsonArray dots = marker_in_map.value().getConfig().value("dots_uchiya").toArray();
+
+        // going through dots and adding them to ss
+        QJsonArray::iterator dot;
+        ss << dots.size() << "\n";
+        for(dot = dots.begin(); dot != dots.end(); dot++)
+        {
+            // adding dot coordinates
+            ss << (*dot).toObject().value("x").toDouble() << " "
+               << (*dot).toObject().value("y").toDouble() << "\n";
+        }
+
+        // rewinding the stream
+        ss.seek(0);
+
+        // adding paper with stream as input
+        m_llah.AddPaper(ss);
+
+        // marker added
+        TimeLoggerLog("Marker %d loaded", marker_in_map.key());
     }
-
 }
 
 void UchiyaMarkerDetector::extractMarkers()

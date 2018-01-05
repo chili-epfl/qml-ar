@@ -17,6 +17,32 @@
  * x right
  * y down
  * z from reader
+ *
+ * Config must have additional property 'dots_uchiya'
+ * and marker ids must be consecutive numbers from 0 to n - 1
+ *
+ * example:
+ * {
+ *  "markers": [
+ *    {
+      "name": "big",
+ *      "id": 0,
+ *      "x_mm": 9.5,
+ *      "y_mm": 7.9,
+ *      "size_mm": 150,
+ *      "dots_uchiya": [
+ *        {
+ *          "x": 81,
+ *          "y": 111
+ *        },
+ *        {
+ *          "x": 569,
+ *          "y": 460
+ *        }
+ *      ]
+ *    }
+ *  ]
+ * }
  */
 
 class UchiyaMarkerDetector: public MarkerDetector

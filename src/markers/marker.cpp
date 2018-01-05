@@ -1,6 +1,16 @@
 #include "marker.h"
 #include <QTextStream>
 
+QJsonObject Marker::getConfig() const
+{
+    return config;
+}
+
+void Marker::setConfig(const QJsonObject value)
+{
+    config = value;
+}
+
 void Marker::setPositionMM(QVector2D position_mm_)
 {
     position_mm = position_mm_;
