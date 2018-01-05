@@ -47,17 +47,12 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // buffer for nv21 -> rgb conversion
     static uchar* rgb = new uchar[MAX_SIZE];
 
-    // timer for debug output
-    QElapsedTimer timer;
-    timer.start();
-
-    //qDebug() << "[00] started" << timer.elapsed();
+    // do nothing if no image found
+    if(frameOriginal.width() * frameOriginal.height() == 0) return QImage();
 
     // mapping frame to memory
     QVideoFrame frame(frameOriginal);
     frame.map(QAbstractVideoBuffer::ReadOnly);
-
-    //qDebug() << "[01] mapped" << timer.elapsed();
 
     // bits of the image as byte array
     uchar* img = (uchar*) frame.bits();
@@ -72,12 +67,10 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // this call to yuv2rgb library converts it to RGB888
     if(frame.pixelFormat() == QVideoFrame::Format_NV21)
     {
-        //qDebug() << "[02] convert start" << timer.elapsed();
         nv21_to_rgb(rgb, img, frame.width(), frame.height());
         img = rgb;
         fmt = QImage::Format_RGB888;
         //need_delete_img = true;
-        //qDebug() << "[03] convert end" << timer.elapsed();
     }
 
     // if format is still invalid, the application stops
@@ -91,25 +84,6 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
                  frame.width(),
                  frame.height(), fmt);
 
-    //qDebug() << "[10] image created" << timer.elapsed();
-
-    // printing bytes of the image
-    /*QString bytes_img;
-    QTextStream bytes_img_stream(&bytes_img);
-    for(int i = 0; i < 10; i++)
-        bytes_img_stream << (int) img[i] << " ";
-
-    bytes_img_stream.flush();
-    // printing additional output
-    qDebug() << " image: bytes=" << frame.mappedBytes()
-             << " planeCount=" << frame.planeCount()
-             << " width=" << frame.width()
-             << " height=" << frame.height()
-             << " bits=" << frame.bits() << " [" << bytes_img << "]"
-             << " pixelFormat=" << frame.pixelFormat()
-             << " handleType=" << frame.handleType()
-             << " imageFormat=" << fmt;*/
-
     // unmapping source from memory
     frame.unmap();
 
@@ -117,8 +91,6 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // e.g. if NV21 format was used
     if(need_delete_img)
         delete img;
-
-    //qDebug() << "[99] done" << timer.elapsed();
 
     TimeLoggerProfile("%s", "Converted image to RGB");
 

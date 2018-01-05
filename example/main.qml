@@ -20,10 +20,10 @@ Window {
 
     Component.onCompleted: {
         // Set camera id (Qt/OpenCV backend)
-        CelluloAR.camera_id = 0
+        CelluloAR.camera_id = -1
 
         // Set image width in pixels
-        CelluloAR.image_width = 300
+        CelluloAR.image_width = 600
 
         // Set camera object and install VideoProbe
         //CelluloAR.qml_camera = camera
