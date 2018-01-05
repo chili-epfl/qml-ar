@@ -63,7 +63,7 @@ QQuickImageProvider *CelluloAR::getImageProvider()
 
 void CelluloAR::update()
 {
-    if(raw_provider == NULL) return;
+    if(!is_initialized) return;
     // obtain input image from camera
     QSize sz;
     sz.setWidth(600);
@@ -84,8 +84,8 @@ double CelluloAR::getUpdateMS()
 
 void CelluloAR::setUpdateMS(double value)
 {
-    timer.start(value);
     connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+    timer.start(value);
 }
 
 QObject *CelluloAR::getQMLCamera()
@@ -103,7 +103,7 @@ void CelluloAR::initialize()
 {
     Q_ASSERT(raw_provider != NULL);
     // creating Uchiya marker detector
-    UchiyaMarkerDetector* detector = new UchiyaMarkerDetector;
+    detector = new UchiyaMarkerDetector;
 
     // setting up assets path (os-dependent)
 #ifdef Q_OS_ANDROID

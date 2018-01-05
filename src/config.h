@@ -13,6 +13,9 @@
 // Define to force usage of QVideoProbe
 #define QT_BACKEND_FORCE_VIDEOPROBE
 
+// Force Qt backend on Linux
+#define QT_BACKEND_FORCE_ON_LINUX
+
 // implementation of PROFILE_PIPELINE
 #ifdef PROFILE_PIPELINE
     #define TimeLoggerProfile(...) TimeLoggerLog(__VA_ARGS__)
