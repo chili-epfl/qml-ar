@@ -26,6 +26,7 @@ class CelluloAR : public QObject
     Q_PROPERTY(QObject* qml_camera READ getQMLCamera WRITE setQMLCamera)
     Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
     Q_PROPERTY(double update_ms READ getUpdateMS WRITE setUpdateMS)
+    Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
 
 public:
     // empty constructor
@@ -46,8 +47,14 @@ public:
     // get frequency of updating
     double getUpdateMS();
 
-    // start timer
-    void setUpdateMS(double value);
+    // returns resulting MVP matrix
+    QMatrix4x4 getMVPMatrix();
+
+    // returns image width
+    int getImageWidth();
+
+    // get processed image provider
+    QQuickImageProvider* getImageProvider();
 
 public slots:
     // initialize from camera id (default value -1)
@@ -59,19 +66,21 @@ public slots:
     // initialize from a QCamera object
     void setQMLCamera(QObject *camera);
 
-    // returns resulting MVP matrix
-    QMatrix4x4 getMVPMatrix();
+    // start timer
+    void setUpdateMS(double value);
 
     // call to emit newMVPMatrix signal
     void newMVPMatrixSlot();
 
-    // get processed image provider
-    QQuickImageProvider* getImageProvider();
+    void setImageWidth(int new_width);
 
     // updates MVP matrix
     void update();
 
 private:
+    // width of the input camera image
+    int image_width;
+
     // timer to update MVP matrix
     QTimer timer;
 

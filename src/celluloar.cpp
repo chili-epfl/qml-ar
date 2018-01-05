@@ -50,10 +50,20 @@ QMatrix4x4 CelluloAR::getMVPMatrix()
     return mvp_provider->getMVPMatrix();
 }
 
+int CelluloAR::getImageWidth()
+{
+    return image_width;
+}
+
 void CelluloAR::newMVPMatrixSlot()
 {
     Q_ASSERT(is_initialized);
     emit newMVPMatrix();
+}
+
+void CelluloAR::setImageWidth(int new_width)
+{
+    image_width = new_width;
 }
 
 QQuickImageProvider *CelluloAR::getImageProvider()
@@ -63,15 +73,21 @@ QQuickImageProvider *CelluloAR::getImageProvider()
 
 void CelluloAR::update()
 {
+    // doing nothing if not initialized
     if(!is_initialized) return;
-    // obtain input image from camera
-    QSize sz;
-    sz.setWidth(600);
-    QPixmap input = raw_provider->requestPixmap("raw", &sz, sz);
-    if(input.isNull()) return;
+
+    // requesting image from provider as pixmap
+    QPixmap input = raw_provider->requestPixmap("raw", NULL, QSize());
+
+    // obtaining source image
+    QImage source = input.toImage();
+
+    // scaling it if necessary
+    if(image_width != 0)
+        source = source.scaledToWidth(image_width);
 
     // send input to marker detector
-    detector->setInput(input.toImage().scaledToWidth(600));
+    detector->setInput(source);
 
     // detect markers
     detector->process();

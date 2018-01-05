@@ -22,6 +22,9 @@ Window {
         // Set camera id (Qt/OpenCV backend)
         CelluloAR.camera_id = 0
 
+        // Set image width in pixels
+        CelluloAR.image_width = 300
+
         // Set camera object and install VideoProbe
         //CelluloAR.qml_camera = camera
 
