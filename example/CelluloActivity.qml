@@ -4,22 +4,10 @@ import Qt3D.Render 2.0
 import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
 
-import CelluloAR 1.0
-
 Entity {
     property var robotList
 
     id: activity
-
-    components: [
-        RenderSettings {
-            activeFrameGraph: ForwardRenderer {
-                camera: camera
-                clearColor: "transparent"
-            }
-        },
-        InputSettings { }
-    ]
 
     property var robotObjects
 
@@ -41,12 +29,6 @@ Entity {
             robotObjects.push(robotObject);
         }
         updatePositions();
-    }
-
-    // ModelViewProjection matrix
-    Camera {
-        id: camera
-        projectionMatrix: CelluloAR.mvp_matrix
     }
 
     // cuboid on top-left corner

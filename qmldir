@@ -1,2 +1,3 @@
 module CelluloAR
+CelluloARComponent 1.0 CelluloARComponent.qml
 plugin celluloarplugin

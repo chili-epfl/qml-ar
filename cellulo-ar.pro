@@ -5,25 +5,6 @@
 QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender
 CONFIG += qt plugin c++11 nostrip
 
-TEMPLATE = lib
-TARGET = celluloarplugin
-CONFIG += plugin
-CONFIG -= android_install
-
-TARGET = $$qtLibraryTarget($$TARGET)
-uri = CelluloAR
-
-#File installation
-qmldir.files = qmldir
-OTHER_FILES += qmldir.files
-
-unix {
-    installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
-    qmldir.path = $$installPath
-    target.path = $$installPath
-    INSTALLS += qmldir target
-}
-
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -91,6 +72,12 @@ HEADERS += \
     src/celluloarqmlplugin.h \
     src/config.h \
     src/utils/timelogger.h
+
+QML_SOURCES += \
+    src/CelluloARComponent.qml \
+    src/CelluloARInitTypes.qml
+
+DISTFILES = $$QML_SOURCES
 
 ##### LIBRARIES
 # QtOpenCV library
@@ -190,3 +177,25 @@ HEADERS += uchiya/blob.h \
     uchiya/mylib/mymat.h \
     uchiya/mylib/mytimer.h \
     uchiya/mylib/opencvpath.h
+
+# Installation
+TEMPLATE = lib
+TARGET = celluloarplugin
+CONFIG += plugin
+CONFIG -= android_install
+
+TARGET = $$qtLibraryTarget($$TARGET)
+uri = CelluloAR
+
+#File installation
+qmldir.files = qmldir
+qml.files = $$QML_SOURCES
+OTHER_FILES += qmldir.files qml.files
+
+unix {
+    installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
+    qmldir.path = $$installPath
+    qml.path = $$installPath
+    target.path = $$installPath
+    INSTALLS += qmldir target qml
+}
