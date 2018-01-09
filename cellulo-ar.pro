@@ -74,8 +74,7 @@ HEADERS += \
     src/utils/timelogger.h
 
 QML_SOURCES += \
-    src/CelluloARComponent.qml \
-    src/CelluloARInitTypes.qml
+    src/CelluloARComponent.qml
 
 DISTFILES = $$QML_SOURCES
 

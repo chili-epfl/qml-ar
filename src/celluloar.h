@@ -29,6 +29,14 @@ class CelluloAR : public QObject
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
 
 public:
+    enum InitType
+    {
+        INIT_CAMERA,
+        INIT_IMAGE,
+        INIT_QMLCAMERA
+    };
+    Q_ENUMS(InitType)
+
     // empty constructor
     // object must be initialized with
     // one of the methods below

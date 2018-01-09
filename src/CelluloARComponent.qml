@@ -13,14 +13,18 @@ import Qt3D.Extras 2.0
  * 1. Set init_type (at creation)
  * 2. Set camera_id/image_filename (at creation)
  * 3. Set other parameters at creation
- * 4. Set arScene (string path to qml file) with arSceneParameters
+ * 4. Set arSceneComponent (loaded using Qt.createComponent)
+ *     with arSceneParameters
  */
 
 Item {
     id: arComponent
+    anchors.fill: parent
+    visible: true
 
     // initialization type (camera/image)
-    property int init_type: CelluloARInitTypes.Camera
+    // See CelluloAR.InitTypes enum
+    property int init_type: CelluloAR.INIT_CAMERA
 
     // id of the camera to use
     property int camera_id: -1
@@ -35,11 +39,15 @@ Item {
     property int update_ms: 100
 
     // set this to the actual surface with 3D models
-    // will load this component and add this to ar scene
-    property string arScene
+    // will create an object of this component
+    // and add this to ar scene
+    property var arSceneComponent
 
     // parameters for the arScene
     property var arSceneParameters
+
+    // the resulting object will be stored here
+    property var arSceneObject
 
     // initialize AR component on loading
     // properties must be set beforehand
@@ -53,24 +61,25 @@ Item {
         console.log("Set update_ms to " + arComponent.update_ms);
 
         // initialize
-        switch(init_type) {
-            case CelluloARInitTypes.Camera:
-                // from camera id
-                CelluloAR.camera_id = arComponent.camera_id;
-                console.log("Using camera id " + arComponent.camera_id);
-                break;
-            case CelluloARInitTypes.Image:
-                // from image
-                CelluloAR.image_filename = arComponent.image_filename;
-                console.log("Using image " + arComponent.image_filename);
-                break;
-            case CelluloARInitTypes.QMLCamera:
-                // Set camera object and install VideoProbe
-                //CelluloAR.qml_camera = camera
-                break;
-            default:
-                // unknown value
-                console.error("Please set valid init type");
+        console.log("Set init type to " + arComponent.init_type);
+        switch(arComponent.init_type) {
+        case CelluloAR.INIT_CAMERA:
+            // from camera id
+            CelluloAR.camera_id = arComponent.camera_id;
+            console.log("Using camera id " + arComponent.camera_id);
+            break;
+        case CelluloAR.INIT_IMAGE:
+            // from image
+            CelluloAR.image_filename = arComponent.image_filename;
+            console.log("Using image " + arComponent.image_filename);
+            break;
+        case CelluloAR.INIT_QMLCAMERA:
+            // Set camera object and install VideoProbe
+            //CelluloAR.qml_camera = camera
+            break;
+        default:
+            // unknown value
+            console.error("Please set valid init type");
         }
     }
 
@@ -144,14 +153,21 @@ Item {
 
                 // load scene on component loading
                 Component.onCompleted: {
-                    console.log("Begin loading scene " + arScene + " with params " + arSceneParameters);
-                    var component = Qt.createComponent(arScene);
-                    component.createObject(activity, arSceneParameters);
+                    console.log("Begin loading scene " + arSceneComponent + " with params " + arSceneParameters);
+                    if(!arSceneComponent) {
+                        console.log("No scene found (null object)");
+                    }
+                    else {
+                        if(arSceneComponent.status === Component.Error) {
+                            console.debug("Error loading scene: " + arSceneComponent.errorString());
+                        }
+                        else {
+                            arSceneObject = arSceneComponent.createObject(activity, arSceneParameters);
+                        }
+                    }
                     console.log("End loading scene");
                 }
             }
-
         }
     }
-
 }

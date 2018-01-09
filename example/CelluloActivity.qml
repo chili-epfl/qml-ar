@@ -5,12 +5,15 @@ import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
 
 Entity {
-    property var robotList
-
     id: activity
 
+    // list of robots
+    property var robotList
+
+    // list of robot objects
     property var robotObjects
 
+    // set robot positions
     function updatePositions() {
         for(var robotId in robotList) {
             var robot = robotList[robotId];
@@ -21,6 +24,7 @@ Entity {
         }
     }
 
+    // create robot objects
     Component.onCompleted: {
         robotObjects = [];
         var component = Qt.createComponent("CelluloRobot.qml");
