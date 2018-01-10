@@ -10,8 +10,6 @@ moc_*
 *.o
 Makefile
 .qmake.stash
-*.json
-!markers.json
 app_process
 *.so
 android-build
