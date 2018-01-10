@@ -1,5 +1,5 @@
 import QtQuick 2.6
-import QMLAR 1.0
+import AR 1.0
 import QtQuick.Scene3D 2.0
 
 import Qt3D.Core 2.0
@@ -27,7 +27,7 @@ Item {
 
     // initialization type (camera/image)
     // See QMLAR.InitTypes enum
-    property int init_type: QMLAR.INIT_CAMERA
+    property int init_type: AR.INIT_CAMERA
 
     // id of the camera to use
     property int camera_id: -1
@@ -56,29 +56,29 @@ Item {
     // properties must be set beforehand
     Component.onCompleted: {
         // Set image width in pixels
-        QMLAR.image_width = arComponent.image_width
+        AR.image_width = arComponent.image_width
         console.log("Set image width to " + arComponent.image_width);
 
         // Set update frequency
-        QMLAR.update_ms = arComponent.update_ms
+        AR.update_ms = arComponent.update_ms
         console.log("Set update_ms to " + arComponent.update_ms);
 
         // initialize
         console.log("Set init type to " + arComponent.init_type);
         switch(arComponent.init_type) {
-        case QMLAR.INIT_CAMERA:
+        case AR.INIT_CAMERA:
             // from camera id
-            QMLAR.camera_id = arComponent.camera_id;
+            AR.camera_id = arComponent.camera_id;
             console.log("Using camera id " + arComponent.camera_id);
             break;
-        case QMLAR.INIT_IMAGE:
+        case AR.INIT_IMAGE:
             // from image
-            QMLAR.image_filename = arComponent.image_filename;
+            AR.image_filename = arComponent.image_filename;
             console.log("Using image " + arComponent.image_filename);
             break;
-        case QMLAR.INIT_QMLCAMERA:
+        case AR.INIT_QMLCAMERA:
             // Set camera object and install VideoProbe
-            //QMLAR.qml_camera = camera
+            //AR.qml_camera = camera
             break;
         default:
             // unknown value
@@ -111,7 +111,7 @@ Item {
         // Update image each 10 ms
         Timer {
             interval: 10; running: true; repeat: true
-            onTriggered: {image.cache=0;image.source="";image.source="image://QMLARMarkers/raw";}
+            onTriggered: {image.cache=0;image.source="";image.source="image://ARMarkers/raw";}
         }
 
         // image with camera image
@@ -151,7 +151,7 @@ Item {
                 // set ModelViewProjection matrix as camera matrix
                 Camera {
                     id: camera
-                    projectionMatrix: QMLAR.mvp_matrix
+                    projectionMatrix: AR.mvp_matrix
                 }
 
                 // load scene on component loading

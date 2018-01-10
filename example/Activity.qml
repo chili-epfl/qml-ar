@@ -7,33 +7,9 @@ import Qt3D.Extras 2.0
 Entity {
     id: activity
 
-    // list of robots
-    property var robotList
-
-    // list of robot objects
-    property var robotObjects
-
-    // set robot positions
-    function updatePositions() {
-        for(var robotId in robotList) {
-            var robot = robotList[robotId];
-            var robotObject = robotObjects[robotId];
-            robotObject.x = robot.x;
-            robotObject.y = robot.y;
-            robotObject.theta = robot.theta;
-        }
-    }
-
-    // create robot objects
-    Component.onCompleted: {
-        robotObjects = [];
-        var component = Qt.createComponent("CelluloRobot.qml");
-        for(var robotId in robotList) {
-            var robotObject = component.createObject(activity);
-            robotObjects.push(robotObject);
-        }
-        updatePositions();
-    }
+    // chest coordinates
+    property var chest_x
+    property var chest_y
 
     // cuboid on top-left corner
     Entity {
@@ -82,7 +58,7 @@ Entity {
     RenderableEntity {
         id: chest
         source: "/assets/Chest.obj"
-        position: Qt.vector3d(210, 297, 0)
+        position: Qt.vector3d(activity.chest_x, activity.chest_y, 0)
         rotationAngle: -90
         scale: 1
 

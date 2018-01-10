@@ -1,6 +1,6 @@
 ##### QT
 # Name of the application
-TARGET=cellulo-ar-chest
+TARGET=ar-chest
 
 # Qt configuration for Quick applications
 QT += quick multimedia opengl multimediawidgets 3dinput 3drender

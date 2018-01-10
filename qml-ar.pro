@@ -184,7 +184,7 @@ CONFIG += plugin
 CONFIG -= android_install
 
 TARGET = $$qtLibraryTarget($$TARGET)
-uri = qmlar
+uri = AR
 
 #File installation
 qmldir.files = qmldir
