@@ -1,4 +1,4 @@
-#include "qmlarqmlplugin.h"
+#include "qmlarplugin.h"
 
 void QMLARQMLPlugin::registerTypes(const char *uri)
 {

@@ -1,7 +1,7 @@
 #include "qmlar.h"
 #include "timelogger.h"
 
-AR::CelluloAR()
+QMLAR::QMLAR()
 {
     // initially, object is not initialized
     is_initialized = false;
@@ -10,13 +10,13 @@ AR::CelluloAR()
     raw_provider = NULL;
 }
 
-int CelluloAR::getCameraId()
+int QMLAR::getCameraId()
 {
     Q_ASSERT(is_initialized);
     return camera_id;
 }
 
-void CelluloAR::setCameraId(int camera_id)
+void QMLAR::setCameraId(int camera_id)
 {
     Q_ASSERT(!is_initialized);
     TimeLoggerLog("Using camera %d", camera_id);
@@ -25,7 +25,7 @@ void CelluloAR::setCameraId(int camera_id)
     initialize();
 }
 
-void CelluloAR::setImageFilename(QString filename)
+void QMLAR::setImageFilename(QString filename)
 {
     Q_ASSERT(!is_initialized);
     TimeLoggerLog("Opening image %s", filename.toStdString().c_str());
@@ -34,7 +34,7 @@ void CelluloAR::setImageFilename(QString filename)
     initialize();
 }
 
-void CelluloAR::setQMLCamera(QObject *camera)
+void QMLAR::setQMLCamera(QObject *camera)
 {
     Q_ASSERT(camera != NULL);
     TimeLoggerLog("%s", "Setting camera from QML camera");
@@ -44,34 +44,34 @@ void CelluloAR::setQMLCamera(QObject *camera)
     initialize();
 }
 
-QMatrix4x4 CelluloAR::getMVPMatrix()
+QMatrix4x4 QMLAR::getMVPMatrix()
 {
     if(!is_initialized) return QMatrix4x4();
     return mvp_provider->getMVPMatrix();
 }
 
-int CelluloAR::getImageWidth()
+int QMLAR::getImageWidth()
 {
     return image_width;
 }
 
-void CelluloAR::newMVPMatrixSlot()
+void QMLAR::newMVPMatrixSlot()
 {
     Q_ASSERT(is_initialized);
     emit newMVPMatrix();
 }
 
-void CelluloAR::setImageWidth(int new_width)
+void QMLAR::setImageWidth(int new_width)
 {
     image_width = new_width;
 }
 
-QQuickImageProvider *CelluloAR::getImageProvider()
+QQuickImageProvider *QMLAR::getImageProvider()
 {
     return &marker_backend;
 }
 
-void CelluloAR::update()
+void QMLAR::update()
 {
     // doing nothing if not initialized
     if(!is_initialized) return;
@@ -93,29 +93,29 @@ void CelluloAR::update()
     detector->process();
 }
 
-double CelluloAR::getUpdateMS()
+double QMLAR::getUpdateMS()
 {
     return timer.interval();
 }
 
-void CelluloAR::setUpdateMS(double value)
+void QMLAR::setUpdateMS(double value)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
     timer.start(value);
 }
 
-QObject *CelluloAR::getQMLCamera()
+QObject *QMLAR::getQMLCamera()
 {
     return qml_camera;
 }
 
-QString CelluloAR::getImageFilename()
+QString QMLAR::getImageFilename()
 {
     Q_ASSERT(is_initialized);
     return image_filename;
 }
 
-void CelluloAR::initialize()
+void QMLAR::initialize()
 {
     Q_ASSERT(raw_provider != NULL);
     // creating Uchiya marker detector
