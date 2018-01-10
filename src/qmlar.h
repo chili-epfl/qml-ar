@@ -15,10 +15,10 @@
 
 /*
  * This class is the C++/QML interface to the
- * Cellulo AR library
+ * QML AR library
  */
 
-class CelluloAR : public QObject
+class QMLAR : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int camera_id WRITE setCameraId READ getCameraId)
@@ -40,7 +40,7 @@ public:
     // empty constructor
     // object must be initialized with
     // one of the methods below
-    CelluloAR();
+    QMLAR();
 
     // returns camera id to be used
     // as raw input

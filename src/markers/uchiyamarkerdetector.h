@@ -13,7 +13,7 @@
  * obtained from main.cpp file from UchiyaMarkers project
  * Notice: some functionality was removed
  *
- * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):
  * x right
  * y down
  * z from reader

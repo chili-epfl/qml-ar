@@ -9,7 +9,7 @@
  * This class extends CalibratedCamera
  * by allowing to get Perspective Projection matrix
  *
- * INPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * INPUT COORDINATE SYSTEM (OpenCV/QML):
  * x right
  * y down
  * z from reader

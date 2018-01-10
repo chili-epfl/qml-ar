@@ -1,26 +1,26 @@
 #ifndef CELLULOARQMLPLUGIN_H
 #define CELLULOARQMLPLUGIN_H
 
-#include "celluloar.h"
+#include "qmlar.h"
 #include <QQmlExtensionPlugin>
 
 /*
- * This class registers CelluloAR
+ * This class registers QMLAR
  * as a singleton object in QML
- * and CelluloARMarkers image provider
+ * and QMLARMarkers image provider
  * with markers debug info
  */
 
-class CelluloARQMLPlugin : public QQmlExtensionPlugin
+class QMLARQMLPlugin : public QQmlExtensionPlugin
 { Q_OBJECT
   Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    // register CelluloAR singleton
+    // register QMLAR singleton
     void registerTypes(const char *uri);
 
     // Define the singleton type provider function (callback).
-    static QObject* get_cellulo_ar(QQmlEngine *engine, QJSEngine *scriptEngine);
+    static QObject* get_qml_ar(QQmlEngine *engine, QJSEngine *scriptEngine);
 };
 
 #endif // CELLULOARQMLPLUGIN_H

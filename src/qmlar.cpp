@@ -1,7 +1,7 @@
-#include "celluloar.h"
+#include "qmlar.h"
 #include "timelogger.h"
 
-CelluloAR::CelluloAR()
+AR::CelluloAR()
 {
     // initially, object is not initialized
     is_initialized = false;

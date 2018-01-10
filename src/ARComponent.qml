@@ -1,5 +1,5 @@
 import QtQuick 2.6
-import CelluloAR 1.0
+import QMLAR 1.0
 import QtQuick.Scene3D 2.0
 
 import Qt3D.Core 2.0
@@ -8,13 +8,16 @@ import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
 
 /*
- * This component implements the QML interface to the CelluloAR library
+ * This component implements the QML interface to the QMLAR library
  * Usage:
  * 1. Set init_type (at creation)
  * 2. Set camera_id/image_filename (at creation)
  * 3. Set other parameters at creation
  * 4. Set arSceneComponent (loaded using Qt.createComponent)
  *     with arSceneParameters
+ *
+ * Coordinates are in millimeters
+ * System (QML): x right, y down, origin: top-left
  */
 
 Item {
@@ -23,8 +26,8 @@ Item {
     visible: true
 
     // initialization type (camera/image)
-    // See CelluloAR.InitTypes enum
-    property int init_type: CelluloAR.INIT_CAMERA
+    // See QMLAR.InitTypes enum
+    property int init_type: QMLAR.INIT_CAMERA
 
     // id of the camera to use
     property int camera_id: -1
@@ -53,29 +56,29 @@ Item {
     // properties must be set beforehand
     Component.onCompleted: {
         // Set image width in pixels
-        CelluloAR.image_width = arComponent.image_width
+        QMLAR.image_width = arComponent.image_width
         console.log("Set image width to " + arComponent.image_width);
 
         // Set update frequency
-        CelluloAR.update_ms = arComponent.update_ms
+        QMLAR.update_ms = arComponent.update_ms
         console.log("Set update_ms to " + arComponent.update_ms);
 
         // initialize
         console.log("Set init type to " + arComponent.init_type);
         switch(arComponent.init_type) {
-        case CelluloAR.INIT_CAMERA:
+        case QMLAR.INIT_CAMERA:
             // from camera id
-            CelluloAR.camera_id = arComponent.camera_id;
+            QMLAR.camera_id = arComponent.camera_id;
             console.log("Using camera id " + arComponent.camera_id);
             break;
-        case CelluloAR.INIT_IMAGE:
+        case QMLAR.INIT_IMAGE:
             // from image
-            CelluloAR.image_filename = arComponent.image_filename;
+            QMLAR.image_filename = arComponent.image_filename;
             console.log("Using image " + arComponent.image_filename);
             break;
-        case CelluloAR.INIT_QMLCAMERA:
+        case QMLAR.INIT_QMLCAMERA:
             // Set camera object and install VideoProbe
-            //CelluloAR.qml_camera = camera
+            //QMLAR.qml_camera = camera
             break;
         default:
             // unknown value
@@ -108,7 +111,7 @@ Item {
         // Update image each 10 ms
         Timer {
             interval: 10; running: true; repeat: true
-            onTriggered: {image.cache=0;image.source="";image.source="image://CelluloARMarkers/raw";}
+            onTriggered: {image.cache=0;image.source="";image.source="image://QMLARMarkers/raw";}
         }
 
         // image with camera image
@@ -148,7 +151,7 @@ Item {
                 // set ModelViewProjection matrix as camera matrix
                 Camera {
                     id: camera
-                    projectionMatrix: CelluloAR.mvp_matrix
+                    projectionMatrix: QMLAR.mvp_matrix
                 }
 
                 // load scene on component loading

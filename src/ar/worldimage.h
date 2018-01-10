@@ -12,7 +12,7 @@
  * between Real World 3D points
  * and projected points on camera image
  *
- * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):
  * x right
  * y down
  * z from reader

@@ -8,7 +8,7 @@
  * This class holds the pose (Translation+Rotation)
  * of the camera
  *
- * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):
  * x right
  * y down
  * z from reader

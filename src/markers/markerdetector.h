@@ -12,7 +12,7 @@
  * This class stores a common interface for
  * marker detectors
  *
- * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):
  * x right
  * y down
  * z from reader

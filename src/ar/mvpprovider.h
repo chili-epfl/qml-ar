@@ -8,7 +8,7 @@
  * This class represents a QML interface
  * to provide ModelViewProjection matrix
  *
- * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):
  * x right
  * y down
  * z from reader

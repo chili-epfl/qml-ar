@@ -41,8 +41,8 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/ar/pose.cpp \
     src/ar/posecamerapnp.cpp \
     src/ar/worldimage.cpp \
-    src/celluloar.cpp \
-    src/celluloarqmlplugin.cpp \
+    src/qmlar.cpp \
+    src/qmlarplugin.cpp \
     src/utils/timelogger.cpp
 
 HEADERS += \
@@ -68,13 +68,13 @@ HEADERS += \
     src/ar/pose.h \
     src/ar/posecamerapnp.h \
     src/ar/worldimage.h \
-    src/celluloar.h \
-    src/celluloarqmlplugin.h \
+    src/qmlar.h \
+    src/qmlarplugin.h \
     src/config.h \
     src/utils/timelogger.h
 
 QML_SOURCES += \
-    src/CelluloARComponent.qml
+    src/ARComponent.qml
 
 DISTFILES = $$QML_SOURCES
 
@@ -179,12 +179,12 @@ HEADERS += uchiya/blob.h \
 
 # Installation
 TEMPLATE = lib
-TARGET = celluloarplugin
+TARGET = qmlarplugin
 CONFIG += plugin
 CONFIG -= android_install
 
 TARGET = $$qtLibraryTarget($$TARGET)
-uri = CelluloAR
+uri = qmlar
 
 #File installation
 qmldir.files = qmldir

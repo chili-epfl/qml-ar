@@ -11,7 +11,7 @@
  * a calibrated camera's matrix
  * multiplies them and outputs MVP
  *
- * INPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * INPUT COORDINATE SYSTEM (OpenCV/QML):
  * x right
  * y down
  * z from reader

@@ -58,7 +58,7 @@ void MarkerMVPProvider::recompute()
 {
     // coordinate systems:
     // original points from QML model (OpenGL):
-    //  ---> Cellulo coordinate system (x right, y down, z to the table)
+    //  ---> QML coordinate system (x right, y down, z to the table)
     //                                  origin at top-left corner of the sheet
     // after ModelView matrix
     //  ---> OpenCV coordinate system (x right, y down, z from reader)

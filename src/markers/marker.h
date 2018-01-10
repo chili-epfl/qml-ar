@@ -12,7 +12,7 @@
  * of a single marker
  * coordinates: top-left corner
  *
- * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/Cellulo):
+ * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):
  * x right
  * y down
  * z from reader
@@ -53,7 +53,7 @@ public:
     void setConfig(const QJsonObject value);
 
     // get position of top-left corner in the world
-    // Cellulo coordinate system
+    // QML coordinate system
     const QVector2D getPositionMM();
 
     // size in millimeters of a single edge
