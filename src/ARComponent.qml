@@ -59,6 +59,10 @@ Item {
         AR.image_width = arComponent.image_width
         console.log("Set image width to " + arComponent.image_width);
 
+        // Setting parent size (will be updated later)
+        arComponent.parent.width = arComponent.image_width;
+        arComponent.parent.height = arComponent.image_width;
+
         // Set update frequency
         AR.update_ms = arComponent.update_ms
         console.log("Set update_ms to " + arComponent.update_ms);
@@ -68,13 +72,19 @@ Item {
         switch(arComponent.init_type) {
         case AR.INIT_CAMERA:
             // from camera id
-            AR.camera_id = arComponent.camera_id;
             console.log("Using camera id " + arComponent.camera_id);
+            AR.camera_id = arComponent.camera_id;
+
+            // starting obtaining images
+            image_timer.running = true;
             break;
         case AR.INIT_IMAGE:
             // from image
+            console.log("Using image " + arComponent.image_filename)
             AR.image_filename = arComponent.image_filename;
-            console.log("Using image " + arComponent.image_filename);
+
+            // starting obtaining images
+            image_timer.running = true;;
             break;
         case AR.INIT_QMLCAMERA:
             // Set camera object and install VideoProbe
@@ -92,17 +102,17 @@ Item {
         anchors.fill: parent
         anchors.margins: 0
 
-        // Resize window on first valid image
+        // Resize AR component on first valid image
         Timer {
             interval: 100; running: true; repeat: true;
             onTriggered: {
                 var w = image.sourceSize.width;
                 var h = image.sourceSize.height;
-                if(w * h > 0)
+                if(w * h > 1)
                 {
-                    console.log("Resizing main window")
-                    window.width = w;
-                    window.height = h;
+                    console.log("Resizing AR component")
+                    arComponent.parent.width = w;
+                    arComponent.parent.height = h;
                     running = false;
                 }
             }
@@ -110,8 +120,9 @@ Item {
 
         // Update image each 10 ms
         Timer {
-            interval: 10; running: true; repeat: true
-            onTriggered: {image.cache=0;image.source="";image.source="image://ARMarkers/raw";}
+            id: image_timer
+            interval: 10; running: false; repeat: true
+            onTriggered: {image.cache=0; image.source=""; image.source="image://ARMarkers/raw";}
         }
 
         // image with camera image

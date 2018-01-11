@@ -18,8 +18,11 @@ void MarkerBackEnd::initialize(MarkerDetector* marker_detector)
 QPixmap MarkerBackEnd::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
     if(detector == NULL)
-        return QPixmap();
-    return QPixmap::fromImage(detector->getPreview());
+        return QPixmap(1, 1);
+    QImage result = detector->getPreview();
+    if(result.width() * result.height() == 0)
+        return QPixmap(1, 1);
+    return QPixmap::fromImage(result);
 }
 
 MarkerBackEnd::~MarkerBackEnd()
