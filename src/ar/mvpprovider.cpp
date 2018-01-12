@@ -35,6 +35,11 @@ QMatrix4x4 MVPProvider::getPMatrix()
     return p_matrix;
 }
 
+bool MVPProvider::isValid()
+{
+    return is_valid;
+}
+
 void MVPProvider::reset()
 {
     if(is_valid)

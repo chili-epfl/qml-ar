@@ -44,6 +44,9 @@ public:
     // return MVP matrix
     QMatrix4x4 getPMatrix();
 
+    // returns true if result is actual matrix
+    bool isValid();
+
     // invalidate matrix
     // makes all objects invisible
     void reset();

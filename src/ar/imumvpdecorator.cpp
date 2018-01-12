@@ -21,6 +21,9 @@ IMUMVPDecorator::IMUMVPDecorator(MVPProvider *mvp_provider, IMU *imu)
 
 void IMUMVPDecorator::updateLastMV()
 {
+    // do nothing if pose invalid
+    if(!provider->isValid()) return;
+
     // MV from provider
     last_mv = provider->getMVMatrix();
 
