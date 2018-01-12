@@ -7,8 +7,8 @@ Window {
     visible: true
     title: qsTr("QML-AR")
 
-    width: arComponent.width
-    height: arComponent.height
+    minimumWidth: arComponent.width
+    minimumHeight: arComponent.height
 
     // crearing AR component
     ARComponent {

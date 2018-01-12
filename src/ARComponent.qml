@@ -22,8 +22,11 @@ import Qt3D.Extras 2.0
 
 Item {
     id: arComponent
-    anchors.fill: parent
     visible: true
+    anchors {
+        horizontalCenter: parent.horizontalCenter
+        verticalCenter: parent.verticalCenter
+    }
 
     // initialization type (camera/image)
     // See QMLAR.InitTypes enum
@@ -127,7 +130,7 @@ Item {
                 var h = image.sourceSize.height;
                 if(w * h > 1)
                 {
-                    console.log("Resizing AR component")
+                    console.log("Resizing AR component to " + w + " x " + h)
                     arComponent.width = w;
                     arComponent.height = h;
                     running = false;
