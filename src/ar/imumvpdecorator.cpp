@@ -37,14 +37,14 @@ QMatrix4x4 IMUMVPDecorator::getCurrentPose()
     // obtaining rotation from IMU
     QMatrix4x4 res;
     res.setToIdentity();
-    res.rotate(IMU.getRotAngle(), IMU.getRotAxis());
+    res.rotate(imu->getRotAngle(), imu->getRotAxis());
     return res;
 }
 
 void IMUMVPDecorator::updatePose()
 {
     // no pose => no MV from provider => nothing
-    if(!last_imu_pose_available) break;
+    if(!last_imu_pose_available) return;
 
     // difference in pose since last MV from provider
     QMatrix4x4 delta_mv = getCurrentPose() * last_imu_pose.inverted();;

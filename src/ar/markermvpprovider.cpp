@@ -95,7 +95,7 @@ void MarkerMVPProvider::recompute()
     p_matrix = getP();
 
     // if P matrix is invalid
-    if(p.isIdentity())
+    if(p_matrix.isIdentity())
     {
         // hide all objects
         reset();
@@ -106,7 +106,7 @@ void MarkerMVPProvider::recompute()
     mv_matrix = getMV();
 
     // calculate new MVP matrix
-    QMatrix4x4 new_mvp_matrix = p * mv;
+    QMatrix4x4 new_mvp_matrix = p_matrix * mv_matrix;
 
     // notify listeners
     setMVPMatrix(new_mvp_matrix);

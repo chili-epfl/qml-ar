@@ -2,7 +2,7 @@
 # Name of the application
 
 # Qt configuration for Quick applications
-QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender
+QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender sensors
 CONFIG += qt plugin c++11 nostrip
 
 # The following define makes your compiler emit warnings if you use
@@ -184,14 +184,12 @@ HEADERS += uchiya/blob.h \
 SOURCES += \
     qml-imu/src/ExtendedKalmanFilter.cpp \
     qml-imu/src/IMU.cpp \
-    qml-imu/src/AccelerometerBiasEstimator.cpp \
-    qml-imu/src/IMUPlugin.cpp
+    qml-imu/src/AccelerometerBiasEstimator.cpp
 
 HEADERS += \
     qml-imu/src/ExtendedKalmanFilter.h \
     qml-imu/src/IMU.h \
-    qml-imu/src/AccelerometerBiasEstimator.h \
-    qml-imu/src/IMUPlugin.h
+    qml-imu/src/AccelerometerBiasEstimator.h
 
 # Installation
 TEMPLATE = lib
