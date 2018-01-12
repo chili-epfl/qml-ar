@@ -74,7 +74,8 @@ HEADERS += \
     src/utils/timelogger.h
 
 QML_SOURCES += \
-    src/ARComponent.qml
+    src/ARComponent.qml \
+    src/AR3DScene.qml
 
 DISTFILES = $$QML_SOURCES
 

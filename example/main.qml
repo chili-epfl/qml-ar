@@ -7,6 +7,9 @@ Window {
     visible: true
     title: qsTr("QML-AR")
 
+    width: arComponent.width
+    height: arComponent.height
+
     // crearing AR component
     ARComponent {
         id: arComponent
@@ -22,5 +25,8 @@ Window {
 
         // add chest coordinates as parameters
         arSceneParameters: {'chest_x': 210, 'chest_y': 297}
+
+        // update frequency
+        update_ms: 10
     }
 }

@@ -1,3 +1,4 @@
 module AR
 ARComponent 1.0 ARComponent.qml
+AR3DScene 1.0 AR3DScene.qml
 plugin qmlarplugin

@@ -63,6 +63,7 @@ Entity {
 
     components: [ transform, mesh, root.material ]
 
+    // @disable-check M300
     Transform {
         id: transform
         scale: root.scale

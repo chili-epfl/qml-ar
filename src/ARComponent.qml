@@ -52,6 +52,9 @@ Item {
     // the resulting object will be stored here
     property var arSceneObject
 
+    // will contain Scene3D component
+    property var scene3d
+
     // initialize AR component on loading
     // properties must be set beforehand
     Component.onCompleted: {
@@ -84,7 +87,7 @@ Item {
             AR.image_filename = arComponent.image_filename;
 
             // starting obtaining images
-            image_timer.running = true;;
+            image_timer.running = true;
             break;
         case AR.INIT_QMLCAMERA:
             // Set camera object and install VideoProbe
@@ -94,6 +97,20 @@ Item {
             // unknown value
             console.error("Please set valid init type");
         }
+    }
+
+    function load_scene3d() {
+        console.log("Begin loading scene3d");
+        var component = Qt.createComponent("AR3DScene.qml");
+        if(component.status === Component.Error) {
+            console.debug("Error loading scene: " + component.errorString());
+        }
+        else {
+            scene3d = component.createObject(scene, {'arSceneComponent': arSceneComponent,
+                                                    'arSceneParameters': arSceneParameters});
+            arSceneObject = scene3d.arSceneObject;
+        }
+        console.log("End loading scene3d");
     }
 
     // scene which displays camera image and OpenGL scene
@@ -111,9 +128,13 @@ Item {
                 if(w * h > 1)
                 {
                     console.log("Resizing AR component")
-                    arComponent.parent.width = w;
-                    arComponent.parent.height = h;
+                    arComponent.width = w;
+                    arComponent.height = h;
                     running = false;
+                    image.visible = true;
+
+                    // load scene on component loading
+                    arComponent.load_scene3d();
                 }
             }
         }
@@ -129,59 +150,9 @@ Item {
         Image {
             id: image
             anchors.fill: parent
-            visible: true
+            visible: false
             clip: false
             transformOrigin: Item.Center
-            source: ""
-        }
-
-        // 3D scene which uses OpenGL
-        Scene3D {
-            id: scene3d
-            anchors.fill: parent
-            anchors.margins: 0
-            focus: true
-            aspects: ["input", "logic"]
-            cameraAspectRatioMode: Scene3D.AutomaticAspectRatio
-
-            // entity with camera which creates user's components inside
-            Entity {
-                id: activity
-
-                // add camera as a component
-                components: [
-                    RenderSettings {
-                        activeFrameGraph: ForwardRenderer {
-                            camera: camera
-                            clearColor: "transparent"
-                        }
-                    },
-                    InputSettings { }
-                ]
-
-                // set ModelViewProjection matrix as camera matrix
-                Camera {
-                    id: camera
-                    projectionMatrix: AR.mvp_matrix
-                }
-
-                // load scene on component loading
-                Component.onCompleted: {
-                    console.log("Begin loading scene " + arSceneComponent + " with params " + arSceneParameters);
-                    if(!arSceneComponent) {
-                        console.log("No scene found (null object)");
-                    }
-                    else {
-                        if(arSceneComponent.status === Component.Error) {
-                            console.debug("Error loading scene: " + arSceneComponent.errorString());
-                        }
-                        else {
-                            arSceneObject = arSceneComponent.createObject(activity, arSceneParameters);
-                        }
-                    }
-                    console.log("End loading scene");
-                }
-            }
         }
     }
 }
