@@ -49,7 +49,7 @@ void QMLAR::setQMLCamera(QObject *camera)
 QMatrix4x4 QMLAR::getMVPMatrix()
 {
     if(!is_initialized) return QMatrix4x4();
-    return mvp_provider->getMVPMatrix();
+    return mvp_imu_decorated->getMVPMatrix();
 }
 
 int QMLAR::getImageWidth()
@@ -137,8 +137,9 @@ void QMLAR::initialize()
     // loading marker positions
     detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
 
-    IMU imu;
-    imu.a_bias = QVector3D(0.397, -0.008, -0.005);
+    // connecting to IMU
+    imu = new IMU();
+    imu->a_bias = QVector3D(0.397, -0.008, -0.005);
 
     // loading camera matrix
     camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");
@@ -153,8 +154,11 @@ void QMLAR::initialize()
     // creating a ModelView provider
     mvp_provider = new MarkerMVPProvider(detector, perspective_camera);
 
-    // notify QML on each update of MVP matrix
-    connect(mvp_provider, SIGNAL(newMVPMatrix()), this, SLOT(newMVPMatrixSlot()));
+    // decorating MVP with IMU
+    mvp_imu_decorated = new IMUMVPDecorator(mvp_provider, imu);
+
+    // notify QML on each update of MVP matrix from IMU
+    connect(mvp_imu_decorated, SIGNAL(newMVPMatrix()), this, SLOT(newMVPMatrixSlot()));
 
     // now the object is initialized
     is_initialized = true;

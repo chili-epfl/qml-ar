@@ -2,21 +2,39 @@
 
 IMUMVPDecorator::IMUMVPDecorator(MVPProvider *mvp_provider, IMU *imu)
 {
+    // saving provider and imu
     Q_ASSERT(mvp_provider != NULL);
     Q_ASSERT(imu != NULL);
     this->provider = mvp_provider;
     this->imu = imu;
+
+    // no pose available for now
+    // will be set on first MVP from provider
     last_imu_pose_available = false;
-    connect(mvp_provider, SIGNAL(newMVPMatrix(), this, SLOT(updateLastMV()));
+
+    // update our MVP on matrix from provider
+    connect(mvp_provider, SIGNAL(newMVPMatrix()), this, SLOT(updateLastMV()));
+
+    // update resulting MVP on new pose from IMU
+    connect(imu, SIGNAL(stateChanged()), this, SLOT(updatePose()));
 }
 
 void IMUMVPDecorator::updateLastMV()
 {
+    // MV from provider
     last_mv = provider->getMVMatrix();
+
+    // obtaining current pose
+    last_imu_pose = getCurrentPose();
+    last_imu_pose_available = true;
+
+    // calculating resulting MVP
+    updatePose();
 }
 
 QMatrix4x4 IMUMVPDecorator::getCurrentPose()
 {
+    // obtaining rotation from IMU
     QMatrix4x4 res;
     res.setToIdentity();
     res.rotate(IMU.getRotAngle(), IMU.getRotAxis());
@@ -25,20 +43,15 @@ QMatrix4x4 IMUMVPDecorator::getCurrentPose()
 
 void IMUMVPDecorator::updatePose()
 {
-    QMatrix4x4 mvp_new;
-    QMatrix4x4 delta_mv;
-    delta_mv.setToIdentity();
+    // no pose => no MV from provider => nothing
+    if(!last_imu_pose_available) break;
 
-    QMatrix4x4 current_imu_pose = getCurrentPose();
+    // difference in pose since last MV from provider
+    QMatrix4x4 delta_mv = getCurrentPose() * last_imu_pose.inverted();;
 
-    if(last_imu_pose_available)
-    {
-        delta_mv = current_imu_pose * last_imu_pose.inverted();
-    }
-    else
-    mvp_new = provider->getPMatrix() * delta_mv * last_mv;
+    // new MVP
+    QMatrix4x4 mvp_new = provider->getPMatrix() * delta_mv * last_mv;
 
-    last_imu_pose = current_imu_pose;
-    last_imu_pose_available = true;
-
+    // telling others about update
+    setMVPMatrix(mvp_new);
 }

@@ -12,6 +12,7 @@
 #include "markerbackend.h"
 #include "markermvpprovider.h"
 #include "calibratedcamerafilestorage.h"
+#include "imumvpdecorator.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -129,6 +130,11 @@ private:
     // provider
     MVPProvider* mvp_provider;
 
+    // Inertial Measurement object
+    IMU* imu;
+
+    // MVP decorated with last pose from IMU
+    IMUMVPDecorator* mvp_imu_decorated;
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix();
