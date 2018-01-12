@@ -46,8 +46,6 @@ void MVPProvider::reset()
     {
         TimeLoggerLog("%s", "Hiding objects");
         mvp_matrix.fill(0);
-        mv_matrix.fill(0);
-        p_matrix.fill(0);
         is_valid = 0;
         emit newMVPMatrix();
     }

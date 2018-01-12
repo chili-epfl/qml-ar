@@ -1,4 +1,5 @@
 #include "imumvpdecorator.h"
+#include "config.h"
 
 IMUMVPDecorator::IMUMVPDecorator(MVPProvider *mvp_provider, IMU *imu)
 {
@@ -21,14 +22,21 @@ IMUMVPDecorator::IMUMVPDecorator(MVPProvider *mvp_provider, IMU *imu)
 
 void IMUMVPDecorator::updateLastMV()
 {
+    TimeLoggerLog("Updating MVP from Provider valid = %d", provider->isValid());
+
     // do nothing if pose invalid
     if(!provider->isValid()) return;
 
     // MV from provider
     last_mv = provider->getMVMatrix();
 
+    // forgetting previous displacement vector
+    imu->resetDisplacement();
+
     // obtaining current pose
     last_imu_pose = getCurrentPose();
+
+    // now the pose is valid
     last_imu_pose_available = true;
 
     // calculating resulting MVP
@@ -37,10 +45,31 @@ void IMUMVPDecorator::updateLastMV()
 
 QMatrix4x4 IMUMVPDecorator::getCurrentPose()
 {
-    // obtaining rotation from IMU
+    // resulting 4x4 rotation matrix
     QMatrix4x4 res;
+
+    // initializing with I
     res.setToIdentity();
-    res.rotate(imu->getRotAngle(), imu->getRotAxis());
+
+    // obtaining rotation axis
+    QVector3D axis = imu->getRotAxis();
+
+    // new axis in OpenCV coordinate system
+    QVector3D new_axis;
+
+    // swapping x and y
+    new_axis.setX(axis.y());
+    new_axis.setY(axis.x());
+
+    // keeping z
+    new_axis.setZ(axis.z());
+
+    // rotating matrix by (axis, angle)
+    res.rotate(imu->getRotAngle(), new_axis);
+
+    QVector3D displacement = imu->getLinearDisplacement();
+    TimeLoggerLog("Displacement dx %.2f dy %.2f dz %.2f", displacement.x(), displacement.y(), displacement.z());
+
     return res;
 }
 
@@ -48,6 +77,8 @@ void IMUMVPDecorator::updatePose()
 {
     // no pose => no MV from provider => nothing
     if(!last_imu_pose_available) return;
+
+    TimeLoggerLog("%s", "Updating MVP from IMU");
 
     // difference in pose since last MV from provider
     QMatrix4x4 delta_mv = getCurrentPose() * last_imu_pose.inverted();;
