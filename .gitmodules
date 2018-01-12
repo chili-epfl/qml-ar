@@ -7,3 +7,6 @@
 [submodule "QtOpenCV"]
 	path = QtOpenCV
 	url = git@github.com:dbzhang800/QtOpenCV.git
+[submodule "qml-imu"]
+	path = qml-imu
+	url = https://github.com/chili-epfl/qml-imu.git

@@ -1,5 +1,7 @@
 #include "qmlar.h"
 #include "timelogger.h"
+#include "qml-imu/src/IMU.h"
+#include "qvector3d.h"
 
 QMLAR::QMLAR()
 {
@@ -130,6 +132,9 @@ void QMLAR::initialize()
 
     // loading marker positions
     detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
+
+    IMU imu;
+    imu.a_bias = QVector3D(0.397, -0.008, -0.005);
 
     // loading camera matrix
     camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");

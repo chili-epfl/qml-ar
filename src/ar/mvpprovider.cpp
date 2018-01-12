@@ -25,12 +25,24 @@ QMatrix4x4 MVPProvider::getMVPMatrix()
     return mvp_matrix;
 }
 
+QMatrix4x4 MVPProvider::getMVMatrix()
+{
+    return mv_matrix;
+}
+
+QMatrix4x4 MVPProvider::getPMatrix()
+{
+    return p_matrix;
+}
+
 void MVPProvider::reset()
 {
     if(is_valid)
     {
         TimeLoggerLog("%s", "Hiding objects");
         mvp_matrix.fill(0);
+        mv_matrix.fill(0);
+        p_matrix.fill(0);
         is_valid = 0;
         emit newMVPMatrix();
     }

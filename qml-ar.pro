@@ -43,7 +43,8 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/ar/worldimage.cpp \
     src/qmlar.cpp \
     src/qmlarplugin.cpp \
-    src/utils/timelogger.cpp
+    src/utils/timelogger.cpp \
+    src/ar/imumvpdecorator.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -71,7 +72,8 @@ HEADERS += \
     src/qmlar.h \
     src/qmlarplugin.h \
     src/config.h \
-    src/utils/timelogger.h
+    src/utils/timelogger.h \
+    src/ar/imumvpdecorator.h
 
 QML_SOURCES += \
     src/ARComponent.qml \
@@ -177,6 +179,19 @@ HEADERS += uchiya/blob.h \
     uchiya/mylib/mymat.h \
     uchiya/mylib/mytimer.h \
     uchiya/mylib/opencvpath.h
+
+# QML-IMU library
+SOURCES += \
+    qml-imu/src/ExtendedKalmanFilter.cpp \
+    qml-imu/src/IMU.cpp \
+    qml-imu/src/AccelerometerBiasEstimator.cpp \
+    qml-imu/src/IMUPlugin.cpp
+
+HEADERS += \
+    qml-imu/src/ExtendedKalmanFilter.h \
+    qml-imu/src/IMU.h \
+    qml-imu/src/AccelerometerBiasEstimator.h \
+    qml-imu/src/IMUPlugin.h
 
 # Installation
 TEMPLATE = lib

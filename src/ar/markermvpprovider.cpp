@@ -92,7 +92,7 @@ void MarkerMVPProvider::recompute()
     }
 
     // obtain Projection matrix
-    QMatrix4x4 p = getP();
+    p_matrix = getP();
 
     // if P matrix is invalid
     if(p.isIdentity())
@@ -103,7 +103,7 @@ void MarkerMVPProvider::recompute()
     }
 
     // obtain ModelView matrix
-    QMatrix4x4 mv = getMV();
+    mv_matrix = getMV();
 
     // calculate new MVP matrix
     QMatrix4x4 new_mvp_matrix = p * mv;

@@ -15,10 +15,16 @@
  */
 
 class MVPProvider : public QObject
-{ Q_OBJECT Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
+{ Q_OBJECT
 protected:
     // last ModelViewProjection matrix
     QMatrix4x4 mvp_matrix;
+
+    // last ModelView matrix
+    QMatrix4x4 mv_matrix;
+
+    // last ModelViewProjection matrix
+    QMatrix4x4 p_matrix;
 
     // valid = corresponds to a real mvp matrix
     bool is_valid;
@@ -31,6 +37,12 @@ public:
 
     // return MVP matrix
     QMatrix4x4 getMVPMatrix();
+
+    // return MVP matrix
+    QMatrix4x4 getMVMatrix();
+
+    // return MVP matrix
+    QMatrix4x4 getPMatrix();
 
     // invalidate matrix
     // makes all objects invisible
