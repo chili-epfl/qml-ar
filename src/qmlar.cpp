@@ -82,6 +82,10 @@ void QMLAR::update()
     // obtaining source image
     QImage source = input.toImage();
 
+    // if no image is available, do nothing
+    if(source.width() * source.height() <= 0)
+        return;
+
     // scaling it if necessary
     if(image_width != 0)
         source = source.scaledToWidth(image_width);
