@@ -47,7 +47,7 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // buffer for nv21 -> rgb conversion
     static uchar* rgb = new uchar[MAX_SIZE];
 
-    Q_ASSERT(MAX_SIZE >= frame.width() * frame.height() * 3);
+    Q_ASSERT(MAX_SIZE >= frameOriginal.width() * frameOriginal.height() * 3);
 
     // do nothing if no image found
     if(frameOriginal.width() * frameOriginal.height() == 0) return QImage();
