@@ -3,6 +3,7 @@
 
 #include <QVector3D>
 #include <QMatrix3x3>
+#include <QMatrix4x4>
 
 /*
  * This class holds the pose (Translation+Rotation)
@@ -23,6 +24,9 @@ private:
 public:
     // construct invalid pose
     Pose();
+
+    // construct using 4x4 matrix
+    Pose(QMatrix4x4 map);
 
     // construct valid pose with translation and rotation
     Pose(QVector3D t, QMatrix3x3 r);

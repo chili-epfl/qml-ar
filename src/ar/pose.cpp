@@ -6,6 +6,17 @@ Pose::Pose()
     is_valid = false;
 }
 
+Pose::Pose(QMatrix4x4 map)
+{
+    for(int i = 0; i < 3; i++)
+    {
+        translation[i] = map(i, 3);
+        for(int j = 0; j < 3; j++)
+            rotation(i, j) = map(i, j);
+    }
+    is_valid = true;
+}
+
 Pose::Pose(QVector3D t, QMatrix3x3 r)
 {
     translation = t;

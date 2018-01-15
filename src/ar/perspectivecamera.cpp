@@ -13,8 +13,6 @@ QMatrix4x4 PerspectiveCamera::getPerspectiveMatrix(double n, double f)
     // 0    0   1  1
     // 0    0   1  0
 
-    // z depth information is lost
-
     QMatrix3x3 camera_matrix = getMatrix();
 
     QMatrix4x4 res;

@@ -3,15 +3,21 @@
 
 LinearPosePredictor::LinearPosePredictor()
 {
+    // initially, have 0 points
     is_valid = 0;
 }
 
 void LinearPosePredictor::setCurrentPose(Pose pose)
 {
+    // second pose is now first pose
     p1 = p2;
     t1 = t2;
+
+    // new pose is second pose
     p2 = pose;
     t2 = QDateTime::currentDateTime();
+
+    // updating is_valid at the beginning
     if(is_valid < 2)
         is_valid++;
 }
@@ -32,12 +38,12 @@ Pose LinearPosePredictor::predictPose()
     // new translation
     QVector3D new_translation = p1.getTranslation() + (p2.getTranslation() - p1.getTranslation()) * scaler;
 
-    // two quaternions from matrices
+    // two rotation quaternions
     QQuaternion p1_rot = QQuaternion::fromRotationMatrix(p1.getRotation());
     QQuaternion p2_rot = QQuaternion::fromRotationMatrix(p2.getRotation());
 
     // delta quaternion
-    QQuaternion rot_delta = (p2_rot / p1_rot);
+    QQuaternion rot_delta = p2_rot * p1_rot.inverted();
 
     // obtaining axis and angle
     QVector3D rot_axis;

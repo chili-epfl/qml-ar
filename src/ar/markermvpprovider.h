@@ -28,12 +28,14 @@ class MarkerMVPProvider : public MVPProvider
 private:
     PerspectiveCamera* camera;
     MarkerDetector* detector;
-public:
-    MarkerMVPProvider(MarkerDetector *d, PerspectiveCamera *c);
 
     // near and far are in millimeters (positive)
+
+    // this functions actually compute matrices
     QMatrix4x4 getP(double n = 1, double f = 10000);
     QMatrix4x4 getMV();
+public:
+    MarkerMVPProvider(MarkerDetector *d, PerspectiveCamera *c);
 public slots:
     void recompute();
 };

@@ -2,6 +2,7 @@
 #include "timelogger.h"
 #include "qml-imu/src/IMU.h"
 #include "qvector3d.h"
+#include "linearposepredictor.h"
 
 QMLAR::QMLAR()
 {
@@ -93,10 +94,10 @@ void QMLAR::update()
         source = source.scaledToWidth(image_width);
 
     // send input to marker detector
-    detector->setInput(source);
+    tracking->setInput(source);
 
     // detect markers
-    detector->process();
+    tracking->process();
 }
 
 double QMLAR::getUpdateMS()
@@ -155,6 +156,12 @@ void QMLAR::initialize()
 
     // creating a ModelView provider
     mvp_provider = new MarkerMVPProvider(detector, perspective_camera);
+
+    // creating linear pose predictor
+    predictor = new LinearPosePredictor();
+
+    // adding tracking to marker detector
+    tracking = new TrackingDecorator(detector, predictor, mvp_provider);
 
     // decorating MVP with IMU
     mvp_imu_decorated = new IMUMVPDecorator(mvp_provider, imu);

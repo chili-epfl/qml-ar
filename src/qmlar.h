@@ -13,6 +13,8 @@
 #include "markermvpprovider.h"
 #include "calibratedcamerafilestorage.h"
 #include "imumvpdecorator.h"
+#include "posepredictor.h"
+#include "trackingdecorator.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -135,6 +137,12 @@ private:
 
     // MVP decorated with last pose from IMU
     IMUMVPDecorator* mvp_imu_decorated;
+
+    // Pose Estimator
+    PosePredictor* predictor;
+
+    // Tracking object
+    TrackingDecorator* tracking;
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix();

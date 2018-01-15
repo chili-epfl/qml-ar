@@ -13,8 +13,10 @@ class PosePredictor : public QObject
 { Q_OBJECT
 public:
     PosePredictor();
-    virtual void setCurrentPose(Pose pose);
-    virtual Pose predictPose();
+    virtual void setCurrentPose(Pose pose) {Q_UNUSED(pose)}
+    virtual Pose predictPose() {return Pose();}
+
+    virtual ~PosePredictor() {}
 };
 
 #endif // POSEPREDICTOR_H
