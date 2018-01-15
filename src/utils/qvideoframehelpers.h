@@ -11,8 +11,12 @@
 class QVideoFrameHelpers
 {
 private:
-    // maximum size for nv21_to_rgb buffer
-    static const int MAX_SIZE = 4000000;
+    // maximum image side length
+    static const int MAX_IMG_SIDE = 2000;
+
+    // maximum size for nv21_to_rgb buffer (w x h x 3 channels)
+    // see yuv2rgb.h:68
+    static const int MAX_SIZE = MAX_IMG_SIDE * MAX_IMG_SIDE * 3;
 
 public:
     // return a list with all possible formats
