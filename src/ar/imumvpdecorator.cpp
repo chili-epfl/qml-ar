@@ -24,8 +24,15 @@ void IMUMVPDecorator::updateLastMV()
 {
     TimeLoggerLog("Updating MVP from Provider valid = %d", provider->isValid());
 
-    // do nothing if pose invalid
-    if(!provider->isValid()) return;
+    if(!provider->isValid())
+    {
+        // reset our matrix if no IMU available
+//        if(imu->getRotAxis().length() < 1e-5) reset();
+        if(!imu->isStartupComplete()) reset();
+
+        // do nothing if pose invalid and on Android
+        return;
+    }
 
     // MV from provider
     last_mv = provider->getMVMatrix();
@@ -50,6 +57,10 @@ QMatrix4x4 IMUMVPDecorator::getCurrentPose()
 
     // initializing with I
     res.setToIdentity();
+
+    // identity if no pose available
+    if(!imu->isStartupComplete())
+        return res;
 
     // obtaining rotation axis
     QVector3D axis = imu->getRotAxis();
