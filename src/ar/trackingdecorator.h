@@ -11,7 +11,7 @@
  */
 
 class TrackingDecorator : public MarkerDetector
-{
+{ Q_OBJECT
 private:
     PosePredictor* predictor;
     MVPProvider* provider;
@@ -21,9 +21,6 @@ public:
 
     // do marker detection
     void process();
-
-    // obtain preview image after detection
-    QImage getPreview();
 
     // obtain last input buffer
     QImage getLastInput();

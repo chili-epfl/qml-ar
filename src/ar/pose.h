@@ -42,6 +42,9 @@ public:
 
     // return rotation + translation
     QMatrix4x4 get4Matrix();
+
+    // get string representation
+    QString toString();
 };
 
 #endif // POSE_H

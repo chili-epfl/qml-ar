@@ -151,9 +151,6 @@ void QMLAR::initialize()
     // allowing to obtain perspective matrix
     perspective_camera = new PerspectiveCamera(camera_matrix);
 
-    // adding UchiyaBackEnd (decorating camera object)
-    marker_backend.initialize(detector);
-
     // creating a ModelView provider
     mvp_provider = new MarkerMVPProvider(detector, perspective_camera);
 
@@ -162,6 +159,9 @@ void QMLAR::initialize()
 
     // adding tracking to marker detector
     tracking = new TrackingDecorator(detector, predictor, mvp_provider);
+
+    // decorating tracking object to obtain images
+    marker_backend.initialize(tracking);
 
     // decorating MVP with IMU
     mvp_imu_decorated = new IMUMVPDecorator(mvp_provider, imu);

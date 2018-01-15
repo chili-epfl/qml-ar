@@ -32,8 +32,8 @@ Pose LinearPosePredictor::predictPose()
         return p1;
 
     // linear scaler if two poses are available
-    double scaler = t1.msecsTo(t2);
-    scaler /= t1.msecsTo(QDateTime::currentDateTime());
+    double scaler = t1.msecsTo(QDateTime::currentDateTime());
+    scaler /= t1.msecsTo(t2);
 
     // new translation
     QVector3D new_translation = p1.getTranslation() + (p2.getTranslation() - p1.getTranslation()) * scaler;

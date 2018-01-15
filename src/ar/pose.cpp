@@ -8,6 +8,9 @@ Pose::Pose()
 
 Pose::Pose(QMatrix4x4 map)
 {
+    // input:
+    // | R | t |
+    // | * |   |
     for(int i = 0; i < 3; i++)
     {
         translation[i] = map(i, 3);
@@ -40,6 +43,9 @@ QMatrix3x3 Pose::getRotation()
 
 QMatrix4x4 Pose::get4Matrix()
 {
+    // result =
+    // | R | t |
+    // | 0 | 1 |
     QMatrix4x4 res;
     res.fill(0);
     for(int i = 0; i < 3; i++)
@@ -52,4 +58,22 @@ QMatrix4x4 Pose::get4Matrix()
     res(3, 3) = 1;
 
     return res;
+}
+
+QString Pose::toString()
+{
+    // wrapping QString to Stream
+    QString s;
+    QTextStream ss(&s);
+
+    // translation vector
+    QVector3D t = getTranslation();
+
+    // rotation Euler angles
+    QVector3D r = QQuaternion::fromRotationMatrix(getRotation()).toEulerAngles();
+
+    // format T (xyz) Rot (xyz)
+    ss << "T (" << t.x() << " " << t.y() << " " << t.z() << ") R (" << r.x() << " " << r.y() << " " << r.z() << ")";
+
+    return s;
 }
