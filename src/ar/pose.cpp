@@ -27,7 +27,7 @@ QMatrix3x3 Pose::getRotation()
     return rotation;
 }
 
-QMatrix4x4 Pose::get4Matrx()
+QMatrix4x4 Pose::get4Matrix()
 {
     QMatrix4x4 res;
     res.fill(0);

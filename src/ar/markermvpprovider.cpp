@@ -27,7 +27,7 @@ QMatrix4x4 MarkerMVPProvider::getMV()
     if(pose.isValid())
     {
         // return 4x4 MV matrix
-        return pose.get4Matrx();
+        return pose.get4Matrix();
     }
 
     return QMatrix4x4();

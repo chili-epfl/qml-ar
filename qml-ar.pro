@@ -44,7 +44,9 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/qmlar.cpp \
     src/qmlarplugin.cpp \
     src/utils/timelogger.cpp \
-    src/ar/imumvpdecorator.cpp
+    src/ar/imumvpdecorator.cpp \
+    src/ar/posepredictor.cpp \
+    src/ar/linearposepredictor.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -73,7 +75,9 @@ HEADERS += \
     src/qmlarplugin.h \
     src/config.h \
     src/utils/timelogger.h \
-    src/ar/imumvpdecorator.h
+    src/ar/imumvpdecorator.h \
+    src/ar/posepredictor.h \
+    src/ar/linearposepredictor.h
 
 QML_SOURCES += \
     src/ARComponent.qml \

@@ -37,7 +37,7 @@ public:
     QMatrix3x3 getRotation();
 
     // return rotation + translation
-    QMatrix4x4 get4Matrx();
+    QMatrix4x4 get4Matrix();
 };
 
 #endif // POSE_H
