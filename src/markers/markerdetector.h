@@ -59,6 +59,9 @@ public:
 
     // return all of the 3D-2D correspondences
     WorldImageCorrespondences getCorrespondences();
+
+    // returns true if at least one marker was detected
+    bool markersDetected();
 };
 
 #endif // MARKERDETECTOR_H

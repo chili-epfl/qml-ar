@@ -46,3 +46,8 @@ WorldImageCorrespondences MarkerDetector::getCorrespondences()
 
     return result;
 }
+
+bool MarkerDetector::markersDetected()
+{
+    return getCorrespondences().size() > 0;
+}
