@@ -47,7 +47,8 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/ar/imumvpdecorator.cpp \
     src/ar/posepredictor.cpp \
     src/ar/linearposepredictor.cpp \
-    src/ar/trackingdecorator.cpp
+    src/ar/trackingdecorator.cpp \
+    src/markers/blobdetector.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -79,7 +80,8 @@ HEADERS += \
     src/ar/imumvpdecorator.h \
     src/ar/posepredictor.h \
     src/ar/linearposepredictor.h \
-    src/ar/trackingdecorator.h
+    src/ar/trackingdecorator.h \
+    src/markers/blobdetector.h
 
 QML_SOURCES += \
     src/ARComponent.qml \
