@@ -33,6 +33,9 @@ protected:
 
     // preview image
     QImage output_buffer;
+
+    // preview image background
+    QImage output_buffer_background;
 public:
     MarkerDetector();
     virtual ~MarkerDetector() {}
@@ -43,6 +46,9 @@ public:
 
     // set input camera image
     void setInput(QImage camera);
+
+    // set background for preview drawing
+    void setPreviewBackground(QImage preview);
 
     // do marker detection
     virtual void process() {}

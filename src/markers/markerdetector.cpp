@@ -10,6 +10,11 @@ void MarkerDetector::setInput(QImage camera)
     input_buffer = camera;
 }
 
+void MarkerDetector::setPreviewBackground(QImage preview)
+{
+    output_buffer_background = preview;
+}
+
 void MarkerDetector::loadMarkerPositions(QString filename)
 {
     markers.populateFromFile(filename);

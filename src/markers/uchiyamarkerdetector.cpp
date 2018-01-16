@@ -190,7 +190,6 @@ void UchiyaMarkerDetector::extractMarkers()
 
 void UchiyaMarkerDetector::drawPreview() {
     // show image
-    m_img.Resize(m_camimg);
     //m_llah.DrawBinary(m_img);
     m_llah.DrawPts(m_img);
 
@@ -210,6 +209,10 @@ void UchiyaMarkerDetector::prepareInput()
     cv::Mat src2mat = QtOcv::image2Mat(input_buffer, CV_8UC3);
     IplImage src2mat2ipl = src2mat;
     cvCopy(&src2mat2ipl, (IplImage*) m_camimg);
+
+    cv::Mat src2mat1 = QtOcv::image2Mat(output_buffer_background, CV_8UC3);
+    IplImage src2mat2ipl1 = src2mat1;
+    cvCopy(&src2mat2ipl1, (IplImage*) m_img);
 }
 
 void UchiyaMarkerDetector::process()

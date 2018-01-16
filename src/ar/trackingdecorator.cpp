@@ -82,8 +82,11 @@ void TrackingDecorator::process()
     // set to true to detect markers on the full image
     bool need_full_image = true;
 
+    // setting input image as background for preview
+    detector->setPreviewBackground(input_buffer);
+
     // removing all but the selected rectangle
-    if(y_min < y_max && x_min < x_max)
+    if(y_min < y_max && x_min < x_max && detector->markersDetected())
     {
         // copying the image
         QImage augmented_input = input_buffer.copy();
@@ -97,7 +100,7 @@ void TrackingDecorator::process()
         p.drawRect(x_max, y_min, input_buffer.width() - x_max, y_max - y_min);
 
         // setting input to underlying detector
-        detector->setInput(input_buffer);
+        detector->setInput(augmented_input);
 
         // processing augmented image
         detector->process();
