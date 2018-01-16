@@ -1,7 +1,7 @@
 import QtQuick 2.6
 import AR 1.0
 import QtQuick.Scene3D 2.0
-
+import QtQuick.Controls 1.4 as QQC
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 import Qt3D.Input 2.0
@@ -58,16 +58,20 @@ Item {
     // will contain Scene3D component
     property var scene3d
 
+    // set to true to preserve width attribute
+    // and set height so that image ratio is preserved
+    property bool force_width: false
+
+    // initial width and height
+    width: 100
+    height: 100
+
     // initialize AR component on loading
     // properties must be set beforehand
     Component.onCompleted: {
         // Set image width in pixels
         AR.image_width = arComponent.image_width
         console.log("Set image width to " + arComponent.image_width);
-
-        // Setting parent size (will be updated later)
-        arComponent.parent.width = arComponent.image_width;
-        arComponent.parent.height = arComponent.image_width;
 
         // Set update frequency
         AR.update_ms = arComponent.update_ms
@@ -112,6 +116,7 @@ Item {
             scene3d = component.createObject(scene, {'arSceneComponent': arSceneComponent,
                                                     'arSceneParameters': arSceneParameters});
             arSceneObject = scene3d.arSceneObject;
+            loading.visible = false;
         }
         console.log("End loading scene3d");
     }
@@ -122,6 +127,14 @@ Item {
         anchors.fill: parent
         anchors.margins: 0
 
+        // indicator showing loading circle
+        QQC.BusyIndicator {
+            id: loading
+            running: true
+            visible: true
+            anchors.fill: parent
+        }
+
         // Resize AR component on first valid image
         Timer {
             interval: 100; running: true; repeat: true;
@@ -130,9 +143,14 @@ Item {
                 var h = image.sourceSize.height;
                 if(w * h > 1)
                 {
-                    console.log("Resizing AR component to " + w + " x " + h)
-                    arComponent.width = w;
-                    arComponent.height = h;
+                    console.log("Image size is " + w + " x " + h)
+                    if(force_width) {
+                        arComponent.height = 1. * arComponent.width * h / w;
+                    }
+                    else {
+                        arComponent.width = w;
+                        arComponent.height = h;
+                    }
                     running = false;
                     image.visible = true;
 

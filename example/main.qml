@@ -28,5 +28,9 @@ Window {
 
         // update frequency
         update_ms: 10
+
+        // set to true to force width to this value
+        force_width: true
+        width: 1000
     }
 }
