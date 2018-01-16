@@ -35,9 +35,6 @@ public:
 public slots:
     // called on new MVP matrix from provider
     void onNewMVPMatrix();
-
-    // called on updated marker info from detector
-    void detectorMarkersUpdated();
 };
 
 #endif // TRACKINGMVPDECORATOR_H
