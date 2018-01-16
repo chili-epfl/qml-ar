@@ -5,7 +5,7 @@
 #include <uchiya/llah.h>
 #include "uchiya/mylib/mymat.h"
 #include "markerdetector.h"
-
+#include "blobdetector.h"
 #include <QMatrix4x4>
 
 /*
@@ -74,6 +74,12 @@ private:
 
     // convert preview image to QImage
     void preparePreview();
+
+    // blob detector
+    BlobDetector blob_detector;
+
+    // maximal number of dots to detect
+    const int max_dots = 50;
 public:
     // initialize given height and width of the image
     UchiyaMarkerDetector();
