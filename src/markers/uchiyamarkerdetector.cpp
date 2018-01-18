@@ -205,8 +205,9 @@ void UchiyaMarkerDetector::preparePreview()
 
 void UchiyaMarkerDetector::prepareInput()
 {
-    QImage blobs = blob_detector.detectBlobs(input_buffer, max_dots);
-    cv::Mat src2mat = QtOcv::image2Mat(blobs, CV_8UC3);
+    blob_detector.detectBlobs(input_buffer, max_dots);
+    //cv::Mat src2mat = QtOcv::image2Mat(blob_detector.drawBlobs(), CV_8UC3);
+    cv::Mat src2mat = QtOcv::image2Mat(input_buffer, CV_8UC3);
     IplImage src2mat2ipl = src2mat;
     cvCopy(&src2mat2ipl, (IplImage*) m_camimg);
 
@@ -240,10 +241,10 @@ void UchiyaMarkerDetector::process()
     // putting camera src image to Uchiya pipeline
     prepareInput();
 
-    // extracting dots
+    // passing detected blobs to the library
     m_llah.Extract(m_camimg);
-
     m_llah.SetPts();
+    //m_llah.SetPts(blob_detector.getBlobs());
     m_llah.CoordinateTransform(static_cast<double>(m_camimg.h));
 
     m_llah.RetrievebyTracking();
@@ -256,6 +257,8 @@ void UchiyaMarkerDetector::process()
 
     // obtaining Uchiya image dst and returning it
     preparePreview();
+
+    output_buffer = blob_detector.drawBlobs();//input_buffer;
 
     TimeLoggerProfile("%s", "End marker detection");
 

@@ -3,7 +3,6 @@
 #include "QtOpenCV/cvmatandqimage.h"
 #include "opencv2/features2d.hpp"
 #include "config.h"
-#include <vector>
 
 BlobDetector::BlobDetector()
 {
@@ -26,13 +25,47 @@ BlobDetector::BlobDetector()
     // init blur size parameter
     blur_size.height = 2;
     blur_size.width = 2;
+
+    // no blobs now
+    is_initialized = false;
 }
 
-QImage BlobDetector::detectBlobs(QImage source, int max_blobs)
+QImage BlobDetector::drawBlobs()
 {
+    Q_ASSERT(is_initialized);
+
+    // store the result in mat
+    cv::Mat result(last_input.height(), last_input.width(), CV_8UC3, cv::Scalar(255, 255, 255));
+
+    // go through all blobs
+    std::vector<cv::KeyPoint>::iterator it;
+    int i = 0;
+    for(it = keypoints.begin(); it != keypoints.end(); it++, i++)
+    {
+        // draw a white circle on the place of a blob
+        cv::KeyPoint kp = (*it);
+        cv::circle(result, kp.pt, 0, cv::Scalar(0, 0, 0), -1);
+    }
+
+    // return mat -> qt image
+    return QtOcv::mat2Image(result);
+}
+
+std::vector<cv::KeyPoint> BlobDetector::getBlobs()
+{
+    Q_ASSERT(is_initialized);
+    return keypoints;
+}
+
+void BlobDetector::detectBlobs(QImage source, int max_blobs)
+{
+    // setting last input image
+    last_input = source;
+
     // get data qimage -> mat
     cv::Mat source_cv = QtOcv::image2Mat_shared(source);
 
+    // color -> grayscale
     cv::Mat source_cv_gray;
     cv::cvtColor(source_cv, source_cv_gray, cv::COLOR_RGB2GRAY);
 
@@ -41,23 +74,13 @@ QImage BlobDetector::detectBlobs(QImage source, int max_blobs)
     cv::blur(source_cv_gray, blurred, blur_size);
 
     // detect blobs
-    std::vector<cv::KeyPoint> keypoints;
+    keypoints.clear();
     detector->detect(blurred, keypoints);
 
-    // store the result in mat
-    cv::Mat result(source_cv_gray.rows, source_cv_gray.cols, CV_8UC3, cv::Scalar(0, 0, 0));
+    // removing extra blobs
+    if(max_blobs > 0 && max_blobs < (int) keypoints.size())
+        keypoints.resize(max_blobs);
 
-    // go through all blobs
-    std::vector<cv::KeyPoint>::iterator it;
-    int i = 0;
-    for(it = keypoints.begin(); it != keypoints.end(); it++, i++)
-    {
-        if(max_blobs > 0 && i >= max_blobs) break;
-        // draw a white circle on the place of a blob
-        cv::KeyPoint kp = (*it);
-        cv::circle(result, kp.pt, 1, cv::Scalar(255, 255, 255), -1);
-    }
-
-    // return mat -> qt image
-    return QtOcv::mat2Image(result);
+    // now the object is initialized
+    is_initialized = true;
 }

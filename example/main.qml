@@ -27,7 +27,7 @@ Window {
         arSceneParameters: {'chest_x': 210, 'chest_y': 297}
 
         // update frequency
-        update_ms: 10
+        update_ms: 50
 
         // set to true to force width to this value
         force_width: true
