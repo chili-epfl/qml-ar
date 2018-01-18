@@ -206,8 +206,8 @@ void UchiyaMarkerDetector::preparePreview()
 void UchiyaMarkerDetector::prepareInput()
 {
     blob_detector.detectBlobs(input_buffer, max_dots);
-    //cv::Mat src2mat = QtOcv::image2Mat(blob_detector.drawBlobs(), CV_8UC3);
-    cv::Mat src2mat = QtOcv::image2Mat(input_buffer, CV_8UC3);
+    cv::Mat src2mat = QtOcv::image2Mat(blob_detector.drawBlobs(), CV_8UC3);
+    //cv::Mat src2mat = QtOcv::image2Mat(input_buffer, CV_8UC3);
     IplImage src2mat2ipl = src2mat;
     cvCopy(&src2mat2ipl, (IplImage*) m_camimg);
 
@@ -257,8 +257,6 @@ void UchiyaMarkerDetector::process()
 
     // obtaining Uchiya image dst and returning it
     preparePreview();
-
-    output_buffer = blob_detector.drawBlobs();//input_buffer;
 
     TimeLoggerProfile("%s", "End marker detection");
 

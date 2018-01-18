@@ -44,7 +44,7 @@ QImage BlobDetector::drawBlobs()
     {
         // draw a white circle on the place of a blob
         cv::KeyPoint kp = (*it);
-        cv::circle(result, kp.pt, 0, cv::Scalar(0, 0, 0), -1);
+        cv::circle(result, kp.pt, 2, cv::Scalar(0, 0, 0), -1);
     }
 
     // return mat -> qt image
