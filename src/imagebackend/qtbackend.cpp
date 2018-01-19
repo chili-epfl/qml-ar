@@ -13,12 +13,13 @@ QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImagePr
     TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
     camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
     need_viewfinder = 1;
+    converter = new ThreadExecutor<QVideoFrame, QImage, QtCameraBackend>(this, &QtCameraBackend::convert);
+    converter->start();
     init();
 }
 
 QtCameraBackend::QtCameraBackend(QCamera *cam) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
-    was_taken = true;
     camera = cam;
     need_viewfinder = 0;
     init();
@@ -61,24 +62,21 @@ void QtCameraBackend::init()
     // installing callback
     connect(frameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(processQImage(QImage)));
 #else
-    #error "OS must be either Android or Linux, camera is unsupported on other systems"
+#error "OS must be either Android or Linux, camera is unsupported on other systems"
 #endif
 
     // starting camera thread
     camera->start();
 }
 
+QImage QtCameraBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
+{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
+    return buf;
+}
+
 QPixmap QtCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{ Q_UNUSED(size) Q_UNUSED(requestedSize)
-    if(id == "raw")
-    {
-        was_taken = true;
-        return QPixmap::fromImage(buf);
-    }
-
-    qFatal("Invalid pixmap id");
-
-    return QPixmap();
+{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
+    return QPixmap::fromImage(buf);
 }
 
 QtCameraBackend::~QtCameraBackend() {
@@ -91,13 +89,20 @@ void QtCameraBackend::processQImage(QImage img)
     buf = img;
 }
 
+void QtCameraBackend::convert(QVideoFrame* frame, QImage* image)
+{
+    *image = QVideoFrameHelpers::VideoFrameToImage(*frame).copy();
+}
+
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
-    // updating the buffer if enough time has passed
-    if(was_taken)
+    TimeLoggerProfile("%s", "Received image from camera");
+    last_frame = frame;
+    converter->setInput(&last_frame);
+    int i = converter->getOutputIndex();
+    if(i >= 0)
     {
-        TimeLoggerProfile("%s", "Received image from camera");
-        processQImage(QVideoFrameHelpers::VideoFrameToImage(frame).copy());
-        was_taken = false;
+        processQImage(*converter->getOutput(i));
+        converter->freeOutput(i);
     }
 }
