@@ -5,6 +5,16 @@
 QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender sensors
 CONFIG += qt plugin c++11 nostrip
 
+# turning on optimization
+# remove possible other optimization flags
+QMAKE_CXXFLAGS_RELEASE -= -O
+QMAKE_CXXFLAGS_RELEASE -= -O1
+QMAKE_CXXFLAGS_RELEASE -= -O2
+QMAKE_CXXFLAGS_RELEASE -= -Os
+
+# add the desired -O3 if not present
+QMAKE_CXXFLAGS_RELEASE *= -O3
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -149,7 +159,8 @@ android {
             -Wl,--end-group\
 
 # neon instructions (for yuv2rgb)
-#    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions
+    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions
+    DEFINES += ARM_NEON_ENABLE
 }
 
 # YUV2RGB library
