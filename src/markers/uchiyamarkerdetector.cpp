@@ -9,6 +9,7 @@
 #include "opencv2/core.hpp"
 #include <vector>
 #include <opencv2/calib3d.hpp>
+#include "opencv2/imgproc.hpp"
 #include "mymatconverter.h"
 #include "timelogger.h"
 #include "config.h"
@@ -205,12 +206,18 @@ void UchiyaMarkerDetector::preparePreview()
 
 void UchiyaMarkerDetector::prepareInput()
 {
+    TimeLoggerLog("%s", "Detecting blobs");
     blob_detector.detectBlobs(input_buffer, max_dots);
-    cv::Mat src2mat = QtOcv::image2Mat(blob_detector.drawBlobs(), CV_8UC3);
-    //cv::Mat src2mat = QtOcv::image2Mat(input_buffer, CV_8UC3);
+
+    TimeLoggerLog("%s", "Drawing blobs");
+    QImage blobs = blob_detector.drawBlobs();
+
+    TimeLoggerLog("%s", "Copying input");
+    cv::Mat src2mat = QtOcv::image2Mat_shared(blobs);
     IplImage src2mat2ipl = src2mat;
     cvCopy(&src2mat2ipl, (IplImage*) m_camimg);
 
+    TimeLoggerLog("%s", "Copying output");
     cv::Mat src2mat1 = QtOcv::image2Mat(output_buffer_background, CV_8UC3);
     IplImage src2mat2ipl1 = src2mat1;
     cvCopy(&src2mat2ipl1, (IplImage*) m_img);
@@ -238,21 +245,35 @@ void UchiyaMarkerDetector::process()
 
     Q_ASSERT(is_initialized);
 
+    TimeLoggerLog("%s", "Preparing input");
     // putting camera src image to Uchiya pipeline
     prepareInput();
 
+    TimeLoggerLog("%s", "Extracting blobs");
+
     // passing detected blobs to the library
     m_llah.Extract(m_camimg);
+
+    TimeLoggerLog("%s", "Setting points");
+
     m_llah.SetPts();
     //m_llah.SetPts(blob_detector.getBlobs());
     m_llah.CoordinateTransform(static_cast<double>(m_camimg.h));
 
+    TimeLoggerLog("%s", "Tracking");
+
     m_llah.RetrievebyTracking();
     m_llah.FindPaper(4);
+
+    TimeLoggerLog("%s", "Matching");
+
     m_llah.RetrievebyMatching();
     m_llah.FindPaper(8);
 
     // creating preview image
+
+    TimeLoggerLog("%s", "Creating preview");
+
     drawPreview();
 
     // obtaining Uchiya image dst and returning it
