@@ -28,6 +28,9 @@ private:
 
     // true if detectBlobs was called
     bool is_initialized;
+
+    // resulting matrix
+    cv::Mat result;
 public:
     BlobDetector();
     virtual ~BlobDetector() {}

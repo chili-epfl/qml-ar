@@ -8,10 +8,11 @@ BlobDetector::BlobDetector()
 {
     // set blob detector parameters
     cv::SimpleBlobDetector::Params parameters;
-    parameters.minThreshold = 0;
-    parameters.maxThreshold = 255;
+    parameters.minThreshold = 50;
+    parameters.maxThreshold = 200;
+    parameters.thresholdStep = 30;
     parameters.filterByArea = true;
-    parameters.minArea = 1;
+    parameters.minArea = 5;
     parameters.filterByCircularity = true;
     parameters.minCircularity = 0.8;
     parameters.filterByConvexity = false;
@@ -35,7 +36,9 @@ QImage BlobDetector::drawBlobs()
     Q_ASSERT(is_initialized);
 
     // store the result in mat
-    cv::Mat result(last_input.height(), last_input.width(), CV_8UC3, cv::Scalar(255, 255, 255));
+    if(result.rows != last_input.height() || result.cols != last_input.width())
+        result = cv::Mat(last_input.height(), last_input.width(), CV_8UC3, cv::Scalar(255, 255, 255));
+    else result.setTo(cv::Scalar(255, 255, 255));
 
     // go through all blobs
     std::vector<cv::KeyPoint>::iterator it;
@@ -48,7 +51,7 @@ QImage BlobDetector::drawBlobs()
     }
 
     // return mat -> qt image
-    return QtOcv::mat2Image(result);
+    return QtOcv::mat2Image_shared(result);
 }
 
 std::vector<cv::KeyPoint> BlobDetector::getBlobs()
