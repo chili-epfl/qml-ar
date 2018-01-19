@@ -146,6 +146,9 @@ private:
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix();
+
+    // notify about new image
+    void imageUpdated();
 };
 
 #endif // CELLULOAR_H

@@ -98,6 +98,9 @@ void QMLAR::update()
 
     // detect markers
     tracking->process();
+
+    // say that iteration is done
+    emit imageUpdated();
 }
 
 double QMLAR::getUpdateMS()

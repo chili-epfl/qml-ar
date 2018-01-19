@@ -62,6 +62,9 @@ Item {
     // and set height so that image ratio is preserved
     property bool force_width: false
 
+    // do show fps?
+    property bool show_fps: true
+
     // initial width and height
     width: 100
     height: 100
@@ -114,7 +117,7 @@ Item {
         }
         else {
             scene3d = component.createObject(scene, {'arSceneComponent': arSceneComponent,
-                                                    'arSceneParameters': arSceneParameters});
+                                                 'arSceneParameters': arSceneParameters});
             arSceneObject = scene3d.arSceneObject;
             loading.visible = false;
         }
@@ -174,6 +177,67 @@ Item {
             visible: false
             clip: false
             transformOrigin: Item.Center
+        }
+
+        // update FPS on new image
+        Connections {
+            target: AR
+            onImageUpdated: fps_text.update()
+        }
+
+        // text showing FPS
+        Text {
+            id: fps_text
+            color: "red"
+            font.pointSize: 20
+
+            visible: arComponent.show_fps
+
+            // last ms of image update
+            property real last_update: 0
+
+            // filtered fps mean
+            property real fps_mean: 0
+
+            // last time delta ms
+            property real last_delta: 0
+
+            // smoothing parameter
+            property real lambda: 0.9
+
+            text: "FPS: " + Math.round(fps_mean) + "; delta: " + Math.round(last_delta) + " ms"
+            anchors.left: parent.left
+            anchors.top: parent.top
+
+
+            // call on new frame
+            function update() {
+                // obtaining ms
+                var this_update = new Date().getTime();
+
+                // if not first launch, update text
+                if(fps_text.last_update > 0) {
+                    // difference since prev. update
+                    var difference = this_update - fps_text.last_update;
+
+                    // FPS = 1000 / delta_ms
+                    var this_fps = 1000. / difference;
+
+                    // setting last delta
+                    fps_text.last_delta = difference;
+
+                    // lambda smoothing
+                    if(fps_text.fps_mean > 0) {
+                        fps_text.fps_mean = fps_text.lambda * fps_text.fps_mean + (1 - fps_text.lambda) * this_fps;
+                    }
+                    else {
+                        fps_text.fps_mean = this_fps;
+                    }
+                }
+
+                // updating last_update
+                fps_text.last_update = this_update;
+            }
         }
     }
 }

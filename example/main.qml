@@ -27,10 +27,13 @@ Window {
         arSceneParameters: {'chest_x': 210, 'chest_y': 297}
 
         // update frequency
-        update_ms: 50
+        update_ms: 10
 
         // set to true to force width to this value
         force_width: true
-        width: 1000
+        width: 1200
+
+        // do show fps?
+        show_fps: true
     }
 }
