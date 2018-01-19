@@ -65,7 +65,7 @@ void ThreadExecutor<Input, Output, Processor>::produce()
     meta.unlock();
 
     // processing input and storing the result
-    (*p.*process)(input, &(values[num_to_use]));
+    (*p.*process)((Input*) input, (Output*) &(values[num_to_use]));
 
     // updating newest and freeing the item
     meta.lock();
@@ -99,7 +99,7 @@ template <typename Input, typename Output, typename Processor>
 Output* ThreadExecutor<Input, Output, Processor>::getOutput(int index)
 {
     // returning the item in the array
-    return &(values[index]);
+    return (Output*) &(values[index]);
 }
 
 template <typename Input, typename Output, typename Processor>

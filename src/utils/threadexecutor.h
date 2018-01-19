@@ -28,16 +28,16 @@ private:
     QSemaphore inputSem;
 
     // indicates if the value is being written/read
-    bool used[MAX_USERS];
+    volatile bool used[MAX_USERS];
 
     // array of values for outputs
-    Output values[MAX_USERS];
+    volatile Output values[MAX_USERS];
 
     // single input for the processor
-    Input* input;
+    volatile Input* input;
 
     // index in the values pointing to the latest one
-    int newest;
+    volatile int newest;
 
     // processor object
     Processor* p;
