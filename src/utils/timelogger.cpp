@@ -18,7 +18,7 @@ void TimeLogger::log(QString filename, int line_number, QString function, const 
     s << timestamp << "\t+" << timestamp - last_timestamp << " ms\t";
 
     // thread id
-    //s << ((int64_t) QThread::currentThreadId()) << " ";
+    s << QThread::currentThreadId() << "\t";
 
     // function-file-line
     s << "[" << function << "@" << filename << ":" << line_number << "]\t";
