@@ -81,10 +81,7 @@ void QMLAR::update()
 
     TimeLoggerLog("%s", "Requesting image");
     // requesting image from provider as pixmap
-    QPixmap input = raw_provider->requestPixmap("raw", NULL, QSize());
-
-    // obtaining source image
-    QImage source = input.toImage();
+    QImage source = raw_provider->requestImage("raw", NULL, QSize());
 
     // if no image is available, do nothing
     if(source.width() * source.height() <= 0 || image_width == 0)
