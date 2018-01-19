@@ -21,6 +21,8 @@ pattern = '^([0-9]+)\s\+([0-9]+)\sms\s\[([^@]+)\@([^:]+):([^]]+)]\s(.*)$'
 program = re.compile(pattern)
 # 1 timestamp, 2 delta_ms, 3 function, 4 file, 5 line, 6 message
 
+messages_to_ignore = ['Displacement.*', 'Expecting point.*', 'Updating MVP from IMU']
+
 # next item for current item
 successors = {}
 
@@ -46,6 +48,12 @@ for i, line in enumerate(f):
     if matching and len(matching) == 8:
         # parsing the array
         _, timestamp, delta_ms, function, file_, line, message, _ = matching
+
+        # ignoring messages
+        do_continue = True
+        for msg in messages_to_ignore:
+            if re.match(msg, message): do_continue = False
+        if not do_continue: continue
 
         # filling in the successor
         if prev_message not in successors.keys():
@@ -77,8 +85,9 @@ all_arrays = []
 all_labels = []
 for (source, dest), arr in transition_arr:
     print('%s->%s, Med %.2f Mean %.2f +- %.2f' % (source, dest, np.median(arr), np.mean(arr), np.std(arr)))
-    all_arrays.append(arr)
-    all_labels.append('%s to %s' % (source, dest))
+    if dest != 'Start marker detection' and np.max(arr) > 5 and dest != 'Received image from camera':
+        all_arrays.append(arr)
+        all_labels.append('%s to %s' % (source, dest))
 
 plt.figure(figsize=(10, 10))
 plt.title('$\delta_{ms}$ for transitions')
