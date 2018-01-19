@@ -2,7 +2,6 @@
 #include <QtMultimedia/QCameraInfo>
 #include <QVideoProbe>
 #include <QException>
-#include <QElapsedTimer>
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
 #include "timelogger.h"
@@ -19,6 +18,7 @@ QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImagePr
 
 QtCameraBackend::QtCameraBackend(QCamera *cam) : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
+    was_taken = true;
     camera = cam;
     need_viewfinder = 0;
     init();
@@ -26,9 +26,6 @@ QtCameraBackend::QtCameraBackend(QCamera *cam) : QQuickImageProvider(QQuickImage
 
 void QtCameraBackend::init()
 {
-    // starting dirty hack timer
-    timer.start();
-
     // initial buffer value is an empty image
     buf = QImage();
 
@@ -74,7 +71,10 @@ void QtCameraBackend::init()
 QPixmap QtCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(size) Q_UNUSED(requestedSize)
     if(id == "raw")
+    {
+        was_taken = true;
         return QPixmap::fromImage(buf);
+    }
 
     qFatal("Invalid pixmap id");
 
@@ -94,10 +94,10 @@ void QtCameraBackend::processQImage(QImage img)
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     // updating the buffer if enough time has passed
-    if(timer.elapsed() > update_ms)
+    if(was_taken)
     {
         TimeLoggerProfile("%s", "Received image from camera");
         processQImage(QVideoFrameHelpers::VideoFrameToImage(frame).copy());
-        timer.start();
+        was_taken = false;
     }
 }

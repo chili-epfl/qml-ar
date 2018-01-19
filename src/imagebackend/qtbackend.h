@@ -30,6 +30,9 @@ public:
     virtual ~QtCameraBackend();
 
 protected:
+    // was last image used?
+    bool was_taken;
+
     // image buffer
     // is written in processQImage slot
     // is read in requestPixmap
@@ -50,12 +53,6 @@ protected:
     // void viewfinder for Android version
     VoidViewFinder* viewfinder;
 //
-
-    // timer is a hack for updating frames not-so-fast
-    QElapsedTimer timer;
-
-    // only updating image each update_ms
-    static const int update_ms = 20;
 
     // initialize the object after setting camera ptr
     void init();
