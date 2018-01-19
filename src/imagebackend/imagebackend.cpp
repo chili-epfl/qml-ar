@@ -8,6 +8,12 @@ ImageBackend::ImageBackend(QString filename) : QQuickImageProvider(QQuickImagePr
     buffer = img;
 }
 
+QImage ImageBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
+{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
+    return buffer;
+}
+
+
 QPixmap ImageBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
     return QPixmap::fromImage(buffer);

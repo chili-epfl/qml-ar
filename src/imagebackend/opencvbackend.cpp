@@ -9,7 +9,7 @@ OpenCVCameraBackend::OpenCVCameraBackend(int cam_id)
     camera_id = cam_id;
 }
 
-QPixmap OpenCVCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+QImage OpenCVCameraBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
     if(!is_initialized)
         setupCV();
@@ -19,9 +19,12 @@ QPixmap OpenCVCameraBackend::requestPixmap(const QString &id, QSize *size, const
     stream->read(mat);
 
     // converting the matrix to qimage and then to pixmap
-    QPixmap pm = QPixmap::fromImage(QtOcv::mat2Image(mat));
+    return QtOcv::mat2Image(mat);
+}
 
-    return(pm);
+QPixmap OpenCVCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+{
+    return QPixmap::fromImage(requestImage(id, size, requestedSize));
 }
 
 void OpenCVCameraBackend::setupCV() {

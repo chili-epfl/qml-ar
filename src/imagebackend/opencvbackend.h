@@ -20,7 +20,7 @@ public:
 
     // get image from the camera
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
-
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 private:
     // open the camera
     void setupCV();
