@@ -201,7 +201,7 @@ void UchiyaMarkerDetector::preparePreview()
     IplImage dst = *(IplImage*) m_img;
     // second parameter disables data copying
     cv::Mat dst2mat = cv::cvarrToMat(&dst, false);
-    output_buffer = QtOcv::mat2Image(dst2mat);
+    output_buffer = QtOcv::mat2Image_shared(dst2mat);
 }
 
 void UchiyaMarkerDetector::prepareInput()
@@ -214,13 +214,16 @@ void UchiyaMarkerDetector::prepareInput()
 
     TimeLoggerLog("%s", "Copying input");
     cv::Mat src2mat = QtOcv::image2Mat_shared(blobs);
-    IplImage src2mat2ipl = src2mat;
-    cvCopy(&src2mat2ipl, (IplImage*) m_camimg);
+    static IplImage src2mat2ipl;
+    src2mat2ipl = (IplImage) src2mat;
+    m_camimg.m_img = &src2mat2ipl;
 
     TimeLoggerLog("%s", "Copying output");
-    cv::Mat src2mat1 = QtOcv::image2Mat(output_buffer_background, CV_8UC3);
-    IplImage src2mat2ipl1 = src2mat1;
-    cvCopy(&src2mat2ipl1, (IplImage*) m_img);
+    static cv::Mat src2mat1;
+    src2mat1 = QtOcv::image2Mat(output_buffer_background, CV_8UC3, QtOcv::MCO_RGB);
+    static IplImage src2mat2ipl1;
+    src2mat2ipl1 = src2mat1;
+    m_img.m_img = &src2mat2ipl1;
 }
 
 void UchiyaMarkerDetector::process()
