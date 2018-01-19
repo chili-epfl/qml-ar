@@ -79,6 +79,7 @@ void QMLAR::update()
     // doing nothing if not initialized
     if(!is_initialized) return;
 
+    TimeLoggerLog("%s", "Requesting image");
     // requesting image from provider as pixmap
     QPixmap input = raw_provider->requestPixmap("raw", NULL, QSize());
 
@@ -86,12 +87,16 @@ void QMLAR::update()
     QImage source = input.toImage();
 
     // if no image is available, do nothing
-    if(source.width() * source.height() <= 0)
+    if(source.width() * source.height() <= 0 || image_width == 0)
         return;
 
+    TimeLoggerLog("%s", "Scaling image");
+
     // scaling it if necessary
-    if(image_width != 0)
+    if(image_width != source.width())
         source = source.scaledToWidth(image_width);
+
+    TimeLoggerLog("%s", "Running marker detection");
 
     // send input to marker detector
     tracking->setInput(source);
