@@ -13,7 +13,7 @@
 #include "mymatconverter.h"
 #include "timelogger.h"
 #include "config.h"
-#include "threadexecutor.h"
+#include "pipelinethread.h"
 #include <QGenericMatrix>
 #include <QJsonArray>
 
@@ -25,8 +25,7 @@ using std::vector;
 UchiyaMarkerDetector::UchiyaMarkerDetector(): MarkerDetector()
 {
     is_initialized = false;
-    blob_finder = new ThreadExecutor<QImage, QImage, UchiyaMarkerDetector>(this, &UchiyaMarkerDetector::detectBlobs);
-    blob_finder->start();
+    pipelineThread = new pipelineThread(this);
 }
 
 void UchiyaMarkerDetector::initialize(int h, int w)

@@ -6,7 +6,6 @@
 #include <QString>
 #include <QQuickImageProvider>
 #include "uchiyamarkerdetector.h"
-#include "imagebackend.h"
 #include "perspectivecamera.h"
 #include "portablebackendfactory.h"
 #include "markerbackend.h"
@@ -15,6 +14,7 @@
 #include "imumvpdecorator.h"
 #include "posepredictor.h"
 #include "trackingdecorator.h"
+#include "abstractcamerabackend.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -26,7 +26,6 @@ class QMLAR : public QObject
     Q_OBJECT
     Q_PROPERTY(int camera_id WRITE setCameraId READ getCameraId)
     Q_PROPERTY(QString image_filename WRITE setImageFilename READ getImageFilename)
-    Q_PROPERTY(QObject* qml_camera READ getQMLCamera WRITE setQMLCamera)
     Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
     Q_PROPERTY(double update_ms READ getUpdateMS WRITE setUpdateMS)
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
@@ -113,7 +112,7 @@ private:
     void initialize();
 
     // image provider (camera)
-    QQuickImageProvider* raw_provider;
+    AbstractCameraBackend* raw_provider;
 
     // marker detector
     UchiyaMarkerDetector* detector;

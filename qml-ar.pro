@@ -59,7 +59,9 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/ar/linearposepredictor.cpp \
     src/ar/trackingdecorator.cpp \
     src/markers/blobdetector.cpp \
-    src/utils/threadexecutor.cpp
+    src/utils/threadworker.cpp \
+    src/utils/pipelinethread.cpp \
+    src/imagebackend/abstractcamerabackend.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -93,7 +95,10 @@ HEADERS += \
     src/ar/linearposepredictor.h \
     src/ar/trackingdecorator.h \
     src/markers/blobdetector.h \
-    src/utils/threadexecutor.h
+    src/utils/threadworker.h \
+    src/utils/pipelineelement.h \
+    src/utils/pipelinethread.h \
+    src/imagebackend/abstractcamerabackend.h
 
 QML_SOURCES += \
     src/ARComponent.qml \

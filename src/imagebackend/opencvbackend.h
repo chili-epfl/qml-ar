@@ -1,8 +1,7 @@
 #ifndef CV_BACKEND_H
 #define CV_BACKEND_H
 
-#include <QQuickImageProvider>
-#include <QString>
+#include "abstractcamerabackend.h"
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 using namespace cv;
@@ -12,15 +11,13 @@ using namespace cv;
  * Uses cv::VideoCapture
  */
 
-class OpenCVCameraBackend : public QQuickImageProvider
+class OpenCVCameraBackend : public AbstractCameraBackend
 {
 public:
     // initialize with camera_id
     OpenCVCameraBackend(int cam_id = 0);
 
-    // get image from the camera
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
-    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+    void threadIteration(PipelineElement *input, PipelineElement *output);
 private:
     // open the camera
     void setupCV();
@@ -30,9 +27,6 @@ private:
 
     // camera opened?
     bool is_initialized = false;
-
-    // buffer for the image
-    QPixmap buf;
 
     // CV VideoCapture
     VideoCapture* stream = NULL;

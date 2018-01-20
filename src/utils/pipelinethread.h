@@ -4,6 +4,10 @@
 #include <QThread>
 #include <QSemaphore>
 #include <QMutex>
+#include <QDateTime>
+#include "pipelineelement.h"
+
+class ThreadWorker;
 
 /*
  * This class implements producer-consumer framework
@@ -14,8 +18,7 @@
 // input, output types
 // processor -- class which contains the method to process inputs
 
-template <typename Input, typename Output, typename Processor>
-class ThreadExecutor : public QThread
+class PipelineThread : public QThread
 {
 private:
     // maximal number of producers/consumers
@@ -31,27 +34,33 @@ private:
     volatile bool used[MAX_USERS];
 
     // array of values for outputs
-    volatile Output values[MAX_USERS];
+    volatile PipelineElement values[MAX_USERS];
 
     // single input for the processor
-    volatile Input* input;
+    volatile PipelineElement* input;
 
     // index in the values pointing to the latest one
     volatile int newest;
 
     // processor object
-    Processor* p;
+    PipelineThread* source;
 
-    // pointer to the function in the object
-    void (Processor::*process)(Input*, Output*);
+    // receiver object
+    PipelineThread* destination;
+
+    // worker object
+    ThreadWorker* worker;
 public:
     // initialize with processor and member function
-    ThreadExecutor(Processor* p, void (Processor::*process_)(Input*, Output*));
+    PipelineThread(ThreadWorker* worker);
 
-    ~ThreadExecutor() {}
+    ~PipelineThread() {}
+
+    // update from source
+    void update();
 
     // set input to this value
-    void setInput(Input* inp);
+    void setInput(PipelineElement* inp);
 
     // update outputs based on last input
     void produce();
@@ -61,16 +70,21 @@ public:
     int getOutputIndex();
 
     // returns output at index
-    Output* getOutput(int index);
+    PipelineElement* getOutput(int index);
 
     // allows to write to this index again
     void freeOutput(int index);
 
+    // set output manually
+    void addOutput(PipelineElement* out);
+
 public:
     // the process loop
     void run();
+    void setDestination(PipelineThread *destination);
+    void setSource(PipelineThread *source);
 };
 
-#include "threadexecutor.cpp"
+#include "pipelinethread.cpp"
 
 #endif // THREADEXECUTOR_H

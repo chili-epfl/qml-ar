@@ -1,7 +1,7 @@
 #ifndef PORTABLEBACKENDFACTORY_H
 #define PORTABLEBACKENDFACTORY_H
 
-#include <QQuickImageProvider>
+#include "abstractcamerabackend.h"
 
 /*
  * This class returns a camera backend
@@ -17,7 +17,7 @@ public:
 
     // -1 is an invalid value telling the method
     // to use the default one (platform-specific)
-    static QQuickImageProvider* getBackend(int camera_id = -1);
+    static AbstractCameraBackend* getBackend(int camera_id = -1);
 };
 
 #endif // PORTABLEBACKENDFACTORY_H

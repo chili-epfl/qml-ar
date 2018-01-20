@@ -1,16 +1,21 @@
 #include "opencvbackend.h"
 #include "QtOpenCV/cvmatandqimage.h"
+#include "pipelinethread.h"
+#include "threadworker.h"
 using namespace std;
 
 OpenCVCameraBackend::OpenCVCameraBackend(int cam_id)
-    : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
     // copy id to object property
     camera_id = cam_id;
+
+    is_initialized = false;
+
+    pipelineThread = new PipelineThread(this);
 }
 
-QImage OpenCVCameraBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
-{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
+void OpenCVCameraBackend::threadIteration(PipelineElement *input, PipelineElement *output)
+{ Q_UNUSED(input);
     if(!is_initialized)
         setupCV();
 
@@ -18,13 +23,12 @@ QImage OpenCVCameraBackend::requestImage(const QString &id, QSize *size, const Q
     Mat mat;
     stream->read(mat);
 
-    // converting the matrix to qimage and then to pixmap
-    return QtOcv::mat2Image(mat);
-}
+    // converting the matrix to qimage
+    output->image = QtOcv::mat2Image(mat);
 
-QPixmap OpenCVCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{
-    return QPixmap::fromImage(requestImage(id, size, requestedSize));
+    pipelineThread->usleep(1000);
+
+    pipelineThread->update();
 }
 
 void OpenCVCameraBackend::setupCV() {

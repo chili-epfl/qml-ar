@@ -37,16 +37,6 @@ void QMLAR::setImageFilename(QString filename)
     initialize();
 }
 
-void QMLAR::setQMLCamera(QObject *camera)
-{
-    Q_ASSERT(camera != NULL);
-    TimeLoggerLog("%s", "Setting camera from QML camera");
-    QCamera* camera_ = qvariant_cast<QCamera*>(camera->property("mediaObject"));
-    raw_provider = new QtCameraBackend(camera_);
-    this->qml_camera = camera;
-    initialize();
-}
-
 QMatrix4x4 QMLAR::getMVPMatrix()
 {
     if(!is_initialized) return QMatrix4x4();
@@ -176,4 +166,6 @@ void QMLAR::initialize()
 
     // now the object is initialized
     is_initialized = true;
+
+    inpu
 }

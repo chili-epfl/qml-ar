@@ -1,20 +1,12 @@
 #include "imagebackend.h"
+#include "pipelinethread.h"
 #include <QDebug>
 
-ImageBackend::ImageBackend(QString filename) : QQuickImageProvider(QQuickImageProvider::Pixmap)
+ImageBackend::ImageBackend(QString filename)
 {
     QImage img(filename);
     Q_ASSERT(!img.isNull());
-    buffer = img;
-}
-
-QImage ImageBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
-{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
-    return buffer;
-}
-
-
-QPixmap ImageBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
-    return QPixmap::fromImage(buffer);
+    last_element.image = img;
+    pipelineThread = new PipelineThread(this);
+    pipelineThread->setInput(&last_element);
 }

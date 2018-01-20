@@ -1,26 +1,21 @@
 #ifndef IMAGEBACKEND_H
 #define IMAGEBACKEND_H
 
-#include <QQuickImageProvider>
 #include <QFile>
-#include <QImage>
+#include "abstractcamerabackend.h"
 
 /*
  * This class implements a QQuickImageProvider
  * showing a constant image from a file
  */
 
-class ImageBackend : public QQuickImageProvider
+class ImageBackend : public AbstractCameraBackend
 {
 private:
-    QImage buffer;
+    PipelineElement last_element;
 public:
     // load image from the file
     ImageBackend(QString filename);
-
-    // get image
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
-    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 };
 
 #endif // IMAGEBACKEND_H

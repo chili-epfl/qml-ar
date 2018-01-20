@@ -2,42 +2,31 @@
 #define QTBACKEND_H
 
 #include <QElapsedTimer>
-#include <QQuickImageProvider>
 #include <QString>
 #include <QtMultimedia/QCamera>
 #include <QtMultimedia/QVideoProbe>
 #include "cameraframegrabber.h"
 #include "voidviewfinder.h"
-#include "threadexecutor.h"
+#include "threadworker.h"
+#include "pipelinethread.h"
+#include "abstractcamerabackend.h"
 
 /*
  *  QCamera backend for QML
  *  works on Linux and Android
  */
 
-class QtCameraBackend : public QObject, public QQuickImageProvider
+class QtCameraBackend : public AbstractCameraBackend
 { Q_OBJECT
 
 public:
-    ThreadExecutor<QVideoFrame, QImage, QtCameraBackend>* converter;
-
     // cam_id indicates the camera index in QCameraInfo::availableCameras()
-    QtCameraBackend(int cam_id = 0);
-
-    // initialize from an existing QCamera
-    QtCameraBackend(QCamera* cam);
-
-    // callback for main thread
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
-
-    virtual ~QtCameraBackend();
-
-    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+    QtCameraBackend(int cam_id);
 
     // convert frame -> image
-    void convert(QVideoFrame *frame, QImage *image);
+    void threadIteration(PipelineElement *frame, PipelineElement *image);
 protected:
-    QVideoFrame last_frame;
+    PipelineElement last_frame;
 
     // image buffer
     // is written in processQImage slot

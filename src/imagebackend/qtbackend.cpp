@@ -7,21 +7,13 @@
 #include "timelogger.h"
 #include "config.h"
 
-QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
+QtCameraBackend::QtCameraBackend(int cam_id)
 {
     // initializing camera
     TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
     camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
     need_viewfinder = 1;
-    converter = new ThreadExecutor<QVideoFrame, QImage, QtCameraBackend>(this, &QtCameraBackend::convert);
-    converter->start();
-    init();
-}
-
-QtCameraBackend::QtCameraBackend(QCamera *cam) : QQuickImageProvider(QQuickImageProvider::Pixmap)
-{
-    camera = cam;
-    need_viewfinder = 0;
+    pipelineThread = new PipelineThread(this);
     init();
 }
 
@@ -69,19 +61,9 @@ void QtCameraBackend::init()
     camera->start();
 }
 
-QImage QtCameraBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
-{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
-    return buf;
-}
-
-QPixmap QtCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
-    return QPixmap::fromImage(buf);
-}
-
-QtCameraBackend::~QtCameraBackend() {
-    delete camera;
-    delete frameGrabber;
+void QtCameraBackend::threadIteration(PipelineElement *frame, PipelineElement *image)
+{
+    image->image = QVideoFrameHelpers::VideoFrameToImage(frame->frame).copy();
 }
 
 void QtCameraBackend::processQImage(QImage img)
@@ -89,20 +71,10 @@ void QtCameraBackend::processQImage(QImage img)
     buf = img;
 }
 
-void QtCameraBackend::convert(QVideoFrame* frame, QImage* image)
-{
-    *image = QVideoFrameHelpers::VideoFrameToImage(*frame).copy();
-}
-
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     TimeLoggerProfile("%s", "Received image from camera");
-    last_frame = frame;
-    converter->setInput(&last_frame);
-    int i = converter->getOutputIndex();
-    if(i >= 0)
-    {
-        processQImage(*converter->getOutput(i));
-        converter->freeOutput(i);
-    }
+
+    last_frame.frame = frame;
+    pipelineThread->setInput(&last_frame);
 }

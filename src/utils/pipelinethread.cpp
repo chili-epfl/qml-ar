@@ -1,9 +1,11 @@
-#include "threadexecutor.h"
+#include "pipelinethread.h"
 #include "config.h"
+#include "threadworker.h"
 
-template <typename Input, typename Output, typename Processor>
-ThreadExecutor<Input, Output, Processor>::ThreadExecutor(Processor* p, void (Processor::*process_)(Input*, Output*))
+PipelineThread::PipelineThread(ThreadWorker* worker)
 {
+    Q_ASSERT(worker != NULL);
+
     // initially, nothing is used
     for(int i = 0; i < MAX_USERS; i++)
     {
@@ -17,23 +19,46 @@ ThreadExecutor<Input, Output, Processor>::ThreadExecutor(Processor* p, void (Pro
     newest = -1;
 
     // saving object and method ptrs
-    this->p = p;
-    this->process = process_;
+    source = NULL;
+    destination = NULL;
+    this->worker = worker;
 }
 
-template <typename Input, typename Output, typename Processor>
-void ThreadExecutor<Input, Output, Processor>::setInput(Input *inp)
+void PipelineThread::update()
 {
-    // simply assigning the pointer
-    input = inp;
-
     // telling thread to continue
     inputSem.release();
 }
 
-template <typename Input, typename Output, typename Processor>
-void ThreadExecutor<Input, Output, Processor>::produce()
+void PipelineThread::setSource(PipelineThread* source)
 {
+    this->source = source;
+}
+
+void PipelineThread::setDestination(PipelineThread* destination)
+{
+    this->destination = destination;
+}
+
+void PipelineThread::setInput(PipelineElement *inp)
+{
+    // simply assigning the pointer
+    input = inp;
+
+    source->inputSem.release();
+}
+
+void PipelineThread::produce()
+{
+    int source_index = -1;
+    if(source != NULL)
+    {
+        source_index = source->getOutputIndex();
+        if(source_index == -1)
+            return;
+        input = source->getOutput(source_index);
+    }
+
     // not processing null input
     if(input == NULL)
         return;
@@ -65,17 +90,24 @@ void ThreadExecutor<Input, Output, Processor>::produce()
     meta.unlock();
 
     // processing input and storing the result
-    (*p.*process)((Input*) input, (Output*) &(values[num_to_use]));
+    worker->threadIteration((PipelineElement*) input, (PipelineElement*) &(values[num_to_use]));
 
     // updating newest and freeing the item
     meta.lock();
     newest = num_to_use;
     used[num_to_use] -= 1;
     meta.unlock();
+
+    if(source != NULL)
+    {
+        source->freeOutput(source_index);
+    }
+
+    if(destination != NULL)
+        destination->update();
 }
 
-template <typename Input, typename Output, typename Processor>
-int ThreadExecutor<Input, Output, Processor>::getOutputIndex()
+int PipelineThread::getOutputIndex()
 {
     int num_to_read = -1;
 
@@ -95,15 +127,13 @@ int ThreadExecutor<Input, Output, Processor>::getOutputIndex()
     return num_to_read;
 }
 
-template <typename Input, typename Output, typename Processor>
-Output* ThreadExecutor<Input, Output, Processor>::getOutput(int index)
+PipelineElement* PipelineThread::getOutput(int index)
 {
     // returning the item in the array
-    return (Output*) &(values[index]);
+    return (PipelineElement*) &(values[index]);
 }
 
-template <typename Input, typename Output, typename Processor>
-void ThreadExecutor<Input, Output, Processor>::freeOutput(int index)
+void PipelineThread::freeOutput(int index)
 {
     if(index < 0)
         return;
@@ -113,8 +143,7 @@ void ThreadExecutor<Input, Output, Processor>::freeOutput(int index)
     meta.unlock();
 }
 
-template<typename Input, typename Output, typename Processor>
-void ThreadExecutor<Input, Output, Processor>::run()
+void PipelineThread::run()
 {
     TimeLoggerLog("%s", "Starting background thread");
     while(true)
