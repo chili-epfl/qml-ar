@@ -1,7 +1,7 @@
 #ifndef IMAGEBACKEND_H
 #define IMAGEBACKEND_H
 
-#include <QQuickImageProvider>
+#include "imageproviderasync.h"
 #include <QFile>
 #include <QImage>
 
@@ -10,7 +10,7 @@
  * showing a constant image from a file
  */
 
-class ImageBackend : public QQuickImageProvider
+class ImageBackend : public ImageProviderAsync
 {
 private:
     QImage buffer;
@@ -19,7 +19,6 @@ public:
     ImageBackend(QString filename);
 
     // get image
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 };
 
