@@ -4,6 +4,12 @@
 #include "opencv2/features2d.hpp"
 #include "config.h"
 
+BlobDetector::BlobDetector(BlobDetector& detector)
+{
+    this->parameters = detector.parameters;
+    this->max_blobs = detector.max_blobs;
+}
+
 BlobDetector::BlobDetector()
 {
     // set blob detector parameters
@@ -28,6 +34,31 @@ BlobDetector::BlobDetector()
 
     // no blobs now
     is_initialized = false;
+
+    max_blobs = 50;
+
+    connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
+}
+
+void BlobDetector::handleFinished()
+{
+    last_output = watcher.result();
+    emit imageAvailable(last_output);
+}
+
+QImage BlobDetector::getAndDraw(QImage img)
+{
+    detectBlobs(img);
+    return drawBlobs();
+}
+
+void BlobDetector::setInput(QImage img)
+{
+    if(!watcher.isRunning())
+    {
+        QFuture<QImage> future = QtConcurrent::run(*this, &BlobDetector::getAndDraw, img);
+        watcher.setFuture(future);
+    }
 }
 
 QImage BlobDetector::drawBlobs()
@@ -49,8 +80,10 @@ QImage BlobDetector::drawBlobs()
         cv::circle(result, kp.pt, 2, cv::Scalar(0, 0, 0), -1);
     }
 
+    last_output = QtOcv::mat2Image_shared(result);
+
     // return mat -> qt image
-    return QtOcv::mat2Image_shared(result);
+    return last_output;
 }
 
 std::vector<cv::KeyPoint> BlobDetector::getBlobs()
@@ -59,13 +92,7 @@ std::vector<cv::KeyPoint> BlobDetector::getBlobs()
     return keypoints;
 }
 
-void BlobDetector::detectBlobs(QImage *input, QImage *output, int max_blobs)
-{
-    detectBlobs(*input, max_blobs);
-    *output = drawBlobs();
-}
-
-void BlobDetector::detectBlobs(QImage source, int max_blobs)
+void BlobDetector::detectBlobs(QImage source)
 {
     TimeLoggerLog("%s", "Saving input");
     // setting last input image

@@ -1,8 +1,10 @@
 #ifndef BLOBDETECTOR_H
 #define BLOBDETECTOR_H
 
+#include <QtConcurrent>
 #include <QImage>
 #include "opencv2/features2d.hpp"
+#include "imageproviderasync.h"
 #include <vector>
 
 /*
@@ -11,7 +13,7 @@
  * at blob positions
  */
 
-class BlobDetector : public QObject
+class BlobDetector : public ImageProviderAsync
 { Q_OBJECT
 private:
     // size for blurring the image
@@ -32,21 +34,29 @@ private:
 
     // resulting matrix
     cv::Mat result;
+
+    QImage last_output;
+
+    QFutureWatcher<QImage> watcher;
+
+    int max_blobs;
 public:
     BlobDetector();
     virtual ~BlobDetector() {}
 
     // detect blobs on a qimage
-    void detectBlobs(QImage source, int max_blobs);
+    void detectBlobs(QImage source);
 
     // draws resulting blobs
     QImage drawBlobs();
 
     // return the blobs
     std::vector<cv::KeyPoint> getBlobs();
+    BlobDetector(BlobDetector &detector);
+    void handleFinished();
 
-    // this function detects and draws blobs
-    void detectBlobs(QImage* input, QImage* output, int max_blobs);
+public slots:
+    void setInput(QImage img);
 };
 
 #endif // BLOBDETECTOR_H
