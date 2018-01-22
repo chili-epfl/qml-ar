@@ -7,6 +7,7 @@
 #include <QString>
 #include <QImage>
 #include "markerstorage.h"
+#include <QtConcurrent>
 
 /*
  * This class stores a common interface for
@@ -22,7 +23,11 @@ class MarkerDetector: public QObject
 { Q_OBJECT
 signals:
     // children call it when a new matrix should be computed
-    void markersUpdated();
+    void markersUpdated(MarkerStorage);
+
+public slots:
+    // set input camera image
+    void setInput(QImage camera);
 
 protected:
     // marker positions
@@ -43,9 +48,6 @@ public:
     // get marker positions from a json file
     // see MarkerStorage for an example
     void loadMarkerPositions(QString filename);
-
-    // set input camera image
-    void setInput(QImage camera);
 
     // set background for preview drawing
     void setPreviewBackground(QImage preview);
@@ -68,6 +70,9 @@ public:
 
     // returns true if at least one marker was detected
     bool markersDetected();
+
+    QFutureWatcher<MarkerStorage> watcher;
+    MarkerDetector(MarkerDetector &detector);
 };
 
 #endif // MARKERDETECTOR_H

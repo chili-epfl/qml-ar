@@ -1,13 +1,32 @@
 #include "marker.h"
 #include "markerdetector.h"
 
+MarkerDetector::MarkerDetector(MarkerDetector &detector)
+{
+    this->input_buffer = detector.input_buffer;
+    this->markers = detector.markers;
+    this->output_buffer_background = detector.output_buffer_background;
+}
+
 MarkerDetector::MarkerDetector()
 {
+    connect(&watcher, SIGNAL(finished()), this, SLOT(handleResults()));
+}
+
+void MarkerDetector::handleResults()
+{
+    MarkerStorage result = watcher.result();
+    emit markersUpdated(corr);
 }
 
 void MarkerDetector::setInput(QImage camera)
 {
     input_buffer = camera;
+    if(!watcher.isRunning())
+    {
+        QFuture<MarkerStorage> future = QtConcurrent::run(*this, MarkerDetector::process, input_buffer);
+        watcher.setFuture(future);
+    }
 }
 
 void MarkerDetector::setPreviewBackground(QImage preview)
