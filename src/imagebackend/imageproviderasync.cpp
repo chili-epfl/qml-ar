@@ -1,6 +1,6 @@
 #include "imageproviderasync.h"
 
-ImageProviderAsync::ImageProviderAsync()
+ImageProviderAsync::ImageProviderAsync() : QQuickImageProvider(QQuickImageProvider::Image)
 {
 
 }

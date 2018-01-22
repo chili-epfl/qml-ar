@@ -2,7 +2,7 @@
 # Name of the application
 
 # Qt configuration for Quick applications
-QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender sensors
+QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender sensors concurrent
 CONFIG += qt plugin c++11 nostrip
 
 # turning on optimization
@@ -59,7 +59,10 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/ar/linearposepredictor.cpp \
     src/ar/trackingdecorator.cpp \
     src/markers/blobdetector.cpp \
-    src/imagebackend/qtcamera2qml.cpp
+    src/imagebackend/qtcamera2qml.cpp \
+    src/imagebackend/androidfilter.cpp \
+    src/imagebackend/imageproviderasync.cpp \
+    src/imagebackend/imagescaler.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -93,7 +96,10 @@ HEADERS += \
     src/ar/linearposepredictor.h \
     src/ar/trackingdecorator.h \
     src/markers/blobdetector.h \
-    src/imagebackend/qtcamera2qml.h
+    src/imagebackend/qtcamera2qml.h \
+    src/imagebackend/androidfilter.h \
+    src/imagebackend/imageproviderasync.h \
+    src/imagebackend/imagescaler.h
 
 QML_SOURCES += \
     src/ARComponent.qml \
