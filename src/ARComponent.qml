@@ -21,7 +21,7 @@ import Qt3D.Extras 2.0
  */
 
 Item {
-    id: arComponent
+    id: root
     visible: true
     anchors {
         horizontalCenter: parent.horizontalCenter
@@ -65,6 +65,12 @@ Item {
     // do show fps?
     property bool show_fps: true
 
+    // what to show on the component?
+    property int output_type: AR.OUTPUT_MARKERS
+
+    // resulting output url
+    property string output_url: ""
+
     // initial width and height
     width: 300
     height: 300
@@ -73,28 +79,40 @@ Item {
     // properties must be set beforehand
     Component.onCompleted: {
         // Set image width in pixels
-        AR.image_width = arComponent.image_width
-        console.log("Set image width to " + arComponent.image_width);
+        AR.image_width = root.image_width
+        console.log("Set image width to " + root.image_width);
 
         // Set update frequency
-        AR.update_ms = arComponent.update_ms
-        console.log("Set update_ms to " + arComponent.update_ms);
+        AR.update_ms = root.update_ms
+        console.log("Set update_ms to " + root.update_ms);
+
+        // set output url
+        switch(root.output_type) {
+        case AR.OUTPUT_CAMERA:
+            root.output_url = "image://ARMarkers/camera";
+            break;
+        case AR.OUTPUT_MARKERS:
+            root.output_url = "image://ARMarkers/markers";
+            break;
+        default:
+            console.error("Please set valid output type");
+        }
 
         // initialize
-        console.log("Set init type to " + arComponent.init_type);
-        switch(arComponent.init_type) {
+        console.log("Set init type to " + root.init_type);
+        switch(root.init_type) {
         case AR.INIT_CAMERA:
             // from camera id
-            console.log("Using camera id " + arComponent.camera_id);
-            AR.camera_id = arComponent.camera_id;
+            console.log("Using camera id " + root.camera_id);
+            AR.camera_id = root.camera_id;
 
             // starting obtaining images
             image_timer.running = true;
             break;
         case AR.INIT_IMAGE:
             // from image
-            console.log("Using image " + arComponent.image_filename)
-            AR.image_filename = arComponent.image_filename;
+            console.log("Using image " + root.image_filename)
+            AR.image_filename = root.image_filename;
 
             // starting obtaining images
             image_timer.running = true;
@@ -148,17 +166,17 @@ Item {
                 {
                     console.log("Image size is " + w + " x " + h)
                     if(force_width) {
-                        arComponent.height = 1. * arComponent.width * h / w;
+                        root.height = 1. * root.width * h / w;
                     }
                     else {
-                        arComponent.width = w;
-                        arComponent.height = h;
+                        root.width = w;
+                        root.height = h;
                     }
                     running = false;
                     image.visible = true;
 
                     // load scene on component loading
-                    arComponent.load_scene3d();
+                    root.load_scene3d();
                 }
             }
         }
@@ -167,7 +185,7 @@ Item {
         Timer {
             id: image_timer
             interval: 10; running: false; repeat: true
-            onTriggered: {image.cache=0; image.source=""; image.source="image://ARMarkers/raw";}
+            onTriggered: {image.cache=0; image.source=""; image.source=root.output_url;}
         }
 
         // image with camera image
@@ -191,7 +209,7 @@ Item {
             color: "red"
             font.pointSize: 20
 
-            visible: arComponent.show_fps
+            visible: root.show_fps
 
             // last ms of image update
             property real last_update: 0

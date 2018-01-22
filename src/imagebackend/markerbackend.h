@@ -23,9 +23,15 @@ public:
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
     virtual ~MarkerBackEnd();
+
+    // set raw camera
+    void setCameraBackend(QQuickImageProvider* provider);
 private:
     // marker detection pipeline
     MarkerDetector* detector;
+
+    // camera provider
+    QQuickImageProvider* camera;
 };
 
 #endif // UCHIYABACKEND_H

@@ -167,6 +167,7 @@ void QMLAR::initialize()
 
     // decorating tracking object to obtain images
     marker_backend.initialize(tracking);
+    marker_backend.setCameraBackend(raw_provider);
 
     // decorating MVP with IMU
     mvp_imu_decorated = new IMUMVPDecorator(mvp_provider, imu);

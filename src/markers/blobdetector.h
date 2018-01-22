@@ -17,7 +17,8 @@ private:
     // size for blurring the image
     cv::Size blur_size;
 
-    // cv blob detector
+    // cv blob detector with parameters
+    cv::SimpleBlobDetector::Params parameters;
     cv::Ptr<cv::SimpleBlobDetector> detector;
 
     // detected blobs

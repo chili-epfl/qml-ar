@@ -32,6 +32,7 @@ class QMLAR : public QObject
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
 
 public:
+    // enum for initialization type
     enum InitType
     {
         INIT_CAMERA,
@@ -39,6 +40,14 @@ public:
         INIT_QMLCAMERA
     };
     Q_ENUMS(InitType)
+
+    // enum for output type
+    enum OutputImage
+    {
+        OUTPUT_CAMERA,
+        OUTPUT_MARKERS
+    };
+    Q_ENUMS(OutputImage)
 
     // empty constructor
     // object must be initialized with

@@ -7,25 +7,24 @@
 BlobDetector::BlobDetector()
 {
     // set blob detector parameters
-    cv::SimpleBlobDetector::Params parameters;
-    parameters.minThreshold = 20;
-    parameters.maxThreshold = 230;
-    parameters.thresholdStep = 30;
+    parameters.minThreshold = 0;
+    parameters.maxThreshold = 255;
+    //parameters.thresholdStep = 30;
     parameters.filterByArea = true;
-    parameters.minArea = 1;
+    parameters.minArea = 10;
     parameters.filterByCircularity = true;
-    parameters.minCircularity = 0.8;
-    parameters.filterByConvexity = false;
-    parameters.minConvexity = 0.87;
-    parameters.filterByInertia = false;
-    parameters.minInertiaRatio = 0.01;
+    parameters.minCircularity = .5;
+    parameters.filterByConvexity = true;
+    parameters.minConvexity = .9;
+    parameters.filterByInertia = true;
+    parameters.minInertiaRatio = .5;
 
     // create blob detector
     detector = cv::SimpleBlobDetector::create(parameters);
 
     // init blur size parameter
-    blur_size.height = 2;
-    blur_size.width = 2;
+    blur_size.height = 4;
+    blur_size.width = 4;
 
     // no blobs now
     is_initialized = false;
@@ -75,11 +74,11 @@ void BlobDetector::detectBlobs(QImage source, int max_blobs)
     cv::Mat source_cv_gray;
     cv::cvtColor(source_cv, source_cv_gray, cv::COLOR_RGB2GRAY);
 
-    //TimeLoggerLog("%s", "Blurring");
+    TimeLoggerLog("%s", "Blurring");
 
     // blur the image
     cv::Mat blurred = source_cv_gray;
-    //cv::blur(source_cv_gray, blurred, blur_size);
+    cv::blur(source_cv_gray, blurred, blur_size);
 
     TimeLoggerLog("%s", "Detecting keypoints");
 

@@ -31,9 +31,12 @@ Window {
 
         // set to true to force width to this value
         force_width: true
-        width: 1200
+        width: 1500
 
         // do show fps?
         show_fps: true
+
+        // set output type
+        output_type: AR.OUTPUT_MARKERS;
     }
 }
