@@ -1,8 +1,7 @@
 #ifndef UCHIYABACKEND_H
 #define UCHIYABACKEND_H
 
-#include <QMatrix4x4>
-#include "qtbackend.h"
+#include "imageproviderasync.h"
 #include "markerdetector.h"
 
 /*
@@ -11,7 +10,7 @@
  * with a marker detector as a parameter
  */
 
-class MarkerBackEnd : public QObject, public QQuickImageProvider
+class MarkerBackEnd : public ImageProviderAsync
 { Q_OBJECT
 public:
     MarkerBackEnd();
@@ -20,7 +19,7 @@ public:
     void initialize(MarkerDetector* marker_detector);
 
     // obtain processed image
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
     virtual ~MarkerBackEnd();
 
