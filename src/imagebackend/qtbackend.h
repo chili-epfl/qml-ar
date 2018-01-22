@@ -2,19 +2,20 @@
 #define QTBACKEND_H
 
 #include <QElapsedTimer>
-#include <QQuickImageProvider>
 #include <QString>
+#include <QtConcurrent>
 #include <QtMultimedia/QCamera>
 #include <QtMultimedia/QVideoProbe>
 #include "cameraframegrabber.h"
 #include "voidviewfinder.h"
+#include "imageproviderasync.h"
 
 /*
  *  QCamera backend for QML
  *  works on Linux and Android
  */
 
-class QtCameraBackend : public QObject, public QQuickImageProvider
+class QtCameraBackend : public ImageProviderAsync
 { Q_OBJECT
 
 public:
@@ -22,11 +23,9 @@ public:
     QtCameraBackend(int cam_id = 0);
 
     // callback for main thread
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
     virtual ~QtCameraBackend();
-
-    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
     // convert frame -> image
     void convert(QVideoFrame *frame, QImage *image);
@@ -65,6 +64,9 @@ protected:
 
     // if set to true, will install a void viewfinder
     bool need_viewfinder;
+
+    // thread result
+    QFutureWatcher<QImage> watcher;
 
 public slots:
     void processQImage(QImage img);

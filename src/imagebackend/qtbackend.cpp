@@ -1,4 +1,5 @@
 #include "qtbackend.h"
+#include "qvideoframehelpers.h"
 #include <QtMultimedia/QCameraInfo>
 #include <QVideoProbe>
 #include <QException>
@@ -7,7 +8,7 @@
 #include "timelogger.h"
 #include "config.h"
 
-QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImageProvider::Pixmap)
+QtCameraBackend::QtCameraBackend(int cam_id) : ImageProviderAsync()
 {
     // initializing camera
     TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
@@ -20,7 +21,7 @@ QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImagePr
 void QtCameraBackend::init()
 {
     // initial buffer value is an empty image
-    buf = QImage();
+    buf = QVideoFrameHelpers::empty();
 
     // installing camera callback
     // has different implementations for Android/Linux
@@ -36,6 +37,9 @@ void QtCameraBackend::init()
     // installing callback
     connect(frameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(processQImage(QImage)));
 #endif
+
+    // waiting for async output
+    connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
 }
 
 void QtCameraBackend::start()
@@ -67,11 +71,6 @@ QImage QtCameraBackend::requestImage(const QString &id, QSize *size, const QSize
     return buf;
 }
 
-QPixmap QtCameraBackend::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
-{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
-    return QPixmap::fromImage(buf);
-}
-
 QtCameraBackend::~QtCameraBackend() {
     delete camera;
 }
@@ -81,20 +80,26 @@ void QtCameraBackend::processQImage(QImage img)
     buf = img;
 }
 
-void QtCameraBackend::convert(QVideoFrame* frame, QImage* image)
-{
-    *image = QVideoFrameHelpers::VideoFrameToImage(*frame).copy();
-}
-
 QCamera *QtCameraBackend::getCamera()
 {
     return camera;
 }
 
+void QtCameraBackend::handleFinished()
+{
+    processQImage(watcher.result());
+    TimeLoggerLog("Obtained new image");
+    emit imageAvailable(buf);
+}
+
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     TimeLoggerProfile("%s", "Received image from camera");
-    last_frame = frame;
-    convert(&last_frame, &buf);
-    frame_available = 1;
+
+    // not converting frame if thread is busy
+    if(!watcher.isRunning())
+    {
+        QFuture<QImage> future = QtConcurrent::run(&QVideoFrameHelpers::VideoFrameToImage, frame);
+        watcher.setFuture(future);
+    }
 }
