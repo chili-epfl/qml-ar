@@ -18,7 +18,7 @@ int PortableCameraBackendFactory::getDefaultCameraId()
     return(res);
 }
 
-QQuickImageProvider *PortableCameraBackendFactory::getBackend(int camera_id)
+ImageProviderAsync *PortableCameraBackendFactory::getBackend(int camera_id)
 {
     // checking for default value
     if(camera_id == -1)
@@ -27,7 +27,7 @@ QQuickImageProvider *PortableCameraBackendFactory::getBackend(int camera_id)
     // creating provider connected to the actual camera
     // using OpenCV for Linux
     // And Qt for Android
-    QQuickImageProvider* provider = NULL;
+    ImageProviderAsync* provider = NULL;
 #if defined Q_OS_ANDROID || defined QT_BACKEND_FORCE_ON_LINUX
     provider = new QtCameraBackend(camera_id);
     TimeLoggerLog("%s", "Using Android camera backend");

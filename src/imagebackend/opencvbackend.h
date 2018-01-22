@@ -1,26 +1,40 @@
 #ifndef CV_BACKEND_H
 #define CV_BACKEND_H
 
+#include <QtConcurrent>
 #include <QQuickImageProvider>
 #include <QString>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-using namespace cv;
+#include "imageproviderasync.h"
 
 /*
  * OpenCV camera backend for QML
  * Uses cv::VideoCapture
  */
 
-class OpenCVCameraBackend : public QQuickImageProvider
-{
+class OpenCVCameraBackend : public ImageProviderAsync
+{ Q_OBJECT
 public:
+    // empty constructor
+    OpenCVCameraBackend();
+
+    virtual ~OpenCVCameraBackend();
+
+    // copy constructor
+    OpenCVCameraBackend(const OpenCVCameraBackend &backend);
+
     // initialize with camera_id
     OpenCVCameraBackend(int cam_id = 0);
 
     // get image from the camera
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+
+    // request new image from camera
+    void request();
+
+    // obtain image from OpenCV
+    QImage getImage();
 private:
     // open the camera
     void setupCV();
@@ -32,10 +46,17 @@ private:
     bool is_initialized = false;
 
     // buffer for the image
-    QPixmap buf;
+    QImage buf;
 
     // CV VideoCapture
-    VideoCapture* stream = NULL;
+    cv::VideoCapture* stream = NULL;
+
+    // thread worker
+    QFutureWatcher<QImage> watcher;
+
+public slots:
+    // get result from future
+    void handleFinished();
 };
 
 #endif // CV_BACKEND_H
