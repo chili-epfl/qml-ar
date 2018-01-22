@@ -3,6 +3,11 @@
 #include "qml-imu/src/IMU.h"
 #include "qvector3d.h"
 #include "linearposepredictor.h"
+#include <typeinfo>
+#include <QVariant>
+#include <QtQml>
+#include <QCameraInfo>
+#include "qtcamera2qml.h"
 
 QMLAR::QMLAR()
 {
@@ -11,6 +16,7 @@ QMLAR::QMLAR()
     camera_id = -2;
     image_filename = "";
     raw_provider = NULL;
+    camera_wrapper = NULL;
 }
 
 int QMLAR::getCameraId()
@@ -25,6 +31,7 @@ void QMLAR::setCameraId(int camera_id)
     TimeLoggerLog("Using camera %d", camera_id);
     this->camera_id = camera_id;
     raw_provider = PortableCameraBackendFactory::getBackend(camera_id);
+    init_type = INIT_CAMERA;
     initialize();
 }
 
@@ -34,16 +41,7 @@ void QMLAR::setImageFilename(QString filename)
     TimeLoggerLog("Opening image %s", filename.toStdString().c_str());
     image_filename = filename;
     raw_provider = new ImageBackend(filename);
-    initialize();
-}
-
-void QMLAR::setQMLCamera(QObject *camera)
-{
-    Q_ASSERT(camera != NULL);
-    TimeLoggerLog("%s", "Setting camera from QML camera");
-    QCamera* camera_ = qvariant_cast<QCamera*>(camera->property("mediaObject"));
-    raw_provider = new QtCameraBackend(camera_);
-    this->qml_camera = camera;
+    init_type = INIT_IMAGE;
     initialize();
 }
 
@@ -74,8 +72,35 @@ QQuickImageProvider *QMLAR::getImageProvider()
     return &marker_backend;
 }
 
+QObject* QMLAR::getCamera()
+{
+    if(init_type == INIT_CAMERA && PortableCameraBackendFactory::cameraViewfinderAvailable())
+    {
+        QCamera* camera = dynamic_cast<QtCameraBackend*>(raw_provider)->getCamera();
+        if(camera_wrapper == NULL)
+            camera_wrapper = new QtCamera2QML(camera);
+        TimeLoggerLog("%s", "Returning camera object");
+        return camera_wrapper;
+    }
+    else
+    {
+        TimeLoggerLog("%s", "No camera in this mode");
+        return NULL;
+    }
+}
+
+void QMLAR::startCamera()
+{
+    if(init_type == INIT_CAMERA && PortableCameraBackendFactory::cameraViewfinderAvailable())
+    {
+        TimeLoggerLog("%s", "Starting camera");
+        dynamic_cast<QtCameraBackend*>(raw_provider)->start();
+    }
+}
+
 void QMLAR::update()
 {
+    return;
     // doing nothing if not initialized
     if(!is_initialized) return;
 
@@ -121,11 +146,6 @@ void QMLAR::setUpdateMS(double value)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
     timer.start(value);
-}
-
-QObject *QMLAR::getQMLCamera()
-{
-    return qml_camera;
 }
 
 QString QMLAR::getImageFilename()

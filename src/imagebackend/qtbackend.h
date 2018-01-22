@@ -21,9 +21,6 @@ public:
     // cam_id indicates the camera index in QCameraInfo::availableCameras()
     QtCameraBackend(int cam_id = 0);
 
-    // initialize from an existing QCamera
-    QtCameraBackend(QCamera* cam);
-
     // callback for main thread
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
@@ -33,7 +30,13 @@ public:
 
     // convert frame -> image
     void convert(QVideoFrame *frame, QImage *image);
+
+    QCamera* getCamera();
+    void start();
 protected:
+    // is frame available?
+    bool frame_available = 0;
+
     QVideoFrame last_frame;
 
     // image buffer

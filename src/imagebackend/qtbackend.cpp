@@ -13,13 +13,7 @@ QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImagePr
     TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
     camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
     need_viewfinder = 1;
-    init();
-}
-
-QtCameraBackend::QtCameraBackend(QCamera *cam) : QQuickImageProvider(QQuickImageProvider::Pixmap)
-{
-    camera = cam;
-    need_viewfinder = 0;
+    frame_available = 0;
     init();
 }
 
@@ -31,13 +25,28 @@ void QtCameraBackend::init()
     // installing camera callback
     // has different implementations for Android/Linux
     // since Android camera is poorly supported in Android NDK (Nov'17)
+
+    // android callback will be installed in start()
+
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID && !defined QT_BACKEND_FORCE_VIDEOPROBE
+    // using custom class as a viewfinder
+    frameGrabber = new CameraFrameGrabber();
+    camera->setViewfinder(frameGrabber);
+
+    // installing callback
+    connect(frameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(processQImage(QImage)));
+#endif
+}
+
+void QtCameraBackend::start()
+{
 #if defined Q_OS_ANDROID || defined QT_BACKEND_FORCE_VIDEOPROBE
     // setting up a viewfinder which does nothing
-    if(need_viewfinder)
-    {
-        viewfinder = new VoidViewFinder;
-        camera->setViewfinder(viewfinder);
-    }
+    //    if(need_viewfinder)
+    //    {
+    //        viewfinder = new VoidViewFinder;
+    //        camera->setViewfinder(viewfinder);
+    //    }
 
     // this object does image grabbing
     probe = new QVideoProbe(this);
@@ -47,16 +56,6 @@ void QtCameraBackend::init()
         connect(probe, SIGNAL(videoFrameProbed(const QVideoFrame &)), this, SLOT(processQVideoFrame(const QVideoFrame &)));
     else
         qFatal("Can't connect probe to camera");
-
-#elif defined Q_OS_LINUX
-    // using custom class as a viewfinder
-    frameGrabber = new CameraFrameGrabber();
-    camera->setViewfinder(frameGrabber);
-
-    // installing callback
-    connect(frameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(processQImage(QImage)));
-#else
-#error "OS must be either Android or Linux, camera is unsupported on other systems"
 #endif
 
     // starting camera thread
@@ -75,7 +74,6 @@ QPixmap QtCameraBackend::requestPixmap(const QString &id, QSize *size, const QSi
 
 QtCameraBackend::~QtCameraBackend() {
     delete camera;
-    delete frameGrabber;
 }
 
 void QtCameraBackend::processQImage(QImage img)
@@ -88,11 +86,15 @@ void QtCameraBackend::convert(QVideoFrame* frame, QImage* image)
     *image = QVideoFrameHelpers::VideoFrameToImage(*frame).copy();
 }
 
+QCamera *QtCameraBackend::getCamera()
+{
+    return camera;
+}
+
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     TimeLoggerProfile("%s", "Received image from camera");
     last_frame = frame;
-    QImage result;
-    convert(&last_frame, &result);
-    processQImage(result);
+    convert(&last_frame, &buf);
+    frame_available = 1;
 }

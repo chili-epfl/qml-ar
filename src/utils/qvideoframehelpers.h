@@ -18,6 +18,9 @@ private:
     // see yuv2rgb.h:68
     static const int MAX_SIZE = MAX_IMG_SIDE * MAX_IMG_SIDE * 3;
 
+    // buffer for nv21 -> rgb conversion
+    static uchar rgb[MAX_SIZE];
+
 public:
     // return a list with all possible formats
     static QList<QVideoFrame::PixelFormat> supportedPixelFormats();

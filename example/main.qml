@@ -1,6 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
 import AR 1.0
+import QtMultimedia 5.9
 
 Window {
     id: window

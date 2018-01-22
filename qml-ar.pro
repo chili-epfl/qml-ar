@@ -58,7 +58,8 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/ar/posepredictor.cpp \
     src/ar/linearposepredictor.cpp \
     src/ar/trackingdecorator.cpp \
-    src/markers/blobdetector.cpp
+    src/markers/blobdetector.cpp \
+    src/imagebackend/qtcamera2qml.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -91,11 +92,13 @@ HEADERS += \
     src/ar/posepredictor.h \
     src/ar/linearposepredictor.h \
     src/ar/trackingdecorator.h \
-    src/markers/blobdetector.h
+    src/markers/blobdetector.h \
+    src/imagebackend/qtcamera2qml.h
 
 QML_SOURCES += \
     src/ARComponent.qml \
-    src/AR3DScene.qml
+    src/AR3DScene.qml \
+    src/ARViewfinder.qml
 
 DISTFILES = $$QML_SOURCES
 

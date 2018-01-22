@@ -16,6 +16,7 @@
 #include "posepredictor.h"
 #include "trackingdecorator.h"
 #include "blobdetector.h"
+#include "qtcamera2qml.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -27,7 +28,7 @@ class QMLAR : public QObject
     Q_OBJECT
     Q_PROPERTY(int camera_id WRITE setCameraId READ getCameraId)
     Q_PROPERTY(QString image_filename WRITE setImageFilename READ getImageFilename)
-    Q_PROPERTY(QObject* qml_camera READ getQMLCamera WRITE setQMLCamera)
+    Q_PROPERTY(QObject* camera READ getCamera NOTIFY never)
     Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
     Q_PROPERTY(double update_ms READ getUpdateMS WRITE setUpdateMS)
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
@@ -37,8 +38,7 @@ public:
     enum InitType
     {
         INIT_CAMERA,
-        INIT_IMAGE,
-        INIT_QMLCAMERA
+        INIT_IMAGE
     };
     Q_ENUMS(InitType)
 
@@ -49,6 +49,9 @@ public:
         OUTPUT_MARKERS
     };
     Q_ENUMS(OutputImage)
+
+    // initialization type
+    int init_type;
 
     // empty constructor
     // object must be initialized with
@@ -62,9 +65,6 @@ public:
     // return filename of the image to be used as input
     QString getImageFilename();
 
-    // get qcamera object
-    QObject* getQMLCamera();
-
     // get frequency of updating
     double getUpdateMS();
 
@@ -77,15 +77,15 @@ public:
     // get processed image provider
     QQuickImageProvider* getImageProvider();
 
+    // return camera object
+    QObject *getCamera();
+
 public slots:
     // initialize from camera id (default value -1)
     void setCameraId(int camera_id = -1);
 
     // initialize from image
     void setImageFilename(QString filename);
-
-    // initialize from a QCamera object
-    void setQMLCamera(QObject *camera);
 
     // start timer
     void setUpdateMS(double value);
@@ -98,15 +98,15 @@ public slots:
     // updates MVP matrix
     void update();
 
+    // start camera if required
+    void startCamera();
+
 private:
     // width of the input camera image
     int image_width;
 
     // timer to update MVP matrix
     QTimer timer;
-
-    // QCamera object
-    QObject* qml_camera;
 
     // name of the image to be used
     // as raw input
@@ -162,12 +162,18 @@ private:
 
     // maximal number of dots to detect
     const int max_dots = 50;
+
+    // camera wrapper
+    QtCamera2QML* camera_wrapper;
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix();
 
     // notify about new image
     void imageUpdated();
+
+    // never called
+    void never();
 };
 
 #endif // CELLULOAR_H

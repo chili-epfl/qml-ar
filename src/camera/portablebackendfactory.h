@@ -18,6 +18,9 @@ public:
     // -1 is an invalid value telling the method
     // to use the default one (platform-specific)
     static QQuickImageProvider* getBackend(int camera_id = -1);
+
+    // true if a viewfinder output is available for the camera
+    static bool cameraViewfinderAvailable();
 };
 
 #endif // PORTABLEBACKENDFACTORY_H

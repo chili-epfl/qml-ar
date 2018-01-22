@@ -5,6 +5,8 @@
 #include "yuv2rgb/yuv2rgb.h"
 #include "config.h"
 
+uchar QVideoFrameHelpers::rgb[MAX_SIZE];
+
 QList<QVideoFrame::PixelFormat> QVideoFrameHelpers::supportedPixelFormats()
 {
     return QList<QVideoFrame::PixelFormat>()
@@ -44,9 +46,6 @@ QList<QVideoFrame::PixelFormat> QVideoFrameHelpers::supportedPixelFormats()
 
 QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 {
-    // buffer for nv21 -> rgb conversion
-    static uchar* rgb = new uchar[MAX_SIZE];
-
     Q_ASSERT(MAX_SIZE >= frameOriginal.width() * frameOriginal.height() * 3);
 
     // do nothing if no image found
@@ -62,9 +61,6 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // bits of the image as byte array
     uchar* img = (uchar*) frame.bits();
 
-    // set this to true to delete img at the end
-    bool need_delete_img = false;
-
     // format of the resulting QImage
     QImage::Format fmt = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
 
@@ -75,7 +71,6 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
         nv21_to_rgb(rgb, img, frame.width(), frame.height());
         img = rgb;
         fmt = QImage::Format_RGB888;
-        //need_delete_img = true;
     }
 
     // if format is still invalid, the application stops
@@ -91,11 +86,6 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 
     // unmapping source from memory
     frame.unmap();
-
-    // deleting img if it was created in this context
-    // e.g. if NV21 format was used
-    if(need_delete_img)
-        delete img;
 
     TimeLoggerProfile("%s", "Converted image to RGB");
 

@@ -6,6 +6,7 @@ import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
+import QtMultimedia 5.9 as QMM
 
 /*
  * This component implements the QML interface to the QMLAR library
@@ -71,6 +72,9 @@ Item {
     // resulting output url
     property string output_url: ""
 
+    // viewfinder object
+    property var viewfinder
+
     // initial width and height
     width: 300
     height: 300
@@ -105,26 +109,31 @@ Item {
             // from camera id
             console.log("Using camera id " + root.camera_id);
             AR.camera_id = root.camera_id;
-
-            // starting obtaining images
-            image_timer.running = true;
             break;
         case AR.INIT_IMAGE:
             // from image
             console.log("Using image " + root.image_filename)
             AR.image_filename = root.image_filename;
-
-            // starting obtaining images
-            image_timer.running = true;
-            break;
-        case AR.INIT_QMLCAMERA:
-            // Set camera object and install VideoProbe
-            //AR.qml_camera = camera
             break;
         default:
             // unknown value
             console.error("Please set valid init type");
+            return;
         }
+
+        // loading viewfinder if needed
+        if(AR.camera != null) {
+            console.log("Using viewfinder output");
+            load_viewfinder();
+        } else {
+            console.log("Using image output");
+        }
+
+        // starting obtaining images
+        image_timer.running = true;
+
+        // trying to resize the component
+        init_timer.running = true;
     }
 
     function load_scene3d() {
@@ -142,6 +151,22 @@ Item {
         console.log("End loading scene3d");
     }
 
+    // create viewfinder component
+    function load_viewfinder() {
+        console.log("Begin loading viewfinder");
+        var component = Qt.createComponent("ARViewfinder.qml");
+        if(component.status === Component.Error) {
+            console.debug("Error loading viewfinder: " + component.errorString());
+        }
+        else {
+            viewfinder = component.createObject(scene, {'source': AR.camera});
+
+            // starting camera
+            AR.startCamera();
+        }
+        console.log("End loading viewfinder");
+    }
+
     // scene which displays camera image and OpenGL scene
     Rectangle {
         id: scene
@@ -152,17 +177,18 @@ Item {
         QQC.BusyIndicator {
             id: loading
             running: true
-            visible: true
+            visible: false
             anchors.fill: parent
         }
 
         // Resize AR component on first valid image
         Timer {
-            interval: 100; running: true; repeat: true;
+            id: init_timer
+            interval: 100; running: false; repeat: true;
             onTriggered: {
                 var w = image.sourceSize.width;
                 var h = image.sourceSize.height;
-                if(w * h > 1)
+                if(w * h > 2)
                 {
                     console.log("Image size is " + w + " x " + h)
                     if(force_width) {
@@ -172,8 +198,24 @@ Item {
                         root.width = w;
                         root.height = h;
                     }
+
+                    // need to set up only once
                     running = false;
-                    image.visible = true;
+
+                    // show image if no viewfinder available
+                    if(AR.camera != null)
+                    {
+                        console.log("Hiding image");
+                        image.cache = 0;
+                        image.source = "";
+                        image_timer.running = false;
+                        image.visible = false;
+                    }
+                    else
+                    {
+                        console.log("Showing image");
+                        image.visible = true;
+                    }
 
                     // load scene on component loading
                     root.load_scene3d();
@@ -185,7 +227,7 @@ Item {
         Timer {
             id: image_timer
             interval: 10; running: false; repeat: true
-            onTriggered: {image.cache=0; image.source=""; image.source=root.output_url;}
+            onTriggered: {image.cache = 0; image.source = ""; image.source = root.output_url;}
         }
 
         // image with camera image

@@ -41,3 +41,12 @@ QQuickImageProvider *PortableCameraBackendFactory::getBackend(int camera_id)
 
     return provider;
 }
+
+bool PortableCameraBackendFactory::cameraViewfinderAvailable()
+{
+    #if defined Q_OS_ANDROID || defined QT_BACKEND_FORCE_ON_LINUX
+        return true;
+    #else
+        return false;
+    #endif
+}
