@@ -4,7 +4,7 @@
 #include <QtCore>
 #include <QtQml>
 #include <QString>
-#include <QQuickImageProvider>
+#include "imageproviderasync.h"
 #include "uchiyamarkerdetector.h"
 #include "imagebackend.h"
 #include "perspectivecamera.h"
@@ -17,6 +17,7 @@
 #include "trackingdecorator.h"
 #include "blobdetector.h"
 #include "qtcamera2qml.h"
+#include "imagescaler.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -30,7 +31,6 @@ class QMLAR : public QObject
     Q_PROPERTY(QString image_filename WRITE setImageFilename READ getImageFilename)
     Q_PROPERTY(QObject* camera READ getCamera NOTIFY never)
     Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
-    Q_PROPERTY(double update_ms READ getUpdateMS WRITE setUpdateMS)
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
 
 public:
@@ -65,9 +65,6 @@ public:
     // return filename of the image to be used as input
     QString getImageFilename();
 
-    // get frequency of updating
-    double getUpdateMS();
-
     // returns resulting MVP matrix
     QMatrix4x4 getMVPMatrix();
 
@@ -80,6 +77,7 @@ public:
     // return camera object
     QObject *getCamera();
 
+    void connectAll();
 public slots:
     // initialize from camera id (default value -1)
     void setCameraId(int camera_id = -1);
@@ -87,16 +85,10 @@ public slots:
     // initialize from image
     void setImageFilename(QString filename);
 
-    // start timer
-    void setUpdateMS(double value);
-
     // call to emit newMVPMatrix signal
     void newMVPMatrixSlot();
 
     void setImageWidth(int new_width);
-
-    // updates MVP matrix
-    void update();
 
     // start camera if required
     void startCamera();
@@ -104,9 +96,6 @@ public slots:
 private:
     // width of the input camera image
     int image_width;
-
-    // timer to update MVP matrix
-    QTimer timer;
 
     // name of the image to be used
     // as raw input
@@ -123,7 +112,7 @@ private:
     void initialize();
 
     // image provider (camera)
-    QQuickImageProvider* raw_provider;
+    ImageProviderAsync* raw_provider;
 
     // marker detector
     UchiyaMarkerDetector* detector;
@@ -155,7 +144,7 @@ private:
     TrackingDecorator* tracking;
 
     // blob detector
-    BlobDetector blob_detector;
+    BlobDetector* blob_detector;
 
     // drawn blobs
     QImage detected_blobs;
@@ -165,6 +154,9 @@ private:
 
     // camera wrapper
     QtCamera2QML* camera_wrapper;
+
+    // scaler for input images
+    ImageScaler* scaler;
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix();

@@ -1,4 +1,5 @@
 #include "qmlar.h"
+#include "qtbackend.h"
 #include "timelogger.h"
 #include "qml-imu/src/IMU.h"
 #include "qvector3d.h"
@@ -98,54 +99,14 @@ void QMLAR::startCamera()
     }
 }
 
-void QMLAR::update()
+void QMLAR::connectAll()
 {
-    return;
-    // doing nothing if not initialized
-    if(!is_initialized) return;
-
-    TimeLoggerLog("%s", "Requesting image");
-    // requesting image from provider as pixmap
-    QImage source = raw_provider->requestImage("raw", NULL, QSize());
-
-    // if no image is available, do nothing
-    if(source.width() * source.height() <= 0 || image_width == 0)
-        return;
-
-    TimeLoggerLog("%s", "Scaling image");
-
-    // scaling it if necessary
-    if(image_width != source.width())
-        source = source.scaledToWidth(image_width);
-
-    TimeLoggerLog("%s", "Detecting blobs");
-    blob_detector.detectBlobs(source, max_dots);
-
-    TimeLoggerLog("N blobs %d", blob_detector.getBlobs().size());
-
-    TimeLoggerLog("%s", "Drawing blobs");
-    detected_blobs = blob_detector.drawBlobs().copy();
-
-    TimeLoggerLog("%s", "Running marker detection");
-    // send input to marker detector
-    tracking->setInput(detected_blobs);
-
-    // detect markers
-    tracking->process();
-
-    // say that iteration is done
-    emit imageUpdated();
-}
-
-double QMLAR::getUpdateMS()
-{
-    return timer.interval();
-}
-
-void QMLAR::setUpdateMS(double value)
-{
-    connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer.start(value);
+    connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
+    connect(scaler, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
+    connect(blob_detector, SIGNAL(imageAvailable(QImage)), tracking, SLOT(setInput(QImage)));
+    connect(tracking, SIGNAL(markersUpdated(MarkerStorage), this, SIGNAL(imageUpdated()));
+    // notify QML on each update of MVP matrix from IMU
+    connect(mvp_imu_decorated, SIGNAL(newMVPMatrix()), this, SLOT(newMVPMatrixSlot()));
 }
 
 QString QMLAR::getImageFilename()
@@ -166,6 +127,9 @@ void QMLAR::initialize()
 #else
     QString ASSETS_PATH = ":/assets/";
 #endif
+
+    // creating blob detector
+    blob_detector = new BlobDetector();
 
     // loading marker positions
     detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
@@ -199,8 +163,10 @@ void QMLAR::initialize()
     // decorating MVP with IMU
     mvp_imu_decorated = new IMUMVPDecorator(mvp_provider, imu);
 
-    // notify QML on each update of MVP matrix from IMU
-    connect(mvp_imu_decorated, SIGNAL(newMVPMatrix()), this, SLOT(newMVPMatrixSlot()));
+    // creating image scaler
+    scaler = new ImageScaler(image_width);
+
+    connectAll();
 
     // now the object is initialized
     is_initialized = true;
