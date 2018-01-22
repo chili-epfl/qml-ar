@@ -7,5 +7,10 @@ VideoOutput {
     id: viewfinder
     visible: true
     anchors.fill: parent
+    filters: [androidFilter]
     //autoOrientation: true
+
+    AndroidFilter {
+        id: androidFilter
+    }
 }
