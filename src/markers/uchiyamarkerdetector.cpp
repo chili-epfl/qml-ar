@@ -208,7 +208,8 @@ void UchiyaMarkerDetector::prepareInput()
 {
     TimeLoggerLog("%s", "Copying input");
     // setting input to the blob detector
-    cv::Mat src2mat = QtOcv::image2Mat_shared(input_buffer);
+    static cv::Mat src2mat;
+    src2mat = QtOcv::image2Mat_shared(input_buffer);
     static IplImage src2mat2ipl;
     src2mat2ipl = (IplImage) src2mat;
     m_camimg.m_img = &src2mat2ipl;
@@ -223,6 +224,9 @@ void UchiyaMarkerDetector::prepareInput()
 
 void UchiyaMarkerDetector::process()
 {
+    // copying input to OpenCV matrices
+    prepareInput();
+
     TimeLoggerProfile("%s", "Start marker detection");
 
     // if the image is invalid, no need for marker detection
