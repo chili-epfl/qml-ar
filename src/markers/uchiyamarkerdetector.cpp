@@ -13,7 +13,6 @@
 #include "mymatconverter.h"
 #include "timelogger.h"
 #include "config.h"
-#include "threadexecutor.h"
 #include <QGenericMatrix>
 #include <QJsonArray>
 
@@ -25,8 +24,6 @@ using std::vector;
 UchiyaMarkerDetector::UchiyaMarkerDetector(): MarkerDetector()
 {
     is_initialized = false;
-    blob_finder = new ThreadExecutor<QImage, QImage, UchiyaMarkerDetector>(this, &UchiyaMarkerDetector::detectBlobs);
-    blob_finder->start();
 }
 
 void UchiyaMarkerDetector::initialize(int h, int w)
@@ -207,31 +204,11 @@ void UchiyaMarkerDetector::preparePreview()
     output_buffer = QtOcv::mat2Image_shared(dst2mat);
 }
 
-void UchiyaMarkerDetector::detectBlobs(QImage* input, QImage* output)
-{
-    TimeLoggerLog("%s", "Detecting blobs");
-    blob_detector.detectBlobs(*input, max_dots);
-
-    TimeLoggerLog("N blobs %d", blob_detector.getBlobs().size());
-
-    TimeLoggerLog("%s", "Drawing blobs");
-    *output = blob_detector.drawBlobs().copy();
-}
-
 void UchiyaMarkerDetector::prepareInput()
 {
     TimeLoggerLog("%s", "Copying input");
     // setting input to the blob detector
-    blob_finder->setInput(&input_buffer);
-
-    // obtaining last image from blob detector
-    int i = blob_finder->getOutputIndex();
-    if(i == -1)
-        return;
-    detected_blobs = blob_finder->getOutput(i)->copy();
-    blob_finder->freeOutput(i);
-
-    cv::Mat src2mat = QtOcv::image2Mat_shared(detected_blobs);
+    cv::Mat src2mat = QtOcv::image2Mat_shared(input_buffer);
     static IplImage src2mat2ipl;
     src2mat2ipl = (IplImage) src2mat;
     m_camimg.m_img = &src2mat2ipl;

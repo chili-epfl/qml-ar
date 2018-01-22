@@ -8,7 +8,6 @@
 #include <QtMultimedia/QVideoProbe>
 #include "cameraframegrabber.h"
 #include "voidviewfinder.h"
-#include "threadexecutor.h"
 
 /*
  *  QCamera backend for QML
@@ -19,8 +18,6 @@ class QtCameraBackend : public QObject, public QQuickImageProvider
 { Q_OBJECT
 
 public:
-    ThreadExecutor<QVideoFrame, QImage, QtCameraBackend>* converter;
-
     // cam_id indicates the camera index in QCameraInfo::availableCameras()
     QtCameraBackend(int cam_id = 0);
 

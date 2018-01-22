@@ -13,8 +13,6 @@ QtCameraBackend::QtCameraBackend(int cam_id) : QQuickImageProvider(QQuickImagePr
     TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
     camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
     need_viewfinder = 1;
-    converter = new ThreadExecutor<QVideoFrame, QImage, QtCameraBackend>(this, &QtCameraBackend::convert);
-    converter->start();
     init();
 }
 
@@ -55,10 +53,6 @@ void QtCameraBackend::init()
     frameGrabber = new CameraFrameGrabber();
     camera->setViewfinder(frameGrabber);
 
-    // this option is required for the Logitech webcam to work
-    camera->viewfinderSettings().setMaximumFrameRate(0);
-    camera->viewfinderSettings().setMinimumFrameRate(0);
-
     // installing callback
     connect(frameGrabber, SIGNAL(frameAvailable(QImage)), this, SLOT(processQImage(QImage)));
 #else
@@ -98,11 +92,7 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     TimeLoggerProfile("%s", "Received image from camera");
     last_frame = frame;
-    converter->setInput(&last_frame);
-    int i = converter->getOutputIndex();
-    if(i >= 0)
-    {
-        processQImage(*converter->getOutput(i));
-        converter->freeOutput(i);
-    }
+    QImage result;
+    convert(&last_frame, &result);
+    processQImage(result);
 }

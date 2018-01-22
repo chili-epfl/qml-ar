@@ -2,6 +2,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "QtOpenCV/cvmatandqimage.h"
+#include "config.h"
 
 using namespace cv;
 
@@ -33,6 +34,9 @@ QPixmap MarkerBackEnd::requestPixmap(const QString &id, QSize *size, const QSize
             return QPixmap(1, 1);
         else return camera->requestPixmap("raw", size, requestedSize);
     }
+
+    TimeLoggerLog("%s", "Invalid request id");
+    return QPixmap(1, 1);
 }
 
 MarkerBackEnd::~MarkerBackEnd()

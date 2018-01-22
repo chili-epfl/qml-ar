@@ -93,10 +93,17 @@ void QMLAR::update()
     if(image_width != source.width())
         source = source.scaledToWidth(image_width);
 
-    TimeLoggerLog("%s", "Running marker detection");
+    TimeLoggerLog("%s", "Detecting blobs");
+    blob_detector.detectBlobs(source, max_dots);
 
+    TimeLoggerLog("N blobs %d", blob_detector.getBlobs().size());
+
+    TimeLoggerLog("%s", "Drawing blobs");
+    detected_blobs = blob_detector.drawBlobs().copy();
+
+    TimeLoggerLog("%s", "Running marker detection");
     // send input to marker detector
-    tracking->setInput(source);
+    tracking->setInput(detected_blobs);
 
     // detect markers
     tracking->process();

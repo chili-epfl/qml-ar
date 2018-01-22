@@ -44,6 +44,9 @@ public:
 
     // return the blobs
     std::vector<cv::KeyPoint> getBlobs();
+
+    // this function detects and draws blobs
+    void detectBlobs(QImage* input, QImage* output, int max_blobs);
 };
 
 #endif // BLOBDETECTOR_H

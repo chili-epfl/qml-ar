@@ -29,6 +29,7 @@ TrackingDecorator::TrackingDecorator(MarkerDetector* detector, PosePredictor *pr
 
 void TrackingDecorator::process()
 {
+    TimeLoggerLog("%s", "Obtaining marker location");
     // obtaining predicted pose
     Pose predictedPose = predictor->predictPose();
 
@@ -85,6 +86,7 @@ void TrackingDecorator::process()
     // setting input image as background for preview
     detector->setPreviewBackground(input_buffer);
 
+    TimeLoggerLog("%s", "Trying image region");
     // removing all but the selected rectangle
     if(y_min < y_max && x_min < x_max && detector->markersDetected())
     {
@@ -114,6 +116,7 @@ void TrackingDecorator::process()
     // need to process the whole image
     if(need_full_image)
     {
+        TimeLoggerLog("%s", "Running full image");
         // setting input to underlying detector
         detector->setInput(input_buffer);
 
@@ -124,6 +127,7 @@ void TrackingDecorator::process()
     // obtaining preview
     output_buffer = detector->getPreview();
 
+    TimeLoggerLog("%s", "Painting bounding box");
     // painting markers bounding box
     if(y_min < y_max && x_min < x_max)
     {

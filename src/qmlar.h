@@ -15,6 +15,7 @@
 #include "imumvpdecorator.h"
 #include "posepredictor.h"
 #include "trackingdecorator.h"
+#include "blobdetector.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -152,6 +153,15 @@ private:
 
     // Tracking object
     TrackingDecorator* tracking;
+
+    // blob detector
+    BlobDetector blob_detector;
+
+    // drawn blobs
+    QImage detected_blobs;
+
+    // maximal number of dots to detect
+    const int max_dots = 50;
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix();

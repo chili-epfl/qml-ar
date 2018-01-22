@@ -59,6 +59,12 @@ std::vector<cv::KeyPoint> BlobDetector::getBlobs()
     return keypoints;
 }
 
+void BlobDetector::detectBlobs(QImage *input, QImage *output, int max_blobs)
+{
+    detectBlobs(*input, max_blobs);
+    *output = drawBlobs();
+}
+
 void BlobDetector::detectBlobs(QImage source, int max_blobs)
 {
     TimeLoggerLog("%s", "Saving input");

@@ -5,8 +5,6 @@
 #include <uchiya/llah.h>
 #include "uchiya/mylib/mymat.h"
 #include "markerdetector.h"
-#include "blobdetector.h"
-#include "threadexecutor.h"
 #include <QMatrix4x4>
 
 /*
@@ -54,9 +52,6 @@ private:
     MyImage m_img;
     LLAH m_llah;
 
-    // this QImage->QImage threaded executor detects blobs
-    ThreadExecutor<QImage, QImage, UchiyaMarkerDetector>* blob_finder;
-
     // one side of a square marker in pixels
     const double marker_size_pixels = 600.0f;
 
@@ -79,23 +74,12 @@ private:
     // convert preview image to QImage
     void preparePreview();
 
-    // blob detector
-    BlobDetector blob_detector;
-
-    // drawn blobs
-    QImage detected_blobs;
-
-    // maximal number of dots to detect
-    const int max_dots = 50;
 public:
     // initialize given height and width of the image
     UchiyaMarkerDetector();
 
     // do marker processing
     void process();
-
-    // this function detects blobs in another thread
-    void detectBlobs(QImage* input, QImage* output);
 };
 
 #endif // UCHIYAMARKERDETECTOR_H
