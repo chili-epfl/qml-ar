@@ -91,3 +91,10 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 
     return(image);
 }
+
+QImage QVideoFrameHelpers::empty()
+{
+    QImage image(1, 1, QImage::Format_RGB888);
+    image.fill(QColor(0, 0, 0));
+    return image;
+}

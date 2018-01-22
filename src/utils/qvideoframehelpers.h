@@ -28,6 +28,9 @@ public:
     // convert QVideoFrame to QImage
     // supports Android nv21 format (uses yuv2rgb library)
     static QImage VideoFrameToImage(const QVideoFrame &frameOriginal);
+
+    // returns empty black image
+    static QImage empty();
 };
 
 #endif // QVIDEOFRAMEHELPERS_H
