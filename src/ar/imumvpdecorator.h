@@ -3,6 +3,8 @@
 
 #include "mvpprovider.h"
 #include "qml-imu/src/IMU.h"
+#include <QElapsedTimer>
+#include <QTimer>
 
 /*
  * This class decorates an MVP provider
@@ -16,6 +18,9 @@
 class IMUMVPDecorator : public MVPProvider
 { Q_OBJECT
 private:
+    // reset if no markers detected within this interval
+    int reset_ms;
+
     // underlying IMU object
     IMU* imu;
 
@@ -34,6 +39,12 @@ private:
 
     // returns current IMU pose
     QMatrix4x4 getCurrentPose();
+
+    // timer for resetting pose after a certain amount of seconds
+    QElapsedTimer since_update;
+
+    // timer for checking if waited for too long
+    QTimer timer;
 public:
     // decorate MVP provider and an IMU
     IMUMVPDecorator(IMU* imu);
@@ -46,6 +57,10 @@ public slots:
     // with high-frequency IMU updates
     void setP(QMatrix4x4 p);
     void setMV(QMatrix4x4 mv);
+
+    // check if no MVP matrix obtained
+    // for too long
+    void checkIfTooLong();
 };
 
 #endif // IMUMVPDECORATOR_H

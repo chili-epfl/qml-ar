@@ -13,6 +13,13 @@ IMUMVPDecorator::IMUMVPDecorator(IMU *imu)
 
     // update resulting MVP on new pose from IMU
     connect(imu, SIGNAL(stateChanged()), this, SLOT(updatePose()));
+
+    // reset after 3 seconds
+    reset_ms = 3000;
+
+    // checking if waited for too long
+    connect(&timer, SIGNAL(timeout()), this, SLOT(checkIfTooLong()));
+    timer.start(500);
 }
 
 void IMUMVPDecorator::setP(QMatrix4x4 p)
@@ -33,6 +40,9 @@ void IMUMVPDecorator::setMV(QMatrix4x4 mv)
         return;
     }
 
+    // remembering current time
+    since_update.start();
+
     // MV from provider
     last_mv = mv;
 
@@ -47,6 +57,17 @@ void IMUMVPDecorator::setMV(QMatrix4x4 mv)
 
     // calculating resulting MVP
     updatePose();
+}
+
+void IMUMVPDecorator::checkIfTooLong()
+{
+    // resetting MVP matrix (waited too long)
+    if(since_update.elapsed() > reset_ms)
+    {
+        TimeLoggerLog("%s", "Waited for too long w/o markers");
+        reset();
+        return;
+    }
 }
 
 QMatrix4x4 IMUMVPDecorator::getCurrentPose()
