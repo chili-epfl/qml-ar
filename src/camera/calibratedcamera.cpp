@@ -59,7 +59,7 @@ int CalibratedCamera::height()
     return image_h;
 }
 
-void CalibratedCamera::setResolution(QImage &image)
+void CalibratedCamera::setResolution(QImage image)
 {
     setResolution(image.width(), image.height());
 }

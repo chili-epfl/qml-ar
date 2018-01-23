@@ -72,7 +72,7 @@ private:
     void prepareInput(QImage source);
 
     // convert preview image to QImage
-    void preparePreview();
+    QImage preparePreview();
 
 public:
     // initialize given height and width of the image

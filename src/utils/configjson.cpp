@@ -8,7 +8,7 @@ ConfigJSON::ConfigJSON()
 
 }
 
-ConfigJSON::ConfigJSON(ConfigJSON &that) : QObject()
+ConfigJSON::ConfigJSON(ConfigJSON &that)
 {
     Q_UNUSED(that)
 }

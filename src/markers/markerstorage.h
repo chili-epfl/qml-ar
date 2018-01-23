@@ -42,7 +42,7 @@
  *
  */
 
-class MarkerStorage : public ConfigJSON
+class MarkerStorage : public QObject, public ConfigJSON
 { Q_OBJECT
 private:
     // stored markers

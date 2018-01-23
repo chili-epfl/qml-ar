@@ -21,10 +21,12 @@
  */
 
 class PerspectiveCamera : public CalibratedCamera
-{
+{ Q_OBJECT
 public:
     // initialize with a calibrated camera
     PerspectiveCamera(CalibratedCamera* camera);
+
+    virtual ~PerspectiveCamera() {}
 
     // returns perspective projection matrix obtained from camera matrix
     // near in far in world units

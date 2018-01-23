@@ -28,10 +28,12 @@
 
 
 class CalibratedCameraFileStorage : public CalibratedCamera, public ConfigJSON
-{
+{ Q_OBJECT
 public:
     // empty constructor (need to populate later)
     CalibratedCameraFileStorage() : CalibratedCamera() {}
+
+    virtual ~CalibratedCameraFileStorage() {}
 
     // read config on creation
     CalibratedCameraFileStorage(QString filename);

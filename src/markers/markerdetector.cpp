@@ -2,7 +2,7 @@
 #include "markerdetector.h"
 #include "config.h"
 
-MarkerDetector* MarkerDetector::MarkerDetector(const MarkerDetector &detector) : QObject()
+MarkerDetector::MarkerDetector(const MarkerDetector &detector) : QObject()
 {
     this->input_buffer = detector.input_buffer;
     this->markers = detector.markers;

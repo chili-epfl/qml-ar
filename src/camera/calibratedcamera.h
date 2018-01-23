@@ -28,6 +28,8 @@ public:
     // initialize matrix with eye matrix
     CalibratedCamera();
 
+    virtual ~CalibratedCamera() {}
+
     // initialize with another CalibratedCamera
     // (CalibratedCameraFileStorage, for example)
     CalibratedCamera(CalibratedCamera* that);
@@ -44,7 +46,7 @@ public:
     int height();
 
 public slots:
-    void setResolution(QImage& image);
+    void setResolution(QImage image);
 
 private:
     // get camera matrix A

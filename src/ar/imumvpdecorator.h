@@ -39,11 +39,13 @@ public:
     IMUMVPDecorator(IMU* imu);
 
 public slots:
-    // set MV matrix from provider
-    void updateLastMV();
-
     // update resulting MVP matrix
     void updatePose();
+
+    // set matrices which to decorate
+    // with high-frequency IMU updates
+    void setP(QMatrix4x4 p);
+    void setMV(QMatrix4x4 mv);
 };
 
 #endif // IMUMVPDECORATOR_H

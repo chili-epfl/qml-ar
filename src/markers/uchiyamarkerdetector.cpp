@@ -227,7 +227,7 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     if(source.height() * source.width() <= 0)
     {
         TimeLoggerLog("%s", "Empty image");
-        return;
+        return qMakePair(markers, source);
     }
 
     // initialize marker detection pipeline

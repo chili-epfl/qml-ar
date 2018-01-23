@@ -14,8 +14,8 @@
  * or with other available methods
  */
 
-class ConfigJSON : public QObject
-{ Q_OBJECT
+class ConfigJSON
+{
 public:
     ConfigJSON();
 

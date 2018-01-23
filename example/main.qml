@@ -27,9 +27,6 @@ Window {
         // add chest coordinates as parameters
         arSceneParameters: {'chest_x': 210, 'chest_y': 297}
 
-        // update frequency
-        update_ms: 10
-
         // set to true to force width to this value
         force_width: true
         width: 1500
@@ -38,6 +35,6 @@ Window {
         show_fps: true
 
         // set output type
-        output_type: AR.OUTPUT_CAMERA
+        output_type: AR.OUTPUT_MARKERS
     }
 }

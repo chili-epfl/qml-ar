@@ -35,9 +35,11 @@ public slots:
     // called on new result from thread
     void handleFinished();
 
-private:
+protected:
     // marker positions
     MarkerStorage markers;
+
+private:
 
     // input image
     QImage input_buffer;
@@ -50,6 +52,7 @@ private:
 
     // for background detection
     QFutureWatcher<QPair<MarkerStorage, QImage>> watcher;
+
 public:
     MarkerDetector();
     MarkerDetector(const MarkerDetector &detector);

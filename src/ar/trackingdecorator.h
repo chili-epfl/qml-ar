@@ -27,10 +27,8 @@ private:
     // blacken an image where there are no markers
     QImage blacken(QImage source);
 public:
-    TrackingDecorator();
+    TrackingDecorator(PosePredictor* p);
 
-    // process input
-    void setInput(QImage img);
 signals:
     // blackened image
     void imageAvailable(QImage);
@@ -42,6 +40,9 @@ public slots:
 
     // called on new available markers
     void onNewMarkers(MarkerStorage storage);
+
+    // process input
+    void setInput(QImage img);
 };
 
 #endif // TRACKINGMVPDECORATOR_H

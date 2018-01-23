@@ -22,7 +22,7 @@ bool MarkerStorage::markersDetected()
     return getCorrespondences().size() > 0;
 }
 
-MarkerStorage::MarkerStorage(const MarkerStorage &that) : ConfigJSON()
+MarkerStorage::MarkerStorage(const MarkerStorage &that) : QObject(), ConfigJSON()
 {
     this->markers = that.markers;
 }

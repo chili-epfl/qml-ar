@@ -40,7 +40,7 @@ QMatrix4x4 MarkerMVPProvider::getP(double n, double f)
     // scale to get to clip coordinates
     // y axis points UP in OpenGL -> -1
     QMatrix4x4 scaler;
-    scaler.scale(2. / camera->width(), -2. / camera.height(), 1);
+    scaler.scale(2. / camera->width(), -2. / camera->height(), 1);
 
     // resulting projection
     return translate_m1 * scaler * project;

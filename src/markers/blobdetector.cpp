@@ -14,9 +14,9 @@ BlobDetector::BlobDetector(const BlobDetector& detector) : BlobDetector()
 BlobDetector::BlobDetector()
 {
     // set blob detector parameters
-    parameters.minThreshold = 0;
-    parameters.maxThreshold = 255;
-    //parameters.thresholdStep = 30;
+    parameters.minThreshold = 100;
+    parameters.maxThreshold = 200;
+    parameters.thresholdStep = 20;
     parameters.filterByArea = true;
     parameters.minArea = 10;
     parameters.filterByCircularity = true;

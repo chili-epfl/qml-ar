@@ -19,7 +19,7 @@ TrackingDecorator::TrackingDecorator(PosePredictor *predictor) : ImageProviderAs
 
 void TrackingDecorator::setInput(QImage img)
 {
-    QImage blackened = backen(img);
+    QImage blackened = blacken(img);
     emit imageAvailable(blackened);
 }
 
@@ -36,6 +36,7 @@ void TrackingDecorator::onNewMVMatrix(QMatrix4x4 mv)
 void TrackingDecorator::onNewMarkers(MarkerStorage storage)
 {
     use_region = storage.markersDetected();
+    this->storage = storage;
 }
 
 QImage TrackingDecorator::blacken(QImage source)
@@ -98,7 +99,7 @@ QImage TrackingDecorator::blacken(QImage source)
 
     TimeLoggerLog("%s", "Blackening input");
     // removing all but the selected rectangle
-    if(y_min < y_max && x_min < x_max && use_region)
+    if(y_min < y_max && x_min < x_max)
     {
         // copying the image
         QPainter p(&augmented_input);
