@@ -196,42 +196,35 @@ void UchiyaMarkerDetector::drawPreview() {
     extractMarkers();
 }
 
-void UchiyaMarkerDetector::preparePreview()
+QImage UchiyaMarkerDetector::preparePreview()
 {
     IplImage dst = *(IplImage*) m_img;
     // second parameter disables data copying
     cv::Mat dst2mat = cv::cvarrToMat(&dst, false);
-    output_buffer = QtOcv::mat2Image_shared(dst2mat);
+    return QtOcv::mat2Image(dst2mat);
 }
 
-void UchiyaMarkerDetector::prepareInput()
+void UchiyaMarkerDetector::prepareInput(QImage source)
 {
     TimeLoggerLog("%s", "Copying input");
-    // setting input to the blob detector
     static cv::Mat src2mat;
-    src2mat = QtOcv::image2Mat_shared(input_buffer);
+    src2mat = QtOcv::image2Mat_shared(source);
     static IplImage src2mat2ipl;
     src2mat2ipl = (IplImage) src2mat;
     m_camimg.m_img = &src2mat2ipl;
-
-    TimeLoggerLog("%s", "Copying output");
-    static cv::Mat src2mat1;
-    src2mat1 = QtOcv::image2Mat(output_buffer_background, CV_8UC3, QtOcv::MCO_RGB);
-    static IplImage src2mat2ipl1;
-    src2mat2ipl1 = src2mat1;
-    m_img.m_img = &src2mat2ipl1;
+    m_img.Clone(m_camimg);
 }
 
-void UchiyaMarkerDetector::process()
+QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
 {
     // copying input to OpenCV matrices
-    prepareInput();
+    prepareInput(source);
 
     TimeLoggerProfile("%s", "Start marker detection");
 
     // if the image is invalid, no need for marker detection
     // this happens at the start of the application
-    if(input_buffer.height() * input_buffer.width() <= 0)
+    if(source.height() * source.width() <= 0)
     {
         TimeLoggerLog("%s", "Empty image");
         return;
@@ -242,16 +235,8 @@ void UchiyaMarkerDetector::process()
     if(!is_initialized)
     {
         TimeLoggerLog("%s", "Initializing UchiyaMarkerDetector");
-        initialize(input_buffer.height(), input_buffer.width());
+        initialize(source.height(), source.width());
     }
-
-    Q_ASSERT(is_initialized);
-
-    TimeLoggerLog("%s", "Preparing input");
-    // putting camera src image to Uchiya pipeline
-    prepareInput();
-
-    TimeLoggerLog("%s", "Extracting blobs");
 
     // passing detected blobs to the library
     m_llah.Extract(m_camimg);
@@ -279,10 +264,9 @@ void UchiyaMarkerDetector::process()
     drawPreview();
 
     // obtaining Uchiya image dst and returning it
-    preparePreview();
+    QImage preview = preparePreview();
 
     TimeLoggerProfile("%s", "End marker detection");
 
-    // tell the parent to recompute projection matrix
-    emit markersUpdated();
+    return qMakePair(markers, preview);
 }

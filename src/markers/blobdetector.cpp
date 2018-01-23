@@ -2,9 +2,10 @@
 #include "opencv2/imgproc.hpp"
 #include "QtOpenCV/cvmatandqimage.h"
 #include "opencv2/features2d.hpp"
+#include "qvideoframehelpers.h"
 #include "config.h"
 
-BlobDetector::BlobDetector(BlobDetector& detector)
+BlobDetector::BlobDetector(const BlobDetector& detector) : BlobDetector()
 {
     this->parameters = detector.parameters;
     this->max_blobs = detector.max_blobs;
@@ -37,6 +38,10 @@ BlobDetector::BlobDetector()
 
     max_blobs = 50;
 
+    buffer_is_nonempty = false;
+
+    this->last_output = QVideoFrameHelpers::empty();
+
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
 }
 
@@ -44,6 +49,12 @@ void BlobDetector::handleFinished()
 {
     last_output = watcher.result();
     emit imageAvailable(last_output);
+
+    if(buffer_is_nonempty)
+    {
+        buffer_is_nonempty = false;
+        setInput(input_buffer);
+    }
 }
 
 QImage BlobDetector::getAndDraw(QImage img)
@@ -52,13 +63,21 @@ QImage BlobDetector::getAndDraw(QImage img)
     return drawBlobs();
 }
 
+QImage BlobDetector::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
+{ Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
+    return last_output;
+}
+
 void BlobDetector::setInput(QImage img)
 {
+    input_buffer = img;
+
     if(!watcher.isRunning())
     {
         QFuture<QImage> future = QtConcurrent::run(*this, &BlobDetector::getAndDraw, img);
         watcher.setFuture(future);
     }
+    else buffer_is_nonempty = true;
 }
 
 QImage BlobDetector::drawBlobs()
@@ -80,7 +99,7 @@ QImage BlobDetector::drawBlobs()
         cv::circle(result, kp.pt, 2, cv::Scalar(0, 0, 0), -1);
     }
 
-    last_output = QtOcv::mat2Image_shared(result);
+    last_output = QtOcv::mat2Image(result);
 
     // return mat -> qt image
     return last_output;

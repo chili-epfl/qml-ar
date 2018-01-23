@@ -32,6 +32,7 @@ public:
 
     QCamera* getCamera();
     void start();
+    void handleFinished();
 protected:
     // is frame available?
     bool frame_available = 0;

@@ -5,48 +5,33 @@ void MVPProvider::setMVPMatrix(QMatrix4x4 mat)
 {
     if(mat != mvp_matrix)
     {
-        if(!is_valid)
+        if(!isValid(mvp_matrix))
             TimeLoggerLog("%s", "Matrix available");
 
         mvp_matrix = mat;
-        is_valid = 1;
-        emit newMVPMatrix();
+        emit newPMatrix(p_matrix);
+        emit newMVMatrix(mv_matrix);
+        emit newMVPMatrix(mvp_matrix);
     }
 }
 
 MVPProvider::MVPProvider()
 {
-    is_valid = 1;
     reset();
-}
-
-QMatrix4x4 MVPProvider::getMVPMatrix()
-{
-    return mvp_matrix;
-}
-
-QMatrix4x4 MVPProvider::getMVMatrix()
-{
-    return mv_matrix;
-}
-
-QMatrix4x4 MVPProvider::getPMatrix()
-{
-    return p_matrix;
-}
-
-bool MVPProvider::isValid()
-{
-    return is_valid;
 }
 
 void MVPProvider::reset()
 {
-    if(is_valid)
+    if(isValid(mvp_matrix))
     {
         TimeLoggerLog("%s", "Hiding objects");
-        mvp_matrix.fill(0);
-        is_valid = 0;
-        emit newMVPMatrix();
+        mvp_matrix.setToIdentity();
+        mv_matrix.setToIdentity();
+        emit newMVPMatrix(mvp_matrix);
     }
+}
+
+bool MVPProvider::isValid(QMatrix4x4 mat)
+{
+    return !mat.isIdentity();
 }

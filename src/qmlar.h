@@ -85,15 +85,18 @@ public slots:
     // initialize from image
     void setImageFilename(QString filename);
 
-    // call to emit newMVPMatrix signal
-    void newMVPMatrixSlot();
-
     void setImageWidth(int new_width);
 
     // start camera if required
     void startCamera();
 
+    // set MVP for QML
+    void setMVP(QMatrix4x4 mvp);
+
 private:
+    // mvp buffer for QML
+    QMatrix4x4 mvp_buffer;
+
     // width of the input camera image
     int image_width;
 
@@ -129,7 +132,7 @@ private:
 
     // ModelViewProjection matrix
     // provider
-    MVPProvider* mvp_provider;
+    MarkerMVPProvider* mvp_provider;
 
     // Inertial Measurement object
     IMU* imu;

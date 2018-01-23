@@ -26,34 +26,24 @@ protected:
     // last ModelViewProjection matrix
     QMatrix4x4 p_matrix;
 
-    // valid = corresponds to a real mvp matrix
-    bool is_valid;
-
     // set MVP matrix internally
     void setMVPMatrix(QMatrix4x4 mat);
 public:
     // initialize with eye matrix
     MVPProvider();
 
-    // return MVP matrix
-    QMatrix4x4 getMVPMatrix();
-
-    // return MVP matrix
-    QMatrix4x4 getMVMatrix();
-
-    // return MVP matrix
-    QMatrix4x4 getPMatrix();
-
-    // returns true if result is actual matrix
-    bool isValid();
-
     // invalidate matrix
     // makes all objects invisible
     void reset();
+
+    // true if result is an actual matrix
+    static bool isValid(QMatrix4x4 mat);
 signals:
 
     // emitted when new MVP matrix is available
-    void newMVPMatrix();
+    void newMVPMatrix(QMatrix4x4);
+    void newPMatrix(QMatrix4x4);
+    void newMVMatrix(QMatrix4x4);
 };
 
 #endif // MVPPROVIDER_H

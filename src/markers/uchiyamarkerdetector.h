@@ -69,7 +69,7 @@ private:
     void initialize(int h, int w);
 
     // convert input to IplImage for UchiyaMarkers
-    void prepareInput();
+    void prepareInput(QImage source);
 
     // convert preview image to QImage
     void preparePreview();
@@ -78,8 +78,10 @@ public:
     // initialize given height and width of the image
     UchiyaMarkerDetector();
 
+    UchiyaMarkerDetector* clone();
+
     // do marker processing
-    void process();
+    virtual QPair<MarkerStorage, QImage> process(QImage source);
 };
 
 #endif // UCHIYAMARKERDETECTOR_H

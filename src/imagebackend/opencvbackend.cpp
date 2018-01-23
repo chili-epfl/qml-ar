@@ -33,7 +33,6 @@ void OpenCVCameraBackend::request()
     // request new image
     QFuture<QImage> future = QtConcurrent::run(*this, &OpenCVCameraBackend::getImage);
     watcher.setFuture(future);
-    TimeLoggerLog("%s", "Obtained CV image");
 }
 
 void OpenCVCameraBackend::handleFinished()
@@ -42,6 +41,8 @@ void OpenCVCameraBackend::handleFinished()
     buf = watcher.result();
 
     emit imageAvailable(buf);
+
+    TimeLoggerLog("%s", "Obtained CV image");
 
     // request new frame if this call was successful
     if(buf.width() * buf.height() > 1)

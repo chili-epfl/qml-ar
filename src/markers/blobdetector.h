@@ -35,14 +35,22 @@ private:
     // resulting matrix
     cv::Mat result;
 
+    // buffered output
     QImage last_output;
 
+    // for handling background job
     QFutureWatcher<QImage> watcher;
 
+    // maximum numbers of dots to detect
     int max_blobs;
+
+    // input buffer for background task
+    bool buffer_is_nonempty;
+    QImage input_buffer;
 public:
     BlobDetector();
     virtual ~BlobDetector() {}
+    BlobDetector(const BlobDetector &detector);
 
     // detect blobs on a qimage
     void detectBlobs(QImage source);
@@ -52,11 +60,18 @@ public:
 
     // return the blobs
     std::vector<cv::KeyPoint> getBlobs();
-    BlobDetector(BlobDetector &detector);
-    void handleFinished();
 
+    // returns drawn blobs
+    QImage getAndDraw(QImage img);
+
+    // returns last image
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 public slots:
+    // set input to background thread
     void setInput(QImage img);
+
+    // get result from background thread
+    void handleFinished();
 };
 
 #endif // BLOBDETECTOR_H

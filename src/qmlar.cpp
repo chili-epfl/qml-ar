@@ -48,19 +48,12 @@ void QMLAR::setImageFilename(QString filename)
 
 QMatrix4x4 QMLAR::getMVPMatrix()
 {
-    if(!is_initialized) return QMatrix4x4();
-    return mvp_imu_decorated->getMVPMatrix();
+    return mvp_buffer;
 }
 
 int QMLAR::getImageWidth()
 {
     return image_width;
-}
-
-void QMLAR::newMVPMatrixSlot()
-{
-    Q_ASSERT(is_initialized);
-    emit newMVPMatrix();
 }
 
 void QMLAR::setImageWidth(int new_width)
@@ -99,14 +92,50 @@ void QMLAR::startCamera()
     }
 }
 
+void QMLAR::setMVP(QMatrix4x4 mvp)
+{
+    mvp_buffer = mvp;
+    emit newMVPMatrix();
+}
+
 void QMLAR::connectAll()
 {
+    // camera -> scaler
     connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
-    connect(scaler, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
-    connect(blob_detector, SIGNAL(imageAvailable(QImage)), tracking, SLOT(setInput(QImage)));
-    connect(tracking, SIGNAL(markersUpdated(MarkerStorage), this, SIGNAL(imageUpdated()));
-    // notify QML on each update of MVP matrix from IMU
-    connect(mvp_imu_decorated, SIGNAL(newMVPMatrix()), this, SLOT(newMVPMatrixSlot()));
+
+    // camera -> QML
+    connect(raw_provider, SIGNAL(imageAvailable(QImage)), &marker_backend, SLOT(setCamera(QImage)));
+
+    // scaler -> tracking
+    connect(scaler, SIGNAL(imageAvailable(QImage)), tracking, SLOT(setInput(QImage)));
+
+    // scaler -> resolution
+    connect(scaler, SIGNAL(imageAvailable(QImage)), perspective_camera, SLOT(setResolution(QImage&)));
+
+    // tracking -> blobs
+    connect(tracking, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
+
+    // blobs -> markers
+    connect(blob_detector, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
+
+    // markers -> QML
+    connect(detector, SIGNAL(previewUpdated(QImage)), &marker_backend, SLOT(setPreview(QImage)));
+
+    // markers -> MVP
+    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), mvp_provider, SLOT(recompute(MarkerStorage)));
+
+    // markers -> tracking
+    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), tracking, SLOT(onNewMarkers(MarkerStorage)));
+
+    // mvp -> tracking
+    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), tracking, SLOT(onNewMVMatrix(QMatrix4x4)));
+    connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), tracking, SLOT(onNewPMatrix(QMatrix4x4)));
+
+    // mvp -> imu
+    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(updateLastMV(QMatrix4x4)));
+
+    // output MVP matrix from IMU decorator
+    connect(mvp_imu_decorated, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVP(QMatrix4x4)));
 }
 
 QString QMLAR::getImageFilename()
@@ -148,7 +177,7 @@ void QMLAR::initialize()
     perspective_camera = new PerspectiveCamera(camera_matrix);
 
     // creating a ModelView provider
-    mvp_provider = new MarkerMVPProvider(detector, perspective_camera);
+    mvp_provider = new MarkerMVPProvider(perspective_camera);
 
     // creating linear pose predictor
     predictor = new LinearPosePredictor();
@@ -156,12 +185,8 @@ void QMLAR::initialize()
     // adding tracking to marker detector
     tracking = new TrackingDecorator(detector, predictor, mvp_provider);
 
-    // decorating tracking object to obtain images
-    marker_backend.initialize(tracking);
-    marker_backend.setCameraBackend(raw_provider);
-
     // decorating MVP with IMU
-    mvp_imu_decorated = new IMUMVPDecorator(mvp_provider, imu);
+    mvp_imu_decorated = new IMUMVPDecorator(imu);
 
     // creating image scaler
     scaler = new ImageScaler(image_width);

@@ -6,43 +6,57 @@
 #include <QColor>
 #include <QRect>
 
-TrackingDecorator::TrackingDecorator(MarkerDetector* detector, PosePredictor *predictor, MVPProvider *provider) :
-    MarkerDetector()
+TrackingDecorator::TrackingDecorator(PosePredictor *predictor) : ImageProviderAsync()
 {
     Q_ASSERT(predictor != NULL);
-    Q_ASSERT(provider != NULL);
-    Q_ASSERT(detector != NULL);
 
     // saving arguments
     this->predictor = predictor;
-    this->provider = provider;
-    this->detector = detector;
 
-    // updating current pose on new MVP
-    connect(provider, SIGNAL(newMVPMatrix()), this, SLOT(onNewMVPMatrix()));
-
-    // patch the connection from detector to provider via this object
-    disconnect(detector, SIGNAL(markersUpdated()), (MarkerMVPProvider*) provider, SLOT(recompute()));
-    // markersUpdated will be called in this->process()
-    connect(this, SIGNAL(markersUpdated()), (MarkerMVPProvider*) provider, SLOT(recompute()));
+    // initially, not using the region
+    use_region = false;
 }
 
-void TrackingDecorator::process()
+void TrackingDecorator::setInput(QImage img)
 {
+    QImage blackened = backen(img);
+    emit imageAvailable(blackened);
+}
+
+void TrackingDecorator::onNewPMatrix(QMatrix4x4 p)
+{
+    P = p;
+}
+
+void TrackingDecorator::onNewMVMatrix(QMatrix4x4 mv)
+{
+    predictor->setCurrentPose(mv);
+}
+
+void TrackingDecorator::onNewMarkers(MarkerStorage storage)
+{
+    use_region = storage.markersDetected();
+}
+
+QImage TrackingDecorator::blacken(QImage source)
+{
+    if(!use_region)
+        return source;
+
     TimeLoggerLog("%s", "Obtaining marker location");
     // obtaining predicted pose
     Pose predictedPose = predictor->predictPose();
 
     // obtaining new MVP
-    QMatrix4x4 MVP = provider->getPMatrix() * predictedPose.get4Matrix();
+    QMatrix4x4 MVP = P * predictedPose.get4Matrix();
 
     // obtaining image correspondences
-    WorldImageCorrespondences correspondences = detector->getCorrespondences();
+    WorldImageCorrespondences correspondences = storage.getCorrespondences();
 
     // corners of the bounding box of markers
-    double x_min = input_buffer.width();
+    double x_min = source.width();
     double x_max = 0;
-    double y_min = input_buffer.height();
+    double y_min = source.height();
     double y_max = 0;
 
     // mapping correspondences to image coordinate system
@@ -63,8 +77,8 @@ void TrackingDecorator::process()
         predicted_image_point.setY(predicted_image_point.y() / predicted_image_point.z());
 
         // OpenGL NDC -> image coordinates
-        predicted_image_point.setX((predicted_image_point.x() + 1) / 2. * input_buffer.width());
-        predicted_image_point.setY((1 - predicted_image_point.y()) / 2. * input_buffer.height());
+        predicted_image_point.setX((predicted_image_point.x() + 1) / 2. * source.width());
+        predicted_image_point.setY((1 - predicted_image_point.y()) / 2. * source.height());
 
         if(predicted_image_point.x() > x_max)
             x_max = predicted_image_point.x();
@@ -80,89 +94,24 @@ void TrackingDecorator::process()
                       image_point.x(), image_point.y())
     }
 
-    // set to true to detect markers on the full image
-    bool need_full_image = true;
+    QImage augmented_input = source;
 
-    // setting input image as background for preview
-    detector->setPreviewBackground(input_buffer);
-
-    TimeLoggerLog("%s", "Trying image region");
+    TimeLoggerLog("%s", "Blackening input");
     // removing all but the selected rectangle
-    if(y_min < y_max && x_min < x_max && detector->markersDetected())
+    if(y_min < y_max && x_min < x_max && use_region)
     {
         // copying the image
-        QImage augmented_input = input_buffer.copy();
         QPainter p(&augmented_input);
 
         // painting all but marker region with black
         p.setBrush(QBrush(Qt::black));
-        p.drawRect(0, 0, input_buffer.width(), y_min);
-        p.drawRect(0, y_max, input_buffer.width(), input_buffer.height() - y_max);
+        p.drawRect(0, 0, source.width(), y_min);
+        p.drawRect(0, y_max, source.width(), source.height() - y_max);
         p.drawRect(0, y_min, x_min, y_max - y_min);
-        p.drawRect(x_max, y_min, input_buffer.width() - x_max, y_max - y_min);
+        p.drawRect(x_max, y_min, source.width() - x_max, y_max - y_min);
 
-        // setting input to underlying detector
-        detector->setInput(augmented_input);
-
-        // processing augmented image
-        detector->process();
-
-        // if augmented image contains markers, no need
-        // to run detection on the full image now
-        if(detector->markersDetected())
-            need_full_image = false;
+        return augmented_input;
     }
 
-    // need to process the whole image
-    if(need_full_image)
-    {
-        TimeLoggerLog("%s", "Running full image");
-        // setting input to underlying detector
-        detector->setInput(input_buffer);
-
-        // doing marker detection
-        detector->process();
-    }
-
-    // obtaining preview
-    output_buffer = detector->getPreview();
-
-    TimeLoggerLog("%s", "Painting bounding box");
-    // painting markers bounding box
-    if(y_min < y_max && x_min < x_max)
-    {
-        QPainter p(&output_buffer);
-        p.setPen(QPen(Qt::black));
-        p.drawRect(x_min, y_min, x_max - x_min, y_max - y_min);
-    }
-
-    // telling listeners that we are done
-    emit markersUpdated();
-}
-
-QImage TrackingDecorator::getLastInput()
-{
-    return input_buffer;
-}
-
-QMap<int, Marker>::iterator TrackingDecorator::begin()
-{
-    return detector->begin();
-}
-
-QMap<int, Marker>::iterator TrackingDecorator::end()
-{
-    return detector->end();
-}
-
-WorldImageCorrespondences TrackingDecorator::getCorrespondences()
-{
-    return detector->getCorrespondences();
-}
-
-void TrackingDecorator::onNewMVPMatrix()
-{
-    // adding this pose to the predictor
-    Pose current_pose = Pose(provider->getMVMatrix());
-    predictor->setCurrentPose(current_pose);
+    return source;
 }

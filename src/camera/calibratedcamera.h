@@ -2,14 +2,16 @@
 #define CALIBRATEDCAMERA_H
 
 #include <QMatrix3x3>
+#include <QObject>
+#include <QImage>
 
 /*
  * This class stores information
  * about a calibrated camera
  */
 
-class CalibratedCamera
-{
+class CalibratedCamera : public QObject
+{ Q_OBJECT
 protected:
     // camera matrix
     // see https://docs.opencv.org/3.0-beta/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
@@ -36,6 +38,13 @@ public:
 
     // set the current image resolution in pixels
     void setResolution(int new_width, int new_height);
+
+    // get image size
+    int width();
+    int height();
+
+public slots:
+    void setResolution(QImage& image);
 
 private:
     // get camera matrix A

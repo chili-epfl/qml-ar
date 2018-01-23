@@ -1,4 +1,4 @@
-#ifndef MARKERDETECTOR_H
+﻿#ifndef MARKERDETECTOR_H
 #define MARKERDETECTOR_H
 
 #include <QObject>
@@ -25,11 +25,17 @@ signals:
     // children call it when a new matrix should be computed
     void markersUpdated(MarkerStorage);
 
+    // called on new preview image
+    void previewUpdated(QImage);
+
 public slots:
     // set input camera image
     void setInput(QImage camera);
 
-protected:
+    // called on new result from thread
+    void handleFinished();
+
+private:
     // marker positions
     MarkerStorage markers;
 
@@ -39,40 +45,22 @@ protected:
     // preview image
     QImage output_buffer;
 
-    // preview image background
-    QImage output_buffer_background;
+    // true if input contains unprocessed data
+    int buffer_is_nonempty;
+
+    // for background detection
+    QFutureWatcher<QPair<MarkerStorage, QImage>> watcher;
 public:
     MarkerDetector();
+    MarkerDetector(const MarkerDetector &detector);
     virtual ~MarkerDetector() {}
 
     // get marker positions from a json file
     // see MarkerStorage for an example
     void loadMarkerPositions(QString filename);
 
-    // set background for preview drawing
-    void setPreviewBackground(QImage preview);
-
     // do marker detection
-    virtual void process() {}
-
-    // obtain preview image after detection
-    QImage getPreview();
-
-    // obtain last input buffer
-    QImage getLastInput();
-
-    // iterators for going through the map
-    QMap<int, Marker>::iterator begin();
-    QMap<int, Marker>::iterator end();
-
-    // return all of the 3D-2D correspondences
-    WorldImageCorrespondences getCorrespondences();
-
-    // returns true if at least one marker was detected
-    bool markersDetected();
-
-    QFutureWatcher<MarkerStorage> watcher;
-    MarkerDetector(MarkerDetector &detector);
+    virtual QPair<MarkerStorage, QImage> process(QImage img) = 0;
 };
 
 #endif // MARKERDETECTOR_H

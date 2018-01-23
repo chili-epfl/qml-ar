@@ -15,22 +15,17 @@ class MarkerBackEnd : public ImageProviderAsync
 public:
     MarkerBackEnd();
 
-    // decorate camera and marker detector object
-    void initialize(MarkerDetector* marker_detector);
-
     // obtain processed image
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
     virtual ~MarkerBackEnd();
-
-    // set raw camera
-    void setCameraBackend(QQuickImageProvider* provider);
+public slots:
+    // slots to set data
+    void setCamera(QImage cam);
+    void setPreview(QImage prev);
 private:
-    // marker detection pipeline
-    MarkerDetector* detector;
-
-    // camera provider
-    QQuickImageProvider* camera;
+    // buffers for preview image and raw image
+    QImage preview, camera;
 };
 
 #endif // UCHIYABACKEND_H

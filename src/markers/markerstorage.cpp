@@ -11,6 +11,22 @@ MarkerStorage::MarkerStorage()
     markers.clear();
 }
 
+MarkerStorage& MarkerStorage::operator =(const MarkerStorage& that)
+{
+    this->markers = that.markers;
+    return *this;
+}
+
+bool MarkerStorage::markersDetected()
+{
+    return getCorrespondences().size() > 0;
+}
+
+MarkerStorage::MarkerStorage(const MarkerStorage &that) : ConfigJSON()
+{
+    this->markers = that.markers;
+}
+
 void MarkerStorage::readConfig(QJsonObject config)
 {
     QJsonArray markers_obj = config.value("markers").toArray();
@@ -71,4 +87,16 @@ QMap<int, Marker>::iterator MarkerStorage::begin()
 QMap<int, Marker>::iterator MarkerStorage::end()
 {
     return markers.end();
+}
+
+WorldImageCorrespondences MarkerStorage::getCorrespondences()
+{
+    WorldImageCorrespondences result;
+    result.clear();
+
+    QMap<int, Marker>::iterator it;
+    for(it = markers.begin(); it != markers.end(); it++)
+        result.join((*it).getCorrespondences());
+
+    return result;
 }

@@ -43,13 +43,17 @@
  */
 
 class MarkerStorage : public ConfigJSON
-{
+{ Q_OBJECT
 private:
     // stored markers
     QMap<int, Marker> markers;
 public:
     // initialize empty storage
     MarkerStorage();
+
+    MarkerStorage(const MarkerStorage& that);
+
+    virtual ~MarkerStorage() {}
 
     // fill with data from object
     void readConfig(QJsonObject data);
@@ -68,6 +72,13 @@ public:
     // obtain a pointer to Marker
     // returns NULL on missing key
     Marker *getPointer(int marker_id);
+
+    // return all of the 3D-2D correspondences
+    WorldImageCorrespondences getCorrespondences();
+    MarkerStorage &operator =(const MarkerStorage &that);
+
+    // returns true if at least one marker was detected
+    bool markersDetected();
 };
 
 #endif // MARKERSTORAGE_H

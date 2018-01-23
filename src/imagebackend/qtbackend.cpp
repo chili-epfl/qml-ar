@@ -72,7 +72,6 @@ QImage QtCameraBackend::requestImage(const QString &id, QSize *size, const QSize
 }
 
 QtCameraBackend::~QtCameraBackend() {
-    delete camera;
 }
 
 void QtCameraBackend::processQImage(QImage img)
@@ -88,7 +87,7 @@ QCamera *QtCameraBackend::getCamera()
 void QtCameraBackend::handleFinished()
 {
     processQImage(watcher.result());
-    TimeLoggerLog("Obtained new image");
+    TimeLoggerLog("%s", "Obtained new image");
     emit imageAvailable(buf);
 }
 

@@ -9,32 +9,16 @@ using namespace cv;
 
 MarkerBackEnd::MarkerBackEnd() : ImageProviderAsync()
 {
-    detector = NULL;
-    camera = NULL;
-}
-
-void MarkerBackEnd::initialize(MarkerDetector* marker_detector)
-{
-    detector = marker_detector;
+    preview = QVideoFrameHelpers::empty();
+    camera = QVideoFrameHelpers::empty();
 }
 
 QImage MarkerBackEnd::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
-{
+{ Q_UNUSED(size) Q_UNUSED(requestedSize)
     if(id == "markers")
-    {
-        if(detector == NULL)
-            return QVideoFrameHelpers::empty();
-        QImage result = detector->getPreview();
-        if(result.width() * result.height() == 0)
-            return QVideoFrameHelpers::empty();
-        return result;
-    }
+        return preview;
     else if(id == "camera")
-    {
-        if(camera == NULL)
-            return QVideoFrameHelpers::empty();
-        else return camera->requestImage("raw", size, requestedSize);
-    }
+        return camera;
 
     TimeLoggerLog("%s", "Invalid request id");
     return QVideoFrameHelpers::empty();
@@ -44,8 +28,12 @@ MarkerBackEnd::~MarkerBackEnd()
 {
 }
 
-void MarkerBackEnd::setCameraBackend(QQuickImageProvider *provider)
+void MarkerBackEnd::setCamera(QImage cam)
 {
-    camera = provider;
-    connect(camera, SIGNAL(imageAvailable(QImage)), this, SIGNAL(imageAvailable(QImage)));
+    camera = cam;
+}
+
+void MarkerBackEnd::setPreview(QImage prev)
+{
+    preview = prev;
 }

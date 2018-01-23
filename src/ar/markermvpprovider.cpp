@@ -4,23 +4,18 @@
 #include "timelogger.h"
 #include "config.h"
 
-MarkerMVPProvider::MarkerMVPProvider(MarkerDetector* d, PerspectiveCamera* c) : MVPProvider()
+MarkerMVPProvider::MarkerMVPProvider(PerspectiveCamera* c) : MVPProvider()
 {
-    Q_ASSERT(d != NULL);
     Q_ASSERT(c != NULL);
 
     // save detector and camera
-    detector = d;
     camera = c;
-
-    // recompute MVP on each markers update
-    connect(detector, SIGNAL(markersUpdated()), (MarkerMVPProvider*) this, SLOT(recompute()));
 }
 
-QMatrix4x4 MarkerMVPProvider::getMV()
+QMatrix4x4 MarkerMVPProvider::getMV(MarkerStorage storage)
 {
     // obtain ModelView matrix from Marker correspondences
-    WorldImageCorrespondences correspondences = detector->getCorrespondences();
+    WorldImageCorrespondences correspondences = storage.getCorrespondences();
     Pose pose = CameraPoseEstimatorCorrespondences::estimate(camera, &correspondences);
 
     // if got valid pose
@@ -35,9 +30,6 @@ QMatrix4x4 MarkerMVPProvider::getMV()
 
 QMatrix4x4 MarkerMVPProvider::getP(double n, double f)
 {
-    // obtain current frame from detector
-    QImage input_buffer = detector->getLastInput();
-
     // get matrix from the camera projection matrix (calibrated)
     QMatrix4x4 project = camera->getPerspectiveMatrix(n, f);
 
@@ -48,13 +40,13 @@ QMatrix4x4 MarkerMVPProvider::getP(double n, double f)
     // scale to get to clip coordinates
     // y axis points UP in OpenGL -> -1
     QMatrix4x4 scaler;
-    scaler.scale(2. / input_buffer.width(), -2. / input_buffer.height(), 1);
+    scaler.scale(2. / camera->width(), -2. / camera.height(), 1);
 
     // resulting projection
     return translate_m1 * scaler * project;
 }
 
-void MarkerMVPProvider::recompute()
+void MarkerMVPProvider::recompute(MarkerStorage storage)
 {
     // coordinate systems:
     // original points from QML model (OpenGL):
@@ -73,21 +65,9 @@ void MarkerMVPProvider::recompute()
     //
 
     // hide objects if no markers were detected
-    if(detector->getCorrespondences().size() <= 0)
+    if(storage.getCorrespondences().size() <= 0)
     {
         reset();
-        return;
-    }
-
-    // Set image resolution if the frame is ready
-    QImage input_buffer = detector->getLastInput();
-    if(input_buffer.width() * input_buffer.height() > 0)
-    {
-        camera->setResolution(input_buffer.width(), input_buffer.height());
-    }
-    else
-    {
-        TimeLoggerLog("%s", "Empty image");
         return;
     }
 
@@ -103,7 +83,7 @@ void MarkerMVPProvider::recompute()
     }
 
     // obtain ModelView matrix
-    mv_matrix = getMV();
+    mv_matrix = getMV(storage);
 
     // calculate new MVP matrix
     QMatrix4x4 new_mvp_matrix = p_matrix * mv_matrix;

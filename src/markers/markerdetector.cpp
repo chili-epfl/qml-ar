@@ -1,77 +1,59 @@
 #include "marker.h"
 #include "markerdetector.h"
+#include "config.h"
 
-MarkerDetector::MarkerDetector(MarkerDetector &detector)
+MarkerDetector* MarkerDetector::MarkerDetector(const MarkerDetector &detector) : QObject()
 {
     this->input_buffer = detector.input_buffer;
     this->markers = detector.markers;
-    this->output_buffer_background = detector.output_buffer_background;
+
+    buffer_is_nonempty = false;
 }
 
 MarkerDetector::MarkerDetector()
 {
-    connect(&watcher, SIGNAL(finished()), this, SLOT(handleResults()));
+    // handling results on thread finish
+    connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
 }
 
-void MarkerDetector::handleResults()
+void MarkerDetector::handleFinished()
 {
-    MarkerStorage result = watcher.result();
-    emit markersUpdated(corr);
+    // saving result from watcher
+    QPair<MarkerStorage, QImage> result = watcher.result();
+
+    // saving markers
+    this->markers = result.first;
+    this->output_buffer = result.second;
+
+    // passing markers further
+    emit markersUpdated(markers);
+
+    emit previewUpdated(output_buffer);
+
+    // starting new job if buffer is not empty
+    if(buffer_is_nonempty)
+    {
+        buffer_is_nonempty = false;
+        setInput(input_buffer);
+    }
 }
 
 void MarkerDetector::setInput(QImage camera)
 {
+    // saving last input
     input_buffer = camera;
+
+    // starting thread if one is not running already
     if(!watcher.isRunning())
     {
-        QFuture<MarkerStorage> future = QtConcurrent::run(*this, MarkerDetector::process, input_buffer);
+        QFuture<QPair<MarkerStorage, QImage>> future = QtConcurrent::run(this, &MarkerDetector::process, camera);
         watcher.setFuture(future);
     }
-}
-
-void MarkerDetector::setPreviewBackground(QImage preview)
-{
-    output_buffer_background = preview;
+    // for starting job right after previous one finished
+    else buffer_is_nonempty = true;
 }
 
 void MarkerDetector::loadMarkerPositions(QString filename)
 {
     markers.populateFromFile(filename);
-}
-
-QImage MarkerDetector::getPreview()
-{
-    return output_buffer;
-}
-
-QImage MarkerDetector::getLastInput()
-{
-    return input_buffer;
-}
-
-QMap<int, Marker>::iterator MarkerDetector::begin()
-{
-    return markers.begin();
-}
-
-QMap<int, Marker>::iterator MarkerDetector::end()
-{
-    return markers.end();
-}
-
-WorldImageCorrespondences MarkerDetector::getCorrespondences()
-{
-    WorldImageCorrespondences result;
-    result.clear();
-
-    QMap<int, Marker>::iterator it;
-    for(it = markers.begin(); it != markers.end(); it++)
-        result.join((*it).getCorrespondences());
-
-    return result;
-}
-
-bool MarkerDetector::markersDetected()
-{
-    return getCorrespondences().size() > 0;
 }
