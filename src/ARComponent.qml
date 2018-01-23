@@ -72,6 +72,15 @@ Item {
     // viewfinder object
     property var viewfinder
 
+    // scale processing_image pixels -> screen pixels
+    property real scaleDots: 1.0
+
+    // show blobs?
+    property bool show_blobs: true
+
+    // show markers?
+    property bool show_markers: true
+
     // initial width and height
     width: 300
     height: 300
@@ -193,6 +202,9 @@ Item {
                         root.height = h;
                     }
 
+                    // setting scale parameter
+                    root.scaleDots = 1.0 * root.width / image_width;
+
                     // need to set up only once
                     running = false;
 
@@ -215,6 +227,20 @@ Item {
                     root.load_scene3d();
                 }
             }
+        }
+
+        ARBlobs {
+            id: blobs
+            visible: root.show_blobs
+            scaleDots: root.scaleDots
+            z: 10
+        }
+
+        ARMarkers {
+            id: markers
+            visible: root.show_markers
+            scaleDots: root.scaleDots
+            z: 11
         }
 
         // Update image each 10 ms

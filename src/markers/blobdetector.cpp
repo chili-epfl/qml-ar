@@ -4,11 +4,18 @@
 #include "opencv2/features2d.hpp"
 #include "qvideoframehelpers.h"
 #include "config.h"
+#include <QVector>
+#include <QVector2D>
 
 BlobDetector::BlobDetector(const BlobDetector& detector) : BlobDetector()
 {
     this->parameters = detector.parameters;
     this->max_blobs = detector.max_blobs;
+}
+
+BlobDetector::BlobDetector(int max_blobs) : BlobDetector()
+{
+    this->max_blobs = max_blobs;
 }
 
 BlobDetector::BlobDetector()
@@ -47,9 +54,16 @@ BlobDetector::BlobDetector()
 
 void BlobDetector::handleFinished()
 {
-    last_output = watcher.result();
+    QPair<QVector<QVector2D>, QImage> result = watcher.result();
+    last_output = result.second;
+
+    // output drawn blobs
     emit imageAvailable(last_output);
 
+    // pass the vector with keypoints
+    emit blobsUpdated(result.first);
+
+    // schedule another run if neccessary
     if(buffer_is_nonempty)
     {
         buffer_is_nonempty = false;
@@ -57,11 +71,7 @@ void BlobDetector::handleFinished()
     }
 }
 
-QImage BlobDetector::getAndDraw(QImage img)
-{
-    detectBlobs(img);
-    return drawBlobs();
-}
+
 
 QImage BlobDetector::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
@@ -74,7 +84,7 @@ void BlobDetector::setInput(QImage img)
 
     if(!watcher.isRunning())
     {
-        QFuture<QImage> future = QtConcurrent::run(*this, &BlobDetector::getAndDraw, img);
+        QFuture<QPair<QVector<QVector2D>, QImage>> future = QtConcurrent::run(*this, &BlobDetector::getAndDraw, img);
         watcher.setFuture(future);
     }
     else buffer_is_nonempty = true;
@@ -111,7 +121,14 @@ std::vector<cv::KeyPoint> BlobDetector::getBlobs()
     return keypoints;
 }
 
-void BlobDetector::detectBlobs(QImage source)
+QPair<QVector<QVector2D>, QImage> BlobDetector::getAndDraw(QImage img)
+{
+    QVector<QVector2D> blobs = detectBlobs(img);
+    QImage drawn = drawBlobs();
+    return qMakePair(blobs, drawn);
+}
+
+QVector<QVector2D> BlobDetector::detectBlobs(QImage source)
 {
     TimeLoggerLog("%s", "Saving input");
     // setting last input image
@@ -142,6 +159,13 @@ void BlobDetector::detectBlobs(QImage source)
     if(max_blobs > 0 && max_blobs < (int) keypoints.size())
         keypoints.resize(max_blobs);
 
+    // creating qt vector with keypoints
+    QVector<QVector2D> blobs_qt;
+    for(unsigned i = 0; i < keypoints.size(); i++)
+        blobs_qt.append(QVector2D(keypoints[i].pt.x, keypoints[i].pt.y));
+
     // now the object is initialized
     is_initialized = true;
+
+    return blobs_qt;
 }

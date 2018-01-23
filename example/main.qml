@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import AR 1.0
 import QtMultimedia 5.9
+import QtQml 2.2
 
 Window {
     id: window
@@ -36,5 +37,11 @@ Window {
 
         // set output type
         output_type: AR.OUTPUT_CAMERA
+
+        // show blobs?
+        show_blobs: true
+
+        // show markers?
+        show_markers: true
     }
 }

@@ -9,6 +9,7 @@
 #include <QtQml>
 #include <QCameraInfo>
 #include "qtcamera2qml.h"
+#include "worldimage.h"
 
 QMLAR::QMLAR()
 {
@@ -83,6 +84,36 @@ QObject* QMLAR::getCamera()
     }
 }
 
+QVariantList QMLAR::getBlobs()
+{
+    QVariantList result;
+    QVector<QVector2D>::iterator it;
+    for(it = last_blobs.begin(); it != last_blobs.end(); it++)
+    {
+        result << *it;
+    }
+    return result;
+}
+
+QVariantList QMLAR::getMarkers()
+{
+    QVariantList result{};
+
+    QMap<int, Marker>::iterator it;
+    for(it = marker_storage.begin(); it != marker_storage.end(); it++)
+    {
+        WorldImageCorrespondences c = it.value().getCorrespondences();
+        if(c.size() != 4) continue;
+        // positioning (mm)    (0, 0)    (0, s)       (s, 0)     (s, s)
+        result << c.getImagePoint(0).toVector2D();
+        result << c.getImagePoint(1).toVector2D();
+        result << c.getImagePoint(3).toVector2D();
+        result << c.getImagePoint(2).toVector2D();
+    }
+
+    return result;
+}
+
 void QMLAR::startCamera()
 {
     if(init_type == INIT_CAMERA && PortableCameraBackendFactory::cameraViewfinderAvailable())
@@ -96,6 +127,18 @@ void QMLAR::setMVP(QMatrix4x4 mvp)
 {
     mvp_buffer = mvp;
     emit newMVPMatrix();
+}
+
+void QMLAR::setBlobs(QVector<QVector2D> blobs)
+{
+    last_blobs = blobs;
+    emit newBlobs();
+}
+
+void QMLAR::setMarkers(MarkerStorage storage)
+{
+    marker_storage = storage;
+    emit newMarkers();
 }
 
 void QMLAR::connectAll()
@@ -118,8 +161,12 @@ void QMLAR::connectAll()
     // blobs -> markers
     connect(blob_detector, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
 
+    // blobs -> QML
+    connect(blob_detector, SIGNAL(blobsUpdated(QVector<QVector2D>)), this, SLOT(setBlobs(QVector<QVector2D>)));
+
     // markers -> QML
     connect(detector, SIGNAL(previewUpdated(QImage)), &marker_backend, SLOT(setPreview(QImage)));
+    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SLOT(setMarkers(MarkerStorage)));
 
     // markers -> MVP
     connect(detector, SIGNAL(markersUpdated(MarkerStorage)), mvp_provider, SLOT(recompute(MarkerStorage)));
@@ -162,7 +209,7 @@ void QMLAR::initialize()
 #endif
 
     // creating blob detector
-    blob_detector = new BlobDetector();
+    blob_detector = new BlobDetector(max_dots);
 
     // loading marker positions
     detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
@@ -195,6 +242,7 @@ void QMLAR::initialize()
     // creating image scaler
     scaler = new ImageScaler(image_width);
 
+    // connecting everything
     connectAll();
 
     // now the object is initialized

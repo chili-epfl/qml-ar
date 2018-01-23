@@ -6,6 +6,8 @@
 #include "opencv2/features2d.hpp"
 #include "imageproviderasync.h"
 #include <vector>
+#include <QVector>
+#include <QVector2D>
 
 /*
  * This class detects blobs on a QImage
@@ -39,7 +41,7 @@ private:
     QImage last_output;
 
     // for handling background job
-    QFutureWatcher<QImage> watcher;
+    QFutureWatcher<QPair<QVector<QVector2D>, QImage>> watcher;
 
     // maximum numbers of dots to detect
     int max_blobs;
@@ -52,8 +54,10 @@ public:
     virtual ~BlobDetector() {}
     BlobDetector(const BlobDetector &detector);
 
+    BlobDetector(int max_blobs);
+
     // detect blobs on a qimage
-    void detectBlobs(QImage source);
+    QVector<QVector2D> detectBlobs(QImage source);
 
     // draws resulting blobs
     QImage drawBlobs();
@@ -62,7 +66,7 @@ public:
     std::vector<cv::KeyPoint> getBlobs();
 
     // returns drawn blobs
-    QImage getAndDraw(QImage img);
+    QPair<QVector<QVector2D>, QImage> getAndDraw(QImage img);
 
     // returns last image
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
@@ -72,6 +76,10 @@ public slots:
 
     // get result from background thread
     void handleFinished();
+signals:
+    // emitted on new blobs
+    // need Qt::QueuedConnection
+    void blobsUpdated(QVector<QVector2D>);
 };
 
 #endif // BLOBDETECTOR_H

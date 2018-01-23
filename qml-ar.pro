@@ -104,7 +104,9 @@ HEADERS += \
 QML_SOURCES += \
     src/ARComponent.qml \
     src/AR3DScene.qml \
-    src/ARViewfinder.qml
+    src/ARViewfinder.qml \
+    src/ARBlobs.qml \
+    src/ARMarkers.qml
 
 DISTFILES = $$QML_SOURCES
 

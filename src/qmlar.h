@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QtQml>
 #include <QString>
+#include <QVariantList>
 #include "imageproviderasync.h"
 #include "uchiyamarkerdetector.h"
 #include "imagebackend.h"
@@ -18,6 +19,7 @@
 #include "blobdetector.h"
 #include "qtcamera2qml.h"
 #include "imagescaler.h"
+#include "markerstorage.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -32,6 +34,8 @@ class QMLAR : public QObject
     Q_PROPERTY(QObject* camera READ getCamera NOTIFY never)
     Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
+    Q_PROPERTY(QVariantList blobs READ getBlobs NOTIFY newBlobs)
+    Q_PROPERTY(QVariantList markers READ getMarkers NOTIFY newMarkers)
 
 public:
     // enum for initialization type
@@ -77,7 +81,11 @@ public:
     // return camera object
     QObject *getCamera();
 
-    void connectAll();
+    // return list of blobs
+    QVariantList getBlobs();
+
+    // return list of marker corners
+    QVariantList getMarkers();
 public slots:
     // initialize from camera id (default value -1)
     void setCameraId(int camera_id = -1);
@@ -85,6 +93,7 @@ public slots:
     // initialize from image
     void setImageFilename(QString filename);
 
+    // set width of the image to process (on startup)
     void setImageWidth(int new_width);
 
     // start camera if required
@@ -93,7 +102,18 @@ public slots:
     // set MVP for QML
     void setMVP(QMatrix4x4 mvp);
 
+    // set blobs from detector
+    void setBlobs(QVector<QVector2D> blobs);
+
+    // set markers
+    void setMarkers(MarkerStorage storage);
 private:
+    // vector with blobs
+    QVector<QVector2D> last_blobs;
+
+    // storage for markers
+    MarkerStorage marker_storage;
+
     // mvp buffer for QML
     QMatrix4x4 mvp_buffer;
 
@@ -160,6 +180,9 @@ private:
 
     // scaler for input images
     ImageScaler* scaler;
+
+    // connect underlying objects
+    void connectAll();
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix();
@@ -169,6 +192,12 @@ signals:
 
     // never called
     void never();
+
+    // on new blobs from detector
+    void newBlobs();
+
+    // on new markers
+    void newMarkers();
 };
 
 #endif // CELLULOAR_H
