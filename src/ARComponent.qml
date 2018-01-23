@@ -42,9 +42,6 @@ Item {
     // scale image to this width
     property int image_width: 600
 
-    // update image each update_ms milliseconds
-    property int update_ms: 100
-
     // set this to the actual surface with 3D models
     // will create an object of this component
     // and add this to ar scene
@@ -85,10 +82,6 @@ Item {
         // Set image width in pixels
         AR.image_width = root.image_width
         console.log("Set image width to " + root.image_width);
-
-        // Set update frequency
-        AR.update_ms = root.update_ms
-        console.log("Set update_ms to " + root.update_ms);
 
         // set output url
         switch(root.output_type) {
@@ -280,6 +273,7 @@ Item {
                     // difference since prev. update
                     var difference = this_update - fps_text.last_update;
 
+                    // no updateon zero difference (too fast to measure)
                     if(difference == 0)
                         return;
 
