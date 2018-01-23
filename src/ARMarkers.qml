@@ -5,8 +5,8 @@ Item {
     id: root
     anchors.fill: parent
     property real scaleDots: 1.0
-    property int last_update: new Date().getTime()
-    property int min_delta_ms: 50
+    property real last_update: 0
+    property real min_delta_ms: 1000
     Canvas {
         id: canvas
         anchors.fill: parent
@@ -14,12 +14,14 @@ Item {
 
         function doPaint() {
             if(!root.visible) return;
-            if(new Date().getTime() - last_update < min_delta_ms) return;
+            var this_update = new Date().getTime();
+            if(this_update - root.last_update < root.min_delta_ms) return;
+            root.last_update = this_update;
             var markers = AR.markers;
             var ctx = getContext("2d");
             ctx.reset();
             ctx.fillStyle = "green";
-            ctx.globalAlpha = 0.2;
+            ctx.globalAlpha = 0.3;
             for(var i = 0; i < markers.length; i += 4) {
                 var marker_tl = markers[i];
                 var marker_br = markers[i + 1];
