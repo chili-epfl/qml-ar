@@ -14,10 +14,14 @@
  * or with other available methods
  */
 
-class ConfigJSON
-{
+class ConfigJSON : public QObject
+{ Q_OBJECT
 public:
     ConfigJSON();
+
+    ConfigJSON(ConfigJSON& that);
+
+    virtual ~ConfigJSON() {}
 
     // fill with data from a file/other QIODevice
     void populate(QIODevice &input);

@@ -8,6 +8,11 @@ ConfigJSON::ConfigJSON()
 
 }
 
+ConfigJSON::ConfigJSON(ConfigJSON &that) : QObject()
+{
+    Q_UNUSED(that)
+}
+
 void ConfigJSON::populate(QIODevice &input)
 {
     if(!input.isReadable())
