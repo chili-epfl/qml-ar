@@ -1,33 +1,32 @@
 #include "imumvpdecorator.h"
 #include "config.h"
 
-IMUMVPDecorator::IMUMVPDecorator(MVPProvider *mvp_provider, IMU *imu)
+IMUMVPDecorator::IMUMVPDecorator(IMU *imu)
 {
     // saving provider and imu
-    Q_ASSERT(mvp_provider != NULL);
     Q_ASSERT(imu != NULL);
-    this->provider = mvp_provider;
     this->imu = imu;
 
     // no pose available for now
     // will be set on first MVP from provider
     last_imu_pose_available = false;
 
-    // update our MVP on matrix from provider
-    connect(mvp_provider, SIGNAL(newMVPMatrix()), this, SLOT(updateLastMV()));
-
     // update resulting MVP on new pose from IMU
     connect(imu, SIGNAL(stateChanged()), this, SLOT(updatePose()));
 }
 
-void IMUMVPDecorator::updateLastMV()
+void IMUMVPDecorator::setP(QMatrix4x4 p)
 {
-    TimeLoggerLog("Updating MVP from Provider valid = %d", provider->isValid());
+    last_p = p;
+}
 
-    if(!provider->isValid())
+void IMUMVPDecorator::setMV(QMatrix4x4 mv)
+{
+    TimeLoggerLog("Updating MVP from Provider valid = %d", isValid(mv))
+
+    if(!isValid(mv))
     {
         // reset our matrix if no IMU available
-//        if(imu->getRotAxis().length() < 1e-5) reset();
         if(!imu->isStartupComplete()) reset();
 
         // do nothing if pose invalid and on Android
@@ -35,7 +34,7 @@ void IMUMVPDecorator::updateLastMV()
     }
 
     // MV from provider
-    last_mv = provider->getMVMatrix();
+    last_mv = mv;
 
     // forgetting previous displacement vector
     imu->resetDisplacement();
@@ -95,7 +94,7 @@ void IMUMVPDecorator::updatePose()
     QMatrix4x4 delta_mv = getCurrentPose() * last_imu_pose.inverted();;
 
     // new MVP
-    QMatrix4x4 mvp_new = provider->getPMatrix() * delta_mv * last_mv;
+    QMatrix4x4 mvp_new = last_p * delta_mv * last_mv;
 
     // telling others about update
     setMVPMatrix(mvp_new);

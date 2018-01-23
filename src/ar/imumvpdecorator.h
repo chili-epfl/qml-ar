@@ -1,8 +1,8 @@
 #ifndef IMUMVPDECORATOR_H
 #define IMUMVPDECORATOR_H
 
-#include "qml-imu/src/IMU.h"
 #include "mvpprovider.h"
+#include "qml-imu/src/IMU.h"
 
 /*
  * This class decorates an MVP provider
@@ -16,14 +16,14 @@
 class IMUMVPDecorator : public MVPProvider
 { Q_OBJECT
 private:
-    // underlying MVP provider
-    MVPProvider* provider;
-
     // underlying IMU object
     IMU* imu;
 
     // last MV from provider
     QMatrix4x4 last_mv;
+
+    // last P
+    QMatrix4x4 last_p;
 
     // last pose from IMU at the
     // moment last_mv was updated
@@ -36,7 +36,7 @@ private:
     QMatrix4x4 getCurrentPose();
 public:
     // decorate MVP provider and an IMU
-    IMUMVPDecorator(MVPProvider* mvp_provider, IMU* imu);
+    IMUMVPDecorator(IMU* imu);
 
 public slots:
     // set MV matrix from provider
