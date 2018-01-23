@@ -280,6 +280,9 @@ Item {
                     // difference since prev. update
                     var difference = this_update - fps_text.last_update;
 
+                    if(difference == 0)
+                        return;
+
                     // FPS = 1000 / delta_ms
                     var this_fps = 1000. / difference;
 
