@@ -35,6 +35,6 @@ Window {
         show_fps: true
 
         // set output type
-        output_type: AR.OUTPUT_MARKERS
+        output_type: AR.OUTPUT_CAMERA
     }
 }

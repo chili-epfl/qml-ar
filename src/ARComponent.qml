@@ -168,6 +168,7 @@ Item {
 
         // indicator showing loading circle
         QQC.BusyIndicator {
+            z: 10
             id: loading
             running: true
             visible: false
@@ -240,6 +241,7 @@ Item {
 
         // text showing FPS
         Text {
+            z: 10
             id: fps_text
             color: "red"
             font.pointSize: 20

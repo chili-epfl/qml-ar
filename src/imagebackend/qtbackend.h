@@ -30,9 +30,11 @@ public:
     // convert frame -> image
     void convert(QVideoFrame *frame, QImage *image);
 
+    // return underlying camera object
     QCamera* getCamera();
+
+    // start camera
     void start();
-    void handleFinished();
 protected:
     // is frame available?
     bool frame_available = 0;
@@ -70,8 +72,14 @@ protected:
     QFutureWatcher<QImage> watcher;
 
 public slots:
+    // set this image as buffer
     void processQImage(QImage img);
+
+    // process frame in thread
     void processQVideoFrame(const QVideoFrame &frame);
+
+    // called on thread finish
+    void handleFinished();
 };
 
 #endif // QTBACKEND_H
