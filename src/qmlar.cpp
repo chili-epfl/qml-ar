@@ -162,11 +162,11 @@ void QMLAR::connectAll()
     connect(blob_detector, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
 
     // blobs -> QML
-    connect(blob_detector, SIGNAL(blobsUpdated(QVector<QVector2D>)), this, SLOT(setBlobs(QVector<QVector2D>)));
+    //connect(blob_detector, SIGNAL(blobsUpdated(QVector<QVector2D>)), this, SLOT(setBlobs(QVector<QVector2D>)));
 
     // markers -> QML
-    connect(detector, SIGNAL(previewUpdated(QImage)), &marker_backend, SLOT(setPreview(QImage)));
-    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SLOT(setMarkers(MarkerStorage)));
+    //connect(detector, SIGNAL(previewUpdated(QImage)), &marker_backend, SLOT(setPreview(QImage)));
+    //connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SLOT(setMarkers(MarkerStorage)));
 
     // markers -> MVP
     connect(detector, SIGNAL(markersUpdated(MarkerStorage)), mvp_provider, SLOT(recompute(MarkerStorage)));
@@ -179,7 +179,7 @@ void QMLAR::connectAll()
     connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), tracking, SLOT(onNewPMatrix(QMatrix4x4)));
 
     // mvp -> FPS
-    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), this, SIGNAL(imageUpdated()));
+    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SIGNAL(imageUpdated()));
 
     // mvp -> imu
     connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(setMV(QMatrix4x4)));

@@ -1,3 +1,4 @@
+#include "timelogger.h"
 #include "qtbackend.h"
 #include "qvideoframehelpers.h"
 #include <QtMultimedia/QCameraInfo>
@@ -5,8 +6,6 @@
 #include <QException>
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
-#include "timelogger.h"
-#include "config.h"
 
 QtCameraBackend::QtCameraBackend(int cam_id) : ImageProviderAsync()
 {

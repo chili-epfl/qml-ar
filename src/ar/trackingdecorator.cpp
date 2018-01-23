@@ -1,4 +1,4 @@
-#include "config.h"
+#include "timelogger.h"
 #include "trackingdecorator.h"
 #include <QPainter>
 #include <QtCore>

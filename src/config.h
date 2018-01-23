@@ -1,11 +1,12 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "timelogger.h"
-
 /*
  * In this file different compile options are defined
  */
+
+// enables TimeLogger
+#define ENABLE_DEBUG_OUTPUT
 
 // Define to enable time output at each important step
 #define PROFILE_PIPELINE

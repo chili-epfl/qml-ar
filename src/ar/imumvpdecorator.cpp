@@ -1,5 +1,5 @@
+#include "timelogger.h"
 #include "imumvpdecorator.h"
-#include "config.h"
 
 IMUMVPDecorator::IMUMVPDecorator(IMU *imu)
 {
@@ -66,6 +66,7 @@ void IMUMVPDecorator::checkIfTooLong()
     {
         TimeLoggerLog("%s", "Waited for too long w/o markers");
         reset();
+        last_imu_pose_available = false;
         return;
     }
 }

@@ -3,7 +3,7 @@
 #include "QtOpenCV/cvmatandqimage.h"
 #include "opencv2/features2d.hpp"
 #include "qvideoframehelpers.h"
-#include "config.h"
+#include "timelogger.h"
 #include <QVector>
 #include <QVector2D>
 
@@ -21,9 +21,9 @@ BlobDetector::BlobDetector(int max_blobs) : BlobDetector()
 BlobDetector::BlobDetector()
 {
     // set blob detector parameters
-    parameters.minThreshold = 100;
+    parameters.minThreshold = 50;
     parameters.maxThreshold = 200;
-    parameters.thresholdStep = 20;
+    parameters.thresholdStep = 25;
     parameters.filterByArea = true;
     parameters.minArea = 10;
     parameters.filterByCircularity = true;

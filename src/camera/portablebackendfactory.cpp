@@ -1,8 +1,7 @@
+#include "timelogger.h"
 #include "portablebackendfactory.h"
 #include "qtbackend.h"
 #include "opencvbackend.h"
-#include "timelogger.h"
-#include "config.h"
 #include <QtCore>
 
 int PortableCameraBackendFactory::getDefaultCameraId()

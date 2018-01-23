@@ -1,6 +1,6 @@
+#include "timelogger.h"
 #include "imagescaler.h"
 #include "qvideoframehelpers.h"
-#include "config.h"
 
 ImageScaler::ImageScaler()
 {

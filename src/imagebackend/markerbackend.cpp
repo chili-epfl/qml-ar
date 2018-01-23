@@ -1,9 +1,9 @@
+#include "timelogger.h"
 #include "markerbackend.h"
 #include "qvideoframehelpers.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "QtOpenCV/cvmatandqimage.h"
-#include "config.h"
 
 using namespace cv;
 

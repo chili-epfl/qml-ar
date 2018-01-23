@@ -2,7 +2,6 @@
 #include "posecamerapnp.h"
 #include <QCameraLens>
 #include "timelogger.h"
-#include "config.h"
 
 MarkerMVPProvider::MarkerMVPProvider(PerspectiveCamera* c) : MVPProvider()
 {

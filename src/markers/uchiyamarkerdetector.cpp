@@ -1,3 +1,4 @@
+#include "timelogger.h"
 #include "uchiyamarkerdetector.h"
 #include <stdio.h>
 #include <iostream>
@@ -11,8 +12,6 @@
 #include <opencv2/calib3d.hpp>
 #include "opencv2/imgproc.hpp"
 #include "mymatconverter.h"
-#include "timelogger.h"
-#include "config.h"
 #include <QGenericMatrix>
 #include <QJsonArray>
 

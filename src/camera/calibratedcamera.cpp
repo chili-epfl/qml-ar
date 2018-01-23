@@ -1,5 +1,5 @@
+#include "timelogger.h"
 #include "calibratedcamera.h"
-#include "config.h"
 
 CalibratedCamera::CalibratedCamera()
 {

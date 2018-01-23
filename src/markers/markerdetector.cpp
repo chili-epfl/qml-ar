@@ -1,6 +1,6 @@
+#include "timelogger.h"
 #include "marker.h"
 #include "markerdetector.h"
-#include "config.h"
 
 MarkerDetector::MarkerDetector(const MarkerDetector &detector) : QObject()
 {

@@ -1,9 +1,9 @@
+#include "timelogger.h"
 #include "qvideoframehelpers.h"
 #include <QElapsedTimer>
 #include <QList>
 #include <QVideoFrame>
 #include "yuv2rgb/yuv2rgb.h"
-#include "config.h"
 
 uchar QVideoFrameHelpers::rgb[MAX_SIZE];
 

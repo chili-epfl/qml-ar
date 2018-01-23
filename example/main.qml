@@ -20,7 +20,7 @@ Window {
         init_type: AR.INIT_CAMERA
 
         // scale image to 600px width
-        image_width: 600
+        image_width: 480
 
         // load scene
         arSceneComponent: Qt.createComponent("Activity.qml")
@@ -39,9 +39,9 @@ Window {
         output_type: AR.OUTPUT_CAMERA
 
         // show blobs?
-        show_blobs: true
+        show_blobs: false
 
         // show markers?
-        show_markers: true
+        show_markers: false
     }
 }
