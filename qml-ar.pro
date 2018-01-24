@@ -65,7 +65,8 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/imagebackend/imagescaler.cpp \
     src/markers/hsvintervaldetector.cpp \
     src/markers/hsvmeancolor.cpp \
-    src/markers/huethreshold.cpp
+    src/markers/huethreshold.cpp \
+    src/markers/meanstdcalculator.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -105,7 +106,8 @@ HEADERS += \
     src/imagebackend/imagescaler.h \
     src/markers/hsvintervaldetector.h \
     src/markers/hsvmeancolor.h \
-    src/markers/huethreshold.h
+    src/markers/huethreshold.h \
+    src/markers/meanstdcalculator.h
 
 QML_SOURCES += \
     src/ARComponent.qml \

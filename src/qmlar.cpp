@@ -207,10 +207,12 @@ void QMLAR::connectAll()
             hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)), Qt::QueuedConnection);
 
     // HSV -> this
-    connect(hsv_interval, SIGNAL(resultAvailable(double,double)), this, SLOT(hueAvailable(double, double)));
+    connect(hsv_interval, SIGNAL(hAvailable(double,double)), this, SLOT(hueAvailable(double, double)));
 
     // HSV -> thresholding
-    connect(hsv_interval, SIGNAL(resultAvailable(double,double)), hue_threshold, SLOT(setColor(double,double)));
+    connect(hsv_interval, SIGNAL(hAvailable(double,double)), hue_threshold, SLOT(setColor(double,double)));
+    connect(hsv_interval, SIGNAL(sAvailable(double,double)), hue_threshold, SLOT(setS(double,double)));
+    connect(hsv_interval, SIGNAL(vAvailable(double,double)), hue_threshold, SLOT(setV(double,double)));
 
     // mvp -> tracking
     connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), tracking, SLOT(onNewMVMatrix(QMatrix4x4)));
@@ -285,7 +287,7 @@ void QMLAR::initialize()
     scaler = new ImageScaler(image_width);
 
     // creating HSV interval detector
-    hsv_interval = new HSVIntervalDetector(1000);
+    hsv_interval = new HSVIntervalDetector(10000);
 
     // creating hsv thresholder
     hue_threshold = new HueThreshold();

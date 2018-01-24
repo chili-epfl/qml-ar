@@ -20,7 +20,7 @@ Window {
         init_type: AR.INIT_CAMERA
 
         // scale image to 600px width
-        image_width: 480
+        image_width: 600
 
         // load scene
         arSceneComponent: Qt.createComponent("Activity.qml")
@@ -43,5 +43,8 @@ Window {
 
         // show markers?
         show_markers: false
+
+        // use image instead of viewfinder
+        force_image: true
     }
 }

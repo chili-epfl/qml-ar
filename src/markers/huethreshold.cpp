@@ -13,7 +13,7 @@ HueThreshold::HueThreshold(const HueThreshold& that) : HueThreshold()
 
 HueThreshold::HueThreshold()
 {
-    min_s = min_v = 30;
+    min_s = min_v = 50;
     max_s = max_v = 255;
     input_buffer_nonempty = false;
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
@@ -29,14 +29,15 @@ QImage HueThreshold::threshold(QImage source)
 
     TimeLoggerLog("%s", "Converting to HSV");
     // qt -> cv input
-    cv::Mat img = QtOcv::image2Mat_shared(source);
+    cv::Mat img;
+    img = QtOcv::image2Mat_shared(source);
 
     // rgb -> hsv
-    static cv::Mat hsv;
-    cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
+    cv::Mat hsv;
+    cv::cvtColor(img, hsv, cv::COLOR_RGB2HSV);
 
     // resulting mask
-    static cv::Mat result;
+    cv::Mat result;
 
     // sanity check
     Q_ASSERT(min_hsv.length() == max_hsv.length());
@@ -55,7 +56,7 @@ QImage HueThreshold::threshold(QImage source)
     }
 
     // converting to rgb
-    static cv::Mat result_rgb;
+    cv::Mat result_rgb;
     cv::cvtColor(255 - result, result_rgb, cv::COLOR_GRAY2RGB);
 
     // resulting mask in qt
@@ -81,11 +82,10 @@ void HueThreshold::setColor(double mean, double sigma)
 {
     TimeLoggerLog("Got color %.2f +- %.2f", mean, sigma);
 
-    // using 3 sigma
-    double delta = 3 * sigma;
+    // using sigma
+    double delta = sigma;
 
     // saving color range as thresholds
-
     if(mean - delta < 0)
     {
         // [0, m]
@@ -93,8 +93,8 @@ void HueThreshold::setColor(double mean, double sigma)
         addMaxHue(mean);
 
         // [m-s+360, 360]
-        addMinHue(mean - delta + 359);
-        addMaxHue(359);
+        addMinHue(mean - delta + 360);
+        addMaxHue(360);
     }
     else
     {
@@ -107,11 +107,11 @@ void HueThreshold::setColor(double mean, double sigma)
     {
         // [0, m+s-360]
         addMinHue(0);
-        addMaxHue(mean + delta - 359);
+        addMaxHue(mean + delta - 360);
 
         // [m, 360]
         addMinHue(mean);
-        addMaxHue(359);
+        addMaxHue(360);
     }
     else
     {
@@ -129,6 +129,18 @@ void HueThreshold::setColor(double mean, double sigma)
                       min_hsv[i][0], min_hsv[i][1], min_hsv[i][2],
                       max_hsv[i][0], max_hsv[i][1], max_hsv[i][2]);
     }
+}
+
+void HueThreshold::setV(double mean, double std)
+{
+    min_v = mean - std;
+    max_v = mean + std;
+}
+
+void HueThreshold::setS(double mean, double std)
+{
+    min_s = mean - std;
+    max_s = mean + std;
 }
 
 void HueThreshold::setInput(QImage input)

@@ -30,7 +30,14 @@ void HSVIntervalDetector::newPoints(QPair<QImage, QVector<QVector2D>> image_poin
         // pixel color
         QColor pixel = image.pixel(point.x(), point.y());
         colors.append(pixel);
-        mean_hue.addColor(pixel);
+
+        // get HSV
+        int h, s, v;
+        pixel.getHsv(&h, &s, &v);
+
+        mean_hue.addColor(h);
+        mean_s.addValue(s);
+        mean_v.addValue(v);
     }
 
     // calculating results after minimal number of points
@@ -44,5 +51,9 @@ void HSVIntervalDetector::calculate()
     if(colors.size() == 0) return;
 
     // returning mean color and standard deviation
-    emit resultAvailable(mean_hue.meanHue(), mean_hue.stdHue());
+    emit hAvailable(mean_hue.meanHue(), mean_hue.stdHue());
+
+    // get SV
+    emit sAvailable(mean_s.getMean(), mean_s.getStd());
+    emit vAvailable(mean_v.getMean(), mean_v.getStd());
 }

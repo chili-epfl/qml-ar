@@ -7,6 +7,7 @@
 #include <QVector2D>
 #include <QColor>
 #include "hsvmeancolor.h"
+#include "meanstdcalculator.h"
 
 /*
  * This class receives matched points
@@ -28,6 +29,9 @@ private:
     // mean and std
     int min_points;
 
+    // for S, V
+    MeanStdCalculator mean_s, mean_v;
+
 public:
     // minimal number of points after which emit results
     HSVIntervalDetector(int min_points = 500);
@@ -42,7 +46,9 @@ public slots:
 
 signals:
     // returns mean and std of color
-    void resultAvailable(double, double);
+    void hAvailable(double, double);
+    void sAvailable(double, double);
+    void vAvailable(double, double);
 };
 
 #endif // HSVINTERVALDETECTOR_H

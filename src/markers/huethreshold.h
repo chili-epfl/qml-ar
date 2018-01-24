@@ -44,6 +44,10 @@ public slots:
     // set color to threshold on
     void setColor(double mean, double std);
 
+    // set V, S distribution
+    void setV(double mean, double std);
+    void setS(double mean, double std);
+
     // set input image
     void setInput(QImage input);
 

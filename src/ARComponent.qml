@@ -81,6 +81,9 @@ Item {
     // show markers?
     property bool show_markers: true
 
+    // use image even if viewfinder available
+    property bool force_image: false
+
     // initial width and height
     width: 300
     height: 300
@@ -209,7 +212,7 @@ Item {
                     running = false;
 
                     // show image if no viewfinder available
-                    if(AR.camera != null)
+                    if(AR.camera != null && !root.force_image)
                     {
                         console.log("Hiding image");
                         image.cache = 0;
@@ -221,6 +224,8 @@ Item {
                     {
                         console.log("Showing image");
                         image.visible = true;
+                        if(AR.camera != null)
+                            viewfinder.visible = 0;
                     }
 
                     // load scene on component loading
@@ -301,7 +306,7 @@ Item {
                     // difference since prev. update
                     var difference = this_update - fps_text.last_update;
 
-                    // no updateon zero difference (too fast to measure)
+                    // no update on zero difference (too fast to measure)
                     if(difference == 0)
                         return;
 

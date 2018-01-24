@@ -7,12 +7,8 @@ HSVMeanColor::HSVMeanColor()
     h_vector.setY(0);
 }
 
-void HSVMeanColor::addColor(QColor c)
+void HSVMeanColor::addColor(int h)
 {
-    // obtaining h, s, v
-    int h, s, v;
-    c.getHsv(&h, &s, &v);
-
     // hue in radians
     double h_radians = qDegreesToRadians((double) h);
 
@@ -21,6 +17,14 @@ void HSVMeanColor::addColor(QColor c)
 
     // saving h
     h_values.append(h);
+}
+
+void HSVMeanColor::addColor(QColor c)
+{
+    // obtaining h, s, v
+    int h, s, v;
+    c.getHsv(&h, &s, &v);
+    addColor(h);
 }
 
 double HSVMeanColor::meanHue()

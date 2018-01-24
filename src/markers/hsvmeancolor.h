@@ -27,6 +27,7 @@ public:
 
     // add color to take mean of
     void addColor(QColor c);
+    void addColor(int h);
 
     // return mean hue (0 to 360)
     double meanHue();
