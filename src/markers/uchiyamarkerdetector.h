@@ -6,6 +6,8 @@
 #include "uchiya/mylib/mymat.h"
 #include "markerdetector.h"
 #include <QMatrix4x4>
+#include <QVector>
+#include <QVector2D>
 
 /*
  * Wrapper around C-style UchiyaMarkers project
@@ -45,7 +47,7 @@
  */
 
 class UchiyaMarkerDetector: public MarkerDetector
-{
+{ Q_OBJECT
 private:
     // see main.h from UchiyaMarkers project
     MyImage m_camimg;
@@ -78,10 +80,15 @@ public:
     // initialize given height and width of the image
     UchiyaMarkerDetector();
 
-    UchiyaMarkerDetector* clone();
+    virtual ~UchiyaMarkerDetector() {}
 
     // do marker processing
     virtual QPair<MarkerStorage, QImage> process(QImage source);
+
+signals:
+    // emits image coords. of blobs which belong
+    // to a marker
+    void dotsFound(QPair<QImage, QVector<QVector2D>>);
 };
 
 #endif // UCHIYAMARKERDETECTOR_H

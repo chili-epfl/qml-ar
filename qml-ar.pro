@@ -62,7 +62,8 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/imagebackend/qtcamera2qml.cpp \
     src/imagebackend/androidfilter.cpp \
     src/imagebackend/imageproviderasync.cpp \
-    src/imagebackend/imagescaler.cpp
+    src/imagebackend/imagescaler.cpp \
+    src/markers/hsvintervaldetector.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -99,7 +100,8 @@ HEADERS += \
     src/imagebackend/qtcamera2qml.h \
     src/imagebackend/androidfilter.h \
     src/imagebackend/imageproviderasync.h \
-    src/imagebackend/imagescaler.h
+    src/imagebackend/imagescaler.h \
+    src/markers/hsvintervaldetector.h
 
 QML_SOURCES += \
     src/ARComponent.qml \

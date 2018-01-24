@@ -106,7 +106,14 @@ QImage BlobDetector::drawBlobs()
     {
         // draw a white circle on the place of a blob
         cv::KeyPoint kp = (*it);
-        cv::circle(result, kp.pt, 2, cv::Scalar(0, 0, 0), -1);
+
+        // preserving blob color
+        QColor color = last_input.pixel(kp.pt.x, kp.pt.y);
+        int r, g, b;
+        color.getRgb(&r, &g, &b);
+
+        // drawing circle
+        cv::circle(result, kp.pt, 2, cv::Scalar(b, g, r), -1);
     }
 
     last_output = QtOcv::mat2Image(result);

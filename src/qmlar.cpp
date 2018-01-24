@@ -174,6 +174,11 @@ void QMLAR::connectAll()
     // markers -> tracking
     connect(detector, SIGNAL(markersUpdated(MarkerStorage)), tracking, SLOT(onNewMarkers(MarkerStorage)));
 
+    // markers -> HSV detector
+    qRegisterMetaType<QPair<QImage, QVector<QVector2D>>>("QPair<QImage, QVector<QVector2D>>");
+    connect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)),
+            hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)), Qt::QueuedConnection);
+
     // mvp -> tracking
     connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), tracking, SLOT(onNewMVMatrix(QMatrix4x4)));
     connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), tracking, SLOT(onNewPMatrix(QMatrix4x4)));
@@ -187,6 +192,10 @@ void QMLAR::connectAll()
 
     // output MVP matrix from IMU decorator
     connect(mvp_imu_decorated, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVP(QMatrix4x4)));
+
+    static QTimer t;
+    connect(&t, SIGNAL(timeout()), hsv_interval, SLOT(printAll()));
+    t.start(10000);
 }
 
 QString QMLAR::getImageFilename()
@@ -241,6 +250,9 @@ void QMLAR::initialize()
 
     // creating image scaler
     scaler = new ImageScaler(image_width);
+
+    // creating HSV interval detector
+    hsv_interval = new HSVIntervalDetector();
 
     // connecting everything
     connectAll();

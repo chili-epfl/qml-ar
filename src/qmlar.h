@@ -20,6 +20,7 @@
 #include "qtcamera2qml.h"
 #include "imagescaler.h"
 #include "markerstorage.h"
+#include "hsvintervaldetector.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -180,6 +181,9 @@ private:
 
     // scaler for input images
     ImageScaler* scaler;
+
+    // detector of dots color interval
+    HSVIntervalDetector* hsv_interval;
 
     // connect underlying objects
     void connectAll();
