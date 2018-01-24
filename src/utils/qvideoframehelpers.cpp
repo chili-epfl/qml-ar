@@ -46,6 +46,7 @@ QList<QVideoFrame::PixelFormat> QVideoFrameHelpers::supportedPixelFormats()
 
 QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 {
+    TimeLoggerLog("%s", "[ANALYZE] Begin FrameConvert");
     Q_ASSERT(MAX_SIZE >= frameOriginal.width() * frameOriginal.height() * 3);
 
     // do nothing if no image found
@@ -87,7 +88,7 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // unmapping source from memory
     frame.unmap();
 
-    TimeLoggerProfile("%s", "Converted image to RGB");
+    TimeLoggerLog("%s", "[ANALYZE] End FrameConvert");
 
     return(image);
 }

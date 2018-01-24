@@ -216,6 +216,8 @@ void UchiyaMarkerDetector::prepareInput(QImage source)
 
 QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
 {
+    TimeLoggerLog("%s", "[ANALYZE] Begin Uchiya");
+
     // copying input to OpenCV matrices
     prepareInput(source);
 
@@ -271,5 +273,10 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     emit dotsFound(qMakePair(source, m_llah.foundDots()));
 
     // returning markers
-    return qMakePair(markers, preview);
+    QPair<MarkerStorage, QImage> result = qMakePair(markers, preview);
+
+    TimeLoggerLog("%s", "[ANALYZE] End Uchiya");
+
+    // returning markers
+    return result;
 }

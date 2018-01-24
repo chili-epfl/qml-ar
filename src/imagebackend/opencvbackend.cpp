@@ -56,12 +56,15 @@ QImage OpenCVCameraBackend::requestImage(const QString &id, QSize *size, const Q
 
 QImage OpenCVCameraBackend::getImage()
 {
+    TimeLoggerLog("%s", "[ANALYZE] Begin CVGetImage");
     // reading the image
     cv::Mat mat;
     stream->read(mat);
 
     // converting the matrix to qimage and then to pixmap
-    return QtOcv::mat2Image(mat);
+    QImage result = QtOcv::mat2Image(mat);
+    TimeLoggerLog("%s", "[ANALYZE] End CVGetImage");
+    return result;
 }
 
 void OpenCVCameraBackend::setupCV() {

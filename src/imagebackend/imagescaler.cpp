@@ -30,13 +30,15 @@ QImage ImageScaler::scale(QImage source)
     if(source.width() * source.height() <= 2 || target_width == 0)
         return QVideoFrameHelpers::empty();
 
-    TimeLoggerLog("%s", "Scaling image");
+    TimeLoggerLog("%s", "[ANALYZE] Begin Scale");
 
     QImage result = source;
 
     // scaling it if necessary
     if(target_width != source.width())
         result = source.scaledToWidth(target_width);
+
+    TimeLoggerLog("%s", "[ANALYZE] End Scale");
 
     return result;
 }

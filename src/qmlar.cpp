@@ -252,6 +252,9 @@ void QMLAR::initialize()
     QString ASSETS_PATH = ":/assets/";
 #endif
 
+    // allowing up to 6 parallel tasks
+    QThreadPool::globalInstance()->setMaxThreadCount(6);
+
     // creating blob detector
     blob_detector = new BlobDetector(max_dots);
 

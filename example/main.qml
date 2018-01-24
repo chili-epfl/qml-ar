@@ -20,7 +20,7 @@ Window {
         init_type: AR.INIT_CAMERA
 
         // scale image to 600px width
-        image_width: 600
+        image_width: 640
 
         // load scene
         arSceneComponent: Qt.createComponent("Activity.qml")

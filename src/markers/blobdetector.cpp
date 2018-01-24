@@ -130,9 +130,15 @@ std::vector<cv::KeyPoint> BlobDetector::getBlobs()
 
 QPair<QVector<QVector2D>, QImage> BlobDetector::getAndDraw(QImage img)
 {
+    TimeLoggerLog("%s", "[ANALYZE] Begin BlobDetector");
     QVector<QVector2D> blobs = detectBlobs(img);
     QImage drawn = drawBlobs();
-    return qMakePair(blobs, drawn);
+
+    QPair<QVector<QVector2D>, QImage> result = qMakePair(blobs, drawn);
+
+    TimeLoggerLog("%s", "[ANALYZE] End BlobDetector");
+
+    return result;
 }
 
 QVector<QVector2D> BlobDetector::detectBlobs(QImage source)

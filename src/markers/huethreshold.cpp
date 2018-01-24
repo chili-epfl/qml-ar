@@ -21,7 +21,7 @@ HueThreshold::HueThreshold()
 
 QImage HueThreshold::threshold(QImage source)
 {
-    TimeLoggerLog("%s", "Threshold begin");
+    TimeLoggerLog("%s", "[ANALYZE] Begin HueThreshold");
 
     // nothing on no ranges
     if(min_hsv.length() == 0)
@@ -63,7 +63,7 @@ QImage HueThreshold::threshold(QImage source)
     QImage result_qt = QtOcv::mat2Image(result_rgb);
     result_qt.toPixelFormat(QImage::Format_RGB888);
 
-    TimeLoggerLog("%s", "Done");
+    TimeLoggerLog("%s", "[ANALYZE] End HueThreshold");
 
     return result_qt;
 }
