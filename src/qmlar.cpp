@@ -159,7 +159,7 @@ void QMLAR::hueAvailable(double mean, double std)
     connect(tracking, SIGNAL(imageAvailable(QImage)), hue_threshold, SLOT(setInput(QImage)));
 
     // hsv -> detector
-    connect(hue_threshold, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
+    //connect(hue_threshold, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
 }
 
 void QMLAR::connectAll()
@@ -227,10 +227,6 @@ void QMLAR::connectAll()
 
     // output MVP matrix from IMU decorator
     connect(mvp_imu_decorated, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVP(QMatrix4x4)));
-
-    static QTimer t;
-    connect(&t, SIGNAL(timeout()), hsv_interval, SLOT(calculate()));
-    t.start(10000);
 }
 
 QString QMLAR::getImageFilename()
@@ -253,7 +249,7 @@ void QMLAR::initialize()
 #endif
 
     // allowing up to 6 parallel tasks
-    QThreadPool::globalInstance()->setMaxThreadCount(6);
+    QThreadPool::globalInstance()->setMaxThreadCount(QThreadPool::globalInstance()->maxThreadCount() + 6);
 
     // creating blob detector
     blob_detector = new BlobDetector(max_dots);
@@ -290,7 +286,7 @@ void QMLAR::initialize()
     scaler = new ImageScaler(image_width);
 
     // creating HSV interval detector
-    hsv_interval = new HSVIntervalDetector(10000);
+    hsv_interval = new HSVIntervalDetector(1000);
 
     // creating hsv thresholder
     hue_threshold = new HueThreshold();
