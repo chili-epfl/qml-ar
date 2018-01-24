@@ -1,11 +1,13 @@
 #include "hsvintervaldetector.h"
 #include "qvideoframehelpers.h"
 #include "timelogger.h"
+#include <QtMath>
 #include <QRgb>
 #include <QColor>
 
-HSVIntervalDetector::HSVIntervalDetector()
+HSVIntervalDetector::HSVIntervalDetector(int min_points)
 {
+    this->min_points = min_points;
 }
 
 void HSVIntervalDetector::newPoints(QPair<QImage, QVector<QVector2D>> image_points)
@@ -18,7 +20,7 @@ void HSVIntervalDetector::newPoints(QPair<QImage, QVector<QVector2D>> image_poin
     if(image.width() * image.height() <= 1)
         return;
 
-    // detecting min and max HSV range
+    // updating hsv color vector
     QVector<QVector2D>::iterator it;
     for(it = points.begin(); it != points.end(); it++)
     {
@@ -28,23 +30,19 @@ void HSVIntervalDetector::newPoints(QPair<QImage, QVector<QVector2D>> image_poin
         // pixel color
         QColor pixel = image.pixel(point.x(), point.y());
         colors.append(pixel);
+        mean_hue.addColor(pixel);
     }
+
+    // calculating results after minimal number of points
+    if(colors.length() > min_points)
+        calculate();
 }
 
-void HSVIntervalDetector::printAll()
+void HSVIntervalDetector::calculate()
 {
-    // resulting HSV values
-    int h, s, v;
+    // doing nothing on no colors
+    if(colors.size() == 0) return;
 
-    // loop over all found colors
-    QVector<QColor>::iterator it;
-    for(it = colors.begin(); it != colors.end(); it++)
-    {
-        // color of the pixel
-        QColor pixel = *it;
-
-        // getting HSV colors
-        pixel.getHsv(&h, &s, &v);
-        TimeLoggerLog("HSV %d %d %d", h, s, v);
-    }
+    // returning mean color and standard deviation
+    emit resultAvailable(mean_hue.meanHue(), mean_hue.stdHue());
 }

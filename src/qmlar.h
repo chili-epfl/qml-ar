@@ -21,6 +21,7 @@
 #include "imagescaler.h"
 #include "markerstorage.h"
 #include "hsvintervaldetector.h"
+#include "huethreshold.h"
 
 /*
  * This class is the C++/QML interface to the
@@ -108,6 +109,9 @@ public slots:
 
     // set markers
     void setMarkers(MarkerStorage storage);
+
+    // sets mean and std hue of dots
+    void hueAvailable(double mean, double std);
 private:
     // vector with blobs
     QVector<QVector2D> last_blobs;
@@ -184,6 +188,9 @@ private:
 
     // detector of dots color interval
     HSVIntervalDetector* hsv_interval;
+
+    // Hue HSV thresholder
+    HueThreshold* hue_threshold;
 
     // connect underlying objects
     void connectAll();

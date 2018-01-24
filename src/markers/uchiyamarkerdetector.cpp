@@ -206,6 +206,7 @@ QImage UchiyaMarkerDetector::preparePreview()
 void UchiyaMarkerDetector::prepareInput(QImage source)
 {
     TimeLoggerLog("%s", "Copying input");
+    qDebug() << "INPUTFORMAT" << source.format();
     static cv::Mat src2mat;
     src2mat = QtOcv::image2Mat_shared(source);
     static IplImage src2mat2ipl;

@@ -36,7 +36,7 @@ Window {
         show_fps: true
 
         // set output type
-        output_type: AR.OUTPUT_CAMERA
+        output_type: AR.OUTPUT_MARKERS
 
         // show blobs?
         show_blobs: false

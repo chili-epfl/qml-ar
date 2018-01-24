@@ -23,7 +23,7 @@ BlobDetector::BlobDetector()
     // set blob detector parameters
     parameters.minThreshold = 50;
     parameters.maxThreshold = 200;
-    parameters.thresholdStep = 25;
+    parameters.thresholdStep = 10;
     parameters.filterByArea = true;
     parameters.minArea = 10;
     parameters.filterByCircularity = true;

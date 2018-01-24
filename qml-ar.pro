@@ -63,7 +63,9 @@ SOURCES += src/imagebackend/opencvbackend.cpp \
     src/imagebackend/androidfilter.cpp \
     src/imagebackend/imageproviderasync.cpp \
     src/imagebackend/imagescaler.cpp \
-    src/markers/hsvintervaldetector.cpp
+    src/markers/hsvintervaldetector.cpp \
+    src/markers/hsvmeancolor.cpp \
+    src/markers/huethreshold.cpp
 
 HEADERS += \
     src/imagebackend/opencvbackend.h \
@@ -101,7 +103,9 @@ HEADERS += \
     src/imagebackend/androidfilter.h \
     src/imagebackend/imageproviderasync.h \
     src/imagebackend/imagescaler.h \
-    src/markers/hsvintervaldetector.h
+    src/markers/hsvintervaldetector.h \
+    src/markers/hsvmeancolor.h \
+    src/markers/huethreshold.h
 
 QML_SOURCES += \
     src/ARComponent.qml \
