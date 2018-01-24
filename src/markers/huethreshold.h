@@ -4,7 +4,6 @@
 #include "imageproviderasync.h"
 #include "opencv2/highgui.hpp"
 #include <QtConcurrent>
-
 /*
  * This class outputs binarized image
  * taking colors in [hue-delta, hue+delta]
@@ -18,6 +17,14 @@ public:
     HueThreshold(const HueThreshold &that);
 
 private:
+    // buffers
+    cv::Mat img;
+    cv::Mat hsv;
+    cv::Mat result;
+    cv::Mat result_rgb;
+    QImage result_qt;
+    cv::Mat mask;
+
     // for results from thread
     QFutureWatcher<QImage> watcher;
 

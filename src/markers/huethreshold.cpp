@@ -29,15 +29,10 @@ QImage HueThreshold::threshold(QImage source)
 
     TimeLoggerLog("%s", "Converting to HSV");
     // qt -> cv input
-    cv::Mat img;
-    img = QtOcv::image2Mat_shared(source);
+    img = QtOcv::image2Mat(source);
 
     // rgb -> hsv
-    cv::Mat hsv;
-    cv::cvtColor(img, hsv, cv::COLOR_RGB2HSV);
-
-    // resulting mask
-    cv::Mat result;
+    cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
 
     // sanity check
     Q_ASSERT(min_hsv.length() == max_hsv.length());
@@ -47,20 +42,27 @@ QImage HueThreshold::threshold(QImage source)
     for(int i = 0; i < min_hsv.length(); i++)
     {
         // current mask
-        cv::Mat mask;
         cv::inRange(hsv, min_hsv.at(i), max_hsv.at(i), mask);
 
         // result = mask or result|mask
         if(i == 0) result = mask;
         else cv::bitwise_or(mask, result, result);
+
+        TimeLoggerLog("%s", "End step");
     }
 
+    TimeLoggerLog("%s", "End mask");
+
     // converting to rgb
-    cv::Mat result_rgb;
     cv::cvtColor(255 - result, result_rgb, cv::COLOR_GRAY2RGB);
 
+    TimeLoggerLog("%s", "End GRAY->RGB");
+
     // resulting mask in qt
-    QImage result_qt = QtOcv::mat2Image(result_rgb);
+    result_qt = QtOcv::mat2Image(result_rgb);
+
+    TimeLoggerLog("%s", "End mat2Image");
+
     result_qt.toPixelFormat(QImage::Format_RGB888);
 
     TimeLoggerLog("%s", "[ANALYZE] End HueThreshold");
