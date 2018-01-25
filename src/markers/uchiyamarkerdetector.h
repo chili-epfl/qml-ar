@@ -54,6 +54,9 @@ private:
     MyImage m_img;
     LLAH m_llah;
 
+    // height and width
+    int h, w;
+
     // one side of a square marker in pixels
     const double marker_size_pixels = 600.0f;
 

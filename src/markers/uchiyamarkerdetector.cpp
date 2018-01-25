@@ -29,6 +29,8 @@ void UchiyaMarkerDetector::initialize(int h, int w)
 {
     Q_ASSERT(is_initialized == false);
     TimeLoggerLog("init %d %d", h, w);
+    this->h = h;
+    this->w = w;
     m_camimg.Init(w, h);		// allocate image
     m_img.Init(w, h);			// allocate image
     initMarkers();		// tracking initialization
@@ -176,7 +178,7 @@ void UchiyaMarkerDetector::extractMarkers()
                                                      image_marker_point_affine.y() / image_marker_point_affine.z());
 
             // Uchiya library mirrors y axis
-            image_marker_point.setY(m_img.h - image_marker_point.y());
+            image_marker_point.setY(h - image_marker_point.y());
 
             // draw the corner with its own color
             QVector3D color = colors[i];
@@ -191,8 +193,6 @@ void UchiyaMarkerDetector::extractMarkers()
 void UchiyaMarkerDetector::drawPreview() {
     // show image
     m_llah.DrawPts(m_img);
-
-    extractMarkers();
 }
 
 QImage UchiyaMarkerDetector::preparePreview()
@@ -216,13 +216,6 @@ void UchiyaMarkerDetector::prepareInput(QImage source)
 
 QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
 {
-    TimeLoggerLog("%s", "[ANALYZE] Begin Uchiya");
-
-    // copying input to OpenCV matrices
-    prepareInput(source);
-
-    TimeLoggerProfile("%s", "Start marker detection");
-
     // if the image is invalid, no need for marker detection
     // this happens at the start of the application
     if(source.height() * source.width() <= 0)
@@ -239,14 +232,27 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
         initialize(source.height(), source.width());
     }
 
-    // passing detected blobs to the library
-    m_llah.Extract(m_camimg);
+    TimeLoggerLog("%s", "[ANALYZE] Begin Uchiya");
+
+    // copying input
+    if(source.isGrayscale())
+    {
+        // copying grayscale bits
+        m_llah.Extract(source);
+    }
+    else
+    {
+        // copying input to OpenCV matrices
+        prepareInput(source);
+        // passing detected blobs to the library
+        m_llah.Extract(m_camimg);
+    }
 
     TimeLoggerLog("%s", "Setting points");
 
     m_llah.SetPts();
     //m_llah.SetPts(blob_detector.getBlobs());
-    m_llah.CoordinateTransform(static_cast<double>(m_camimg.h));
+    m_llah.CoordinateTransform(source.height());
 
     TimeLoggerLog("%s", "Tracking");
 
@@ -258,11 +264,13 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     m_llah.RetrievebyMatching();
     m_llah.FindPaper(8);
 
-    // creating preview image
+    TimeLoggerLog("%s", "Extracting data");
+    // extracting WorldImage correspondences
+    extractMarkers();
 
     TimeLoggerLog("%s", "Creating preview");
-
-    drawPreview();
+    // creating preview image
+    //drawPreview();
 
     // obtaining Uchiya image dst and returning it
     QImage preview = preparePreview();
