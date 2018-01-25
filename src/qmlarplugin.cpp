@@ -1,3 +1,4 @@
+#include "qmlar.h"
 #include "qmlarplugin.h"
 #include "androidfilter.h"
 

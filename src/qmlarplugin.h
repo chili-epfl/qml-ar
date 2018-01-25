@@ -1,8 +1,9 @@
 #ifndef CELLULOARQMLPLUGIN_H
 #define CELLULOARQMLPLUGIN_H
 
-#include "qmlar.h"
 #include <QQmlExtensionPlugin>
+#include <QQmlEngine>
+#include <QJSEngine>
 
 /*
  * This class registers QMLAR

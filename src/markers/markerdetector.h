@@ -23,7 +23,7 @@ class MarkerDetector: public QObject
 { Q_OBJECT
 signals:
     // children call it when a new matrix should be computed
-    void markersUpdated(MarkerStorage);
+    void markersUpdated(MarkerStorage&);
 
     // called on new preview image
     void previewUpdated(QImage);
