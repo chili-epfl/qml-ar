@@ -1,5 +1,7 @@
 ##### QT
 # Name of the application
+TEMPLATE = app
+
 TARGET=ar-chest
 
 # Qt configuration for Quick applications
