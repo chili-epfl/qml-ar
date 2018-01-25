@@ -25,6 +25,8 @@ private:
     QImage result_qt;
     cv::Mat mask;
 
+    uchar buf[640*480*3];
+
     // for results from thread
     QFutureWatcher<QImage> watcher;
 
@@ -32,14 +34,14 @@ private:
     QVector<cv::Scalar> min_hsv;
     QVector<cv::Scalar> max_hsv;
 
+    // min/max hue
+    int mean_h, delta_h;
+
     // true if image is pending processing
     int input_buffer_nonempty;
 
     // buffer for input images
     QImage input_buffer;
-
-    // do color thresholding
-    QImage threshold(QImage source);
 
     // minimal and maximal SV values
     int min_s, max_s, min_v, max_v;
@@ -60,6 +62,12 @@ public slots:
 
     // handle result from thread
     void handleFinished();
+
+    // loop implementation
+    QImage thresholdManual(QImage source);
+
+    // CV implementation
+    QImage threshold(QImage source);
 };
 
 #endif // HUETHRESHOLD_H

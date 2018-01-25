@@ -2,13 +2,18 @@
 #include "timelogger.h"
 #include "QtOpenCV/cvmatandqimage.h"
 #include "opencv2/imgproc.hpp"
+#include <strings.h>
 
 HueThreshold::HueThreshold(const HueThreshold& that) : HueThreshold()
 {
+    this->min_v = that.min_v;
+    this->max_v = that.max_v;
     this->min_s = that.min_s;
     this->max_s = that.max_s;
     this->min_hsv = that.min_hsv;
     this->max_hsv = that.max_hsv;
+    this->mean_h = that.mean_h;
+    this->delta_h = that.delta_h;
 }
 
 HueThreshold::HueThreshold()
@@ -17,6 +22,57 @@ HueThreshold::HueThreshold()
     max_s = max_v = 255;
     input_buffer_nonempty = false;
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
+}
+
+QImage HueThreshold::thresholdManual(QImage source)
+{
+    //Q_ASSERT(source.format() == QImage::Format_RGB888);
+    TimeLoggerLog("%s", "[ANALYZE] Begin HueThresholdManual");
+
+    hsv = QtOcv::image2Mat_shared(source);
+
+    // rgb -> hsv
+    cv::cvtColor(hsv, hsv, cv::COLOR_RGB2HSV);
+
+    int h_ = source.height();
+    int w_ = source.width();
+
+    uchar* src = hsv.data;
+
+    bzero(buf, 640*480);
+
+    uchar mean_h_ = (int) (mean_h / 2);
+    uchar min_s_ = min_s;
+    uchar max_s_ = max_s;
+    uchar min_v_ = min_v;
+    uchar max_v_ = max_v;
+    uchar delta_h_ = delta_h / 2;
+
+    for(int j = 0; j < h_; j++)
+    for(int i = 0; i < w_; i++)
+        {
+            uchar* pixel = src + (w_ * j + i);
+            uchar h = pixel[0];
+            uchar s = pixel[1];
+            uchar v = pixel[2];
+
+            uchar diff;
+            if(h > mean_h_) diff = h - mean_h_;
+            else diff = mean_h_ - h;
+            if(180 - diff < diff) diff = 180 - diff;
+
+            if(s >= min_s_ && s <= max_s_ &&
+                    v >= min_v_ && v <= max_v_ &&
+                    diff < delta_h_)
+            {
+                buf[w_ * j + i] = 255;
+            }
+        }
+
+    QImage result(buf, w_, h_, QImage::Format_Grayscale8);
+
+    TimeLoggerLog("%s", "[ANALYZE] End HueThresholdManual");
+    return result;
 }
 
 QImage HueThreshold::threshold(QImage source)
@@ -87,6 +143,9 @@ void HueThreshold::setColor(double mean, double sigma)
     // using sigma
     double delta = sigma;
 
+    mean_h = mean;
+    delta_h = sigma;
+
     // saving color range as thresholds
     if(mean - delta < 0)
     {
@@ -129,7 +188,7 @@ void HueThreshold::setColor(double mean, double sigma)
     {
         TimeLoggerLog("Thresholding from (%.2f %.2f %.2f) to (%.2f %.2f %.2f)",
                       min_hsv[i][0], min_hsv[i][1], min_hsv[i][2],
-                      max_hsv[i][0], max_hsv[i][1], max_hsv[i][2]);
+                max_hsv[i][0], max_hsv[i][1], max_hsv[i][2]);
     }
 }
 
@@ -151,7 +210,8 @@ void HueThreshold::setInput(QImage input)
 
     if(!watcher.isRunning())
     {
-        QFuture<QImage> future = QtConcurrent::run(*this, &HueThreshold::threshold, input);
+        //QFuture<QImage> future = QtConcurrent::run(*this, &HueThreshold::threshold, input);
+        QFuture<QImage> future = QtConcurrent::run(*this, &HueThreshold::thresholdManual, input);
         watcher.setFuture(future);
     }
     else input_buffer_nonempty = true;
