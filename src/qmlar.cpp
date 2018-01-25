@@ -191,15 +191,21 @@ void QMLAR::hueAvailable(double mean, double std)
 
 void QMLAR::connectAll()
 {
-    hue_threshold->setColor(0, 10);
+    hue_threshold->setColor(0, 20);
 //    hue_threshold->setS(50,100);
 //    hue_threshold->setV(100,100);
-    connect(raw_provider, &ImageProviderAsync::imageAvailable, scaler, &ImageScaler::setInput);
     connect(scaler, &ImageProviderAsync::imageAvailable, hue_threshold, &HueThreshold::setInput);
     connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
     connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
+    //connect(scaler, &ImageScaler::imageAvailable, marker_backend, &MarkerBackEnd::setCamera);
+    connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+
+    connect(detector, &UchiyaMarkerDetector::markersUpdated, mvp_provider, &MarkerMVPProvider::recompute);
+
+    connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
+
 //    // camera -> scaler
-//    connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
+    connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
 
 //    // camera -> QML
 //    connect(raw_provider, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setCamera(QImage)));
@@ -208,7 +214,7 @@ void QMLAR::connectAll()
 //    connect(scaler, SIGNAL(imageAvailable(QImage)), tracking, SLOT(setInput(QImage)));
 
 //    // scaler -> resolution
-//    connect(scaler, SIGNAL(imageAvailable(QImage)), perspective_camera, SLOT(setResolution(QImage)));
+      connect(scaler, SIGNAL(imageAvailable(QImage)), perspective_camera, SLOT(setResolution(QImage)));
 
 //    // tracking -> blobs
 //    connect(tracking, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
@@ -283,44 +289,44 @@ void QMLAR::initialize()
 #endif
 
     // allowing up to 6 parallel tasks
-    QThreadPool::globalInstance()->setMaxThreadCount(QThreadPool::globalInstance()->maxThreadCount() + 6);
+    QThreadPool::globalInstance()->setMaxThreadCount(4);
 
     // creating blob detector
-//    blob_detector = new BlobDetector(max_dots);
+    blob_detector = new BlobDetector(max_dots);
 
     // loading marker positions
-//    detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
+    detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
 
     // connecting to IMU
-//    imu = new IMU();
+    imu = new IMU();
 
     // setting Accelerometer bias (TODO: fix hardcode)
-//    imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
+    imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
 
     // loading camera matrix
-//    camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");
+    camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");
 
     // decorating camera matrix object
     // allowing to obtain perspective matrix
-//    perspective_camera = new PerspectiveCamera(camera_matrix);
+    perspective_camera = new PerspectiveCamera(camera_matrix);
 
     // creating a ModelView provider
-//    mvp_provider = new MarkerMVPProvider(perspective_camera);
+    mvp_provider = new MarkerMVPProvider(perspective_camera);
 
     // creating linear pose predictor
-//    predictor = new LinearPosePredictor();
+    predictor = new LinearPosePredictor();
 
     // adding tracking to marker detector
-//    tracking = new TrackingDecorator(predictor);
+    tracking = new TrackingDecorator(predictor);
 
     // decorating MVP with IMU
-//    mvp_imu_decorated = new IMUMVPDecorator(imu);
+    mvp_imu_decorated = new IMUMVPDecorator(imu);
 
     // creating image scaler
     scaler = new ImageScaler(image_width);
 
     // creating HSV interval detector
-//    hsv_interval = new HSVIntervalDetector(1000);
+    hsv_interval = new HSVIntervalDetector(1000);
 
     // creating hsv thresholder
     hue_threshold = new HueThreshold();
