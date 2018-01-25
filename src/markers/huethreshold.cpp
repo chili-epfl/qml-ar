@@ -32,14 +32,17 @@ QImage HueThreshold::thresholdManual(QImage source)
     hsv = QtOcv::image2Mat_shared(source);
 
     // rgb -> hsv
-    cv::cvtColor(hsv, hsv, cv::COLOR_RGB2HSV);
+    cv::cvtColor(hsv, hsv, cv::COLOR_RGB2HSV, 3);
 
     int h_ = source.height();
     int w_ = source.width();
 
+    // checking input size
+    Q_ASSERT(h_ * w_ < IMAGE_MAX_PIXELS);
+
     uchar* src = hsv.data;
 
-    bzero(buf, 640*480);
+    //bzero(buf, h_ * w_);
 
     uchar mean_h_ = (int) (mean_h / 2);
     uchar min_s_ = min_s;
@@ -51,7 +54,7 @@ QImage HueThreshold::thresholdManual(QImage source)
     for(int j = 0; j < h_; j++)
     for(int i = 0; i < w_; i++)
         {
-            uchar* pixel = src + (w_ * j + i);
+            uchar* pixel = src + 3 * (w_ * j + i);
             uchar h = pixel[0];
             uchar s = pixel[1];
             uchar v = pixel[2];
@@ -67,6 +70,7 @@ QImage HueThreshold::thresholdManual(QImage source)
             {
                 buf[w_ * j + i] = 255;
             }
+            else buf[w_ * j + i] = 0;
         }
 
     QImage result(buf, w_, h_, QImage::Format_Grayscale8);
@@ -196,6 +200,18 @@ void HueThreshold::setV(double mean, double std)
 {
     min_v = mean - std;
     max_v = mean + std;
+}
+
+void HueThreshold::setVMinMax(double min_, double max_)
+{
+    min_v = min_;
+    max_v = max_;
+}
+
+void HueThreshold::setSMinMax(double min_, double max_)
+{
+    min_s = min_;
+    max_s = max_;
 }
 
 void HueThreshold::setS(double mean, double std)

@@ -9,6 +9,8 @@
  * taking colors in [hue-delta, hue+delta]
  */
 
+#define IMAGE_MAX_PIXELS (640 * 480)
+
 class HueThreshold : public ImageProviderAsync
 { Q_OBJECT
 public:
@@ -25,7 +27,7 @@ private:
     QImage result_qt;
     cv::Mat mask;
 
-    uchar buf[640*480*3];
+    uchar buf[IMAGE_MAX_PIXELS];
 
     // for results from thread
     QFutureWatcher<QImage> watcher;
@@ -68,6 +70,8 @@ public slots:
 
     // CV implementation
     QImage threshold(QImage source);
+    void setVMinMax(double min_, double max_);
+    void setSMinMax(double min_, double max_);
 };
 
 #endif // HUETHRESHOLD_H
