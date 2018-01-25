@@ -1,8 +1,8 @@
 #ifndef UCHIYAMARKERDETECTOR_H
 #define UCHIYAMARKERDETECTOR_H
 
-#include <uchiya/mylib/myimage.h>
-#include <uchiya/llah.h>
+#include "uchiya/mylib/myimage.h"
+#include "uchiya/llah.h"
 #include "uchiya/mylib/mymat.h"
 #include "markerdetector.h"
 #include <QMatrix4x4>

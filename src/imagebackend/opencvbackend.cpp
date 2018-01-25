@@ -1,7 +1,7 @@
 #include "timelogger.h"
 #include "opencvbackend.h"
 #include "qvideoframehelpers.h"
-#include "QtOpenCV/cvmatandqimage.h"
+#include "cvmatandqimage.h"
 
 OpenCVCameraBackend::OpenCVCameraBackend(const OpenCVCameraBackend& backend) : ImageProviderAsync()
 {

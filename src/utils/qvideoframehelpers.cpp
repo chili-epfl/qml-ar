@@ -3,7 +3,7 @@
 #include <QElapsedTimer>
 #include <QList>
 #include <QVideoFrame>
-#include "yuv2rgb/yuv2rgb.h"
+#include "yuv2rgb.h"
 
 uchar QVideoFrameHelpers::rgb[MAX_SIZE];
 

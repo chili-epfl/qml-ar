@@ -3,7 +3,7 @@
 #include <QMatrix4x4>
 #include <opencv2/calib3d.hpp>
 #include <opencv2/core.hpp>
-#include <QtOpenCV/cvmatandqimage.h>
+#include "cvmatandqimage.h"
 
 Pose CameraPoseEstimatorCorrespondences::estimate(CalibratedCamera *camera, WorldImageCorrespondences *correspondences)
 {
