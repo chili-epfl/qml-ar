@@ -6,8 +6,8 @@
 #include <QTimer>
 
 /*
- * This class takes input from memory
- * and outputs it as a QImage
+ * This class takes input from pre-created
+ * byte array and outputs it as a QImage
  */
 
 class RandomImageBackend : public ImageProviderAsync
