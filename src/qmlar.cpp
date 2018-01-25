@@ -1,13 +1,30 @@
+#include <QVariant>
+#include <QtQml>
+#include <QCameraInfo>
 #include "qmlar.h"
+#include "imageproviderasync.h"
+#include "uchiyamarkerdetector.h"
+#include "imagebackend.h"
+#include "perspectivecamera.h"
+#include "portablebackendfactory.h"
+#include "markerbackend.h"
+#include "markermvpprovider.h"
+#include "calibratedcamerafilestorage.h"
+#include "imumvpdecorator.h"
+#include "posepredictor.h"
+#include "trackingdecorator.h"
+#include "blobdetector.h"
+#include "qtcamera2qml.h"
+#include "imagescaler.h"
+#include "markerstorage.h"
+#include "hsvintervaldetector.h"
+#include "huethreshold.h"
 #include "qtbackend.h"
 #include "timelogger.h"
 #include "qml-imu/src/IMU.h"
 #include "qvector3d.h"
 #include "linearposepredictor.h"
-#include <typeinfo>
-#include <QVariant>
-#include <QtQml>
-#include <QCameraInfo>
+#include "randomimagebackend.h"
 #include "qtcamera2qml.h"
 #include "worldimage.h"
 
@@ -19,6 +36,8 @@ QMLAR::QMLAR()
     image_filename = "";
     raw_provider = NULL;
     camera_wrapper = NULL;
+    marker_backend = new MarkerBackEnd();
+    marker_storage = new MarkerStorage();
 }
 
 int QMLAR::getCameraId()
@@ -32,8 +51,16 @@ void QMLAR::setCameraId(int camera_id)
     Q_ASSERT(!is_initialized);
     TimeLoggerLog("Using camera %d", camera_id);
     this->camera_id = camera_id;
+
+    // Random provider (debug)
+    //init_type = INIT_IMAGE;
+    //raw_provider = new RandomImageBackend();
+
+    // camera
     raw_provider = PortableCameraBackendFactory::getBackend(camera_id);
     init_type = INIT_CAMERA;
+
+
     initialize();
 }
 
@@ -64,7 +91,7 @@ void QMLAR::setImageWidth(int new_width)
 
 QQuickImageProvider *QMLAR::getImageProvider()
 {
-    return &marker_backend;
+    return marker_backend;
 }
 
 QObject* QMLAR::getCamera()
@@ -100,7 +127,7 @@ QVariantList QMLAR::getMarkers()
     QVariantList result{};
 
     QMap<int, Marker>::iterator it;
-    for(it = marker_storage.begin(); it != marker_storage.end(); it++)
+    for(it = marker_storage->begin(); it != marker_storage->end(); it++)
     {
         WorldImageCorrespondences c = it.value().getCorrespondences();
         if(c.size() != 4) continue;
@@ -135,9 +162,9 @@ void QMLAR::setBlobs(QVector<QVector2D> blobs)
     emit newBlobs();
 }
 
-void QMLAR::setMarkers(MarkerStorage storage)
+void QMLAR::setMarkers(MarkerStorage &storage)
 {
-    marker_storage = storage;
+    *marker_storage = storage;
     emit newMarkers();
 }
 
@@ -164,69 +191,76 @@ void QMLAR::hueAvailable(double mean, double std)
 
 void QMLAR::connectAll()
 {
-    // camera -> scaler
-    connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
+    hue_threshold->setColor(0, 10);
+//    hue_threshold->setS(50,100);
+//    hue_threshold->setV(100,100);
+    connect(raw_provider, &ImageProviderAsync::imageAvailable, scaler, &ImageScaler::setInput);
+    connect(scaler, &ImageProviderAsync::imageAvailable, hue_threshold, &HueThreshold::setInput);
+    connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
+    connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
+//    // camera -> scaler
+//    connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
 
-    // camera -> QML
-    connect(raw_provider, SIGNAL(imageAvailable(QImage)), &marker_backend, SLOT(setCamera(QImage)));
+//    // camera -> QML
+//    connect(raw_provider, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setCamera(QImage)));
 
-    // scaler -> tracking
-    connect(scaler, SIGNAL(imageAvailable(QImage)), tracking, SLOT(setInput(QImage)));
+//    // scaler -> tracking
+//    connect(scaler, SIGNAL(imageAvailable(QImage)), tracking, SLOT(setInput(QImage)));
 
-    // scaler -> resolution
-    connect(scaler, SIGNAL(imageAvailable(QImage)), perspective_camera, SLOT(setResolution(QImage)));
+//    // scaler -> resolution
+//    connect(scaler, SIGNAL(imageAvailable(QImage)), perspective_camera, SLOT(setResolution(QImage)));
 
-    // tracking -> blobs
-    connect(tracking, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
+//    // tracking -> blobs
+//    connect(tracking, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
 
-    // tracking -> threshold
-    connect(tracking, SIGNAL(imageAvailable(QImage)), hue_threshold, SLOT(setInput(QImage)));
+//    // tracking -> threshold
+//    connect(tracking, SIGNAL(imageAvailable(QImage)), hue_threshold, SLOT(setInput(QImage)));
 
-    // blobs -> markers
-    connect(blob_detector, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
+//    // blobs -> markers
+//    connect(blob_detector, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
 
-    // blobs -> QML
-    //connect(blob_detector, SIGNAL(blobsUpdated(QVector<QVector2D>)), this, SLOT(setBlobs(QVector<QVector2D>)));
+//    // blobs -> QML
+//    //connect(blob_detector, SIGNAL(blobsUpdated(QVector<QVector2D>)), this, SLOT(setBlobs(QVector<QVector2D>)));
 
-    // markers -> QML
-    //connect(detector, SIGNAL(previewUpdated(QImage)), &marker_backend, SLOT(setPreview(QImage)));
-    //connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SLOT(setMarkers(MarkerStorage)));
+//    // markers -> QML
+//    //connect(detector, SIGNAL(previewUpdated(QImage)), marker_backend, SLOT(setPreview(QImage)));
+//    //connect(detector, SIGNAL(markersUpdated(MarkerStorage&)), this, SLOT(setMarkers(MarkerStorage&)));
 
-    // threshold -> QML
-    connect(hue_threshold, SIGNAL(imageAvailable(QImage)), &marker_backend, SLOT(setPreview(QImage)));
+//    // threshold -> QML
+//    connect(hue_threshold, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setPreview(QImage)));
 
-    // markers -> MVP
-    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), mvp_provider, SLOT(recompute(MarkerStorage)));
+//    // markers -> MVP
+//    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), mvp_provider, SLOT(recompute(MarkerStorage)));
 
-    // markers -> tracking
-    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), tracking, SLOT(onNewMarkers(MarkerStorage)));
+//    // markers -> tracking
+//    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), tracking, SLOT(onNewMarkers(MarkerStorage)));
 
-    // markers -> HSV detector
-    qRegisterMetaType<QPair<QImage, QVector<QVector2D>>>("QPair<QImage, QVector<QVector2D>>");
-    connect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)),
-            hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)), Qt::QueuedConnection);
+//    // markers -> HSV detector
+//    qRegisterMetaType<QPair<QImage, QVector<QVector2D>>>("QPair<QImage, QVector<QVector2D>>");
+//    connect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)),
+//            hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)), Qt::QueuedConnection);
 
-    // HSV -> this
-    connect(hsv_interval, SIGNAL(hAvailable(double,double)), this, SLOT(hueAvailable(double, double)));
+//    // HSV -> this
+//    connect(hsv_interval, SIGNAL(hAvailable(double,double)), this, SLOT(hueAvailable(double, double)));
 
-    // HSV -> thresholding
-    connect(hsv_interval, SIGNAL(hAvailable(double,double)), hue_threshold, SLOT(setColor(double,double)));
-    connect(hsv_interval, SIGNAL(sAvailable(double,double)), hue_threshold, SLOT(setS(double,double)));
-    connect(hsv_interval, SIGNAL(vAvailable(double,double)), hue_threshold, SLOT(setV(double,double)));
+//    // HSV -> thresholding
+//    connect(hsv_interval, SIGNAL(hAvailable(double,double)), hue_threshold, SLOT(setColor(double,double)));
+//    connect(hsv_interval, SIGNAL(sAvailable(double,double)), hue_threshold, SLOT(setS(double,double)));
+//    connect(hsv_interval, SIGNAL(vAvailable(double,double)), hue_threshold, SLOT(setV(double,double)));
 
-    // mvp -> tracking
-    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), tracking, SLOT(onNewMVMatrix(QMatrix4x4)));
-    connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), tracking, SLOT(onNewPMatrix(QMatrix4x4)));
+//    // mvp -> tracking
+//    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), tracking, SLOT(onNewMVMatrix(QMatrix4x4)));
+//    connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), tracking, SLOT(onNewPMatrix(QMatrix4x4)));
 
-    // mvp -> FPS
-    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SIGNAL(imageUpdated()));
+//    // mvp -> FPS
+//    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SIGNAL(imageUpdated()));
 
-    // mvp -> imu
-    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(setMV(QMatrix4x4)));
-    connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(setP(QMatrix4x4)));
+//    // mvp -> imu
+//    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(setMV(QMatrix4x4)));
+//    connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(setP(QMatrix4x4)));
 
-    // output MVP matrix from IMU decorator
-    connect(mvp_imu_decorated, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVP(QMatrix4x4)));
+//    // output MVP matrix from IMU decorator
+//    connect(mvp_imu_decorated, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVP(QMatrix4x4)));
 }
 
 QString QMLAR::getImageFilename()
@@ -252,41 +286,41 @@ void QMLAR::initialize()
     QThreadPool::globalInstance()->setMaxThreadCount(QThreadPool::globalInstance()->maxThreadCount() + 6);
 
     // creating blob detector
-    blob_detector = new BlobDetector(max_dots);
+//    blob_detector = new BlobDetector(max_dots);
 
     // loading marker positions
-    detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
+//    detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
 
     // connecting to IMU
-    imu = new IMU();
+//    imu = new IMU();
 
     // setting Accelerometer bias (TODO: fix hardcode)
-    imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
+//    imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
 
     // loading camera matrix
-    camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");
+//    camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");
 
     // decorating camera matrix object
     // allowing to obtain perspective matrix
-    perspective_camera = new PerspectiveCamera(camera_matrix);
+//    perspective_camera = new PerspectiveCamera(camera_matrix);
 
     // creating a ModelView provider
-    mvp_provider = new MarkerMVPProvider(perspective_camera);
+//    mvp_provider = new MarkerMVPProvider(perspective_camera);
 
     // creating linear pose predictor
-    predictor = new LinearPosePredictor();
+//    predictor = new LinearPosePredictor();
 
     // adding tracking to marker detector
-    tracking = new TrackingDecorator(predictor);
+//    tracking = new TrackingDecorator(predictor);
 
     // decorating MVP with IMU
-    mvp_imu_decorated = new IMUMVPDecorator(imu);
+//    mvp_imu_decorated = new IMUMVPDecorator(imu);
 
     // creating image scaler
     scaler = new ImageScaler(image_width);
 
     // creating HSV interval detector
-    hsv_interval = new HSVIntervalDetector(1000);
+//    hsv_interval = new HSVIntervalDetector(1000);
 
     // creating hsv thresholder
     hue_threshold = new HueThreshold();

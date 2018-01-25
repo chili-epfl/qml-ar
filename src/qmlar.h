@@ -2,26 +2,30 @@
 #define CELLULOAR_H
 
 #include <QtCore>
+#include <QVector2D>
 #include <QtQml>
 #include <QString>
 #include <QVariantList>
-#include "imageproviderasync.h"
-#include "uchiyamarkerdetector.h"
-#include "imagebackend.h"
-#include "perspectivecamera.h"
-#include "portablebackendfactory.h"
-#include "markerbackend.h"
-#include "markermvpprovider.h"
-#include "calibratedcamerafilestorage.h"
-#include "imumvpdecorator.h"
-#include "posepredictor.h"
-#include "trackingdecorator.h"
-#include "blobdetector.h"
-#include "qtcamera2qml.h"
-#include "imagescaler.h"
-#include "markerstorage.h"
-#include "hsvintervaldetector.h"
-#include "huethreshold.h"
+#include <QMatrix4x4>
+#include <QQuickImageProvider>
+
+// forward declarations
+class ImageProviderAsync;
+class UchiyaMarkerDetector;
+class PerspectiveCamera;
+class MarkerBackEnd;
+class MarkerMVPProvider;
+class CalibratedCamera;
+class IMUMVPDecorator;
+class PosePredictor;
+class TrackingDecorator;
+class BlobDetector;
+class QtCamera2QML;
+class ImageScaler;
+class MarkerStorage;
+class HSVIntervalDetector;
+class HueThreshold;
+class IMU;
 
 /*
  * This class is the C++/QML interface to the
@@ -108,7 +112,7 @@ public slots:
     void setBlobs(QVector<QVector2D> blobs);
 
     // set markers
-    void setMarkers(MarkerStorage storage);
+    void setMarkers(MarkerStorage& storage);
 
     // sets mean and std hue of dots
     void hueAvailable(double mean, double std);
@@ -117,7 +121,7 @@ private:
     QVector<QVector2D> last_blobs;
 
     // storage for markers
-    MarkerStorage marker_storage;
+    MarkerStorage* marker_storage;
 
     // mvp buffer for QML
     QMatrix4x4 mvp_buffer;
@@ -153,7 +157,7 @@ private:
 
     // marker backend for visualizing
     // detected markers
-    MarkerBackEnd marker_backend;
+    MarkerBackEnd* marker_backend;
 
     // ModelViewProjection matrix
     // provider
