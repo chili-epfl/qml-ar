@@ -145,14 +145,14 @@ void QMLAR::hueAvailable(double mean, double std)
 { Q_UNUSED(mean) Q_UNUSED(std)
     // severing input to hsv_interval after first available result
 
-    // HSV -> thresholding
+    // X HSV -> thresholding
     disconnect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)),
             hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)));
 
-    // tracking -> blobs
+    // X tracking -> blobs
     disconnect(tracking, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
 
-    // blobs -> markers
+    // X blobs -> markers
     disconnect(blob_detector, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
 
     // tracking -> hsv
