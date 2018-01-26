@@ -198,11 +198,9 @@ void QMLAR::connectAll()
     hue_threshold->setColor(0, 20);
 //    hue_threshold->setS(50,100);
 //    hue_threshold->setV(100,100);
-    //connect(scaler, &ImageProviderAsync::imageAvailable, hue_threshold, &HueThreshold::setInput);
-    //connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
-    //connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
-    connect(scaler, &ImageScaler::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
-    connect(scaler, SIGNAL(imageAvailable(QImage)), this, SIGNAL(imageUpdated()));
+    connect(scaler, &ImageProviderAsync::imageAvailable, hue_threshold, &HueThreshold::setInput);
+    connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
+    connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
     //connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
     //connect(detector, &UchiyaMarkerDetector::markersUpdated, mvp_provider, &MarkerMVPProvider::recompute);
