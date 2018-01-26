@@ -60,7 +60,9 @@ for i, line in enumerate(f):
             if status == 'Begin':
                 block_begin[block] = (timestamp, thread)
             elif status == 'End':
-                assert(block in block_begin.keys())
+                if block not in block_begin.keys():
+                    print('Stray block end: %s %s %s' % (block, timestamp, thread))
+                    continue
                 if thread != block_begin[block][1]:
                     print('Multistart for block ' + block + ' tid1 ' + block_begin[block][1] + ' tid2 ' + thread)
                     continue

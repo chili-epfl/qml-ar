@@ -25,12 +25,12 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QThreadPool::globalInstance()->setMaxThreadCount(4);
+    QThreadPool::globalInstance()->setMaxThreadCount(8);
 
 //    for(int i = 0; i < 10; i++)
 //        qDebug() << run(i);
 
-    run(4);
+    run(8);
 
     return a.exec();
 }
