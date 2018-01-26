@@ -35,6 +35,7 @@ QMLAR::QMLAR()
     camera_id = -2;
     image_filename = "";
     raw_provider = NULL;
+    perspective_camera = NULL;
     camera_wrapper = NULL;
     marker_backend = new MarkerBackEnd();
     marker_storage = new MarkerStorage();
@@ -81,7 +82,10 @@ QMatrix4x4 QMLAR::getMVPMatrix()
 
 int QMLAR::getImageWidth()
 {
-    return image_width;
+    if(perspective_camera == NULL)
+        return image_width;
+    else
+        return perspective_camera->width();
 }
 
 void QMLAR::setImageWidth(int new_width)
@@ -194,18 +198,19 @@ void QMLAR::connectAll()
     hue_threshold->setColor(0, 20);
 //    hue_threshold->setS(50,100);
 //    hue_threshold->setV(100,100);
-    connect(scaler, &ImageProviderAsync::imageAvailable, hue_threshold, &HueThreshold::setInput);
-    connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
-    connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
-    //connect(scaler, &ImageScaler::imageAvailable, marker_backend, &MarkerBackEnd::setCamera);
-    connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+    //connect(scaler, &ImageProviderAsync::imageAvailable, hue_threshold, &HueThreshold::setInput);
+    //connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
+    //connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
+    connect(scaler, &ImageScaler::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
+    connect(scaler, SIGNAL(imageAvailable(QImage)), this, SIGNAL(imageUpdated()));
+    //connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
-    connect(detector, &UchiyaMarkerDetector::markersUpdated, mvp_provider, &MarkerMVPProvider::recompute);
+    //connect(detector, &UchiyaMarkerDetector::markersUpdated, mvp_provider, &MarkerMVPProvider::recompute);
 
-    connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
+    //connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
 
 //    // camera -> scaler
-    connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
+      connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
 
 //    // camera -> QML
 //    connect(raw_provider, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setCamera(QImage)));
@@ -288,8 +293,8 @@ void QMLAR::initialize()
     QString ASSETS_PATH = ":/assets/";
 #endif
 
-    // allowing up to 6 parallel tasks
-    QThreadPool::globalInstance()->setMaxThreadCount(4);
+    // allowing up to 10 parallel tasks
+    QThreadPool::globalInstance()->setMaxThreadCount(10);
 
     // creating blob detector
     blob_detector = new BlobDetector(max_dots);
