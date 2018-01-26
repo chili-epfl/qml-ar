@@ -85,8 +85,9 @@ QCamera *QtCameraBackend::getCamera()
 void QtCameraBackend::handleFinished()
 {
     processQImage(watcher.result());
-    TimeLoggerLog("%s", "Obtained new image");
-    emit imageAvailable(buf);
+    emit imageAvailable(buf.copy());
+    TimeLoggerLog("%s", "[ANALYZE] End QtGetImage");
+    TimeLoggerLog("%s", "[ANALYZE] Begin QtGetImage");
 }
 
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)

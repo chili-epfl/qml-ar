@@ -7,7 +7,7 @@ ImageScaler::ImageScaler()
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleResult()));
 }
 
-ImageScaler::ImageScaler(const ImageScaler& that) : ImageScaler()
+ImageScaler::ImageScaler(const ImageScaler& that)// : ImageScaler()
 {
     this->target_width = that.target_width;
 }
@@ -35,7 +35,7 @@ QImage ImageScaler::scale(QImage source)
     QImage result = source;
 
     // scaling it if necessary
-    if(target_width != source.width())
+    if(target_width < source.width())
         result = source.scaledToWidth(target_width);
 
     TimeLoggerLog("%s", "[ANALYZE] End Scale");
@@ -45,14 +45,14 @@ QImage ImageScaler::scale(QImage source)
 
 void ImageScaler::setInput(QImage source)
 {
-    input_buffer = source;
+    //input_buffer = source;
 
     if(!watcher.isRunning())
     {
-        QFuture<QImage> future = QtConcurrent::run(*this, &ImageScaler::scale, source);
+        QFuture<QImage> future = QtConcurrent::run(*this, &ImageScaler::scale, source.copy());
         watcher.setFuture(future);
     }
-    else input_buffer_nonempty = true;
+    //else input_buffer_nonempty = true;
 }
 
 ImageScaler::ImageScaler(int target_width) : ImageScaler()
