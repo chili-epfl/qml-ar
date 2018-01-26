@@ -4,7 +4,7 @@
 #include "opencv2/imgproc.hpp"
 #include <strings.h>
 
-HueThreshold::HueThreshold(const HueThreshold& that) : HueThreshold()
+HueThreshold::HueThreshold(const HueThreshold& that)
 {
     this->min_v = that.min_v;
     this->max_v = that.max_v;
@@ -14,6 +14,8 @@ HueThreshold::HueThreshold(const HueThreshold& that) : HueThreshold()
     this->max_hsv = that.max_hsv;
     this->mean_h = that.mean_h;
     this->delta_h = that.delta_h;
+    input_buffer_nonempty = false;
+
 }
 
 HueThreshold::HueThreshold()
@@ -29,7 +31,10 @@ QImage HueThreshold::thresholdManual(QImage source)
     //Q_ASSERT(source.format() == QImage::Format_RGB888);
     TimeLoggerLog("%s", "[ANALYZE] Begin HueThresholdManual");
 
-    hsv = QtOcv::image2Mat_shared(source);
+    //QImage copied = source.copy();
+    QImage copied = source;
+
+    hsv = QtOcv::image2Mat_shared(copied);
 
     // rgb -> hsv
     cv::cvtColor(hsv, hsv, cv::COLOR_RGB2HSV, 3);
@@ -75,8 +80,11 @@ QImage HueThreshold::thresholdManual(QImage source)
 
     QImage result(buf, w_, h_, QImage::Format_Grayscale8);
 
+    QImage result_copy = result.copy();
+
     TimeLoggerLog("%s", "[ANALYZE] End HueThresholdManual");
-    return result;
+
+    return result_copy;
 }
 
 QImage HueThreshold::threshold(QImage source)
@@ -222,7 +230,7 @@ void HueThreshold::setS(double mean, double std)
 
 void HueThreshold::setInput(QImage input)
 {
-    input_buffer = input;
+    //input_buffer = input;
 
     if(!watcher.isRunning())
     {
@@ -230,16 +238,17 @@ void HueThreshold::setInput(QImage input)
         QFuture<QImage> future = QtConcurrent::run(*this, &HueThreshold::thresholdManual, input);
         watcher.setFuture(future);
     }
-    else input_buffer_nonempty = true;
+    //else input_buffer_nonempty = true;
 }
 
 void HueThreshold::handleFinished()
 {
     QImage result = watcher.result();
 
-    TimeLoggerLog("Image from threshold %dx%d", result.width(), result.height());
-
     emit imageAvailable(result);
+
+    TimeLoggerLog("%s", "[ANALYZE] End HueThresholdMain");
+    TimeLoggerLog("%s", "[ANALYZE] Begin HueThresholdMain");
 
     if(input_buffer_nonempty)
     {
