@@ -127,9 +127,11 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // unmapping source from memory
     frame.unmap();
 
+    QImage result = image.copy();
+
     TimeLoggerLog("%s", "[ANALYZE] End FrameConvert");
 
-    return(image.copy());
+    return(result);
 }
 
 QImage QVideoFrameHelpers::empty()
