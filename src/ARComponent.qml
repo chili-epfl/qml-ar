@@ -206,7 +206,7 @@ Item {
                     }
 
                     // setting scale parameter
-                    root.scaleDots = 1.0 * root.width / image_width;
+                    root.scaleDots = 1.0 * root.width / w;
 
                     // need to set up only once
                     running = false;
@@ -232,6 +232,34 @@ Item {
                     root.load_scene3d();
                 }
             }
+        }
+
+        Rectangle {
+            id: hiddenMenuEnabler
+            z: 10
+            opacity: 0
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+            }
+            width: 100
+            height: 100
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: hiddenMenu.visible = !hiddenMenu.visible
+            }
+        }
+
+        ARMenu {
+            z: 15
+            anchors.top: hiddenMenuEnabler.bottom
+            anchors.left: hiddenMenuEnabler.left
+            width: 300
+            activity: root
+            height: 100
+            id: hiddenMenu
+            visible: true
         }
 
         ARBlobs {
@@ -289,7 +317,7 @@ Item {
             property real last_delta: 0
 
             // smoothing parameter
-            property real lambda: 0.99
+            property real lambda: 0.94
 
             text: "FPS: " + Math.round(fps_mean) + "; delta: " + Math.round(last_delta) + " ms"
             anchors.left: parent.left

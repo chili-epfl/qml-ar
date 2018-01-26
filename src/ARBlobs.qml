@@ -6,7 +6,7 @@ Item {
     anchors.fill: parent
     property real scaleDots: 1.0
     property real last_update: 0
-    property real min_delta_ms: 1000
+    property real min_delta_ms: 500
     Canvas {
         id: canvas
         anchors.fill: parent
