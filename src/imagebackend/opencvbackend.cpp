@@ -40,7 +40,7 @@ void OpenCVCameraBackend::handleFinished()
     // obtain previous result
     buf = watcher.result();
 
-    emit imageAvailable(buf);
+    emit imageAvailable(buf.copy());
 
     TimeLoggerLog("%s", "Obtained CV image");
 

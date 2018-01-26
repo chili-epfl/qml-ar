@@ -86,8 +86,8 @@ void QtCameraBackend::handleFinished()
 {
     processQImage(watcher.result());
     emit imageAvailable(buf.copy());
-    TimeLoggerLog("%s", "[ANALYZE] End QtGetImage");
-    TimeLoggerLog("%s", "[ANALYZE] Begin QtGetImage");
+    TimeLoggerLog("%s", "[ANALYZE] End QtCameraMain");
+    TimeLoggerLog("%s", "[ANALYZE] Begin QtCameraMain");
 }
 
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
