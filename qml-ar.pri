@@ -118,7 +118,8 @@ QML_SOURCES += \
     $$PWD/src/AR3DScene.qml \
     $$PWD/src/ARViewfinder.qml \
     $$PWD/src/ARBlobs.qml \
-    $$PWD/src/ARMarkers.qml
+    $$PWD/src/ARMarkers.qml \
+    $$PWD/src/ARMenu.qml \
 
 DISTFILES = $$QML_SOURCES
 
