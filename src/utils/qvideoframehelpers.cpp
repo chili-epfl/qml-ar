@@ -6,6 +6,8 @@
 #include "yuv2rgb.h"
 
 uchar QVideoFrameHelpers::rgb[MAX_SIZE];
+uchar QVideoFrameHelpers::yuv1[MAX_SIZE];
+uchar QVideoFrameHelpers::yuv2[MAX_SIZE];
 
 QList<QVideoFrame::PixelFormat> QVideoFrameHelpers::supportedPixelFormats()
 {
@@ -44,6 +46,28 @@ QList<QVideoFrame::PixelFormat> QVideoFrameHelpers::supportedPixelFormats()
             << QVideoFrame::Format_AdobeDng;
 }
 
+void QVideoFrameHelpers::halfYUV(uchar* src, uchar* dst, int w, int h)
+{
+    //byte[] yuv = new byte[imageWidth/2 * imageHeight/2 * 3 / 2];
+    // halve yuma
+    int i = 0;
+    for (int y = 0; y < h; y+=2) {
+        for (int x = 0; x < w; x+=2) {
+            dst[i] = src[y * w + x];
+            i++;
+        }
+    }
+    // halve U and V color components
+    for (int y = 0; y < h / 2; y+=2) {
+        for (int x = 0; x < w; x += 4) {
+            dst[i] = src[(w * h) + (y * w) + x];
+            i++;
+            dst[i] = src[(w * h) + (y * w) + (x + 1)];
+            i++;
+        }
+    }
+}
+
 QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 {
     TimeLoggerLog("%s", "[ANALYZE] Begin FrameConvert");
@@ -51,6 +75,8 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 
     // do nothing if no image found
     if(frameOriginal.width() * frameOriginal.height() == 0) return QImage();
+
+    TimeLoggerLog("Source %d %d", frameOriginal.width(), frameOriginal.height());
 
     Q_ASSERT(frameOriginal.width() <= MAX_IMG_SIDE);
     Q_ASSERT(frameOriginal.height() <= MAX_IMG_SIDE);
@@ -62,6 +88,19 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // bits of the image as byte array
     uchar* img = (uchar*) frame.bits();
 
+    // .. and size
+    int w = frameOriginal.width();
+    int h = frameOriginal.height();
+
+    // size /= 4
+    halfYUV(img, yuv1, w, h);
+    w /= 2;
+    h /= 2;
+    halfYUV(yuv1, yuv2, w, h);
+    w /= 2;
+    h /= 2;
+    img = yuv2;
+
     // format of the resulting QImage
     QImage::Format fmt = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
 
@@ -69,7 +108,7 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     // this call to yuv2rgb library converts it to RGB888
     if(frame.pixelFormat() == QVideoFrame::Format_NV21)
     {
-        nv21_to_rgb(rgb, img, frame.width(), frame.height());
+        nv21_to_rgb(rgb, img, w, h);
         img = rgb;
         fmt = QImage::Format_RGB888;
     }
@@ -82,15 +121,15 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 
     // the resulting QImage
     QImage image(img,
-                 frame.width(),
-                 frame.height(), fmt);
+                 w,
+                 h, fmt);
 
     // unmapping source from memory
     frame.unmap();
 
     TimeLoggerLog("%s", "[ANALYZE] End FrameConvert");
 
-    return(image);
+    return(image.copy());
 }
 
 QImage QVideoFrameHelpers::empty()

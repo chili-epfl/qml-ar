@@ -21,6 +21,9 @@ private:
     // buffer for nv21 -> rgb conversion
     static uchar rgb[MAX_SIZE];
 
+    // buffer for halving image two times
+    static uchar yuv1[MAX_SIZE], yuv2[MAX_SIZE];
+
 public:
     // return a list with all possible formats
     static QList<QVideoFrame::PixelFormat> supportedPixelFormats();
@@ -31,6 +34,10 @@ public:
 
     // returns empty black image
     static QImage empty();
+
+    // downscale YUV image by half
+    // https://stackoverflow.com/questions/17187193/resize-downsize-yuv420sp-image
+    static void halfYUV(uchar *src, uchar *dst, int w, int h);
 };
 
 #endif // QVIDEOFRAMEHELPERS_H
