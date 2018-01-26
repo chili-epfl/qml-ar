@@ -289,7 +289,7 @@ Item {
             property real last_delta: 0
 
             // smoothing parameter
-            property real lambda: 0.9
+            property real lambda: 0.99
 
             text: "FPS: " + Math.round(fps_mean) + "; delta: " + Math.round(last_delta) + " ms"
             anchors.left: parent.left
