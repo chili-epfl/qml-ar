@@ -259,7 +259,7 @@ Item {
             activity: root
             height: 100
             id: hiddenMenu
-            visible: true
+            visible: false
         }
 
         ARBlobs {

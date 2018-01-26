@@ -9,6 +9,8 @@
 #include <QMatrix4x4>
 #include <QQuickImageProvider>
 
+#include "markerstorage.h"
+
 // forward declarations
 class ImageProviderAsync;
 class UchiyaMarkerDetector;
@@ -112,7 +114,7 @@ public slots:
     void setBlobs(QVector<QVector2D> blobs);
 
     // set markers
-    void setMarkers(MarkerStorage& storage);
+    void setMarkers(MarkerStorage storage);
 
     // sets mean and std hue of dots
     void hueAvailable(double mean, double std);
