@@ -92,6 +92,7 @@ signals:
     // emits image coords. of blobs which belong
     // to a marker
     void dotsFound(QPair<QImage, QVector<QVector2D>>);
+    void dotsAll(QVector<QVector2D>);
 };
 
 #endif // UCHIYAMARKERDETECTOR_H

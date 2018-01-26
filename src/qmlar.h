@@ -116,6 +116,9 @@ public slots:
 
     // sets mean and std hue of dots
     void hueAvailable(double mean, double std);
+
+    // set image and dots from detector
+    void setDots(QPair<QImage, QVector<QVector2D>> image_dots);
 private:
     // vector with blobs
     QVector<QVector2D> last_blobs;

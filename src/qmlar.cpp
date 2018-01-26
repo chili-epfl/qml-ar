@@ -61,7 +61,6 @@ void QMLAR::setCameraId(int camera_id)
     raw_provider = PortableCameraBackendFactory::getBackend(camera_id);
     init_type = INIT_CAMERA;
 
-
     initialize();
 }
 
@@ -124,6 +123,11 @@ QVariantList QMLAR::getBlobs()
         result << *it;
     }
     return result;
+}
+
+void QMLAR::setDots(QPair<QImage, QVector<QVector2D> > image_dots)
+{
+    setBlobs(image_dots.second);
 }
 
 QVariantList QMLAR::getMarkers()
@@ -196,19 +200,27 @@ void QMLAR::hueAvailable(double mean, double std)
 void QMLAR::connectAll()
 {
     hue_threshold->setColor(0, 20);
+    qRegisterMetaType<QPair<QImage, QVector<QVector2D>>>("QPair<QImage, QVector<QVector2D>>");
+    qRegisterMetaType<QVector<QVector2D>>("QVector<QVector2D>");
+
+    connect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsAll(QVector<QVector2D>)),
+            this, SLOT(setBlobs(QVector<QVector2D>)), Qt::QueuedConnection);
+
+
 //    hue_threshold->setS(50,100);
 //    hue_threshold->setV(100,100);
-    connect(scaler, &ImageProviderAsync::imageAvailable, hue_threshold, &HueThreshold::setInput);
-    connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
-    connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
-    //connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+    connect(scaler, SIGNAL(imageAvailable(QImage)), hue_threshold, SLOT(setInput(QImage)));
+    connect(hue_threshold, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setPreview(QImage)));
+    connect(hue_threshold, SIGNAL(imageAvailable(QImage)), this, SIGNAL(imageUpdated()));
 
-    //connect(detector, &UchiyaMarkerDetector::markersUpdated, mvp_provider, &MarkerMVPProvider::recompute);
+    connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
-    //connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
+    connect(detector, &UchiyaMarkerDetector::markersUpdated, mvp_provider, &MarkerMVPProvider::recompute);
+
+    connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
 
 //    // camera -> scaler
-      connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
+    connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
 
 //    // camera -> QML
 //    connect(raw_provider, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setCamera(QImage)));
@@ -217,7 +229,7 @@ void QMLAR::connectAll()
 //    connect(scaler, SIGNAL(imageAvailable(QImage)), tracking, SLOT(setInput(QImage)));
 
 //    // scaler -> resolution
-      connect(scaler, SIGNAL(imageAvailable(QImage)), perspective_camera, SLOT(setResolution(QImage)));
+    connect(scaler, SIGNAL(imageAvailable(QImage)), perspective_camera, SLOT(setResolution(QImage)));
 
 //    // tracking -> blobs
 //    connect(tracking, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
@@ -245,7 +257,6 @@ void QMLAR::connectAll()
 //    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), tracking, SLOT(onNewMarkers(MarkerStorage)));
 
 //    // markers -> HSV detector
-//    qRegisterMetaType<QPair<QImage, QVector<QVector2D>>>("QPair<QImage, QVector<QVector2D>>");
 //    connect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)),
 //            hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)), Qt::QueuedConnection);
 

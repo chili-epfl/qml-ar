@@ -273,12 +273,13 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     //drawPreview();
 
     // obtaining Uchiya image dst and returning it
-    QImage preview = preparePreview();
+    QImage preview;// = preparePreview();
 
     TimeLoggerProfile("%s", "End marker detection");
 
     // sending obtained dots
     emit dotsFound(qMakePair(source, m_llah.foundDots()));
+    emit dotsAll(m_llah.foundDots(true));
 
     // returning markers
     QPair<MarkerStorage, QImage> result = qMakePair(markers, preview);
