@@ -81,6 +81,7 @@ QMatrix4x4 QMLAR::getMVPMatrix()
 
 int QMLAR::getImageWidth()
 {
+    init_sem.acquire();
     if(perspective_camera == NULL)
         return image_width;
     else
@@ -89,6 +90,7 @@ int QMLAR::getImageWidth()
 
 void QMLAR::setImageWidth(int new_width)
 {
+    Q_ASSERT(!is_initialized);
     image_width = new_width;
 }
 
@@ -99,6 +101,7 @@ QQuickImageProvider *QMLAR::getImageProvider()
 
 QObject* QMLAR::getCamera()
 {
+    init_sem.acquire();
     if(init_type == INIT_CAMERA && PortableCameraBackendFactory::cameraViewfinderAvailable())
     {
         QCamera* camera = dynamic_cast<QtCameraBackend*>(raw_provider)->getCamera();
@@ -151,6 +154,7 @@ QVariantList QMLAR::getMarkers()
 
 void QMLAR::startCamera()
 {
+    init_sem.acquire();
     if(init_type == INIT_CAMERA && PortableCameraBackendFactory::cameraViewfinderAvailable())
     {
         TimeLoggerLog("%s", "Starting camera");
@@ -345,4 +349,7 @@ void QMLAR::initialize()
 
     // now the object is initialized
     is_initialized = true;
+
+    // 10 functions can know that object is initialized
+    init_sem.release(10);
 }

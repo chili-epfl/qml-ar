@@ -35,16 +35,7 @@ class IMU;
  */
 
 class QMLAR : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(int camera_id WRITE setCameraId READ getCameraId)
-    Q_PROPERTY(QString image_filename WRITE setImageFilename READ getImageFilename)
-    Q_PROPERTY(QObject* camera READ getCamera)
-    Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
-    Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
-    Q_PROPERTY(QVariantList blobs READ getBlobs NOTIFY newBlobs)
-    Q_PROPERTY(QVariantList markers READ getMarkers NOTIFY newMarkers)
-
+{ Q_OBJECT
 public:
     // enum for initialization type
     enum InitType
@@ -122,6 +113,9 @@ public slots:
     // set image and dots from detector
     void setDots(QPair<QImage, QVector<QVector2D>> image_dots);
 private:
+    // initialization semaphore
+    QSemaphore init_sem;
+
     // vector with blobs
     QVector<QVector2D> last_blobs;
 

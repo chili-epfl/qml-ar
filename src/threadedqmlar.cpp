@@ -5,21 +5,29 @@
 ThreadedQMLAR::ThreadedQMLAR()
 {
     TimeLoggerLog("%s", "Starting Threaded QMLAR");
+
+    // creating AR object and a thread
     instance = new QMLAR();
     thread = new QThread();
 
+    qRegisterMetaType<Qt::ApplicationState>("Qt::ApplicationState");
+
+    // moving AR to thread
     instance->moveToThread(thread);
 
+    // calls to this object -> another thread
     connect(this, SIGNAL(setCameraIdSignal(int)), instance, SLOT(setCameraId(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(setImageFilenameSignal(QString)), instance, SLOT(setImageFilename(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(setImageWidthSignal(int)), instance, SLOT(setImageWidth(int)), Qt::QueuedConnection);
-    connect(this, SIGNAL(startCameraSignal()), instance, SLOT(startCamera()), Qt::QueuedConnection);
+    connect(this, SIGNAL(startCameraSignal(void)), instance, SLOT(startCamera()), Qt::QueuedConnection);
 
-    connect(instance, SIGNAL(imageUpdated()), this, SIGNAL(imageUpdated()), Qt::QueuedConnection);
+    // events from AR -> this object
+    connect(instance, SIGNAL(imageUpdated(void)), this, SIGNAL(imageUpdated(void)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newBlobs(QVariantList)), this, SIGNAL(newBlobs(QVariantList)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newMarkers(QVariantList)), this, SIGNAL(newMarkers(QVariantList)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SIGNAL(newMVPMatrix(QMatrix4x4)), Qt::QueuedConnection);
 
+    // starting AR
     thread->start();
 }
 
