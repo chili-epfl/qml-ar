@@ -31,8 +31,7 @@ QImage HueThreshold::thresholdManual(QImage source)
     //Q_ASSERT(source.format() == QImage::Format_RGB888);
     TimeLoggerLog("%s", "[ANALYZE] Begin HueThresholdManual");
 
-    //QImage copied = source.copy();
-    QImage copied = source;
+    QImage copied = source.copy();
 
     hsv = QtOcv::image2Mat_shared(copied);
 
@@ -47,8 +46,6 @@ QImage HueThreshold::thresholdManual(QImage source)
 
     uchar* src = hsv.data;
 
-    //bzero(buf, h_ * w_);
-
     uchar mean_h_ = (int) (mean_h / 2);
     uchar min_s_ = min_s;
     uchar max_s_ = max_s;
@@ -56,8 +53,10 @@ QImage HueThreshold::thresholdManual(QImage source)
     uchar max_v_ = max_v;
     uchar delta_h_ = delta_h / 2;
 
+    TimeLoggerLog("%s", "Starting loop");
+
     for(int j = 0; j < h_; j++)
-    for(int i = 0; i < w_; i++)
+        for(int i = 0; i < w_; i++)
         {
             uchar* pixel = src + 3 * (w_ * j + i);
             uchar h = pixel[0];

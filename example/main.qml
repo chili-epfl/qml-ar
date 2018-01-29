@@ -36,7 +36,7 @@ Window {
         show_fps: true
 
         // set output type
-        output_type: AR.OUTPUT_MARKERS
+        output_type: AR.OUTPUT_CAMERA
 
         // show blobs?
         show_blobs: false
@@ -45,6 +45,6 @@ Window {
         show_markers: false
 
         // use image instead of viewfinder
-        force_image: true
+        force_image: false
     }
 }
