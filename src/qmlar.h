@@ -39,7 +39,7 @@ class QMLAR : public QObject
     Q_OBJECT
     Q_PROPERTY(int camera_id WRITE setCameraId READ getCameraId)
     Q_PROPERTY(QString image_filename WRITE setImageFilename READ getImageFilename)
-    Q_PROPERTY(QObject* camera READ getCamera NOTIFY never)
+    Q_PROPERTY(QObject* camera READ getCamera)
     Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
     Q_PROPERTY(QVariantList blobs READ getBlobs NOTIFY newBlobs)
@@ -205,19 +205,16 @@ private:
     void connectAll();
 signals:
     // notify QML part when new matrix is available
-    void newMVPMatrix();
+    void newMVPMatrix(QMatrix4x4 mvp);
 
     // notify about new image
     void imageUpdated();
 
-    // never called
-    void never();
-
     // on new blobs from detector
-    void newBlobs();
+    void newBlobs(QVariantList);
 
     // on new markers
-    void newMarkers();
+    void newMarkers(QVariantList);
 };
 
 #endif // CELLULOAR_H

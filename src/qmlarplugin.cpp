@@ -1,6 +1,6 @@
-#include "qmlar.h"
 #include "qmlarplugin.h"
 #include "androidfilter.h"
+#include "threadedqmlar.h"
 
 void QMLARQMLPlugin::registerTypes(const char *uri)
 {
@@ -13,7 +13,7 @@ QObject *QMLARQMLPlugin::get_qml_ar(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(scriptEngine)
 
-    QMLAR* qml_ar = new QMLAR();
-    engine->addImageProvider("ARMarkers", qml_ar->getImageProvider());
-    return qml_ar;
+    ThreadedQMLAR* qml_ar_threaded = new ThreadedQMLAR();
+    engine->addImageProvider("ARMarkers", qml_ar_threaded->getImageProvider());
+    return qml_ar_threaded;
 }

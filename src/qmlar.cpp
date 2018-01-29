@@ -161,19 +161,19 @@ void QMLAR::startCamera()
 void QMLAR::setMVP(QMatrix4x4 mvp)
 {
     mvp_buffer = mvp;
-    emit newMVPMatrix();
+    emit newMVPMatrix(mvp_buffer);
 }
 
 void QMLAR::setBlobs(QVector<QVector2D> blobs)
 {
     last_blobs = blobs;
-    emit newBlobs();
+    emit newBlobs(getBlobs());
 }
 
 void QMLAR::setMarkers(MarkerStorage storage)
 {
     *marker_storage = storage;
-    emit newMarkers();
+    emit newMarkers(getMarkers());
 }
 
 void QMLAR::hueAvailable(double mean, double std)

@@ -69,7 +69,8 @@ SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
     $$PWD/src/markers/hsvmeancolor.cpp \
     $$PWD/src/markers/huethreshold.cpp \
     $$PWD/src/markers/meanstdcalculator.cpp \
-    $$PWD/src/imagebackend/randomimagebackend.cpp
+    $$PWD/src/imagebackend/randomimagebackend.cpp \
+    $$PWD/src/threadedqmlar.cpp
 
 HEADERS += \
     $$PWD/src/imagebackend/opencvbackend.h \
@@ -111,7 +112,8 @@ HEADERS += \
     $$PWD/src/markers/hsvmeancolor.h \
     $$PWD/src/markers/huethreshold.h \
     $$PWD/src/markers/meanstdcalculator.h \
-    $$PWD/src/imagebackend/randomimagebackend.h
+    $$PWD/src/imagebackend/randomimagebackend.h \
+    $$PWD/src/threadedqmlar.h
 
 QML_SOURCES += \
     $$PWD/src/ARComponent.qml \
