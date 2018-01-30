@@ -11,13 +11,18 @@ Item {
         id: blobs_menu
         anchors.left: parent.left
         anchors.top: parent.top
-        width: 100
-        height: 100
+        width: root.width * 0.33
+        height: parent.height
         color: "green"
         opacity: 0.5
 
+        radius: height*0.4
         Text {
-            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: "Helvetica"
+            font.pixelSize: 0.2*parent.height
+            font.bold: true
             text: "Blobs"
         }
 
@@ -31,13 +36,19 @@ Item {
         id: markers_menu
         anchors.left: blobs_menu.right
         anchors.top: parent.top
-        width: 100
-        height: 100
+        width: root.width * 0.33
+        height: parent.height
+        radius: height*0.4
+
         color: "green"
         opacity: 0.5
 
         Text {
-            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: "Helvetica"
+            font.pixelSize: 0.2*parent.height
+            font.bold: true
             text: "Markers"
         }
 
@@ -51,13 +62,18 @@ Item {
         id: fps_menu
         anchors.left: markers_menu.right
         anchors.top: parent.top
-        width: 100
-        height: 100
+        width: root.width * 0.33
+        height: parent.height
         color: "green"
         opacity: 0.5
+        radius: height*0.4
 
         Text {
-            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: "Helvetica"
+            font.pixelSize: 0.2*parent.height
+            font.bold: true
             text: "FPS"
         }
 
