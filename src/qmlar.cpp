@@ -223,7 +223,7 @@ void QMLAR::connectAll()
 
     connect(hue_threshold, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setPreview(QImage)));
     connect(hue_threshold, SIGNAL(imageAvailable(QImage)), this, SIGNAL(imageUpdated()));
-    connect(hue_threshold, SIGNAL(imageAvailable(QImage)), fps, SLOT(newFrame()));
+    connect(mvp_provider, SIGNAL(newMVPMatrix(QMatrix4x4)), fps, SLOT(newFrame()));
 
     //connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
 
