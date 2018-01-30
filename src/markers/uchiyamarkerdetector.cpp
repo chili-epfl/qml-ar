@@ -257,12 +257,12 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     TimeLoggerLog("%s", "Tracking");
 
     m_llah.RetrievebyTracking();
-    m_llah.FindPaper(4);
+    m_llah.FindPaper(6);
 
     TimeLoggerLog("%s", "Matching");
 
     m_llah.RetrievebyMatching();
-    m_llah.FindPaper(8);
+    m_llah.FindPaper(10);
 
     TimeLoggerLog("%s", "Extracting data");
     // extracting WorldImage correspondences
