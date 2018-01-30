@@ -6,6 +6,12 @@
 #include <QQuickImageProvider>
 #include "qmlar.h"
 
+/*
+ * This class is a wrapper around QMLAR object
+ * which is placed at a separate thread and controlled
+ * by this object
+ */
+
 class ThreadedQMLAR : public QObject
 { Q_OBJECT
     Q_PROPERTY(int camera_id WRITE setCameraId READ getCameraId)
@@ -15,6 +21,8 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
     Q_PROPERTY(QVariantList blobs READ getBlobs NOTIFY newBlobs)
     Q_PROPERTY(QVariantList markers READ getMarkers NOTIFY newMarkers)
+    Q_PROPERTY(double FPSMean READ getFPSMean NOTIFY imageUpdated)
+    Q_PROPERTY(double FPSStd READ getFPSStd NOTIFY imageUpdated)
 private:
     // instance to QMLAR object
     QMLAR* instance;
@@ -33,6 +41,10 @@ public:
     QObject* getCamera();
     QVariantList getBlobs();
     QVariantList getMarkers();
+
+    // FPS
+    double getFPSMean();
+    double getFPSStd();
 
 public slots:
     // initialize from camera id (default value -1)

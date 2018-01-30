@@ -255,9 +255,9 @@ Item {
             z: 15
             anchors.top: hiddenMenuEnabler.bottom
             anchors.left: hiddenMenuEnabler.left
-            width: 300
+            width: root.width * 0.5
             activity: root
-            height: 100
+            height: root.height * 0.1
             id: hiddenMenu
             visible: false
         }
@@ -292,12 +292,6 @@ Item {
             transformOrigin: Item.Center
         }
 
-        // update FPS on new image
-        Connections {
-            target: AR
-            onImageUpdated: fps_text.update()
-        }
-
         // text showing FPS
         Text {
             z: 10
@@ -307,55 +301,9 @@ Item {
 
             visible: root.show_fps
 
-            // last ms of image update
-            property real last_update: 0
-
-            // filtered fps mean
-            property real fps_mean: 0
-
-            // last time delta ms
-            property real last_delta: 0
-
-            // smoothing parameter
-            property real lambda: 0.94
-
-            text: "FPS: " + Math.round(fps_mean) + "; delta: " + Math.round(last_delta) + " ms"
+            text: "FPS: " + Math.round(AR.FPSMean) + " +- " + Math.round(AR.FPSStd)
             anchors.left: parent.left
             anchors.top: parent.top
-
-
-            // call on new frame
-            function update() {
-                // obtaining ms
-                var this_update = new Date().getTime();
-
-                // if not first launch, update text
-                if(fps_text.last_update > 0) {
-                    // difference since prev. update
-                    var difference = this_update - fps_text.last_update;
-
-                    // no update on zero difference (too fast to measure)
-                    if(difference == 0)
-                        return;
-
-                    // FPS = 1000 / delta_ms
-                    var this_fps = 1000. / difference;
-
-                    // setting last delta
-                    fps_text.last_delta = difference;
-
-                    // lambda smoothing
-                    if(fps_text.fps_mean > 0) {
-                        fps_text.fps_mean = fps_text.lambda * fps_text.fps_mean + (1 - fps_text.lambda) * this_fps;
-                    }
-                    else {
-                        fps_text.fps_mean = this_fps;
-                    }
-                }
-
-                // updating last_update
-                fps_text.last_update = this_update;
-            }
         }
     }
 }

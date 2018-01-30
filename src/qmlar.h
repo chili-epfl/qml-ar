@@ -28,6 +28,7 @@ class MarkerStorage;
 class HSVIntervalDetector;
 class HueThreshold;
 class IMU;
+class FPSCalculator;
 
 /*
  * This class is the C++/QML interface to the
@@ -85,6 +86,10 @@ public:
 
     // return list of marker corners
     QVariantList getMarkers();
+
+    // get FPS mean/std
+    double getFPSMean();
+    double getFPSStd();
 public slots:
     // initialize from camera id (default value -1)
     void setCameraId(int camera_id = -1);
@@ -194,6 +199,9 @@ private:
 
     // Hue HSV thresholder
     HueThreshold* hue_threshold;
+
+    // fps mean/std values
+    FPSCalculator* fps;
 
     // connect underlying objects
     void connectAll();

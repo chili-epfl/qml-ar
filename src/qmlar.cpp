@@ -27,6 +27,7 @@
 #include "randomimagebackend.h"
 #include "qtcamera2qml.h"
 #include "worldimage.h"
+#include "fpscalculator.h"
 
 QMLAR::QMLAR()
 {
@@ -39,6 +40,9 @@ QMLAR::QMLAR()
     camera_wrapper = NULL;
     marker_backend = new MarkerBackEnd();
     marker_storage = new MarkerStorage();
+
+    // calculating mean/std fps based on 100 calls
+    fps = new FPSCalculator(100);
 }
 
 int QMLAR::getCameraId()
@@ -152,6 +156,16 @@ QVariantList QMLAR::getMarkers()
     return result;
 }
 
+double QMLAR::getFPSMean()
+{
+    return fps->mean();
+}
+
+double QMLAR::getFPSStd()
+{
+    return fps->std();
+}
+
 void QMLAR::startCamera()
 {
     init_sem.acquire();
@@ -209,6 +223,7 @@ void QMLAR::connectAll()
 
     connect(hue_threshold, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setPreview(QImage)));
     connect(hue_threshold, SIGNAL(imageAvailable(QImage)), this, SIGNAL(imageUpdated()));
+    connect(hue_threshold, SIGNAL(imageAvailable(QImage)), fps, SLOT(newFrame()));
 
     //connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
 

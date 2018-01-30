@@ -71,6 +71,16 @@ QVariantList ThreadedQMLAR::getMarkers()
     return instance->getMarkers();
 }
 
+double ThreadedQMLAR::getFPSMean()
+{
+    return instance->getFPSMean();
+}
+
+double ThreadedQMLAR::getFPSStd()
+{
+    return instance->getFPSStd();
+}
+
 void ThreadedQMLAR::setCameraId(int camera_id)
 {
     emit setCameraIdSignal(camera_id);
