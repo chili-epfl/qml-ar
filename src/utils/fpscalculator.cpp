@@ -30,6 +30,8 @@ FPSCalculator::FPSCalculator(int to_keep)
     values_to_keep = to_keep;
     values.clear();
     last_msecs = 0;
+    last_mean = 0;
+    last_std = 0;
 }
 
 void FPSCalculator::newFrame()
