@@ -1,4 +1,21 @@
 ## AR module for QML
+This module allows to add an AR component to your QML application simply by importing our library. The framework uses <a href="http://limu.ait.kyushu-u.ac.jp/~uchiyama/me/code/UCHIYAMARKERS/index.html">Random dot markers</a> by Hideaki Uchiyama, which are chosen over other possibilities due to their small negative visual impact on the scene they are put on.
+
+## Gallery:
+Android:
+<p>
+<img src="/example/screenshots/android1.jpg?raw=true" height="200" alt="Sample application on Android" />
+<img src="/example/screenshots/android2.jpg?raw=true" height="200" alt="Sample application on Android" />
+<img src="/example/screenshots/android3.jpg?raw=true" height="200" alt="Sample application on Android" />
+<img src="/example/screenshots/android4.jpg?raw=true" height="200" alt="Sample application on Android" />
+</p>
+
+Linux:
+<p>
+<img src="/example/screenshots/linux1.jpg?raw=true" height="200" alt="Sample application on Linux" />
+<img src="/example/screenshots/linux2.jpg?raw=true" height="200" alt="Sample application on Linux" />
+<img src="/example/screenshots/linux3.jpg?raw=true" height="200" alt="Sample application on Linux" />
+</p>
 
 ## Prerequisites (Common)
 1. <a href="https://www.qt.io/download">Qt 5</a> (tested with 5.10.0) and Qt Creator (tested with 4.5.0), tested on Desktop and Android kits
@@ -25,18 +42,11 @@
 2. Attach camera to your PC (device 1 is used by default). Point camera towards the printed sheet
 3. A chest from Qt examples and a cuboid should appear
 
-## Gallery:
-Android:
-<p>
-<img src="/example/screenshots/android1.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/example/screenshots/android2.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/example/screenshots/android3.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/example/screenshots/android4.jpg?raw=true" height="200" alt="Sample application on Android" />
-</p>
+## Application Structure
+<img src="/doc/components.png" />
 
-Linux:
-<p>
-<img src="/example/screenshots/linux1.jpg?raw=true" height="200" alt="Sample application on Linux" />
-<img src="/example/screenshots/linux2.jpg?raw=true" height="200" alt="Sample application on Linux" />
-<img src="/example/screenshots/linux3.jpg?raw=true" height="200" alt="Sample application on Linux" />
-</p>
+## Adding markers to your scene
+You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
+
+## Contact
+<a href="mailto:sergei.volodin@epfl.ch">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
