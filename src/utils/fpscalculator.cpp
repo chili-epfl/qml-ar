@@ -37,10 +37,10 @@ FPSCalculator::FPSCalculator(int to_keep)
 void FPSCalculator::newFrame()
 {
     // obtaining msecs
-    qint64 msecs = QDateTime::currentDateTime().currentMSecsSinceEpoch();
+    qint64 msecs = QDateTime::currentMSecsSinceEpoch();
 
     // adding current freq
-    if(last_msecs > 0 && msecs > last_msecs)
+    if(last_msecs > 0 && msecs > last_msecs && msecs - last_msecs < 1000)
     {
         double freq = 1000. / (msecs - last_msecs);
         values.push_front(freq);
