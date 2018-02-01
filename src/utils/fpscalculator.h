@@ -16,6 +16,9 @@ private:
     // list of values_to_keep FPS values
     QLinkedList<double> values;
 
+    // timestamps of frames
+    QLinkedList<qint64> timestamps;
+
     // last mean fps
     double last_mean;
 
@@ -25,8 +28,8 @@ private:
     // number of FPS values to store
     int values_to_keep;
 
-    // last timestamp, saved at newFrame
-    qint64 last_msecs;
+    // number of frames from which to calculate FPS
+    int frames_window;
 
     // calculates mean value
     void calculateMean();

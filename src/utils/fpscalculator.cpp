@@ -29,9 +29,10 @@ FPSCalculator::FPSCalculator(int to_keep)
 {
     values_to_keep = to_keep;
     values.clear();
-    last_msecs = 0;
+    timestamps.clear();
     last_mean = 0;
     last_std = 0;
+    frames_window = 20;
 }
 
 void FPSCalculator::newFrame()
@@ -39,17 +40,24 @@ void FPSCalculator::newFrame()
     // obtaining msecs
     qint64 msecs = QDateTime::currentMSecsSinceEpoch();
 
-    // adding current freq
-    if(last_msecs > 0 && msecs > last_msecs && msecs - last_msecs < 1000)
+    // adding current timestamp
+    timestamps.push_back(msecs);
+
+    // calculating fps based on window
+    if(timestamps.size() >= frames_window)
     {
-        double freq = 1000. / (msecs - last_msecs);
+        // removing extra timestamps
+        if(timestamps.size() > frames_window)
+            timestamps.removeFirst();
+
+        // FPS = 1000. / (DT / N)
+        double freq = 1000. / (timestamps.last() - timestamps.first()) * frames_window;
+
+        // saving frequency
         values.push_front(freq);
         if(values.size() > values_to_keep)
             values.removeLast();
     }
-
-    // saving last timestamp
-    last_msecs = msecs;
 
     // updating mean/std
     if(values.size() > 0)
