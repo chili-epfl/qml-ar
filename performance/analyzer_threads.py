@@ -96,7 +96,7 @@ for block, arr in execution_time.items():
     all_labels.append('%s\n$%.1f$ FPS, ms: $%.2f\pm %.2f$ med $%.2f$' % (block,  1000./ np.mean(arr), np.mean(arr), np.std(arr), np.median(arr)))
     all_blocks.append(block)
 
-plt.figure(figsize=(15, 10))
+plt.figure(figsize=(15, 5))
 plt.title('Processing time for thread loop')
 plt.xlabel('ms')
 #plt.yticks(rotation=25)
