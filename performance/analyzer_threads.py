@@ -81,18 +81,36 @@ print(all_threads)
 # all blocks
 print(block_begin.keys())
 
+# show only these blocks
+block_filter = {'Uchiya': 'Detector', 'QtCameraMain': 'Camera', 'HueThresholdManual': 'HSV threshold', 'FrameConvert': 'yuv2rgb'}
+
 # printing the result
 all_arrays = []
 all_labels = []
+all_blocks = []
 for block, arr in execution_time.items():
+    if block not in block_filter.keys(): continue
+    block = block_filter[block]
     print('%s, Med %.2f Mean %.2f +- %.2f' % (block, np.median(arr), np.mean(arr), np.std(arr)))
     all_arrays.append(arr)
-    all_labels.append('%s: med %.2f/mean %.2f/std %.2f' % (block, np.median(arr), np.mean(arr), np.std(arr)))
+    all_labels.append('%s\n$%.1f$ FPS, ms: $%.2f\pm %.2f$ med $%.2f$' % (block,  1000./ np.mean(arr), np.mean(arr), np.std(arr), np.median(arr)))
+    all_blocks.append(block)
 
-plt.figure(figsize=(10, 10))
-plt.title('$\Delta_{t}$ for thread loop')
+plt.figure(figsize=(15, 10))
+plt.title('Processing time for thread loop')
 plt.xlabel('ms')
-plt.yticks(rotation=25)
+#plt.yticks(rotation=25)
 plt.boxplot(all_arrays, labels = all_labels, vert = False)
 plt.savefig(filename + '.png', bbox_inches='tight')
 print('Output: ' + filename + '.png')
+
+for arr, block in zip(all_arrays, all_blocks):
+    plt.figure(figsize=(10, 10))
+    plt.hist(arr, 20, facecolor='g', alpha=0.75)
+    plt.xlabel('ms')
+    plt.ylabel('Count')
+    plt.title('Histogram of ' + block + ' time')
+    plt.grid(True)
+    fn_local = filename + '_' + block + '.png'
+    plt.savefig(fn_local, bbox_inches='tight')
+    print('Block ' + block + ': ' + fn_local)
