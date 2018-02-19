@@ -51,7 +51,6 @@ class UchiyaMarkerDetector: public MarkerDetector
 private:
     // see main.h from UchiyaMarkers project
     MyImage m_camimg;
-    MyImage m_img;
     LLAH m_llah;
 
     // height and width
@@ -63,9 +62,6 @@ private:
     // are the images allocated?
     bool is_initialized;
 
-    // see main.cpp from UchiyaMarkers project
-    void drawPreview();
-
     void camInit(int h, int w);
     void initMarkers();
     void extractMarkers();
@@ -75,9 +71,6 @@ private:
 
     // convert input to IplImage for UchiyaMarkers
     void prepareInput(QImage source);
-
-    // convert preview image to QImage
-    QImage preparePreview();
 
 public:
     // initialize given height and width of the image

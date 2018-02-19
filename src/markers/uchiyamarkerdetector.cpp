@@ -32,14 +32,13 @@ void UchiyaMarkerDetector::initialize(int h, int w)
     this->h = h;
     this->w = w;
     m_camimg.Init(w, h);		// allocate image
-    m_img.Init(w, h);			// allocate image
     initMarkers();		// tracking initialization
     is_initialized = true;
 }
 
 void UchiyaMarkerDetector::initMarkers()
 {
-    m_llah.Init(m_img.w, m_img.h);		// set image size
+    m_llah.Init(m_camimg.w, m_camimg.h);		// set image size
 
     // going through all markers
     QMap<int, Marker>::iterator marker_in_map;
@@ -144,15 +143,7 @@ void UchiyaMarkerDetector::extractMarkers()
 
         // length should be equal since number of corners is the same
         Q_ASSERT(marker_uchiya_affine_corners.size() == marker_corners.size());
-
         Q_ASSERT(marker_uchiya_affine_corners.size() == 4);
-
-        // colors for the corners
-        QVector<QVector3D> colors;
-        colors.append(QVector3D(255, 0, 0));
-        colors.append(QVector3D(0, 255, 0));
-        colors.append(QVector3D(0, 0, 255));
-        colors.append(QVector3D(255, 255, 255));
 
         // go through the vector, compute image point and
         // add a correspondence
@@ -180,27 +171,10 @@ void UchiyaMarkerDetector::extractMarkers()
             // Uchiya library mirrors y axis
             image_marker_point.setY(h - image_marker_point.y());
 
-            // draw the corner with its own color
-            QVector3D color = colors[i];
-            m_img.Circle(image_marker_point.x(), image_marker_point.y(), 5, 1, color.x(), color.y(), color.z());
-
             // add the calculated correspondence
             m->addCorrespondence(world_marker_point, image_marker_point);
         }
     }
-}
-
-void UchiyaMarkerDetector::drawPreview() {
-    // show image
-    m_llah.DrawPts(m_img);
-}
-
-QImage UchiyaMarkerDetector::preparePreview()
-{
-    IplImage dst = *(IplImage*) m_img;
-    // second parameter disables data copying
-    cv::Mat dst2mat = cv::cvarrToMat(&dst, false);
-    return QtOcv::mat2Image(dst2mat);
 }
 
 void UchiyaMarkerDetector::prepareInput(QImage source)
@@ -211,7 +185,6 @@ void UchiyaMarkerDetector::prepareInput(QImage source)
     static IplImage src2mat2ipl;
     src2mat2ipl = (IplImage) src2mat;
     m_camimg.m_img = &src2mat2ipl;
-    m_img.Clone(m_camimg);
 }
 
 QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
@@ -250,7 +223,6 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     }
     TimeLoggerLog("%s", "[ANALYZE] End UchiyaCopyInput");
 
-
     TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaSetPts");
     m_llah.SetPts();
     //m_llah.SetPts(blob_detector.getBlobs());
@@ -262,23 +234,18 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     m_llah.FindPaper(6);
     TimeLoggerLog("%s", "[ANALYZE] End UchiyaTracking");
 
-
-    TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaMatching");
-    m_llah.RetrievebyMatching();
-    m_llah.FindPaper(10);
-    TimeLoggerLog("%s", "[ANALYZE] End UchiyaMatching");
+    if(m_llah.GetVisiblePaper()->size() == 0)
+    {
+        TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaMatching");
+        m_llah.RetrievebyMatching();
+        m_llah.FindPaper(10);
+        TimeLoggerLog("%s", "[ANALYZE] End UchiyaMatching");
+    }
 
     TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaExtractMarkers");
     // extracting WorldImage correspondences
     extractMarkers();
     TimeLoggerLog("%s", "[ANALYZE] End UchiyaExtractMarkers");
-
-    //TimeLoggerLog("%s", "Creating preview");
-    // creating preview image
-    //drawPreview();
-
-    // obtaining Uchiya image dst and returning it
-    QImage preview;// = preparePreview();
 
     TimeLoggerProfile("%s", "End marker detection");
 
@@ -287,7 +254,7 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     emit dotsAll(m_llah.foundDots(true));
 
     // returning markers
-    QPair<MarkerStorage, QImage> result = qMakePair(markers, preview);
+    QPair<MarkerStorage, QImage> result = qMakePair(markers, QImage());
 
     TimeLoggerLog("%s", "[ANALYZE] End Uchiya");
 
