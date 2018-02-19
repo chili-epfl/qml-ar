@@ -24,6 +24,9 @@ program = re.compile(pattern)
 # transition array
 execution_time = {}
 
+# begin deltas
+begin_times = {}
+
 # ignoring first lines
 ignore_lines = 0
 
@@ -59,6 +62,8 @@ for i, line in enumerate(f):
  #           print(timestamp, thread, block, status)
             if status == 'Begin':
                 block_begin[block] = (timestamp, thread)
+                if block not in begin_times: begin_times[block] = []
+                begin_times[block].append(int(timestamp))
             elif status == 'End':
                 if block not in block_begin.keys():
                     print('Stray block end: %s %s %s' % (block, timestamp, thread))
@@ -72,17 +77,23 @@ for i, line in enumerate(f):
             else:
                 assert(False)
 
+# begin deltas for blocks
+begin_deltas = {x: list(filter(lambda x: x < 1000, list(np.array(y[1:]) - np.array(y[:-1])))) for x, y in begin_times.items()}
+
 # printing all successors
-print(execution_time)
+#print(execution_time)
 
 # all tids
+print('Used threads:')
 print(all_threads)
 
 # all blocks
+print('Blocks:')
 print(block_begin.keys())
 
 # show only these blocks
-block_filter = {'Uchiya': 'Detector', 'QtCameraMain': 'Camera', 'HueThresholdManual': 'HSV threshold', 'FrameConvert': 'yuv2rgb'}
+#block_filter = {'Uchiya': 'Detector', 'QtCameraMain': 'Camera', 'HueThresholdManual': 'HSV threshold', 'FrameConvert': 'yuv2rgb'}
+block_filter = {x: x for x in block_begin.keys()}
 
 # printing the result
 all_arrays = []
@@ -91,18 +102,25 @@ all_blocks = []
 for block, arr in execution_time.items():
     if block not in block_filter.keys(): continue
     block = block_filter[block]
-    print('%s, Med %.2f Mean %.2f +- %.2f' % (block, np.median(arr), np.mean(arr), np.std(arr)))
     all_arrays.append(arr)
-    all_labels.append('%s\n$%.1f$ FPS, ms: $%.2f\pm %.2f$ med $%.2f$' % (block,  1000./ np.mean(arr), np.mean(arr), np.std(arr), np.median(arr)))
+    all_labels.append('%s $\\rightarrow$\n$%.1f$ FPS, ms: $%.2f\pm %.2f$ med $%.2f$' % (block,  1000./ np.mean(arr), np.mean(arr), np.std(arr), np.median(arr)))
     all_blocks.append(block)
+    arr1 = begin_deltas[block]
+    all_arrays.append(arr1)
+    all_labels.append('%s $\circlearrowright$\n$%.1f$ FPS, ms: $%.2f\pm %.2f$ med $%.2f$' % (block,  1000./ np.mean(arr1), np.mean(arr1), np.std(arr1), np.median(arr1)))
+    all_blocks.append(block + " Delta")
 
-plt.figure(figsize=(15, 5))
+for label in all_labels:
+    print(' '.join(label.split()))
+
+plt.figure(figsize=(15, 15))
 plt.title('Processing time for thread loop')
 plt.xlabel('ms')
 #plt.yticks(rotation=25)
 plt.boxplot(all_arrays, labels = all_labels, vert = False)
 plt.savefig(filename + '.png', bbox_inches='tight')
 print('Output: ' + filename + '.png')
+plt.clf()
 
 for arr, block in zip(all_arrays, all_blocks):
     plt.figure(figsize=(10, 10))
@@ -114,3 +132,4 @@ for arr, block in zip(all_arrays, all_blocks):
     fn_local = filename + '_' + block + '.png'
     plt.savefig(fn_local, bbox_inches='tight')
     print('Block ' + block + ': ' + fn_local)
+    plt.clf()
