@@ -207,7 +207,6 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
 
     TimeLoggerLog("%s", "[ANALYZE] Begin Uchiya");
 
-    TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaCopyInput");
     // copying input
     if(source.isGrayscale())
     {
@@ -221,7 +220,6 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
         // passing detected blobs to the library
         m_llah.Extract(m_camimg);
     }
-    TimeLoggerLog("%s", "[ANALYZE] End UchiyaCopyInput");
 
     TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaSetPts");
     m_llah.SetPts();
@@ -242,10 +240,8 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
         TimeLoggerLog("%s", "[ANALYZE] End UchiyaMatching");
     }
 
-    TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaExtractMarkers");
     // extracting WorldImage correspondences
     extractMarkers();
-    TimeLoggerLog("%s", "[ANALYZE] End UchiyaExtractMarkers");
 
     TimeLoggerProfile("%s", "End marker detection");
 

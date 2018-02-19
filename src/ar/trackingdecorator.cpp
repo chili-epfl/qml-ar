@@ -19,7 +19,9 @@ TrackingDecorator::TrackingDecorator(PosePredictor *predictor) : ImageProviderAs
 
 void TrackingDecorator::setInput(QImage img)
 {
+    TimeLoggerLog("%s", "[ANALYZE] Begin Blacken");
     QImage blackened = blacken(img);
+    TimeLoggerLog("%s", "[ANALYZE] End Blacken");
     emit imageAvailable(blackened);
 }
 

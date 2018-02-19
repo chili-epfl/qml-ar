@@ -246,9 +246,6 @@ void HueThreshold::handleFinished()
 
     emit imageAvailable(result);
 
-    TimeLoggerLog("%s", "[ANALYZE] End HueThresholdMain");
-    TimeLoggerLog("%s", "[ANALYZE] Begin HueThresholdMain");
-
     if(input_buffer_nonempty)
     {
         input_buffer_nonempty = false;
