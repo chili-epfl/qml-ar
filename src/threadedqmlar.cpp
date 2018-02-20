@@ -81,6 +81,11 @@ double ThreadedQMLAR::getFPSStd()
     return instance->getFPSStd();
 }
 
+bool ThreadedQMLAR::markers_visible()
+{
+    return instance->getMarkers().size() > 0;
+}
+
 void ThreadedQMLAR::setCameraId(int camera_id)
 {
     emit setCameraIdSignal(camera_id);

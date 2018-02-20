@@ -23,6 +23,7 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(QVariantList markers READ getMarkers NOTIFY newMarkers)
     Q_PROPERTY(double FPSMean READ getFPSMean NOTIFY imageUpdated)
     Q_PROPERTY(double FPSStd READ getFPSStd NOTIFY imageUpdated)
+    Q_PROPERTY(bool markers_visible READ markers_visible NOTIFY newMarkers)
 private:
     // instance to QMLAR object
     QMLAR* instance;
@@ -45,6 +46,8 @@ public:
     // FPS
     double getFPSMean();
     double getFPSStd();
+
+    bool markers_visible();
 
 public slots:
     // initialize from camera id (default value -1)

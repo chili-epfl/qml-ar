@@ -301,9 +301,22 @@ Item {
 
             visible: root.show_fps
 
-            text: "FPS: " + Math.round(AR.FPSMean) + " +- " + Math.round(AR.FPSStd)
+            text: "FPS: " + Math.round(AR.FPSMean) + " ± " + Math.round(AR.FPSStd)
             anchors.left: parent.left
             anchors.top: parent.top
+        }
+
+        Text {
+            z: 10
+            id: markers_text
+            color: AR.markers_visible ? "green" : "red"
+            font.pointSize: 20
+
+            visible: root.show_fps
+
+            text: "Markers " + (AR.markers_visible ? "present" : "absent")
+            anchors.left: parent.left
+            anchors.top: fps_text.bottom
         }
     }
 }
