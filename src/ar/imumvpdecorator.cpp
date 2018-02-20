@@ -1,7 +1,7 @@
 #include "timelogger.h"
 #include "imumvpdecorator.h"
 
-IMUMVPDecorator::IMUMVPDecorator(IMU *imu)
+IMUMVPDecorator::IMUMVPDecorator(IMU *imu, bool connect_on_create)
 {
     // saving provider and imu
     Q_ASSERT(imu != NULL);
@@ -11,11 +11,17 @@ IMUMVPDecorator::IMUMVPDecorator(IMU *imu)
     // will be set on first MVP from provider
     last_imu_pose_available = false;
 
-    // update resulting MVP on new pose from IMU
-    connect(imu, SIGNAL(stateChanged()), this, SLOT(updatePose()));
-
     // reset after 3 seconds
     reset_ms = 3000;
+
+    if(connect_on_create)
+        doConnect();
+}
+
+void IMUMVPDecorator::doConnect()
+{
+    // update resulting MVP on new pose from IMU
+    connect(imu, SIGNAL(stateChanged()), this, SLOT(updatePose()));
 
     // checking if waited for too long
     connect(&timer, SIGNAL(timeout()), this, SLOT(checkIfTooLong()));
@@ -45,9 +51,6 @@ void IMUMVPDecorator::setMV(QMatrix4x4 mv)
 
     // MV from provider
     last_mv = mv;
-
-    // forgetting previous displacement vector
-    imu->resetDisplacement();
 
     // obtaining current pose
     last_imu_pose = getCurrentPose();
@@ -98,9 +101,6 @@ QMatrix4x4 IMUMVPDecorator::getCurrentPose()
 
     // rotating matrix by (axis, angle)
     res.rotate(imu->getRotAngle(), new_axis);
-
-    QVector3D displacement = imu->getLinearDisplacement();
-    TimeLoggerLog("Displacement dx %.2f dy %.2f dz %.2f", displacement.x(), displacement.y(), displacement.z());
 
     return res;
 }

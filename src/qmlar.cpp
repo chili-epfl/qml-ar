@@ -41,6 +41,14 @@ QMLAR::QMLAR()
     marker_backend = new MarkerBackEnd();
     marker_storage = new MarkerStorage();
 
+    // reserve threads
+    for(int i = 0; i < 11; i++)
+        threads.append(new QThread());
+
+    // allowing up to 10 parallel tasks
+    // (separate from previous call)
+    QThreadPool::globalInstance()->setMaxThreadCount(10);
+
     // calculating mean/std fps based on 100 calls
     fps = new FPSCalculator(100);
 }
@@ -306,13 +314,11 @@ QString QMLAR::getImageFilename()
 
 void QMLAR::initialize()
 {
+    // sanity check
     Q_ASSERT(raw_provider != NULL);
-    // provider -> thread
-    raw_provider->moveToThread(&t6);
 
     // creating Uchiya marker detector
     detector = new UchiyaMarkerDetector;
-    detector->moveToThread(&t2);
 
     // setting up assets path (os-dependent)
 #ifdef Q_OS_ANDROID
@@ -320,9 +326,6 @@ void QMLAR::initialize()
 #else
     QString ASSETS_PATH = ":/assets/";
 #endif
-
-    // allowing up to 10 parallel tasks
-    QThreadPool::globalInstance()->setMaxThreadCount(10);
 
     // creating blob detector
     blob_detector = new BlobDetector(max_dots);
@@ -332,7 +335,6 @@ void QMLAR::initialize()
 
     // connecting to IMU
     imu = new IMU();
-    imu->moveToThread(&t3);
 
     // setting Accelerometer bias (TODO: fix hardcode)
     imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
@@ -352,11 +354,9 @@ void QMLAR::initialize()
 
     // adding tracking to marker detector
     tracking = new TrackingDecorator(predictor);
-    imu->moveToThread(&t5);
 
     // decorating MVP with IMU
-    mvp_imu_decorated = new IMUMVPDecorator(imu);
-    imu->moveToThread(&t4);
+    mvp_imu_decorated = new IMUMVPDecorator(imu, false);
 
     // creating image scaler
     scaler = new ImageScaler(image_width);
@@ -365,20 +365,30 @@ void QMLAR::initialize()
     hsv_interval = new HSVIntervalDetector(1000);
 
     // creating hsv thresholder
-    // and move to thread
     hue_threshold = new HueThreshold();
-    hue_threshold->moveToThread(&t1);
+
+    // moving objects to threads
+    // index in threads array
+    int thread_to_use = 0;
+    imu->moveToThread(threads[thread_to_use++]);
+    detector->moveToThread(threads[thread_to_use++]);
+    blob_detector->moveToThread(threads[thread_to_use++]);
+    mvp_provider->moveToThread(threads[thread_to_use++]);
+    tracking->moveToThread(threads[thread_to_use++]);
+    mvp_imu_decorated->moveToThread(threads[thread_to_use++]);
+    scaler->moveToThread(threads[thread_to_use++]);
+    hsv_interval->moveToThread(threads[thread_to_use++]);
+    hue_threshold->moveToThread(threads[thread_to_use++]);
+    raw_provider->moveToThread(threads[thread_to_use++]);
+    fps->moveToThread(threads[thread_to_use++]);
+    mvp_imu_decorated->doConnect();
 
     // connecting everything
     connectAll();
 
     // start queue threads
-    t1.start();
-    t2.start();
-    t3.start();
-    t4.start();
-    t5.start();
-    t6.start();
+    for(int i = 0; i < thread_to_use; i++)
+        threads[i]->start();
 
     // now the object is initialized
     is_initialized = true;

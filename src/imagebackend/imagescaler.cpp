@@ -45,14 +45,14 @@ QImage ImageScaler::scale(QImage source)
 
 void ImageScaler::setInput(QImage source)
 {
-    //input_buffer = source;
+    input_buffer = source;
 
     if(!watcher.isRunning())
     {
         QFuture<QImage> future = QtConcurrent::run(*this, &ImageScaler::scale, source.copy());
         watcher.setFuture(future);
     }
-    //else input_buffer_nonempty = true;
+    else input_buffer_nonempty = true;
 }
 
 ImageScaler::ImageScaler(int target_width) : ImageScaler()
