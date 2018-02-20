@@ -61,6 +61,7 @@ for i, line in enumerate(f):
             _, _, status, block, _ = split
  #           print(timestamp, thread, block, status)
             if status == 'Begin':
+                if block not in execution_time.keys(): execution_time[block] = []
                 block_begin[block] = (timestamp, thread)
                 if block not in begin_times: begin_times[block] = []
                 begin_times[block].append(int(timestamp))
@@ -102,9 +103,10 @@ all_blocks = []
 for block, arr in execution_time.items():
     if block not in block_filter.keys(): continue
     block = block_filter[block]
-    all_arrays.append(arr)
-    all_labels.append('%s $\\rightarrow$\n$%.1f$ FPS, ms: $%.2f\pm %.2f$ med $%.2f$' % (block,  1000./ np.mean(arr), np.mean(arr), np.std(arr), np.median(arr)))
-    all_blocks.append(block)
+    if len(arr) > 0:
+        all_arrays.append(arr)
+        all_labels.append('%s $\\rightarrow$\n$%.1f$ FPS, ms: $%.2f\pm %.2f$ med $%.2f$' % (block,  1000./ np.mean(arr), np.mean(arr), np.std(arr), np.median(arr)))
+        all_blocks.append(block)
     arr1 = begin_deltas[block]
     all_arrays.append(arr1)
     all_labels.append('%s $\circlearrowright$\n$%.1f$ FPS, ms: $%.2f\pm %.2f$ med $%.2f$' % (block,  1000./ np.mean(arr1), np.mean(arr1), np.std(arr1), np.median(arr1)))
