@@ -229,7 +229,7 @@ void HueThreshold::setS(double mean, double std)
 
 void HueThreshold::setInput(QImage input)
 {
-    //input_buffer = input;
+    input_buffer = input;
 
     if(!watcher.isRunning())
     {
@@ -237,7 +237,7 @@ void HueThreshold::setInput(QImage input)
         QFuture<QImage> future = QtConcurrent::run(*this, &HueThreshold::thresholdManual, input);
         watcher.setFuture(future);
     }
-    //else input_buffer_nonempty = true;
+    else input_buffer_nonempty = true;
 }
 
 void HueThreshold::handleFinished()

@@ -205,6 +205,9 @@ private:
 
     // connect underlying objects
     void connectAll();
+
+    // threads for objects
+    QThread t1, t2, t3, t4, t5, t6;
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix(QMatrix4x4 mvp);

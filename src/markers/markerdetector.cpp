@@ -41,7 +41,7 @@ void MarkerDetector::handleFinished()
 void MarkerDetector::setInput(QImage camera)
 {
     // saving last input
-    //input_buffer = camera;
+    input_buffer = camera;
 
     // starting thread if one is not running already
     if(!watcher.isRunning())
@@ -50,7 +50,7 @@ void MarkerDetector::setInput(QImage camera)
         watcher.setFuture(future);
     }
     // for starting job right after previous one finished
-    //else buffer_is_nonempty = true;
+    else buffer_is_nonempty = true;
 }
 
 void MarkerDetector::loadMarkerPositions(QString filename)

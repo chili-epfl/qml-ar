@@ -17,9 +17,6 @@ void ImageScaler::handleResult()
     buffer = watcher.result();
     emit imageAvailable(buffer);
 
-    TimeLoggerLog("%s", "[ANALYZE] End ScaleMain");
-    TimeLoggerLog("%s", "[ANALYZE] Begin ScaleMain")
-
     if(input_buffer_nonempty)
     {
         input_buffer_nonempty = false;

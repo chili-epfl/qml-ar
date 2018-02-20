@@ -220,6 +220,7 @@ void QMLAR::connectAll()
     hue_threshold->setColor(0, 20);
     qRegisterMetaType<QPair<QImage, QVector<QVector2D>>>("QPair<QImage, QVector<QVector2D>>");
     qRegisterMetaType<QVector<QVector2D>>("QVector<QVector2D>");
+    qRegisterMetaType<MarkerStorage>("MarkerStorage");
 
     connect(hue_threshold, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setPreview(QImage)));
     connect(hue_threshold, SIGNAL(imageAvailable(QImage)), this, SIGNAL(imageUpdated()));
@@ -306,8 +307,12 @@ QString QMLAR::getImageFilename()
 void QMLAR::initialize()
 {
     Q_ASSERT(raw_provider != NULL);
+    // provider -> thread
+    raw_provider->moveToThread(&t6);
+
     // creating Uchiya marker detector
     detector = new UchiyaMarkerDetector;
+    detector->moveToThread(&t2);
 
     // setting up assets path (os-dependent)
 #ifdef Q_OS_ANDROID
@@ -327,6 +332,7 @@ void QMLAR::initialize()
 
     // connecting to IMU
     imu = new IMU();
+    imu->moveToThread(&t3);
 
     // setting Accelerometer bias (TODO: fix hardcode)
     imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
@@ -346,9 +352,11 @@ void QMLAR::initialize()
 
     // adding tracking to marker detector
     tracking = new TrackingDecorator(predictor);
+    imu->moveToThread(&t5);
 
     // decorating MVP with IMU
     mvp_imu_decorated = new IMUMVPDecorator(imu);
+    imu->moveToThread(&t4);
 
     // creating image scaler
     scaler = new ImageScaler(image_width);
@@ -357,10 +365,20 @@ void QMLAR::initialize()
     hsv_interval = new HSVIntervalDetector(1000);
 
     // creating hsv thresholder
+    // and move to thread
     hue_threshold = new HueThreshold();
+    hue_threshold->moveToThread(&t1);
 
     // connecting everything
     connectAll();
+
+    // start queue threads
+    t1.start();
+    t2.start();
+    t3.start();
+    t4.start();
+    t5.start();
+    t6.start();
 
     // now the object is initialized
     is_initialized = true;
