@@ -23,6 +23,7 @@ OpenCVCameraBackend::OpenCVCameraBackend(int cam_id) : ImageProviderAsync()
     // copy id to object property
     camera_id = cam_id;
     buf = QVideoFrameHelpers::empty();
+    watcher.setParent(this);
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
     setupCV();
     request();

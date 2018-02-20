@@ -47,10 +47,8 @@ private:
     QTimer timer;
 public:
     // decorate MVP provider and an IMU
-    IMUMVPDecorator(IMU* imu, bool connect_on_create = true);
+    IMUMVPDecorator(IMU* imu);
 
-    // perform connections
-    void doConnect();
 public slots:
     // update resulting MVP matrix
     void updatePose();

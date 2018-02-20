@@ -13,6 +13,7 @@ MarkerDetector::MarkerDetector(const MarkerDetector &detector) : QObject()
 MarkerDetector::MarkerDetector()
 {
     // handling results on thread finish
+    watcher.setParent(this);
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
 }
 

@@ -1,7 +1,7 @@
 #include "timelogger.h"
 #include "imumvpdecorator.h"
 
-IMUMVPDecorator::IMUMVPDecorator(IMU *imu, bool connect_on_create)
+IMUMVPDecorator::IMUMVPDecorator(IMU *imu)
 {
     // saving provider and imu
     Q_ASSERT(imu != NULL);
@@ -14,14 +14,10 @@ IMUMVPDecorator::IMUMVPDecorator(IMU *imu, bool connect_on_create)
     // reset after 3 seconds
     reset_ms = 3000;
 
-    if(connect_on_create)
-        doConnect();
-}
-
-void IMUMVPDecorator::doConnect()
-{
     // update resulting MVP on new pose from IMU
     connect(imu, SIGNAL(stateChanged()), this, SLOT(updatePose()));
+
+    timer.setParent(this);
 
     // checking if waited for too long
     connect(&timer, SIGNAL(timeout()), this, SLOT(checkIfTooLong()));

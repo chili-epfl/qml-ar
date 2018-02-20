@@ -49,6 +49,7 @@ BlobDetector::BlobDetector()
 
     this->last_output = QVideoFrameHelpers::empty();
 
+    watcher.setParent(this);
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
 }
 

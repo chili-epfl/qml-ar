@@ -4,6 +4,7 @@
 
 ImageScaler::ImageScaler()
 {
+    watcher.setParent(this);
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleResult()));
 }
 

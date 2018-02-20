@@ -12,6 +12,8 @@ QtCameraBackend::QtCameraBackend(int cam_id) : ImageProviderAsync()
     // initializing camera
     TimeLoggerLog("Number of cameras: %d", QCameraInfo::availableCameras().size());
     camera = new QCamera(QCameraInfo::availableCameras().at(cam_id));
+    camera->setParent(this);
+    watcher.setParent(this);
     need_viewfinder = 1;
     frame_available = 0;
     init();

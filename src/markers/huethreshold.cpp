@@ -23,6 +23,7 @@ HueThreshold::HueThreshold()
     min_s = min_v = 50;
     max_s = max_v = 255;
     input_buffer_nonempty = false;
+    watcher.setParent(this);
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
 }
 

@@ -356,7 +356,7 @@ void QMLAR::initialize()
     tracking = new TrackingDecorator(predictor);
 
     // decorating MVP with IMU
-    mvp_imu_decorated = new IMUMVPDecorator(imu, false);
+    mvp_imu_decorated = new IMUMVPDecorator(imu);
 
     // creating image scaler
     scaler = new ImageScaler(image_width);
@@ -381,7 +381,6 @@ void QMLAR::initialize()
     hue_threshold->moveToThread(threads[thread_to_use++]);
     raw_provider->moveToThread(threads[thread_to_use++]);
     fps->moveToThread(threads[thread_to_use++]);
-    mvp_imu_decorated->doConnect();
 
     // connecting everything
     connectAll();

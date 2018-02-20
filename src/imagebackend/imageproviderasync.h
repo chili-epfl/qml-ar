@@ -5,6 +5,11 @@
 #include <QObject>
 #include <QImage>
 
+/*
+ * This class is an interface for image providers which emit a signal
+ * on new image
+ */
+
 class ImageProviderAsync : public QObject, public QQuickImageProvider
 { Q_OBJECT
 public:
