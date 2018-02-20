@@ -5,17 +5,13 @@ Item {
     id: root
     anchors.fill: parent
     property real scaleDots: 1.0
-    property real last_update: 0
-    property real min_delta_ms: 150
+
     Canvas {
         id: canvas
         anchors.fill: parent
         onPaint: doPaint()
         function doPaint() {
             if(!root.visible) return;
-            var this_update = new Date().getTime();
-            if(this_update - root.last_update < root.min_delta_ms) return;
-            root.last_update = this_update;
             var blobs = AR.blobs;
             var ctx = getContext("2d");
             ctx.reset()

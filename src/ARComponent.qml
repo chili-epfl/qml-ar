@@ -212,7 +212,7 @@ Item {
                     running = false;
 
                     // show image if no viewfinder available
-                    if(AR.camera != null && !root.force_image)
+                    if(AR.camera !== null && !root.force_image)
                     {
                         console.log("Hiding image");
                         image.cache = 0;
@@ -224,7 +224,7 @@ Item {
                     {
                         console.log("Showing image");
                         image.visible = true;
-                        if(AR.camera != null)
+                        if(AR.camera !== null)
                             viewfinder.visible = 0;
                     }
 
@@ -306,6 +306,7 @@ Item {
             anchors.top: parent.top
         }
 
+        // text showing marker visibility
         Text {
             z: 10
             id: markers_text

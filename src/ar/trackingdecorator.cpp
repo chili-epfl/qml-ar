@@ -67,7 +67,6 @@ QImage TrackingDecorator::blacken(QImage source)
     {
         // original 3D world point
         QVector3D world_point = correspondences.getWorldPoint(i);
-        QVector3D image_point = correspondences.getImagePoint(i);
         QVector4D world_point_4d = QVector4D(world_point);
         world_point_4d.setW(1);
 
