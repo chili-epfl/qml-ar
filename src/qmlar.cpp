@@ -376,7 +376,7 @@ void QMLAR::initialize()
     hue_threshold = new HueThreshold();
 
     // creating pose filter
-    pose_filter = new PoseFilter(0.8);
+    pose_filter = new PoseFilter(0.5);
 
     // calculating mean/std fps based on 100 calls
     fps = new FPSCalculator(100);
