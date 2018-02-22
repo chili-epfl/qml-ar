@@ -312,6 +312,8 @@ void QMLAR::connectAll()
 
 //    // output MVP matrix from IMU decorator
     connect(mvp_imu_decorated, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVP(QMatrix4x4)));
+
+    connect(this, SIGNAL(newFilterAlpha(double)), pose_filter, SLOT(setAlpha(double)));
 }
 
 QString QMLAR::getImageFilename()

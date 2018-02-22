@@ -24,12 +24,16 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(double FPSMean READ getFPSMean NOTIFY imageUpdated)
     Q_PROPERTY(double FPSStd READ getFPSStd NOTIFY imageUpdated)
     Q_PROPERTY(bool markers_visible READ markers_visible NOTIFY newMarkers)
+    Q_PROPERTY(double filter_alpha READ getFilterAlpha WRITE setFilterAlpha)
 private:
     // instance to QMLAR object
     QMLAR* instance;
 
     // thread to run in
     QThread* thread;
+
+    // cached alpha filter
+    double filter_alpha;
 public:
     ThreadedQMLAR();
 
@@ -49,6 +53,8 @@ public:
 
     bool markers_visible();
 
+    double getFilterAlpha();
+
 public slots:
     // initialize from camera id (default value -1)
     void setCameraId(int camera_id = -1);
@@ -61,6 +67,9 @@ public slots:
 
     // start camera if required
     void startCamera();
+
+    // set filtering alpha
+    void setFilterAlpha(double alpha);
 
 signals:
     // notify QML part when new matrix is available
@@ -86,6 +95,9 @@ signals:
 
     // start camera if required
     void startCameraSignal();
+
+    // set filtering alpha
+    void setFilterAlphaSignal(double alpha);
 };
 
 #endif // THREADEDQMLAR_H

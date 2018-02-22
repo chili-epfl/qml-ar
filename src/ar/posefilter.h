@@ -41,6 +41,9 @@ public slots:
 
     // recalculate filter output
     void update();
+
+    // new filtering alpha
+    void setAlpha(double alpha);
 };
 
 #endif // POSEFILTER_H

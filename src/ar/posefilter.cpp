@@ -45,3 +45,8 @@ void PoseFilter::update()
     // saving MVP matrix
     setMVPMatrix(p_matrix * mv_matrix);
 }
+
+void PoseFilter::setAlpha(double alpha)
+{
+    this->alpha = alpha;
+}

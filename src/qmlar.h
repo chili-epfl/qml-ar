@@ -118,6 +118,7 @@ public slots:
 
     // set image and dots from detector
     void setDots(QPair<QImage, QVector<QVector2D>> image_dots);
+
 private:
     // initialization semaphore
     QSemaphore init_sem;
@@ -224,6 +225,9 @@ signals:
 
     // on new markers
     void newMarkers(QVariantList);
+
+    // set filter alpha
+    void newFilterAlpha(double alpha);
 };
 
 #endif // CELLULOAR_H

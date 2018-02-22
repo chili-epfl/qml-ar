@@ -20,6 +20,7 @@ ThreadedQMLAR::ThreadedQMLAR()
     connect(this, SIGNAL(setImageFilenameSignal(QString)), instance, SLOT(setImageFilename(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(setImageWidthSignal(int)), instance, SLOT(setImageWidth(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(startCameraSignal(void)), instance, SLOT(startCamera()), Qt::QueuedConnection);
+    connect(this, SIGNAL(setFilterAlphaSignal(double)), instance, SIGNAL(newFilterAlpha(double)));
 
     // events from AR -> this object
     connect(instance, SIGNAL(imageUpdated(void)), this, SIGNAL(imageUpdated(void)), Qt::QueuedConnection);
@@ -86,6 +87,11 @@ bool ThreadedQMLAR::markers_visible()
     return instance->getMarkers().size() > 0;
 }
 
+double ThreadedQMLAR::getFilterAlpha()
+{
+    return filter_alpha;
+}
+
 void ThreadedQMLAR::setCameraId(int camera_id)
 {
     emit setCameraIdSignal(camera_id);
@@ -104,4 +110,10 @@ void ThreadedQMLAR::setImageWidth(int new_width)
 void ThreadedQMLAR::startCamera()
 {
     emit startCameraSignal();
+}
+
+void ThreadedQMLAR::setFilterAlpha(double alpha)
+{
+    this->filter_alpha = alpha;
+    emit setFilterAlphaSignal(alpha);
 }
