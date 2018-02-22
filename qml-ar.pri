@@ -71,7 +71,8 @@ SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
     $$PWD/src/markers/meanstdcalculator.cpp \
     $$PWD/src/imagebackend/randomimagebackend.cpp \
     $$PWD/src/threadedqmlar.cpp \
-    $$PWD/src/utils/fpscalculator.cpp
+    $$PWD/src/utils/fpscalculator.cpp \
+    $$PWD/src/ar/posefilter.cpp
 
 HEADERS += \
     $$PWD/src/imagebackend/opencvbackend.h \
@@ -115,7 +116,8 @@ HEADERS += \
     $$PWD/src/markers/meanstdcalculator.h \
     $$PWD/src/imagebackend/randomimagebackend.h \
     $$PWD/src/threadedqmlar.h \
-    $$PWD/src/utils/fpscalculator.h
+    $$PWD/src/utils/fpscalculator.h \
+    $$PWD/src/ar/posefilter.h
 
 QML_SOURCES += \
     $$PWD/src/ARComponent.qml \
