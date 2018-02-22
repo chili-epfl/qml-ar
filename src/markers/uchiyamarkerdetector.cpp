@@ -81,6 +81,10 @@ void UchiyaMarkerDetector::extractMarkers()
     // this removes point correspondences
     markers.undetect();
 
+    // largest markers (if any)
+    Marker* biggest_marker = NULL;
+    double biggest_determinant = 0;
+
     // for detected papers
     for(visible::iterator itpa=(*papers).begin(); itpa!=(*papers).end(); itpa++)
     {
@@ -99,6 +103,26 @@ void UchiyaMarkerDetector::extractMarkers()
         // top-left 3x3 submatrix is used
         // warning: matrix uses mirrored y axis
         QMatrix4x4 homography = MyMatConverter::convert3x3((*itpa)->H);
+
+        // using only 1 biggest marker to speed up
+        // (parts of image which are not biggest marker
+        // will be blackened on next iteration)
+        // biggest = by marker area ~ H determinant
+        // TODO: use visible area instead of total area
+        QMatrix4x4 homography_1 = homography;
+        homography_1(3, 3) = 1;
+        double det = fabs(homography_1.determinant());
+        if(det > biggest_determinant)
+        {
+            // forgetting old marker
+            if(biggest_marker)
+                biggest_marker->undetect();
+
+            // saving new marker
+            biggest_determinant = det;
+            biggest_marker = m;
+        }
+        else break;
 
         // Basic idea:
         // 1. Need: correspondences world <-> image
@@ -122,10 +146,10 @@ void UchiyaMarkerDetector::extractMarkers()
         marker_br += QVector3D(marker_size, marker_size, 0);
 
         // marker coordinate system (marker has size 600)
-        QVector3D marker_uchiya_tl_aeffine = QVector3D(0  , 600, 0);
-        QVector3D marker_uchiya_bl_aeffine = QVector3D(0  , 0  , 0);
-        QVector3D marker_uchiya_tr_aeffine = QVector3D(600, 600, 0);
-        QVector3D marker_uchiya_br_aeffine = QVector3D(600, 0  , 0);
+        QVector3D marker_uchiya_tl_affine = QVector3D(0  , 600, 0);
+        QVector3D marker_uchiya_bl_affine = QVector3D(0  , 0  , 0);
+        QVector3D marker_uchiya_tr_affine = QVector3D(600, 600, 0);
+        QVector3D marker_uchiya_br_affine = QVector3D(600, 0  , 0);
 
         // add all of the points to a vector
         QVector<QVector3D> marker_corners;
@@ -136,10 +160,10 @@ void UchiyaMarkerDetector::extractMarkers()
 
         // all of the marker corners corresponding to real world corners
         QVector<QVector3D> marker_uchiya_affine_corners;
-        marker_uchiya_affine_corners.push_back(marker_uchiya_tl_aeffine);
-        marker_uchiya_affine_corners.push_back(marker_uchiya_bl_aeffine);
-        marker_uchiya_affine_corners.push_back(marker_uchiya_tr_aeffine);
-        marker_uchiya_affine_corners.push_back(marker_uchiya_br_aeffine);
+        marker_uchiya_affine_corners.push_back(marker_uchiya_tl_affine);
+        marker_uchiya_affine_corners.push_back(marker_uchiya_bl_affine);
+        marker_uchiya_affine_corners.push_back(marker_uchiya_tr_affine);
+        marker_uchiya_affine_corners.push_back(marker_uchiya_br_affine);
 
         // length should be equal since number of corners is the same
         Q_ASSERT(marker_uchiya_affine_corners.size() == marker_corners.size());
