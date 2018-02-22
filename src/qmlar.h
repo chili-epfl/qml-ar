@@ -29,6 +29,7 @@ class HSVIntervalDetector;
 class HueThreshold;
 class IMU;
 class FPSCalculator;
+class PoseFilter;
 
 /*
  * This class is the C++/QML interface to the
@@ -202,6 +203,9 @@ private:
 
     // fps mean/std values
     FPSCalculator* fps;
+
+    // 3D pose low-pass filter
+    PoseFilter* pose_filter;
 
     // connect underlying objects
     void connectAll();

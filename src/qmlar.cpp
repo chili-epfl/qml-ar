@@ -28,6 +28,7 @@
 #include "qtcamera2qml.h"
 #include "worldimage.h"
 #include "fpscalculator.h"
+#include "posefilter.h"
 
 QMLAR::QMLAR()
 {
@@ -42,15 +43,15 @@ QMLAR::QMLAR()
     marker_storage = new MarkerStorage();
 
     // reserve threads
-    for(int i = 0; i < 11; i++)
+    for(int i = 0; i < 12; i++)
         threads.append(new QThread());
 
     // allowing up to 10 parallel tasks
     // (separate from previous call)
     QThreadPool::globalInstance()->setMaxThreadCount(10);
 
-    // calculating mean/std fps based on 100 calls
-    fps = new FPSCalculator(100);
+    // no fps calculator yet
+    fps = NULL;
 }
 
 int QMLAR::getCameraId()
@@ -166,12 +167,16 @@ QVariantList QMLAR::getMarkers()
 
 double QMLAR::getFPSMean()
 {
-    return fps->mean();
+    if(fps)
+        return fps->mean();
+    return 0;
 }
 
 double QMLAR::getFPSStd()
 {
-    return fps->std();
+    if(fps)
+        return fps->std();
+    return 0;
 }
 
 void QMLAR::startCamera()
@@ -236,27 +241,27 @@ void QMLAR::connectAll()
 
     //connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
 
-//    // camera -> scaler
+    // camera -> scaler
     connect(raw_provider, SIGNAL(imageAvailable(QImage)), scaler, SLOT(setInput(QImage)));
 
-//    // camera -> QML
+    // camera -> QML
     connect(scaler, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setCamera(QImage)));
 
-//    // scaler -> tracking
+    // scaler -> tracking
     connect(scaler, SIGNAL(imageAvailable(QImage)), tracking, SLOT(setInput(QImage)));
 
-//    // scaler -> resolution
+    // scaler -> resolution
     connect(scaler, SIGNAL(imageAvailable(QImage)), perspective_camera, SLOT(setResolution(QImage)));
 
 //    // tracking -> blobs
 //    connect(tracking, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
 
-//    // tracking -> threshold
+    // tracking -> threshold
     connect(tracking, SIGNAL(imageAvailable(QImage)), hue_threshold, SLOT(setInput(QImage)));
 
     connect(hue_threshold, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
 
-//    // blobs -> markers
+    // blobs -> markers
     connect(blob_detector, SIGNAL(imageAvailable(QImage)), detector, SLOT(setInput(QImage)));
 
 //    // blobs -> QML
@@ -266,17 +271,17 @@ void QMLAR::connectAll()
     connect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsAll(QVector<QVector2D>)),
             this, SLOT(setBlobs(QVector<QVector2D>)), Qt::QueuedConnection);
 
-//    // markers -> QML
+    // markers -> QML
 //    //connect(detector, SIGNAL(previewUpdated(QImage)), marker_backend, SLOT(setPreview(QImage)));
     connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SLOT(setMarkers(MarkerStorage)));
 
 //    // threshold -> QML
 //    connect(hue_threshold, SIGNAL(imageAvailable(QImage)), marker_backend, SLOT(setPreview(QImage)));
 
-//    // markers -> MVP
+    // markers -> MVP
     connect(detector, SIGNAL(markersUpdated(MarkerStorage)), mvp_provider, SLOT(recompute(MarkerStorage)));
 
-//    // markers -> tracking
+    // markers -> tracking
     connect(detector, SIGNAL(markersUpdated(MarkerStorage)), tracking, SLOT(onNewMarkers(MarkerStorage)));
 
 //    // markers -> HSV detector
@@ -298,9 +303,12 @@ void QMLAR::connectAll()
 //    // mvp -> FPS
 //    connect(detector, SIGNAL(markersUpdated(MarkerStorage)), this, SIGNAL(imageUpdated()));
 
-//    // mvp -> imu
-    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(setMV(QMatrix4x4)));
+    // mvp -> imu
+    connect(mvp_provider, SIGNAL(newMVMatrix(QMatrix4x4)), pose_filter, SLOT(setMV(QMatrix4x4)));
+    connect(pose_filter, SIGNAL(newMVMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(setMV(QMatrix4x4)));
+
     connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), mvp_imu_decorated, SLOT(setP(QMatrix4x4)));
+    connect(mvp_provider, SIGNAL(newPMatrix(QMatrix4x4)), pose_filter, SLOT(setP(QMatrix4x4)));
 
 //    // output MVP matrix from IMU decorator
     connect(mvp_imu_decorated, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVP(QMatrix4x4)));
@@ -367,6 +375,12 @@ void QMLAR::initialize()
     // creating hsv thresholder
     hue_threshold = new HueThreshold();
 
+    // creating pose filter
+    pose_filter = new PoseFilter(0.8);
+
+    // calculating mean/std fps based on 100 calls
+    fps = new FPSCalculator(100);
+
     // moving objects to threads
     // index in threads array
     int thread_to_use = 0;
@@ -381,6 +395,7 @@ void QMLAR::initialize()
     hue_threshold->moveToThread(threads[thread_to_use++]);
     raw_provider->moveToThread(threads[thread_to_use++]);
     fps->moveToThread(threads[thread_to_use++]);
+    pose_filter->moveToThread(threads[thread_to_use++]);
 
     // connecting everything
     connectAll();
