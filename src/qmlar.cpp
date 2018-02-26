@@ -212,8 +212,7 @@ void QMLAR::hueAvailable(double mean, double std)
     // severing input to hsv_interval after first available result
 
     // X HSV -> thresholding
-    disconnect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)),
-            hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)));
+    disconnect(detector, SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)), hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)));
 
     // X tracking -> blobs
     disconnect(tracking, SIGNAL(imageAvailable(QImage)), blob_detector, SLOT(setInput(QImage)));
@@ -268,8 +267,7 @@ void QMLAR::connectAll()
 //    //connect(blob_detector, SIGNAL(blobsUpdated(QVector<QVector2D>)), this, SLOT(setBlobs(QVector<QVector2D>)));
 
     // blobs -> QML (from Uchiya)
-    connect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsAll(QVector<QVector2D>)),
-            this, SLOT(setBlobs(QVector<QVector2D>)), Qt::QueuedConnection);
+    connect(detector, SIGNAL(dotsAll(QVector<QVector2D>)), this, SLOT(setBlobs(QVector<QVector2D>)), Qt::QueuedConnection);
 
     // markers -> QML
 //    //connect(detector, SIGNAL(previewUpdated(QImage)), marker_backend, SLOT(setPreview(QImage)));
@@ -285,8 +283,7 @@ void QMLAR::connectAll()
     connect(detector, SIGNAL(markersUpdated(MarkerStorage)), tracking, SLOT(onNewMarkers(MarkerStorage)));
 
 //    // markers -> HSV detector
-//    connect(dynamic_cast<UchiyaMarkerDetector*>(detector), SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)),
-//            hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)), Qt::QueuedConnection);
+//    connect(detector, SIGNAL(dotsFound(QPair<QImage, QVector<QVector2D>>)), hsv_interval, SLOT(newPoints(QPair<QImage, QVector<QVector2D>>)), Qt::QueuedConnection);
 
 //    // HSV -> this
 //    connect(hsv_interval, SIGNAL(hAvailable(double,double)), this, SLOT(hueAvailable(double, double)));
