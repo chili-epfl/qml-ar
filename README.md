@@ -44,7 +44,7 @@ Linux:
 3. A chest from Qt examples and a cuboid should appear
 
 ## Application Structure
-<img src="/doc/components.png" />
+<img src="/doc/components_v2.png" />
 
 ## Adding markers to your scene
 You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
