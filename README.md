@@ -8,6 +8,7 @@ Android:
 <img src="/example/screenshots/android2.jpg?raw=true" height="200" alt="Sample application on Android" />
 <img src="/example/screenshots/android3.jpg?raw=true" height="200" alt="Sample application on Android" />
 <img src="/example/screenshots/android4.jpg?raw=true" height="200" alt="Sample application on Android" />
+<img src="/example/screenshots/android_mixed.jpg?raw=true" height="200" alt="Mixed reality output" />
 </p>
 
 Linux:
@@ -47,6 +48,14 @@ Linux:
 
 ## Adding markers to your scene
 You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
+
+## Mixed reality
+<img src="/example/screenshots/android_mixed.jpg?raw=true" height="200" alt="Mixed reality output" />
+Mixed reality is supported both on Android and Linux.
+See comments for example to enable this mode.
+Currently, CPU camera image rendering is used in this mode, which also results in low resolution
+Moreover, the image looks far away (whereas objects look close) since the image is not currently shifted.
+Framework tested on Xiaomi Redmi 4A, and both with Google Cardboard and Gear VR.
 
 ## Contact
 <a href="mailto:sergei.volodin@epfl.ch">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
