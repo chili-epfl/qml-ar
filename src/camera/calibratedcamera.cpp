@@ -59,10 +59,10 @@ int CalibratedCamera::height()
     return image_h;
 }
 
-void CalibratedCamera::setResolution(QImage image)
+void CalibratedCamera::setResolutionImage(QImage image)
 {
     // reject further calls
-    disconnect(this, SLOT(setResolution(QImage)));
+    disconnect(this, SLOT(setResolutionImage(QImage)));
 
     setResolution(image.width(), image.height());
 }

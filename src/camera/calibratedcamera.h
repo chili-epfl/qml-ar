@@ -46,7 +46,7 @@ public:
     int height();
 
 public slots:
-    void setResolution(QImage image);
+    void setResolutionImage(QImage image);
 
 private:
     // get camera matrix A

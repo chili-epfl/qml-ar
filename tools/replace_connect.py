@@ -33,11 +33,11 @@ for i, line in enumerate(open(source, 'r')):
         ob1 = res.group(1)
         ob2 = res.group(4)
         # new connect() syntax
-        new_connect = 'connect(%s, &%s:%s, %s, &%s:%s' % (ob1, types[ob1], fn1, ob2, types[ob2], fn2)
+        new_connect = 'connect(%s, &%s::%s, %s, &%s::%s' % (ob1, types[ob1], fn1, ob2, types[ob2], fn2)
         new_line = line[:res.start()] + new_connect + line[res.end():]
-        print('New connect string: ' + new_connect)
-    elif i in connect_lines:
-        print('Missed connect: ' + line.strip())
+        #print('New connect string: ' + new_connect)
+#    elif i in connect_lines:
+        #print('Missed connect: ' + line.strip())
     new_code.append(new_line)
 
 print(''.join(new_code))
