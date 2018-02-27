@@ -28,6 +28,9 @@ Scene3D {
     // the resulting object will be stored here
     property var arSceneObject
 
+    // delta MVP x axis (in ???)
+    property double delta_x: 0
+
     // entity with camera which creates user's components inside
     Entity {
         id: activity
@@ -46,7 +49,10 @@ Scene3D {
         // set ModelViewProjection matrix as camera matrix
         Camera {
             id: camera
-            projectionMatrix: AR.mvp_matrix
+            projectionMatrix: AR.p_matrix.times(Qt.matrix4x4(1, 0, 0, delta_x,
+                                                             0, 1, 0, 0,
+                                                             0, 0, 1, 0,
+                                                             0, 0, 0, 1)).times(AR.mv_matrix)
         }
 
         // load scene on component loading

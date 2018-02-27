@@ -160,14 +160,17 @@ Item {
                                            'arSceneParameters': arSceneParameters});
                 scene3d_right = component.createObject(scene, {'arSceneComponent': arSceneComponent,
                                            'arSceneParameters': arSceneParameters});
+                var eye_delta = 10; //(mm)
                 scene3d_left.anchors.left = scene.left;
                 scene3d_left.anchors.bottom = scene.bottom
                 scene3d_left.anchors.top = scene.top;
                 scene3d_left.width = 0.5 * scene.width;
+                scene3d_left.delta_x = eye_delta;
                 scene3d_right.anchors.left = scene3d_left.right;
                 scene3d_right.anchors.bottom = scene.bottom
                 scene3d_right.anchors.top = scene.top;
                 scene3d_right.width = 0.5 * scene.width;
+                scene3d_right.delta_x = -eye_delta;
             }
             else {
                 scene3d = component.createObject(scene, {'arSceneComponent': arSceneComponent,
@@ -218,7 +221,12 @@ Item {
             onTriggered: {
                 var w = image.sourceSize.width;
                 var h = image.sourceSize.height;
-                if(avr_mode) w *= 2;
+                if(avr_mode) {
+                    w *= 2;
+
+                    // can't use 2xVideoOutput for now...
+                    force_image = true;
+                }
                 if(w * h > 2)
                 {
                     console.log("Image size is " + w + " x " + h)

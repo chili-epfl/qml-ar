@@ -16,7 +16,11 @@ Window {
     ARComponent {
         id: arComponent
 
-        avr_mode: true
+        // enable Augmented Virtual Reality
+        // adds two video outputs with one eye shifted
+        // relative to another
+        //avr_mode: true
+        avr_mode: false
 
         // use camera
         init_type: AR.INIT_CAMERA
@@ -32,7 +36,10 @@ Window {
 
         // set to true to force width to this value
         force_width: true
-        width: 1500
+
+        // set width to 1500 on tablet (regular mode)
+        // and to 1200 on phone (AVR mode)
+        width: avr_mode ? 1200 : 1500
 
         // do show fps?
         show_fps: true
