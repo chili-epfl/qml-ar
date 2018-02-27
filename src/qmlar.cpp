@@ -195,6 +195,18 @@ void QMLAR::setMVP(QMatrix4x4 mvp)
     emit newMVPMatrix(mvp_buffer);
 }
 
+void QMLAR::setMV(QMatrix4x4 mv)
+{
+    mv_buffer = mv;
+    emit newMVMatrix(mv_buffer);
+}
+
+void QMLAR::setP(QMatrix4x4 p)
+{
+    p_buffer = p;
+    emit newPMatrix(p_buffer);
+}
+
 void QMLAR::setBlobs(QVector<QVector2D> blobs)
 {
     last_blobs = blobs;
@@ -309,6 +321,8 @@ void QMLAR::connectAll()
 
 //    // output MVP matrix from IMU decorator
     connect(mvp_imu_decorated, &IMUMVPDecorator::newMVPMatrix, this, &QMLAR::setMVP);
+    connect(mvp_imu_decorated, &IMUMVPDecorator::newMVMatrix, this, &QMLAR::setMV);
+    connect(mvp_imu_decorated, &IMUMVPDecorator::newPMatrix, this, &QMLAR::setP);
 
     connect(this, &QMLAR::newFilterAlpha, pose_filter, &PoseFilter::setAlpha);
 }

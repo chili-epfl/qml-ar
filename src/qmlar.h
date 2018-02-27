@@ -106,6 +106,8 @@ public slots:
 
     // set MVP for QML
     void setMVP(QMatrix4x4 mvp);
+    void setMV(QMatrix4x4 mv);
+    void setP(QMatrix4x4 p);
 
     // set blobs from detector
     void setBlobs(QVector<QVector2D> blobs);
@@ -131,6 +133,7 @@ private:
 
     // mvp buffer for QML
     QMatrix4x4 mvp_buffer;
+    QMatrix4x4 mv_buffer, p_buffer;
 
     // width of the input camera image
     int image_width;
@@ -216,6 +219,8 @@ private:
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix(QMatrix4x4 mvp);
+    void newMVMatrix(QMatrix4x4 mv);
+    void newPMatrix(QMatrix4x4 p);
 
     // notify about new image
     void imageUpdated();

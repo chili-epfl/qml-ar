@@ -18,6 +18,8 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(QString image_filename WRITE setImageFilename READ getImageFilename)
     Q_PROPERTY(QObject* camera READ getCamera)
     Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
+    Q_PROPERTY(QMatrix4x4 mv_matrix READ getMVMatrix NOTIFY newMVPMatrix)
+    Q_PROPERTY(QMatrix4x4 p_matrix READ getPMatrix NOTIFY newMVPMatrix)
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
     Q_PROPERTY(QVariantList blobs READ getBlobs NOTIFY newBlobs)
     Q_PROPERTY(QVariantList markers READ getMarkers NOTIFY newMarkers)
@@ -39,7 +41,7 @@ private:
     QVariantList last_blobs, last_markers;
 
     // MVP matrix buffer
-    QMatrix4x4 mvp_matrix;
+    QMatrix4x4 mvp_matrix, mv_matrix, p_matrix;
 public:
     ThreadedQMLAR();
 
@@ -47,6 +49,8 @@ public:
     int getCameraId();
     QString getImageFilename();
     QMatrix4x4 getMVPMatrix();
+    QMatrix4x4 getMVMatrix();
+    QMatrix4x4 getPMatrix();
     int getImageWidth();
     QQuickImageProvider *getImageProvider();
     QObject* getCamera();
@@ -83,10 +87,14 @@ public slots:
     void setBlobs(QVariantList that);
     void setMarkers(QVariantList that);
     void setMVPMatrix(QMatrix4x4);
+    void setMVMatrix(QMatrix4x4);
+    void setPMatrix(QMatrix4x4);
 
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix(QMatrix4x4);
+    void newMVMatrix(QMatrix4x4);
+    void newPMatrix(QMatrix4x4);
 
     // notify about new image
     void imageUpdated();

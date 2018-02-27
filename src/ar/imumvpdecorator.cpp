@@ -112,8 +112,9 @@ void IMUMVPDecorator::updatePose()
     QMatrix4x4 delta_mv = getCurrentPose() * last_imu_pose.inverted();;
 
     // new MVP
-    QMatrix4x4 mvp_new = last_p * delta_mv * last_mv;
+    mv_matrix = delta_mv * last_mv;
+    p_matrix = last_p;
 
     // telling others about update
-    setMVPMatrix(mvp_new);
+    setMVPMatrix(p_matrix * mv_matrix);
 }

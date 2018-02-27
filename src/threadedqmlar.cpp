@@ -27,6 +27,8 @@ ThreadedQMLAR::ThreadedQMLAR()
     connect(instance, SIGNAL(newBlobs(QVariantList)), this, SLOT(setBlobs(QVariantList)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newMarkers(QVariantList)), this, SLOT(setMarkers(QVariantList)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVPMatrix(QMatrix4x4)), Qt::QueuedConnection);
+    connect(instance, SIGNAL(newMVMatrix(QMatrix4x4)), this, SLOT(setMVMatrix(QMatrix4x4)), Qt::QueuedConnection);
+    connect(instance, SIGNAL(newPMatrix(QMatrix4x4)), this, SLOT(setPMatrix(QMatrix4x4)), Qt::QueuedConnection);
 
     // starting AR
     thread->start();
@@ -47,6 +49,16 @@ QString ThreadedQMLAR::getImageFilename()
 QMatrix4x4 ThreadedQMLAR::getMVPMatrix()
 {
     return mvp_matrix;
+}
+
+QMatrix4x4 ThreadedQMLAR::getMVMatrix()
+{
+    return mv_matrix;
+}
+
+QMatrix4x4 ThreadedQMLAR::getPMatrix()
+{
+    return p_matrix;
 }
 
 int ThreadedQMLAR::getImageWidth()
@@ -143,4 +155,16 @@ void ThreadedQMLAR::setMVPMatrix(QMatrix4x4 that)
 {
     this->mvp_matrix = that;
     emit newMVPMatrix(mvp_matrix);
+}
+
+void ThreadedQMLAR::setMVMatrix(QMatrix4x4 that)
+{
+    this->mv_matrix = that;
+    emit newMVMatrix(mv_matrix);
+}
+
+void ThreadedQMLAR::setPMatrix(QMatrix4x4 that)
+{
+    this->p_matrix = that;
+    emit newPMatrix(p_matrix);
 }
