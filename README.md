@@ -50,11 +50,11 @@ Linux:
 You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
 
 ## Mixed reality
-<img src="/example/screenshots/android_mixed.jpg?raw=true" height="200" alt="Mixed reality output" />
+<img src="/example/screenshots/android_mixed.jpg?raw=true" height="300" alt="Mixed reality output" />
 Mixed reality is supported both on Android and Linux.
-See comments for example to enable this mode.
-Currently, CPU camera image rendering is used in this mode, which also results in low resolution
-Moreover, the image looks far away (whereas objects look close) since the image is not currently shifted.
+See comments in the files of the example application on how to enable this mode.
+Currently, camera image rendering is done on CPU in this mode, which also results in low resolution and low FPS.
+Moreover, the image looks far away (whereas objects look close) since the image is not shifted.
 Framework tested on Xiaomi Redmi 4A, and both with Google Cardboard and Gear VR.
 
 ## Contact
