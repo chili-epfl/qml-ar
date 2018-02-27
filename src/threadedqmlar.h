@@ -26,6 +26,7 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(double FPSMean READ getFPSMean NOTIFY imageUpdated)
     Q_PROPERTY(double FPSStd READ getFPSStd NOTIFY imageUpdated)
     Q_PROPERTY(bool markers_visible READ markers_visible NOTIFY newMarkers)
+    Q_PROPERTY(bool pose_valid READ poseValid NOTIFY newMVPMatrix)
     Q_PROPERTY(double filter_alpha READ getFilterAlpha WRITE setFilterAlpha)
 private:
     // instance to QMLAR object
@@ -66,6 +67,9 @@ public:
 
     // filtering coefficient
     double getFilterAlpha();
+
+    // is pose valid?
+    bool poseValid();
 
 public slots:
     // initialize from camera id (default value -1)

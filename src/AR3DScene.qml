@@ -49,10 +49,15 @@ Scene3D {
         // set ModelViewProjection matrix as camera matrix
         Camera {
             id: camera
-            projectionMatrix: AR.p_matrix.times(Qt.matrix4x4(1, 0, 0, delta_x,
-                                                             0, 1, 0, 0,
-                                                             0, 0, 1, 0,
-                                                             0, 0, 0, 1)).times(AR.mv_matrix)
+
+            // pose valid -> P * Delta_X * MV
+            // pose invalid -> zero
+            projectionMatrix: AR.pose_valid ?
+                                  AR.p_matrix.times(Qt.matrix4x4(1, 0, 0, delta_x,
+                                                                 0, 1, 0, 0,
+                                                                 0, 0, 1, 0,
+                                                                 0, 0, 0, 1)).times(AR.mv_matrix)
+                                : Qt.matrix4x4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         }
 
         // load scene on component loading

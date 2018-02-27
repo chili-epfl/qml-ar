@@ -113,6 +113,11 @@ double ThreadedQMLAR::getFilterAlpha()
     return filter_alpha;
 }
 
+bool ThreadedQMLAR::poseValid()
+{
+    return !mvp_matrix.isIdentity();
+}
+
 void ThreadedQMLAR::setCameraId(int camera_id)
 {
     emit setCameraIdSignal(camera_id);
