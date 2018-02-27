@@ -90,10 +90,6 @@ QImage TrackingDecorator::blacken(QImage source)
             y_max = predicted_image_point.y();
         if(predicted_image_point.y() < y_min)
             y_min = predicted_image_point.y();
-
-        TimeLoggerLog("Expecting point (%.2f %.2f %.2f) at (%.2f %.2f), was at (%.2f, %.2f)", world_point.x(),
-                      world_point.y(), world_point.z(), predicted_image_point.x(), predicted_image_point.y(),
-                      image_point.x(), image_point.y())
     }
 
     QImage augmented_input = source;

@@ -24,9 +24,9 @@ ThreadedQMLAR::ThreadedQMLAR()
 
     // events from AR -> this object
     connect(instance, SIGNAL(imageUpdated(void)), this, SIGNAL(imageUpdated(void)), Qt::QueuedConnection);
-    connect(instance, SIGNAL(newBlobs(QVariantList)), this, SIGNAL(newBlobs(QVariantList)), Qt::QueuedConnection);
-    connect(instance, SIGNAL(newMarkers(QVariantList)), this, SIGNAL(newMarkers(QVariantList)), Qt::QueuedConnection);
-    connect(instance, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SIGNAL(newMVPMatrix(QMatrix4x4)), Qt::QueuedConnection);
+    connect(instance, SIGNAL(newBlobs(QVariantList)), this, SLOT(setBlobs(QVariantList)), Qt::QueuedConnection);
+    connect(instance, SIGNAL(newMarkers(QVariantList)), this, SLOT(setMarkers(QVariantList)), Qt::QueuedConnection);
+    connect(instance, SIGNAL(newMVPMatrix(QMatrix4x4)), this, SLOT(setMVPMatrix(QMatrix4x4)), Qt::QueuedConnection);
 
     // starting AR
     thread->start();
@@ -34,57 +34,66 @@ ThreadedQMLAR::ThreadedQMLAR()
 
 int ThreadedQMLAR::getCameraId()
 {
+    // works since is set only once from another thread
     return instance->getCameraId();
 }
 
 QString ThreadedQMLAR::getImageFilename()
 {
+    // works since is set only once from another thread
     return instance->getImageFilename();
 }
 
 QMatrix4x4 ThreadedQMLAR::getMVPMatrix()
 {
-    return instance->getMVPMatrix();
+    return mvp_matrix;
 }
 
 int ThreadedQMLAR::getImageWidth()
 {
+    // works since is set only once from another thread
     return instance->getImageWidth();
 }
 
 QQuickImageProvider *ThreadedQMLAR::getImageProvider()
 {
+    // works since is set only once from another thread
     return instance->getImageProvider();
 }
 
 QObject *ThreadedQMLAR::getCamera()
 {
+    // works since is set only once from another thread
     return instance->getCamera();
 }
 
 QVariantList ThreadedQMLAR::getBlobs()
 {
-    return instance->getBlobs();
+    return last_blobs;
 }
 
 QVariantList ThreadedQMLAR::getMarkers()
 {
-    return instance->getMarkers();
+    return last_markers;
 }
 
 double ThreadedQMLAR::getFPSMean()
 {
+    // works since mean is a fixed-location variable
+    // which is set from a different thread
     return instance->getFPSMean();
 }
 
 double ThreadedQMLAR::getFPSStd()
 {
+    // works since mean is a fixed-location variable
+    // which is set from a different thread
     return instance->getFPSStd();
 }
 
 bool ThreadedQMLAR::markers_visible()
 {
-    return instance->getMarkers().size() > 0;
+    return last_markers.size() > 0;
 }
 
 double ThreadedQMLAR::getFilterAlpha()
@@ -116,4 +125,22 @@ void ThreadedQMLAR::setFilterAlpha(double alpha)
 {
     this->filter_alpha = alpha;
     emit setFilterAlphaSignal(alpha);
+}
+
+void ThreadedQMLAR::setBlobs(QVariantList that)
+{
+    this->last_blobs = that;
+    emit newBlobs(last_blobs);
+}
+
+void ThreadedQMLAR::setMarkers(QVariantList that)
+{
+    this->last_markers = that;
+    emit newMarkers(last_markers);
+}
+
+void ThreadedQMLAR::setMVPMatrix(QMatrix4x4 that)
+{
+    this->mvp_matrix = that;
+    emit newMVPMatrix(mvp_matrix);
 }

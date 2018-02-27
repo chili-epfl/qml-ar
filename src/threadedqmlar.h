@@ -34,6 +34,12 @@ private:
 
     // cached alpha filter
     double filter_alpha;
+
+    // buffers for blobs and markers
+    QVariantList last_blobs, last_markers;
+
+    // MVP matrix buffer
+    QMatrix4x4 mvp_matrix;
 public:
     ThreadedQMLAR();
 
@@ -51,8 +57,10 @@ public:
     double getFPSMean();
     double getFPSStd();
 
+    // at least one marker present
     bool markers_visible();
 
+    // filtering coefficient
     double getFilterAlpha();
 
 public slots:
@@ -70,6 +78,11 @@ public slots:
 
     // set filtering alpha
     void setFilterAlpha(double alpha);
+
+    // setters for AR->QML communication
+    void setBlobs(QVariantList that);
+    void setMarkers(QVariantList that);
+    void setMVPMatrix(QMatrix4x4);
 
 signals:
     // notify QML part when new matrix is available

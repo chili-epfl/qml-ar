@@ -6,7 +6,7 @@
  */
 
 // enables TimeLogger
-//#define ENABLE_DEBUG_OUTPUT
+#define ENABLE_DEBUG_OUTPUT
 
 // Define to enable time output at each important step
 #define PROFILE_PIPELINE
