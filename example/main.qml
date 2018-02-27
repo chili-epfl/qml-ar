@@ -16,6 +16,8 @@ Window {
     ARComponent {
         id: arComponent
 
+        avr_mode: true
+
         // use camera
         init_type: AR.INIT_CAMERA
 

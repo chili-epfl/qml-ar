@@ -56,6 +56,10 @@ Item {
     // will contain Scene3D component
     property var scene3d
 
+    // same for avr_mode
+    property var scene3d_left
+    property var scene3d_right
+
     // set to true to preserve width attribute
     // and set height so that image ratio is preserved
     property bool force_width: false
@@ -83,6 +87,9 @@ Item {
 
     // use image even if viewfinder available
     property bool force_image: false
+
+    // use Augmented Virtual Reality (left-right pair)
+    property bool avr_mode: false
 
     // initial width and height
     width: 300
@@ -127,7 +134,7 @@ Item {
         }
 
         // loading viewfinder if needed
-        if(AR.camera != null) {
+        if(AR.camera !== null) {
             console.log("Using viewfinder output");
             load_viewfinder();
         } else {
@@ -148,9 +155,26 @@ Item {
             console.debug("Error loading scene: " + component.errorString());
         }
         else {
-            scene3d = component.createObject(scene, {'arSceneComponent': arSceneComponent,
-                                                 'arSceneParameters': arSceneParameters});
-            arSceneObject = scene3d.arSceneObject;
+            if(avr_mode) {
+                scene3d_left = component.createObject(scene, {'arSceneComponent': arSceneComponent,
+                                           'arSceneParameters': arSceneParameters});
+                scene3d_right = component.createObject(scene, {'arSceneComponent': arSceneComponent,
+                                           'arSceneParameters': arSceneParameters});
+                scene3d_left.anchors.left = scene.left;
+                scene3d_left.anchors.bottom = scene.bottom
+                scene3d_left.anchors.top = scene.top;
+                scene3d_left.width = 0.5 * scene.width;
+                scene3d_right.anchors.left = scene3d_left.right;
+                scene3d_right.anchors.bottom = scene.bottom
+                scene3d_right.anchors.top = scene.top;
+                scene3d_right.width = 0.5 * scene.width;
+            }
+            else {
+                scene3d = component.createObject(scene, {'arSceneComponent': arSceneComponent,
+                                                     'arSceneParameters': arSceneParameters});
+                scene3d.anchors.fill = scene;
+                arSceneObject = scene3d.arSceneObject;
+            }
             loading.visible = false;
         }
         console.log("End loading scene3d");
@@ -183,7 +207,7 @@ Item {
             z: 10
             id: loading
             running: true
-            visible: false
+            visible: true
             anchors.fill: parent
         }
 
@@ -194,6 +218,7 @@ Item {
             onTriggered: {
                 var w = image.sourceSize.width;
                 var h = image.sourceSize.height;
+                if(avr_mode) w *= 2;
                 if(w * h > 2)
                 {
                     console.log("Image size is " + w + " x " + h)
@@ -212,18 +237,22 @@ Item {
                     running = false;
 
                     // show image if no viewfinder available
-                    if(AR.camera !== null && !root.force_image)
-                    {
+                    if(AR.camera !== null && !root.force_image) {
                         console.log("Hiding image");
                         image.cache = 0;
                         image.source = "";
                         image_timer.running = false;
                         image.visible = false;
                     }
-                    else
-                    {
+                    else {
                         console.log("Showing image");
-                        image.visible = true;
+                        if(avr_mode) {
+                            image_avr_left.visible = true;
+                            image_avr_right.visible = true;
+                        }
+                        else {
+                            image.visible = true;
+                        }
                         if(AR.camera !== null)
                             viewfinder.visible = 0;
                     }
@@ -280,13 +309,47 @@ Item {
         Timer {
             id: image_timer
             interval: 10; running: false; repeat: true
-            onTriggered: {image.cache = 0; image.source = ""; image.source = root.output_url;}
+            onTriggered: {
+                if(avr_mode) {
+                    image_avr_left.cache = 0;
+                    image_avr_left.source = "";
+                    image_avr_left.source = root.output_url;
+                    image_avr_right.cache = 0;
+                    image_avr_right.source = "";
+                    image_avr_right.source = root.output_url;
+                }
+                image.cache = 0; image.source = ""; image.source = root.output_url;
+            }
         }
 
         // image with camera image
         Image {
             id: image
             anchors.fill: parent
+            visible: false
+            clip: false
+            transformOrigin: Item.Center
+        }
+
+        // AVR image with camera image
+        Image {
+            id: image_avr_left
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: 0.5 * parent.width
+            visible: false
+            clip: false
+            transformOrigin: Item.Center
+        }
+
+        // AVR image with camera image
+        Image {
+            id: image_avr_right
+            anchors.left: image_avr_left.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: 0.5 * parent.width
             visible: false
             clip: false
             transformOrigin: Item.Center

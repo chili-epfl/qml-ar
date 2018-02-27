@@ -10,8 +10,8 @@ import Qt3D.Extras 2.0
 // 3D scene which uses OpenGL
 Scene3D {
     id: scene3d
-    anchors.fill: parent
-    anchors.margins: 0
+    //anchors.fill: parent
+    //anchors.margins: 0
     focus: true
     visible: true
     aspects: ["input", "logic"]
