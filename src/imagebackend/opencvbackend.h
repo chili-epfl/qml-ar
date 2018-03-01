@@ -54,6 +54,9 @@ private:
     // thread worker
     QFutureWatcher<QImage> watcher;
 
+    // last image identity
+    int image_id;
+
 public slots:
     // get result from future
     void handleFinished();

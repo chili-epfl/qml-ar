@@ -4,19 +4,31 @@
 #include <QObject>
 #include <QDateTime>
 
+/*
+ * This template class wraps an object
+ * adding additional information: id, timestamp
+ *
+ * Designed to be used in a pipeline of Qt objects
+ */
+
 template<class T> class PipelineContainer
 {
 private:
     T object;
     qint64 creation_timestamp;
-    int id;
+    int id_;
 public:
-    PipelineContainer(T object, int id = 0);
+    PipelineContainer(T object, int id_ = 0);
+    PipelineContainer();
+
+    // get current id
+    int id();
 
     // get underlying object
     T& o();
-
-    void replaceObject(T object_new);
+    operator T&();
 };
+
+#include "pipelinecontainer.cpp"
 
 #endif // PIPELINECONTAINER_H

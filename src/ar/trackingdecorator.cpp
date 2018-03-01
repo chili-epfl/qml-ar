@@ -17,7 +17,7 @@ TrackingDecorator::TrackingDecorator(PosePredictor *predictor) : ImageProviderAs
     use_region = false;
 }
 
-void TrackingDecorator::setInput(QImage img)
+void TrackingDecorator::setInput(PipelineContainer<QImage> img)
 {
     TimeLoggerLog("%s", "[ANALYZE] Begin Blacken");
     QImage blackened = blacken(img);

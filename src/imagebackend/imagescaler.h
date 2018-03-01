@@ -12,7 +12,7 @@
 class ImageScaler : public ImageProviderAsync
 { Q_OBJECT
 public slots:
-    void setInput(QImage source);
+    void setInput(PipelineContainer<QImage> source);
     void handleResult();
 private:
     QImage buffer;
@@ -21,8 +21,11 @@ private:
 
     int target_width;
 
-    QImage input_buffer;
+    PipelineContainer<QImage> input_buffer;
     bool input_buffer_nonempty;
+
+    // input id which is being processed
+    int id_in_process;
 public:
     ImageScaler(int target_width);
 

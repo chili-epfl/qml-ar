@@ -21,8 +21,8 @@ public:
     virtual ~MarkerBackEnd();
 public slots:
     // slots to set data
-    void setCamera(QImage cam);
-    void setPreview(QImage prev);
+    void setCamera(PipelineContainer<QImage> cam);
+    void setPreview(PipelineContainer<QImage> prev);
 private:
     // buffers for preview image and raw image
     QImage preview, camera;

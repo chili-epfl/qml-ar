@@ -245,6 +245,7 @@ void QMLAR::connectAll()
     qRegisterMetaType<QPair<QImage, QVector<QVector2D>>>("QPair<QImage, QVector<QVector2D>>");
     qRegisterMetaType<QVector<QVector2D>>("QVector<QVector2D>");
     qRegisterMetaType<MarkerStorage>("MarkerStorage");
+    qRegisterMetaType<PipelineContainer<QImage>>("PipelineContainer<QImage>");
 
     connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
     connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);

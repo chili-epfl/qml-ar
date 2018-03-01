@@ -28,12 +28,12 @@ MarkerBackEnd::~MarkerBackEnd()
 {
 }
 
-void MarkerBackEnd::setCamera(QImage cam)
+void MarkerBackEnd::setCamera(PipelineContainer<QImage> cam)
 {
     camera = cam;
 }
 
-void MarkerBackEnd::setPreview(QImage prev)
+void MarkerBackEnd::setPreview(PipelineContainer<QImage> prev)
 {
     preview = prev;
 }

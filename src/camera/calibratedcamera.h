@@ -4,6 +4,7 @@
 #include <QMatrix3x3>
 #include <QObject>
 #include <QImage>
+#include "pipelinecontainer.h"
 
 /*
  * This class stores information
@@ -46,7 +47,7 @@ public:
     int height();
 
 public slots:
-    void setResolutionImage(QImage image);
+    void setResolutionImage(PipelineContainer<QImage> image);
 
 private:
     // get camera matrix A

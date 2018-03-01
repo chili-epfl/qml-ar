@@ -7,6 +7,7 @@
 #include <QString>
 #include <QImage>
 #include "markerstorage.h"
+#include "pipelinecontainer.h"
 #include <QtConcurrent>
 
 /*
@@ -30,7 +31,7 @@ signals:
 
 public slots:
     // set input camera image
-    void setInput(QImage camera);
+    void setInput(PipelineContainer<QImage> camera);
 
     // called on new result from thread
     void handleFinished();

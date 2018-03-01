@@ -4,6 +4,7 @@
 #include <QQuickImageProvider>
 #include <QObject>
 #include <QImage>
+#include "pipelinecontainer.h"
 
 /*
  * This class is an interface for image providers which emit a signal
@@ -18,7 +19,7 @@ public:
     virtual ~ImageProviderAsync() {}
 
 signals:
-    void imageAvailable(QImage);
+    void imageAvailable(PipelineContainer<QImage>);
 };
 
 #endif // IMAGEPROVIDERASYNC_H

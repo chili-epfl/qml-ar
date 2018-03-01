@@ -39,7 +39,7 @@ void MarkerDetector::handleFinished()
     }
 }
 
-void MarkerDetector::setInput(QImage camera)
+void MarkerDetector::setInput(PipelineContainer<QImage> camera)
 {
     // saving last input
     input_buffer = camera;

@@ -26,6 +26,7 @@ OpenCVCameraBackend::OpenCVCameraBackend(int cam_id) : ImageProviderAsync()
     watcher.setParent(this);
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
     setupCV();
+    image_id = 0;
     request();
 }
 
@@ -41,7 +42,14 @@ void OpenCVCameraBackend::handleFinished()
     // obtain previous result
     buf = watcher.result();
 
-    emit imageAvailable(buf.copy());
+    // copying image from buffer
+    QImage image_copied = buf.copy();
+
+    // sending image
+    emit imageAvailable(PipelineContainer<QImage>(image_copied, image_id));
+
+    // next image will have different id
+    image_id++;
 
     TimeLoggerLog("%s", "Obtained CV image");
 

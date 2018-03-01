@@ -42,7 +42,7 @@ public slots:
     void onNewMarkers(MarkerStorage storage);
 
     // process input
-    void setInput(QImage img);
+    void setInput(PipelineContainer<QImage> img);
 };
 
 #endif // TRACKINGMVPDECORATOR_H
