@@ -229,7 +229,7 @@ void QMLAR::hueAvailable(double mean, double std)
     disconnect(blob_detector, &BlobDetector::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
     // blacken_rest -> hsv
-    connect(blacken_rest, &BlackenRest::imageAvailable, hue_threshold, &HueThreshold::setInput);
+    //connect(blacken_rest, &BlackenRest::imageAvailable, hue_threshold, &HueThreshold::setInput);
 
     // hsv -> detector
     //connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
@@ -270,7 +270,7 @@ void QMLAR::connectAll()
     connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
     // blobs -> markers
-    connect(blob_detector, &BlobDetector::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+    //connect(blob_detector, &BlobDetector::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
 //    // blobs -> QML
 //    //connect(blob_detector, &BlobDetector::blobsUpdated, this, &QMLAR::setBlobs);
