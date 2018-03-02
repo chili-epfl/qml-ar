@@ -348,6 +348,7 @@ void QMLAR::connectAll()
     // latency/fps calculator
     connect(pose_filter, &PoseFilter::newInfo, latency, &LatencyCalculator::onNewContainerInfo);
     connect(pose_filter, &PoseFilter::newInfo, fps, &FPSCalculator::newFrame);
+    connect(pose_filter, &PoseFilter::newInfo, this, &QMLAR::setInfo);
 
     connect(this, &QMLAR::newFilterAlpha, pose_filter, &PoseFilter::setAlpha);
 }
