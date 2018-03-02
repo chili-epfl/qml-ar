@@ -126,6 +126,9 @@ public slots:
     // set image and dots from detector
     void setDots(PipelineContainer<QPair<QImage, QVector<QVector2D>>> image_dots);
 
+    // set last info
+    void setInfo(PipelineContainerInfo info);
+
 private:
     // initialization semaphore
     QSemaphore init_sem;
@@ -136,8 +139,11 @@ private:
     // storage for markers
     MarkerStorage* marker_storage;
 
+    // info from mvp provider
+    PipelineContainerInfo* last_info;
+
     // mvp buffer for QML
-    PipelineContainer<QMatrix4x4> mvp_buffer;
+    QMatrix4x4 mvp_buffer;
     QMatrix4x4 mv_buffer, p_buffer;
 
     // width of the input camera image

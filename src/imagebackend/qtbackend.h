@@ -39,6 +39,9 @@ protected:
     // last image id
     int image_id;
 
+    // information about current image
+    PipelineContainerInfo image_info;
+
     // is frame available?
     bool frame_available = 0;
 

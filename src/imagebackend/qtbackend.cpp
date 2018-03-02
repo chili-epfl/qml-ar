@@ -92,10 +92,7 @@ void QtCameraBackend::handleFinished()
 
     // sending image
     emit imageAvailable(PipelineContainer<QImage>
-                        (buf.copy(), PipelineContainerInfo(image_id).checkpointed("Camera")));
-
-    // incrementing output id
-    image_id++;
+                        (buf.copy(), image_info.checkpointed("Camera")));
 
     TimeLoggerLog("%s", "[ANALYZE] Begin QtCamera");
 }
@@ -107,6 +104,9 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
     // not converting frame if thread is busy
     if(!watcher.isRunning())
     {
+        image_info = PipelineContainerInfo(image_id);
+        image_id++;
+        image_info.checkpoint("Grabbed");
         QFuture<QImage> future = QtConcurrent::run(&QVideoFrameHelpers::VideoFrameToImage, frame);
         watcher.setFuture(future);
     }

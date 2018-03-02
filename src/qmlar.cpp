@@ -42,6 +42,7 @@ QMLAR::QMLAR()
     camera_wrapper = NULL;
     marker_backend = new MarkerBackEnd();
     marker_storage = new MarkerStorage();
+    last_info = new PipelineContainerInfo();
 
     // reserve threads
     for(int i = 0; i < 13; i++)
@@ -148,6 +149,12 @@ void QMLAR::setDots(PipelineContainer<QPair<QImage, QVector<QVector2D> >> image_
     setBlobs(image_dots.o().second);
 }
 
+void QMLAR::setInfo(PipelineContainerInfo info)
+{
+    *last_info = info;
+    qDebug() << info.toString();
+}
+
 QVariantList QMLAR::getMarkers()
 {
     QVariantList result{};
@@ -204,7 +211,6 @@ void QMLAR::startCamera()
 void QMLAR::setMVP(PipelineContainer<QMatrix4x4> mvp)
 {
     mvp_buffer = mvp;
-    qDebug() << mvp.info().toString();
     emit newMVPMatrix(mvp_buffer);
 }
 
@@ -340,8 +346,8 @@ void QMLAR::connectAll()
     connect(mvp_imu_decorated, &IMUMVPDecorator::newPMatrix, this, &QMLAR::setP);
 
     // latency/fps calculator
-    connect(mvp_imu_decorated, &IMUMVPDecorator::newInfo, latency, &LatencyCalculator::onNewContainerInfo);
-    connect(mvp_imu_decorated, &MarkerMVPProvider::newMVPMatrix, fps, &FPSCalculator::newFrame);
+    connect(pose_filter, &PoseFilter::newInfo, latency, &LatencyCalculator::onNewContainerInfo);
+    connect(pose_filter, &PoseFilter::newInfo, fps, &FPSCalculator::newFrame);
 
     connect(this, &QMLAR::newFilterAlpha, pose_filter, &PoseFilter::setAlpha);
 }
