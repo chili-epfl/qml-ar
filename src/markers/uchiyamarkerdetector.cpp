@@ -138,32 +138,32 @@ void UchiyaMarkerDetector::extractMarkers()
         // positioning (mm)    (0, 0)    (0, s)       (s, 0)     (s, s)
         QVector3D marker_tl = m->getPositionMM();
         QVector3D marker_bl = marker_tl;
-        QVector3D marker_tr = marker_tl;
         QVector3D marker_br = marker_tl;
+        QVector3D marker_tr = marker_tl;
 
         marker_bl += QVector3D(0          , marker_size, 0);
-        marker_tr += QVector3D(marker_size, 0          , 0);
         marker_br += QVector3D(marker_size, marker_size, 0);
+        marker_tr += QVector3D(marker_size, 0          , 0);
 
         // marker coordinate system (marker has size 600)
         QVector3D marker_uchiya_tl_affine = QVector3D(0  , 600, 0);
         QVector3D marker_uchiya_bl_affine = QVector3D(0  , 0  , 0);
-        QVector3D marker_uchiya_tr_affine = QVector3D(600, 600, 0);
         QVector3D marker_uchiya_br_affine = QVector3D(600, 0  , 0);
+        QVector3D marker_uchiya_tr_affine = QVector3D(600, 600, 0);
 
         // add all of the points to a vector
         QVector<QVector3D> marker_corners;
         marker_corners.append(marker_tl);
         marker_corners.append(marker_bl);
-        marker_corners.append(marker_tr);
         marker_corners.append(marker_br);
+        marker_corners.append(marker_tr);
 
         // all of the marker corners corresponding to real world corners
         QVector<QVector3D> marker_uchiya_affine_corners;
         marker_uchiya_affine_corners.push_back(marker_uchiya_tl_affine);
         marker_uchiya_affine_corners.push_back(marker_uchiya_bl_affine);
-        marker_uchiya_affine_corners.push_back(marker_uchiya_tr_affine);
         marker_uchiya_affine_corners.push_back(marker_uchiya_br_affine);
+        marker_uchiya_affine_corners.push_back(marker_uchiya_tr_affine);
 
         // length should be equal since number of corners is the same
         Q_ASSERT(marker_uchiya_affine_corners.size() == marker_corners.size());
