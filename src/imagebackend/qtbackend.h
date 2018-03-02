@@ -36,6 +36,9 @@ public:
     // start camera
     void start();
 protected:
+    // last image id
+    int image_id;
+
     // is frame available?
     bool frame_available = 0;
 

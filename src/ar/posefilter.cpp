@@ -9,14 +9,15 @@ PoseFilter::PoseFilter(double alpha)
     first_update = true;
 }
 
-void PoseFilter::setP(QMatrix4x4 p)
+void PoseFilter::setP(PipelineContainer<QMatrix4x4> p)
 {
     p_matrix = p;
 }
 
-void PoseFilter::setMV(QMatrix4x4 mv)
+void PoseFilter::setMV(PipelineContainer<QMatrix4x4> mv)
 {
     last_mv = mv;
+    object_in_process = mv.info();
     update();
 }
 

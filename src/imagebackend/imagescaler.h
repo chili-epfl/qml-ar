@@ -25,7 +25,7 @@ private:
     bool input_buffer_nonempty;
 
     // input id which is being processed
-    int id_in_process;
+    PipelineContainerInfo object_in_process;
 public:
     ImageScaler(int target_width);
 

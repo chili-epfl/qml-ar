@@ -25,6 +25,8 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(QVariantList markers READ getMarkers NOTIFY newMarkers)
     Q_PROPERTY(double FPSMean READ getFPSMean NOTIFY imageUpdated)
     Q_PROPERTY(double FPSStd READ getFPSStd NOTIFY imageUpdated)
+    Q_PROPERTY(double LatencyMean READ getLatencyMean NOTIFY imageUpdated)
+    Q_PROPERTY(double LatencyStd READ getLatencyStd NOTIFY imageUpdated)
     Q_PROPERTY(bool markers_visible READ markers_visible NOTIFY newMarkers)
     Q_PROPERTY(bool pose_valid READ poseValid NOTIFY newMVPMatrix)
     Q_PROPERTY(double filter_alpha READ getFilterAlpha WRITE setFilterAlpha)
@@ -61,6 +63,10 @@ public:
     // FPS
     double getFPSMean();
     double getFPSStd();
+
+    // Latency
+    double getLatencyMean();
+    double getLatencyStd();
 
     // at least one marker present
     bool markers_visible();

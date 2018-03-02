@@ -16,6 +16,7 @@ QtCameraBackend::QtCameraBackend(int cam_id) : ImageProviderAsync()
     watcher.setParent(this);
     need_viewfinder = 1;
     frame_available = 0;
+    image_id = 0;
     init();
 }
 
@@ -86,8 +87,16 @@ QCamera *QtCameraBackend::getCamera()
 
 void QtCameraBackend::handleFinished()
 {
+    // saving to buffer
     processQImage(watcher.result());
-    emit imageAvailable(buf.copy());
+
+    // sending image
+    emit imageAvailable(PipelineContainer<QImage>
+                        (buf.copy(), PipelineContainerInfo(image_id).checkpointed("Camera")));
+
+    // incrementing output id
+    image_id++;
+
     TimeLoggerLog("%s", "[ANALYZE] Begin QtCamera");
 }
 

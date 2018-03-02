@@ -29,6 +29,7 @@
 #include "worldimage.h"
 #include "fpscalculator.h"
 #include "posefilter.h"
+#include "latencycalculator.h"
 
 QMLAR::QMLAR()
 {
@@ -43,7 +44,7 @@ QMLAR::QMLAR()
     marker_storage = new MarkerStorage();
 
     // reserve threads
-    for(int i = 0; i < 12; i++)
+    for(int i = 0; i < 13; i++)
         threads.append(new QThread());
 
     // allowing up to 10 parallel tasks
@@ -52,6 +53,7 @@ QMLAR::QMLAR()
 
     // no fps calculator yet
     fps = NULL;
+    latency = NULL;
 }
 
 int QMLAR::getCameraId()
@@ -141,9 +143,9 @@ QVariantList QMLAR::getBlobs()
     return result;
 }
 
-void QMLAR::setDots(QPair<QImage, QVector<QVector2D> > image_dots)
+void QMLAR::setDots(PipelineContainer<QPair<QImage, QVector<QVector2D> >> image_dots)
 {
-    setBlobs(image_dots.second);
+    setBlobs(image_dots.o().second);
 }
 
 QVariantList QMLAR::getMarkers()
@@ -175,6 +177,20 @@ double QMLAR::getFPSStd()
     return 0;
 }
 
+double QMLAR::getLatencyMean()
+{
+    if(latency)
+        return latency->mean();
+    return 0;
+}
+
+double QMLAR::getLatencyStd()
+{
+    if(latency)
+        return latency->std();
+    return 0;
+}
+
 void QMLAR::startCamera()
 {
     init_sem.acquire();
@@ -185,31 +201,32 @@ void QMLAR::startCamera()
     }
 }
 
-void QMLAR::setMVP(QMatrix4x4 mvp)
+void QMLAR::setMVP(PipelineContainer<QMatrix4x4> mvp)
 {
     mvp_buffer = mvp;
+    qDebug() << mvp.info().toString();
     emit newMVPMatrix(mvp_buffer);
 }
 
-void QMLAR::setMV(QMatrix4x4 mv)
+void QMLAR::setMV(PipelineContainer<QMatrix4x4> mv)
 {
     mv_buffer = mv;
     emit newMVMatrix(mv_buffer);
 }
 
-void QMLAR::setP(QMatrix4x4 p)
+void QMLAR::setP(PipelineContainer<QMatrix4x4> p)
 {
     p_buffer = p;
     emit newPMatrix(p_buffer);
 }
 
-void QMLAR::setBlobs(QVector<QVector2D> blobs)
+void QMLAR::setBlobs(PipelineContainer<QVector<QVector2D>> blobs)
 {
     last_blobs = blobs;
     emit newBlobs(getBlobs());
 }
 
-void QMLAR::setMarkers(MarkerStorage storage)
+void QMLAR::setMarkers(PipelineContainer<MarkerStorage> storage)
 {
     *marker_storage = storage;
     emit newMarkers(getMarkers());
@@ -238,14 +255,15 @@ void QMLAR::hueAvailable(double mean, double std)
 void QMLAR::connectAll()
 {
     hue_threshold->setColor(0, 20);
-    qRegisterMetaType<QPair<QImage, QVector<QVector2D>>>("QPair<QImage, QVector<QVector2D>>");
-    qRegisterMetaType<QVector<QVector2D>>("QVector<QVector2D>");
-    qRegisterMetaType<MarkerStorage>("MarkerStorage");
     qRegisterMetaType<PipelineContainer<QImage>>("PipelineContainer<QImage>");
+    qRegisterMetaType<PipelineContainer<QPair<QImage, QVector<QVector2D>>>>("PipelineContainer<QPair<QImage, QVector<QVector2D>>>");
+    qRegisterMetaType<PipelineContainer<QVector<QVector2D>>>("PipelineContainer<QVector<QVector2D>>");
+    qRegisterMetaType<PipelineContainer<MarkerStorage>>("PipelineContainer<MarkerStorage>");
+    qRegisterMetaType<PipelineContainer<QMatrix4x4>>("PipelineContainer<QMatrix4x4>");
+    qRegisterMetaType<PipelineContainerInfo>("PipelineContainerInfo");
 
     connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
     connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
-    connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, fps, &FPSCalculator::newFrame);
 
     //connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
 
@@ -321,6 +339,10 @@ void QMLAR::connectAll()
     connect(mvp_imu_decorated, &IMUMVPDecorator::newMVMatrix, this, &QMLAR::setMV);
     connect(mvp_imu_decorated, &IMUMVPDecorator::newPMatrix, this, &QMLAR::setP);
 
+    // latency/fps calculator
+    connect(mvp_imu_decorated, &IMUMVPDecorator::newInfo, latency, &LatencyCalculator::onNewContainerInfo);
+    connect(mvp_imu_decorated, &MarkerMVPProvider::newMVPMatrix, fps, &FPSCalculator::newFrame);
+
     connect(this, &QMLAR::newFilterAlpha, pose_filter, &PoseFilter::setAlpha);
 }
 
@@ -391,6 +413,8 @@ void QMLAR::initialize()
     // calculating mean/std fps based on 100 calls
     fps = new FPSCalculator(100);
 
+    latency = new LatencyCalculator();
+
     // moving objects to threads
     // index in threads array
     int thread_to_use = 0;
@@ -406,6 +430,7 @@ void QMLAR::initialize()
     raw_provider->moveToThread(threads[thread_to_use++]);
     fps->moveToThread(threads[thread_to_use++]);
     pose_filter->moveToThread(threads[thread_to_use++]);
+    latency->moveToThread(threads[thread_to_use++]);
 
     // connecting everything
     connectAll();

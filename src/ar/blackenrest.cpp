@@ -19,26 +19,29 @@ BlackenRest::BlackenRest(PosePredictor *predictor) : ImageProviderAsync()
 
 void BlackenRest::setInput(PipelineContainer<QImage> img)
 {
+    object_in_process = img.info();
     TimeLoggerLog("%s", "[ANALYZE] Begin Blacken");
-    QImage blackened = blacken(img);
+    QImage blackened = blacken(img.o());
     TimeLoggerLog("%s", "[ANALYZE] End Blacken");
-    emit imageAvailable(blackened);
+
+    emit imageAvailable(PipelineContainer<QImage>
+                        (blackened,object_in_process.checkpointed("BlackenRest")));
 }
 
-void BlackenRest::onNewPMatrix(QMatrix4x4 p)
+void BlackenRest::onNewPMatrix(PipelineContainer<QMatrix4x4> p)
 {
-    P = p;
+    P = p.o();
 }
 
-void BlackenRest::onNewMVMatrix(QMatrix4x4 mv)
+void BlackenRest::onNewMVMatrix(PipelineContainer<QMatrix4x4> mv)
 {
-    predictor->setCurrentPose(mv);
+    predictor->setCurrentPose(mv.o());
 }
 
-void BlackenRest::onNewMarkers(MarkerStorage storage)
+void BlackenRest::onNewMarkers(PipelineContainer<MarkerStorage> storage)
 {
-    use_region = storage.markersDetected();
-    this->storage = storage;
+    use_region = storage.o().markersDetected();
+    this->storage = storage.o();
 }
 
 QImage BlackenRest::blacken(QImage source)

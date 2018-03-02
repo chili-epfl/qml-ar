@@ -8,6 +8,7 @@
 #include <QColor>
 #include "hsvmeancolor.h"
 #include "meanstdcalculator.h"
+#include "pipelinecontainer.h"
 
 /*
  * This class receives matched points
@@ -39,7 +40,7 @@ public:
 
 public slots:
     // on new set of points
-    void newPoints(QPair<QImage, QVector<QVector2D>> points);
+    void newPoints(PipelineContainer<QPair<QImage, QVector<QVector2D>>> points);
 
     // emits mean and intervals
     void calculate();

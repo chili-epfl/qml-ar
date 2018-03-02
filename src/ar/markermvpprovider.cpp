@@ -45,7 +45,7 @@ QMatrix4x4 MarkerMVPProvider::getP(double n, double f)
     return translate_m1 * scaler * project;
 }
 
-void MarkerMVPProvider::recompute(MarkerStorage storage)
+void MarkerMVPProvider::recompute(PipelineContainer<MarkerStorage> storage)
 {
     // coordinate systems:
     // original points from QML model (OpenGL):
@@ -63,8 +63,11 @@ void MarkerMVPProvider::recompute(MarkerStorage storage)
     //         since MV is used before P
     //
 
+    // obtaining input id
+    object_in_process = storage.info();
+
     // hide objects if no markers were detected
-    if(storage.getCorrespondences().size() <= 0)
+    if(storage.o().getCorrespondences().size() <= 0)
     {
         reset();
         return;

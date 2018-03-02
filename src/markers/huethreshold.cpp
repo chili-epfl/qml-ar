@@ -228,14 +228,14 @@ void HueThreshold::setS(double mean, double std)
     max_s = mean + std;
 }
 
-void HueThreshold::setInput(QImage input)
+void HueThreshold::setInput(PipelineContainer<QImage> input)
 {
     input_buffer = input;
 
     if(!watcher.isRunning())
     {
-        //QFuture<QImage> future = QtConcurrent::run(*this, &HueThreshold::threshold, input);
-        QFuture<QImage> future = QtConcurrent::run(*this, &HueThreshold::thresholdManual, input);
+        object_in_process = input.info();
+        QFuture<QImage> future = QtConcurrent::run(*this, &HueThreshold::thresholdManual, input.o());
         watcher.setFuture(future);
     }
     else input_buffer_nonempty = true;
@@ -245,7 +245,8 @@ void HueThreshold::handleFinished()
 {
     QImage result = watcher.result();
 
-    emit imageAvailable(result);
+    emit imageAvailable(PipelineContainer<QImage>
+                        (result, object_in_process.checkpointed("HueThreshold")));
 
     if(input_buffer_nonempty)
     {

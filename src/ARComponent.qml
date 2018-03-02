@@ -363,16 +363,19 @@ Item {
             transformOrigin: Item.Center
         }
 
-        // text showing FPS
+        // text showing FPS and latency
         Text {
             z: 10
             id: fps_text
-            color: "red"
+            color: "#4286f4"
             font.pointSize: 20
 
             visible: root.show_fps
 
-            text: "FPS: " + Math.round(AR.FPSMean) + " ± " + Math.round(AR.FPSStd)
+            text: "FPS: " + Math.round(AR.FPSMean)
+                  + " ± " + Math.round(AR.FPSStd) + " / "
+                  + "LAT: " + Math.round(AR.LatencyMean)
+                  + " ± " + Math.round(AR.LatencyStd) + " ms"
             anchors.left: parent.left
             anchors.top: parent.top
         }

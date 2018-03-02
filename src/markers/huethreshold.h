@@ -19,6 +19,9 @@ public:
     HueThreshold(const HueThreshold &that);
 
 private:
+    // input id
+    PipelineContainerInfo object_in_process;
+
     // buffers
     cv::Mat img;
     cv::Mat hsv;
@@ -43,7 +46,7 @@ private:
     int input_buffer_nonempty;
 
     // buffer for input images
-    QImage input_buffer;
+    PipelineContainer<QImage> input_buffer;
 
     // minimal and maximal SV values
     int min_s, max_s, min_v, max_v;
@@ -60,7 +63,7 @@ public slots:
     void setS(double mean, double std);
 
     // set input image
-    void setInput(QImage input);
+    void setInput(PipelineContainer<QImage> input);
 
     // handle result from thread
     void handleFinished();

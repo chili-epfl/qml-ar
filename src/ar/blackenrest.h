@@ -18,6 +18,10 @@
 class BlackenRest : public ImageProviderAsync
 { Q_OBJECT
 private:
+    // info of the object in process
+    PipelineContainerInfo object_in_process;
+
+    // predictor of the pose (1 frame interval)
     PosePredictor* predictor;
 
     // do use region of the image
@@ -36,15 +40,15 @@ public:
 
 signals:
     // blackened image
-    void imageAvailable(QImage);
+    void imageAvailable(PipelineContainer<QImage>);
 
 public slots:
     // called on new MVP matrix from provider
-    void onNewPMatrix(QMatrix4x4 p);
-    void onNewMVMatrix(QMatrix4x4 mv);
+    void onNewPMatrix(PipelineContainer<QMatrix4x4> p);
+    void onNewMVMatrix(PipelineContainer<QMatrix4x4> mv);
 
     // called on new available markers
-    void onNewMarkers(MarkerStorage storage);
+    void onNewMarkers(PipelineContainer<MarkerStorage> storage);
 
     // process input
     void setInput(PipelineContainer<QImage> img);

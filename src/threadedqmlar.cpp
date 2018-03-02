@@ -98,9 +98,23 @@ double ThreadedQMLAR::getFPSMean()
 
 double ThreadedQMLAR::getFPSStd()
 {
-    // works since mean is a fixed-location variable
+    // works since std is a fixed-location variable
     // which is set from a different thread
     return instance->getFPSStd();
+}
+
+double ThreadedQMLAR::getLatencyMean()
+{
+    // works since mean is a fixed-location variable
+    // which is set from a different thread
+    return instance->getLatencyMean();
+}
+
+double ThreadedQMLAR::getLatencyStd()
+{
+    // works since std is a fixed-location variable
+    // which is set from a different thread
+    return instance->getLatencyStd();
 }
 
 bool ThreadedQMLAR::markers_visible()

@@ -10,11 +10,11 @@ HSVIntervalDetector::HSVIntervalDetector(int min_points)
     this->min_points = min_points;
 }
 
-void HSVIntervalDetector::newPoints(QPair<QImage, QVector<QVector2D>> image_points)
+void HSVIntervalDetector::newPoints(PipelineContainer<QPair<QImage, QVector<QVector2D>>> image_points)
 {
     // unpacking arguments
-    QImage image = image_points.first;
-    QVector<QVector2D> points = image_points.second;
+    QImage image = image_points.o().first;
+    QVector<QVector2D> points = image_points.o().second;
 
     // doing nothing on empty image
     if(image.width() * image.height() <= 1)

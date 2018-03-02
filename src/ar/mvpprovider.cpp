@@ -9,9 +9,14 @@ void MVPProvider::setMVPMatrix(QMatrix4x4 mat)
             TimeLoggerLog("%s", "Matrix available");
 
         mvp_matrix = mat;
-        emit newPMatrix(p_matrix);
-        emit newMVMatrix(mv_matrix);
-        emit newMVPMatrix(mvp_matrix);
+
+        // obtaining new info
+        PipelineContainerInfo info = object_in_process.checkpointed(typeid(*this).name());
+
+        emit newPMatrix(PipelineContainer<QMatrix4x4>(p_matrix, info));
+        emit newMVMatrix(PipelineContainer<QMatrix4x4>(mv_matrix, info));
+        emit newMVPMatrix(PipelineContainer<QMatrix4x4>(mvp_matrix, info));
+        emit newInfo(info);
     }
 }
 
@@ -27,7 +32,12 @@ void MVPProvider::reset()
         TimeLoggerLog("%s", "Hiding objects");
         mvp_matrix.setToIdentity();
         mv_matrix.setToIdentity();
-        emit newMVPMatrix(mvp_matrix);
+
+        // obtaining new info
+        PipelineContainerInfo info = object_in_process.checkpointed(typeid(*this).name());
+
+        emit newMVPMatrix(PipelineContainer<QMatrix4x4>(mvp_matrix, info));
+        emit newInfo(info);
     }
 }
 

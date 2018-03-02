@@ -269,9 +269,13 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
 
     TimeLoggerProfile("%s", "End marker detection");
 
+    PipelineContainerInfo info = object_in_process.checkpointed("UchiyaMarkerDetector");
+
     // sending obtained dots
-    emit dotsFound(qMakePair(source, m_llah.foundDots()));
-    emit dotsAll(m_llah.foundDots(true));
+    emit dotsFound(PipelineContainer<QPair<QImage, QVector<QVector2D> > >
+                   (qMakePair(source, m_llah.foundDots()), info));
+    emit dotsAll(PipelineContainer<QVector<QVector2D> >
+                 (m_llah.foundDots(true), info));
 
     // returning markers
     QPair<MarkerStorage, QImage> result = qMakePair(markers, QImage());

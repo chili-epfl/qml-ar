@@ -36,8 +36,8 @@ public:
 
 public slots:
     // set matrices which to decorate
-    void setP(QMatrix4x4 p);
-    void setMV(QMatrix4x4 mv);
+    void setP(PipelineContainer<QMatrix4x4> p);
+    void setMV(PipelineContainer<QMatrix4x4> mv);
 
     // recalculate filter output
     void update();

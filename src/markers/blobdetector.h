@@ -72,7 +72,7 @@ public:
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 public slots:
     // set input to background thread
-    void setInput(QImage img);
+    void setInput(PipelineContainer<QImage> img);
 
     // get result from background thread
     void handleFinished();

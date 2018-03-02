@@ -24,12 +24,12 @@ IMUMVPDecorator::IMUMVPDecorator(IMU *imu)
     timer.start(500);
 }
 
-void IMUMVPDecorator::setP(QMatrix4x4 p)
+void IMUMVPDecorator::setP(PipelineContainer<QMatrix4x4> p)
 {
     last_p = p;
 }
 
-void IMUMVPDecorator::setMV(QMatrix4x4 mv)
+void IMUMVPDecorator::setMV(PipelineContainer<QMatrix4x4> mv)
 {
     TimeLoggerLog("Updating MVP from Provider valid = %d", isValid(mv))
 
@@ -46,7 +46,10 @@ void IMUMVPDecorator::setMV(QMatrix4x4 mv)
     since_update.start();
 
     // MV from provider
-    last_mv = mv;
+    last_mv = mv.o();
+
+    // id from provider
+    object_in_process = mv.info();
 
     // obtaining current pose
     last_imu_pose = getCurrentPose();
@@ -109,7 +112,7 @@ void IMUMVPDecorator::updatePose()
     TimeLoggerLog("%s", "Updating MVP from IMU");
 
     // difference in pose since last MV from provider
-    QMatrix4x4 delta_mv = getCurrentPose() * last_imu_pose.inverted();;
+    QMatrix4x4 delta_mv = getCurrentPose() * last_imu_pose.inverted();
 
     // new MVP
     mv_matrix = delta_mv * last_mv;

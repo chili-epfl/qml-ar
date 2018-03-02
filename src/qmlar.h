@@ -30,6 +30,7 @@ class HueThreshold;
 class IMU;
 class FPSCalculator;
 class PoseFilter;
+class LatencyCalculator;
 
 /*
  * This class is the C++/QML interface to the
@@ -91,6 +92,10 @@ public:
     // get FPS mean/std
     double getFPSMean();
     double getFPSStd();
+
+    // get Latency mean/std
+    double getLatencyMean();
+    double getLatencyStd();
 public slots:
     // initialize from camera id (default value -1)
     void setCameraId(int camera_id = -1);
@@ -105,21 +110,21 @@ public slots:
     void startCamera();
 
     // set MVP for QML
-    void setMVP(QMatrix4x4 mvp);
-    void setMV(QMatrix4x4 mv);
-    void setP(QMatrix4x4 p);
+    void setMVP(PipelineContainer<QMatrix4x4> mvp);
+    void setMV(PipelineContainer<QMatrix4x4> mv);
+    void setP(PipelineContainer<QMatrix4x4> p);
 
     // set blobs from detector
-    void setBlobs(QVector<QVector2D> blobs);
+    void setBlobs(PipelineContainer<QVector<QVector2D>> blobs);
 
     // set markers
-    void setMarkers(MarkerStorage storage);
+    void setMarkers(PipelineContainer<MarkerStorage> storage);
 
     // sets mean and std hue of dots
     void hueAvailable(double mean, double std);
 
     // set image and dots from detector
-    void setDots(QPair<QImage, QVector<QVector2D>> image_dots);
+    void setDots(PipelineContainer<QPair<QImage, QVector<QVector2D>>> image_dots);
 
 private:
     // initialization semaphore
@@ -132,7 +137,7 @@ private:
     MarkerStorage* marker_storage;
 
     // mvp buffer for QML
-    QMatrix4x4 mvp_buffer;
+    PipelineContainer<QMatrix4x4> mvp_buffer;
     QMatrix4x4 mv_buffer, p_buffer;
 
     // width of the input camera image
@@ -207,6 +212,9 @@ private:
 
     // fps mean/std values
     FPSCalculator* fps;
+
+    // latency mean/std values
+    LatencyCalculator* latency;
 
     // 3D pose low-pass filter
     PoseFilter* pose_filter;

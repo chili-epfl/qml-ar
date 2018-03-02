@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDateTime>
+#include "pipelinecontainerinfo.h"
 
 /*
  * This template class wraps an object
@@ -17,8 +18,10 @@ private:
     T object;
     qint64 creation_timestamp;
     int id_;
+    PipelineContainerInfo info_;
 public:
-    PipelineContainer(T object, int id_ = 0);
+    PipelineContainer(T object, PipelineContainerInfo info);
+    PipelineContainer(T object);
     PipelineContainer();
 
     // get current id
@@ -27,6 +30,11 @@ public:
     // get underlying object
     T& o();
     operator T&();
+
+    // info management
+    void setInfo(PipelineContainerInfo info);
+    PipelineContainerInfo info();
+    operator PipelineContainerInfo();
 };
 
 #include "pipelinecontainer.cpp"

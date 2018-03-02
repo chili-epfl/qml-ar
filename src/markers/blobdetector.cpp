@@ -79,7 +79,7 @@ QImage BlobDetector::requestImage(const QString &id, QSize *size, const QSize &r
     return last_output;
 }
 
-void BlobDetector::setInput(QImage img)
+void BlobDetector::setInput(PipelineContainer<QImage> img)
 {
     input_buffer = img;
 

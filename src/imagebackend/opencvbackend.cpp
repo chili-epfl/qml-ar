@@ -42,11 +42,9 @@ void OpenCVCameraBackend::handleFinished()
     // obtain previous result
     buf = watcher.result();
 
-    // copying image from buffer
-    QImage image_copied = buf.copy();
-
     // sending image
-    emit imageAvailable(PipelineContainer<QImage>(image_copied, image_id));
+    emit imageAvailable(PipelineContainer<QImage>
+                        (buf.copy(), PipelineContainerInfo(image_id).checkpointed("Camera")));
 
     // next image will have different id
     image_id++;

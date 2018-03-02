@@ -26,10 +26,11 @@ void MarkerDetector::handleFinished()
     this->markers = result.first;
     this->output_buffer = result.second;
 
-    // passing markers further
-    emit markersUpdated(markers);
+    PipelineContainerInfo info = object_in_process.checkpointed("MarkerDetector");
 
-    emit previewUpdated(output_buffer);
+    // passing markers further
+    emit markersUpdated(PipelineContainer<MarkerStorage>(markers, info));
+    emit previewUpdated(PipelineContainer<QImage>(output_buffer, info));
 
     // starting new job if buffer is not empty
     if(buffer_is_nonempty)
@@ -47,7 +48,10 @@ void MarkerDetector::setInput(PipelineContainer<QImage> camera)
     // starting thread if one is not running already
     if(!watcher.isRunning())
     {
-        QFuture<QPair<MarkerStorage, QImage>> future = QtConcurrent::run(this, &MarkerDetector::process, camera);
+        // saving id
+        object_in_process = camera.info();
+
+        QFuture<QPair<MarkerStorage, QImage>> future = QtConcurrent::run(this, &MarkerDetector::process, camera.o());
         watcher.setFuture(future);
     }
     // for starting job right after previous one finished

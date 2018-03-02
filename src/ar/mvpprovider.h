@@ -3,6 +3,7 @@
 
 #include <QMatrix4x4>
 #include <QObject>
+#include "pipelinecontainer.h"
 
 /*
  * This class represents a QML interface
@@ -26,6 +27,9 @@ protected:
     // last ModelViewProjection matrix
     QMatrix4x4 p_matrix;
 
+    // current input id
+    PipelineContainerInfo object_in_process;
+
     // set MVP matrix internally
     void setMVPMatrix(QMatrix4x4 mat);
 public:
@@ -41,9 +45,10 @@ public:
 signals:
 
     // emitted when new MVP matrix is available
-    void newMVPMatrix(QMatrix4x4);
-    void newPMatrix(QMatrix4x4);
-    void newMVMatrix(QMatrix4x4);
+    void newMVPMatrix(PipelineContainer<QMatrix4x4>);
+    void newPMatrix(PipelineContainer<QMatrix4x4>);
+    void newMVMatrix(PipelineContainer<QMatrix4x4>);
+    void newInfo(PipelineContainerInfo);
 };
 
 #endif // MVPPROVIDER_H

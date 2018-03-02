@@ -37,7 +37,7 @@ public:
 
 public slots:
     // this functions actually compute matrices
-    void recompute(MarkerStorage storage);
+    void recompute(PipelineContainer<MarkerStorage> storage);
 };
 
 #endif // MARKERMVPPROVIDER_H

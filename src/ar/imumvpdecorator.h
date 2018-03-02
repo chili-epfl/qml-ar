@@ -55,8 +55,8 @@ public slots:
 
     // set matrices which to decorate
     // with high-frequency IMU updates
-    void setP(QMatrix4x4 p);
-    void setMV(QMatrix4x4 mv);
+    void setP(PipelineContainer<QMatrix4x4> p);
+    void setMV(PipelineContainer<QMatrix4x4> mv);
 
     // check if no MVP matrix obtained
     // for too long

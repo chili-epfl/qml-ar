@@ -24,10 +24,10 @@ class MarkerDetector: public QObject
 { Q_OBJECT
 signals:
     // children call it when a new matrix should be computed
-    void markersUpdated(MarkerStorage);
+    void markersUpdated(PipelineContainer<MarkerStorage>);
 
     // called on new preview image
-    void previewUpdated(QImage);
+    void previewUpdated(PipelineContainer<QImage>);
 
 public slots:
     // set input camera image
@@ -40,10 +40,12 @@ protected:
     // marker positions
     MarkerStorage markers;
 
-private:
+    // input id
+    PipelineContainerInfo object_in_process;
 
+private:
     // input image
-    QImage input_buffer;
+    PipelineContainer<QImage> input_buffer;
 
     // preview image
     QImage output_buffer;

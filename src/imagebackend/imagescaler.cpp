@@ -4,7 +4,6 @@
 
 ImageScaler::ImageScaler()
 {
-    id_in_process = -1;
     watcher.setParent(this);
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleResult()));
 }
@@ -17,9 +16,9 @@ ImageScaler::ImageScaler(const ImageScaler& that)// : ImageScaler()
 void ImageScaler::handleResult()
 {
     buffer = watcher.result();
-    emit imageAvailable(PipelineContainer<QImage>(buffer, id_in_process));
-    qDebug() << "Got id" << id_in_process;
-    id_in_process = -1;
+
+    emit imageAvailable(PipelineContainer<QImage>
+                        (buffer, object_in_process.checkpointed("ImageScaler")));
 
     if(input_buffer_nonempty)
     {
@@ -53,7 +52,7 @@ void ImageScaler::setInput(PipelineContainer<QImage> source)
 
     if(!watcher.isRunning())
     {
-        id_in_process = input_buffer.id();
+        object_in_process = input_buffer.info();
         QFuture<QImage> future = QtConcurrent::run(*this, &ImageScaler::scale, source.o().copy());
         watcher.setFuture(future);
     }
