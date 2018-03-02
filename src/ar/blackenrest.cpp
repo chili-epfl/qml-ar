@@ -1,12 +1,12 @@
 #include "timelogger.h"
-#include "trackingdecorator.h"
+#include "blackenrest.h"
 #include <QPainter>
 #include <QtCore>
 #include <QPen>
 #include <QColor>
 #include <QRect>
 
-TrackingDecorator::TrackingDecorator(PosePredictor *predictor) : ImageProviderAsync()
+BlackenRest::BlackenRest(PosePredictor *predictor) : ImageProviderAsync()
 {
     Q_ASSERT(predictor != NULL);
 
@@ -17,7 +17,7 @@ TrackingDecorator::TrackingDecorator(PosePredictor *predictor) : ImageProviderAs
     use_region = false;
 }
 
-void TrackingDecorator::setInput(PipelineContainer<QImage> img)
+void BlackenRest::setInput(PipelineContainer<QImage> img)
 {
     TimeLoggerLog("%s", "[ANALYZE] Begin Blacken");
     QImage blackened = blacken(img);
@@ -25,23 +25,23 @@ void TrackingDecorator::setInput(PipelineContainer<QImage> img)
     emit imageAvailable(blackened);
 }
 
-void TrackingDecorator::onNewPMatrix(QMatrix4x4 p)
+void BlackenRest::onNewPMatrix(QMatrix4x4 p)
 {
     P = p;
 }
 
-void TrackingDecorator::onNewMVMatrix(QMatrix4x4 mv)
+void BlackenRest::onNewMVMatrix(QMatrix4x4 mv)
 {
     predictor->setCurrentPose(mv);
 }
 
-void TrackingDecorator::onNewMarkers(MarkerStorage storage)
+void BlackenRest::onNewMarkers(MarkerStorage storage)
 {
     use_region = storage.markersDetected();
     this->storage = storage;
 }
 
-QImage TrackingDecorator::blacken(QImage source)
+QImage BlackenRest::blacken(QImage source)
 {
     if(!use_region)
         return source;
@@ -56,11 +56,8 @@ QImage TrackingDecorator::blacken(QImage source)
     // obtaining image correspondences
     WorldImageCorrespondences correspondences = storage.getCorrespondences();
 
-    // corners of the bounding box of markers
-    double x_min = source.width();
-    double x_max = 0;
-    double y_min = source.height();
-    double y_max = 0;
+    // resulting polygon containing marker
+    QPolygon marker;
 
     // mapping correspondences to image coordinate system
     for(int i = 0; i < correspondences.size(); i++)
@@ -82,32 +79,36 @@ QImage TrackingDecorator::blacken(QImage source)
         predicted_image_point.setX((predicted_image_point.x() + 1) / 2. * source.width());
         predicted_image_point.setY((1 - predicted_image_point.y()) / 2. * source.height());
 
-        if(predicted_image_point.x() > x_max)
-            x_max = predicted_image_point.x();
-        if(predicted_image_point.x() < x_min)
-            x_min = predicted_image_point.x();
-        if(predicted_image_point.y() > y_max)
-            y_max = predicted_image_point.y();
-        if(predicted_image_point.y() < y_min)
-            y_min = predicted_image_point.y();
+        // adding point as marker corner
+        marker.append(QPoint(predicted_image_point.x(), predicted_image_point.y()));
     }
 
+    // blackened output
     QImage augmented_input = source;
 
     TimeLoggerLog("%s", "Blackening input");
+
     // removing all but the selected rectangle
-    if(y_min < y_max && x_min < x_max)
+    if(marker.size() > 0)
     {
         // copying the image
         QPainter p(&augmented_input);
 
-        // painting all but marker region with black
-        p.setBrush(QBrush(Qt::black));
-        p.drawRect(0, 0, source.width(), y_min);
-        p.drawRect(0, y_max, source.width(), source.height() - y_max);
-        p.drawRect(0, y_min, x_min, y_max - y_min);
-        p.drawRect(x_max, y_min, source.width() - x_max, y_max - y_min);
+        // all image selection
+        QPainterPath pp_all;
+        pp_all.addRect(0, 0, source.width(), source.height());
 
+        // marker selection
+        QPainterPath pp;
+        pp.addPolygon(marker);
+
+        // want to blacken
+        p.setBrush(QBrush(Qt::black));
+
+        // blackening all but marker
+        p.drawPath(pp_all - pp);
+
+        // returning resulting image
         return augmented_input;
     }
 
