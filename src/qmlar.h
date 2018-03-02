@@ -20,7 +20,7 @@ class MarkerMVPProvider;
 class CalibratedCamera;
 class IMUMVPDecorator;
 class PosePredictor;
-class TrackingDecorator;
+class BlackenRest;
 class BlobDetector;
 class QtCamera2QML;
 class ImageScaler;
@@ -182,7 +182,7 @@ private:
     PosePredictor* predictor;
 
     // Tracking object
-    TrackingDecorator* tracking;
+    BlackenRest* blacken_rest;
 
     // blob detector
     BlobDetector* blob_detector;

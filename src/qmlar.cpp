@@ -12,7 +12,7 @@
 #include "calibratedcamerafilestorage.h"
 #include "imumvpdecorator.h"
 #include "posepredictor.h"
-#include "trackingdecorator.h"
+#include "blackenrest.h"
 #include "blobdetector.h"
 #include "qtcamera2qml.h"
 #include "imagescaler.h"
@@ -154,12 +154,8 @@ QVariantList QMLAR::getMarkers()
     for(it = marker_storage->begin(); it != marker_storage->end(); it++)
     {
         WorldImageCorrespondences c = it.value().getCorrespondences();
-        if(c.size() != 4) continue;
-        // positioning (mm)    (0, 0)    (0, s)       (s, 0)     (s, s)
-        result << c.getImagePoint(0).toVector2D();
-        result << c.getImagePoint(1).toVector2D();
-        result << c.getImagePoint(3).toVector2D();
-        result << c.getImagePoint(2).toVector2D();
+        for(int i = 0; i < c.size(); i++)
+            result << c.getImagePoint(i).toVector2D();
     }
 
     return result;
@@ -226,14 +222,14 @@ void QMLAR::hueAvailable(double mean, double std)
     // X HSV -> thresholding
     disconnect(detector, &UchiyaMarkerDetector::dotsFound, hsv_interval, &HSVIntervalDetector::newPoints);
 
-    // X tracking -> blobs
-    disconnect(tracking, &TrackingDecorator::imageAvailable, blob_detector, &BlobDetector::setInput);
+    // X blacken_rest -> blobs
+    disconnect(blacken_rest, &BlackenRest::imageAvailable, blob_detector, &BlobDetector::setInput);
 
     // X blobs -> markers
     disconnect(blob_detector, &BlobDetector::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
-    // tracking -> hsv
-    connect(tracking, &TrackingDecorator::imageAvailable, hue_threshold, &HueThreshold::setInput);
+    // blacken_rest -> hsv
+    connect(blacken_rest, &BlackenRest::imageAvailable, hue_threshold, &HueThreshold::setInput);
 
     // hsv -> detector
     //connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
@@ -259,17 +255,17 @@ void QMLAR::connectAll()
     // camera -> QML
     connect(scaler, &ImageScaler::imageAvailable, marker_backend, &MarkerBackEnd::setCamera);
 
-    // scaler -> tracking
-    connect(scaler, &ImageScaler::imageAvailable, tracking, &TrackingDecorator::setInput);
+    // scaler -> blacken_rest
+    connect(scaler, &ImageScaler::imageAvailable, blacken_rest, &BlackenRest::setInput);
 
     // scaler -> resolution
     connect(scaler, &ImageScaler::imageAvailable, perspective_camera, &CalibratedCamera::setResolutionImage);
 
-//    // tracking -> blobs
-//    connect(tracking, &TrackingDecorator::imageAvailable, blob_detector, &BlobDetector::setInput);
+//    // blacken_rest -> blobs
+//    connect(blacken_rest, &BlackenRest::imageAvailable, blob_detector, &BlobDetector::setInput);
 
-    // tracking -> threshold
-    connect(tracking, &TrackingDecorator::imageAvailable, hue_threshold, &HueThreshold::setInput);
+    // blacken_rest -> threshold
+    connect(blacken_rest, &BlackenRest::imageAvailable, hue_threshold, &HueThreshold::setInput);
 
     connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
@@ -292,8 +288,8 @@ void QMLAR::connectAll()
     // markers -> MVP
     connect(detector, &UchiyaMarkerDetector::markersUpdated, mvp_provider, &MarkerMVPProvider::recompute);
 
-    // markers -> tracking
-    connect(detector, &UchiyaMarkerDetector::markersUpdated, tracking, &TrackingDecorator::onNewMarkers);
+    // markers -> blacken_rest
+    connect(detector, &UchiyaMarkerDetector::markersUpdated, blacken_rest, &BlackenRest::onNewMarkers);
 
 //    // markers -> HSV detector
 //    connect(detector, &UchiyaMarkerDetector::dotsFound, hsv_interval, &HSVIntervalDetector::newPoints, Qt::QueuedConnection);
@@ -306,9 +302,9 @@ void QMLAR::connectAll()
 //    connect(hsv_interval, &HSVIntervalDetector::sAvailable, hue_threshold, &HueThreshold::setS);
 //    connect(hsv_interval, &HSVIntervalDetector::vAvailable, hue_threshold, &HueThreshold::setV);
 
-//    // mvp -> tracking
-    connect(mvp_provider, &MarkerMVPProvider::newMVMatrix, tracking, &TrackingDecorator::onNewMVMatrix);
-    connect(mvp_provider, &MarkerMVPProvider::newPMatrix, tracking, &TrackingDecorator::onNewPMatrix);
+//    // mvp -> blacken_rest
+    connect(mvp_provider, &MarkerMVPProvider::newMVMatrix, blacken_rest, &BlackenRest::onNewMVMatrix);
+    connect(mvp_provider, &MarkerMVPProvider::newPMatrix, blacken_rest, &BlackenRest::onNewPMatrix);
 
 //    // mvp -> FPS
 //    connect(detector, &UchiyaMarkerDetector::markersUpdated, this, &QMLAR::imageUpdated);
@@ -374,8 +370,8 @@ void QMLAR::initialize()
     // creating linear pose predictor
     predictor = new LinearPosePredictor();
 
-    // adding tracking to marker detector
-    tracking = new TrackingDecorator(predictor);
+    // adding blacken_rest to marker detector
+    blacken_rest = new BlackenRest(predictor);
 
     // decorating MVP with IMU
     mvp_imu_decorated = new IMUMVPDecorator(imu);
@@ -402,7 +398,7 @@ void QMLAR::initialize()
     detector->moveToThread(threads[thread_to_use++]);
     blob_detector->moveToThread(threads[thread_to_use++]);
     mvp_provider->moveToThread(threads[thread_to_use++]);
-    tracking->moveToThread(threads[thread_to_use++]);
+    blacken_rest->moveToThread(threads[thread_to_use++]);
     mvp_imu_decorated->moveToThread(threads[thread_to_use++]);
     scaler->moveToThread(threads[thread_to_use++]);
     hsv_interval->moveToThread(threads[thread_to_use++]);

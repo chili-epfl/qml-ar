@@ -59,7 +59,6 @@ SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
     $$PWD/src/ar/imumvpdecorator.cpp \
     $$PWD/src/ar/posepredictor.cpp \
     $$PWD/src/ar/linearposepredictor.cpp \
-    $$PWD/src/ar/trackingdecorator.cpp \
     $$PWD/src/markers/blobdetector.cpp \
     $$PWD/src/imagebackend/qtcamera2qml.cpp \
     $$PWD/src/imagebackend/androidfilter.cpp \
@@ -73,7 +72,8 @@ SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
     $$PWD/src/threadedqmlar.cpp \
     $$PWD/src/utils/fpscalculator.cpp \
     $$PWD/src/ar/posefilter.cpp \
-    $$PWD/src/utils/pipelinecontainer.cpp
+    $$PWD/src/utils/pipelinecontainer.cpp \
+    $$PWD/src/ar/blackenrest.cpp
 
 HEADERS += \
     $$PWD/src/imagebackend/opencvbackend.h \
@@ -105,7 +105,6 @@ HEADERS += \
     $$PWD/src/ar/imumvpdecorator.h \
     $$PWD/src/ar/posepredictor.h \
     $$PWD/src/ar/linearposepredictor.h \
-    $$PWD/src/ar/trackingdecorator.h \
     $$PWD/src/markers/blobdetector.h \
     $$PWD/src/imagebackend/qtcamera2qml.h \
     $$PWD/src/imagebackend/androidfilter.h \
@@ -119,7 +118,8 @@ HEADERS += \
     $$PWD/src/threadedqmlar.h \
     $$PWD/src/utils/fpscalculator.h \
     $$PWD/src/ar/posefilter.h \
-    $$PWD/src/utils/pipelinecontainer.h
+    $$PWD/src/utils/pipelinecontainer.h \
+    $$PWD/src/ar/blackenrest.h
 
 QML_SOURCES += \
     $$PWD/src/ARComponent.qml \
