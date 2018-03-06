@@ -64,7 +64,6 @@ void IMUMVPDecorator::checkIfTooLong()
     // resetting MVP matrix (waited too long)
     if(since_update.elapsed() > reset_ms)
     {
-        TimeLoggerLog("%s", "Waited for too long w/o markers");
         reset();
         last_imu_pose_available = false;
         return;

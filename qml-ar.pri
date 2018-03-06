@@ -75,7 +75,8 @@ SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
     $$PWD/src/utils/pipelinecontainer.cpp \
     $$PWD/src/ar/blackenrest.cpp \
     $$PWD/src/utils/pipelinecontainerinfo.cpp \
-    $$PWD/src/utils/latencycalculator.cpp
+    $$PWD/src/utils/latencycalculator.cpp \
+    $$PWD/src/imagebackend/delayfilter.cpp
 
 HEADERS += \
     $$PWD/src/imagebackend/opencvbackend.h \
@@ -123,7 +124,8 @@ HEADERS += \
     $$PWD/src/utils/pipelinecontainer.h \
     $$PWD/src/ar/blackenrest.h \
     $$PWD/src/utils/pipelinecontainerinfo.h \
-    $$PWD/src/utils/latencycalculator.h
+    $$PWD/src/utils/latencycalculator.h \
+    $$PWD/src/imagebackend/delayfilter.h
 
 QML_SOURCES += \
     $$PWD/src/ARComponent.qml \

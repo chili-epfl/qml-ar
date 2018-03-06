@@ -46,6 +46,17 @@ QList<QVideoFrame::PixelFormat> QVideoFrameHelpers::supportedPixelFormats()
             << QVideoFrame::Format_AdobeDng;
 }
 
+QVideoFrame QVideoFrameHelpers::cloneAndroidFrame(QVideoFrame *input)
+{
+#ifdef Q_OS_ANDROID
+    // Stays in GPU Memory --> FAST
+    GLuint textureId = input->handle().toUInt();
+    return QVideoFrame(new TextureBuffer(textureId), input->size(), input->pixelFormat());
+#else
+    return *input;
+#endif
+}
+
 void QVideoFrameHelpers::halfYUV(uchar* src, uchar* dst, int w, int h)
 {
     //byte[] yuv = new byte[imageWidth/2 * imageHeight/2 * 3 / 2];

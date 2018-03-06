@@ -9,7 +9,7 @@
 #define ENABLE_DEBUG_OUTPUT
 
 // output info for measuring throughput
-#define PROFILE_PIPELINE_THROUGHPUT
+//#define PROFILE_PIPELINE_THROUGHPUT
 
 // output info for measuring latency
 #define PROFILE_PIPELINE_LATENCY

@@ -2,6 +2,7 @@
 #define ANDROIDFILTER_H
 
 #include <QAbstractVideoFilter>
+#include "qvideoframehelpers.h"
 
 /*
  * A class for fixing video output on android

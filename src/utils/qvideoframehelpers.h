@@ -3,10 +3,24 @@
 
 #include <QList>
 #include <QVideoFrame>
+#include <QOpenGLContext>
 
 /*
  * Helpers for QVideoFrame used in this project
  */
+
+class TextureBuffer : public QAbstractVideoBuffer
+{
+public:
+    TextureBuffer(uint id) : QAbstractVideoBuffer(GLTextureHandle), m_id(id) { }
+    MapMode mapMode() const { return NotMapped; }
+    uchar *map(MapMode, int *, int *) { return 0; }
+    void unmap() { }
+    QVariant handle() const { return QVariant::fromValue<GLuint>(m_id); }
+
+private:
+    GLuint m_id;
+};
 
 class QVideoFrameHelpers
 {
@@ -27,6 +41,9 @@ private:
 public:
     // return a list with all possible formats
     static QList<QVideoFrame::PixelFormat> supportedPixelFormats();
+
+    // clone android frame
+    static QVideoFrame cloneAndroidFrame(QVideoFrame* input);
 
     // convert QVideoFrame to QImage
     // supports Android nv21 format (uses yuv2rgb library)
