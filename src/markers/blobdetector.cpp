@@ -131,39 +131,32 @@ std::vector<cv::KeyPoint> BlobDetector::getBlobs()
 
 QPair<QVector<QVector2D>, QImage> BlobDetector::getAndDraw(QImage img)
 {
-    TimeLoggerLog("%s", "[ANALYZE] Begin BlobDetector");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin BlobDetector");
     QVector<QVector2D> blobs = detectBlobs(img);
     QImage drawn = drawBlobs();
 
     QPair<QVector<QVector2D>, QImage> result = qMakePair(blobs, drawn);
 
-    TimeLoggerLog("%s", "[ANALYZE] End BlobDetector");
+    TimeLoggerThroughput("%s", "[ANALYZE] End BlobDetector");
 
     return result;
 }
 
 QVector<QVector2D> BlobDetector::detectBlobs(QImage source)
 {
-    TimeLoggerLog("%s", "Saving input");
     // setting last input image
     last_input = source;
 
     // get data qimage -> mat
     cv::Mat source_cv = QtOcv::image2Mat_shared(source);
 
-    TimeLoggerLog("%s", "Converting to grayscale");
-
     // color -> grayscale
     cv::Mat source_cv_gray;
     cv::cvtColor(source_cv, source_cv_gray, cv::COLOR_RGB2GRAY);
 
-    TimeLoggerLog("%s", "Blurring");
-
     // blur the image
     cv::Mat blurred = source_cv_gray;
     cv::blur(source_cv_gray, blurred, blur_size);
-
-    TimeLoggerLog("%s", "Detecting keypoints");
 
     // detect blobs
     keypoints.clear();

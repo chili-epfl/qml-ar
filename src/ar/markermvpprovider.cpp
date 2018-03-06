@@ -93,5 +93,5 @@ void MarkerMVPProvider::recompute(PipelineContainer<MarkerStorage> storage)
     // notify listeners
     setMVPMatrix(new_mvp_matrix);
 
-    TimeLoggerProfile("%s", "Calculated MVP matrix");
+    TimeLoggerThroughput("%s", "Calculated MVP matrix");
 }

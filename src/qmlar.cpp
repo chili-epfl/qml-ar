@@ -152,7 +152,7 @@ void QMLAR::setDots(PipelineContainer<QPair<QImage, QVector<QVector2D> >> image_
 void QMLAR::setInfo(PipelineContainerInfo info)
 {
     *last_info = info;
-    qDebug() << info.toString();
+    TimeLoggerLatency("[ANALYZE] LAT %s", info.toString().toStdString().c_str());
 }
 
 QVariantList QMLAR::getMarkers()

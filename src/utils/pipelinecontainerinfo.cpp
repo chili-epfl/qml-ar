@@ -30,13 +30,13 @@ QString PipelineContainerInfo::toString()
 {
     QString res;
     QTextStream ts(&res);
-    ts << "ID (" << id << ") ";
+    ts << "ID " << id << " ";
     for(int i = 0; i < stages.size(); i++)
     {
         qint64 delta_t = timestamps[i];
         if(i > 0) delta_t -= timestamps[i - 1];
-        ts << stages[i] << " (" << delta_t << ") ";
+        ts << stages[i] << " " << delta_t << " ";
     }
-    ts << "TOT (" << delta() << ")";
+    ts << "TOT " << delta();
     return res;
 }

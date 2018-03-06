@@ -20,9 +20,9 @@ BlackenRest::BlackenRest(PosePredictor *predictor) : ImageProviderAsync()
 void BlackenRest::setInput(PipelineContainer<QImage> img)
 {
     object_in_process = img.info();
-    TimeLoggerLog("%s", "[ANALYZE] Begin Blacken");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin Blacken");
     QImage blackened = blacken(img.o());
-    TimeLoggerLog("%s", "[ANALYZE] End Blacken");
+    TimeLoggerThroughput("%s", "[ANALYZE] End Blacken");
 
     emit imageAvailable(PipelineContainer<QImage>
                         (blackened,object_in_process.checkpointed("BlackenRest")));
@@ -49,7 +49,6 @@ QImage BlackenRest::blacken(QImage source)
     if(!use_region)
         return source;
 
-    TimeLoggerLog("%s", "Obtaining marker location");
     // obtaining predicted pose
     Pose predictedPose = predictor->predictPose();
 
@@ -88,8 +87,6 @@ QImage BlackenRest::blacken(QImage source)
 
     // blackened output
     QImage augmented_input = source;
-
-    TimeLoggerLog("%s", "Blackening input");
 
     // removing all but the selected rectangle
     if(marker.size() > 0)

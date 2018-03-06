@@ -30,7 +30,7 @@ HueThreshold::HueThreshold()
 QImage HueThreshold::thresholdManual(QImage source)
 {
     //Q_ASSERT(source.format() == QImage::Format_RGB888);
-    TimeLoggerLog("%s", "[ANALYZE] Begin HueThresholdManual");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin HueThresholdManual");
 
     QImage copied = source.copy();
 
@@ -53,8 +53,6 @@ QImage HueThreshold::thresholdManual(QImage source)
     uchar min_v_ = min_v;
     uchar max_v_ = max_v;
     uchar delta_h_ = delta_h / 2;
-
-    TimeLoggerLog("%s", "Starting loop");
 
     for(int j = 0; j < h_; j++)
         for(int i = 0; i < w_; i++)
@@ -82,20 +80,19 @@ QImage HueThreshold::thresholdManual(QImage source)
 
     QImage result_copy = result.copy();
 
-    TimeLoggerLog("%s", "[ANALYZE] End HueThresholdManual");
+    TimeLoggerThroughput("%s", "[ANALYZE] End HueThresholdManual");
 
     return result_copy;
 }
 
 QImage HueThreshold::threshold(QImage source)
 {
-    TimeLoggerLog("%s", "[ANALYZE] Begin HueThreshold");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin HueThreshold");
 
     // nothing on no ranges
     if(min_hsv.length() == 0)
         return source;
 
-    TimeLoggerLog("%s", "Converting to HSV");
     // qt -> cv input
     img = QtOcv::image2Mat(source);
 
@@ -105,8 +102,6 @@ QImage HueThreshold::threshold(QImage source)
     // sanity check
     Q_ASSERT(min_hsv.length() == max_hsv.length());
 
-    TimeLoggerLog("%s", "Thresholding");
-
     for(int i = 0; i < min_hsv.length(); i++)
     {
         // current mask
@@ -115,25 +110,17 @@ QImage HueThreshold::threshold(QImage source)
         // result = mask or result|mask
         if(i == 0) result = mask;
         else cv::bitwise_or(mask, result, result);
-
-        TimeLoggerLog("%s", "End step");
     }
-
-    TimeLoggerLog("%s", "End mask");
 
     // converting to rgb
     cv::cvtColor(255 - result, result_rgb, cv::COLOR_GRAY2RGB);
 
-    TimeLoggerLog("%s", "End GRAY->RGB");
-
     // resulting mask in qt
     result_qt = QtOcv::mat2Image(result_rgb);
 
-    TimeLoggerLog("%s", "End mat2Image");
-
     result_qt.toPixelFormat(QImage::Format_RGB888);
 
-    TimeLoggerLog("%s", "[ANALYZE] End HueThreshold");
+    TimeLoggerThroughput("%s", "[ANALYZE] End HueThreshold");
 
     return result_qt;
 }

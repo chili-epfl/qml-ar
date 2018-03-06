@@ -28,7 +28,6 @@ QMatrix3x3 CalibratedCamera::getMatrixOld()
 double CalibratedCamera::getScaler()
 {
     Q_ASSERT(calibration_w != 0);
-    //TimeLoggerLog("Scaler: %lf %d %d", (double) (1. * image_w / calibration_w), image_w, calibration_w);
     return (1. * image_w / calibration_w);
 }
 

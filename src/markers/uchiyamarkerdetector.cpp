@@ -28,7 +28,6 @@ UchiyaMarkerDetector::UchiyaMarkerDetector(): MarkerDetector()
 void UchiyaMarkerDetector::initialize(int h, int w)
 {
     Q_ASSERT(is_initialized == false);
-    TimeLoggerLog("init %d %d", h, w);
     this->h = h;
     this->w = w;
     m_camimg.Init(w, h);		// allocate image
@@ -203,7 +202,6 @@ void UchiyaMarkerDetector::extractMarkers()
 
 void UchiyaMarkerDetector::prepareInput(QImage source)
 {
-    TimeLoggerLog("%s", "Copying input");
     static cv::Mat src2mat;
     src2mat = QtOcv::image2Mat_shared(source);
     static IplImage src2mat2ipl;
@@ -229,7 +227,7 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
         initialize(source.height(), source.width());
     }
 
-    TimeLoggerLog("%s", "[ANALYZE] Begin Uchiya");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin Uchiya");
 
     // copying input
     if(source.isGrayscale())
@@ -245,29 +243,29 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
         m_llah.Extract(m_camimg);
     }
 
-    TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaSetPts");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin UchiyaSetPts");
     m_llah.SetPts();
     //m_llah.SetPts(blob_detector.getBlobs());
     m_llah.CoordinateTransform(source.height());
-    TimeLoggerLog("%s", "[ANALYZE] End UchiyaSetPts");
+    TimeLoggerThroughput("%s", "[ANALYZE] End UchiyaSetPts");
 
-    TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaTracking");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin UchiyaTracking");
     m_llah.RetrievebyTracking();
     m_llah.FindPaper(6);
-    TimeLoggerLog("%s", "[ANALYZE] End UchiyaTracking");
+    TimeLoggerThroughput("%s", "[ANALYZE] End UchiyaTracking");
 
     if(m_llah.GetVisiblePaper()->size() == 0)
     {
-        TimeLoggerLog("%s", "[ANALYZE] Begin UchiyaMatching");
+        TimeLoggerThroughput("%s", "[ANALYZE] Begin UchiyaMatching");
         m_llah.RetrievebyMatching();
         m_llah.FindPaper(10);
-        TimeLoggerLog("%s", "[ANALYZE] End UchiyaMatching");
+        TimeLoggerThroughput("%s", "[ANALYZE] End UchiyaMatching");
     }
 
     // extracting WorldImage correspondences
     extractMarkers();
 
-    TimeLoggerProfile("%s", "End marker detection");
+    TimeLoggerThroughput("%s", "End marker detection");
 
     PipelineContainerInfo info = object_in_process.checkpointed("UchiyaMarkerDetector");
 
@@ -280,7 +278,7 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
     // returning markers
     QPair<MarkerStorage, QImage> result = qMakePair(markers, QImage());
 
-    TimeLoggerLog("%s", "[ANALYZE] End Uchiya");
+    TimeLoggerThroughput("%s", "[ANALYZE] End Uchiya");
 
     // returning markers
     return result;

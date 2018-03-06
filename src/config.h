@@ -6,10 +6,13 @@
  */
 
 // enables TimeLogger
-//#define ENABLE_DEBUG_OUTPUT
+#define ENABLE_DEBUG_OUTPUT
 
-// Define to enable time output at each important step
-#define PROFILE_PIPELINE
+// output info for measuring throughput
+#define PROFILE_PIPELINE_THROUGHPUT
+
+// output info for measuring latency
+#define PROFILE_PIPELINE_LATENCY
 
 // Define to force usage of QVideoProbe on Linux
 //#define QT_BACKEND_FORCE_VIDEOPROBE
@@ -17,11 +20,17 @@
 // Force Qt backend on Linux
 //#define QT_BACKEND_FORCE_ON_LINUX
 
-// implementation of PROFILE_PIPELINE
-#ifdef PROFILE_PIPELINE
-    #define TimeLoggerProfile(...) TimeLoggerLog(__VA_ARGS__)
+// implementation of PROFILE_THROUGHPUT/LATENCY
+#ifdef PROFILE_PIPELINE_THROUGHPUT
+    #define TimeLoggerThroughput(...) TimeLoggerLog(__VA_ARGS__)
 #else
-    #define TimeLoggerProfile(...) {}
+    #define TimeLoggerThroughput(...) {}
+#endif
+
+#ifdef PROFILE_PIPELINE_LATENCY
+    #define TimeLoggerLatency(...) TimeLoggerLog(__VA_ARGS__)
+#else
+    #define TimeLoggerLatency(...) {}
 #endif
 
 #endif // CONFIG_H

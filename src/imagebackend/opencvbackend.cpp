@@ -49,8 +49,6 @@ void OpenCVCameraBackend::handleFinished()
     // next image will have different id
     image_id++;
 
-    TimeLoggerLog("%s", "Obtained CV image");
-
     // request new frame if this call was successful
     if(buf.width() * buf.height() > 1)
         request();
@@ -63,14 +61,14 @@ QImage OpenCVCameraBackend::requestImage(const QString &id, QSize *size, const Q
 
 QImage OpenCVCameraBackend::getImage()
 {
-    TimeLoggerLog("%s", "[ANALYZE] Begin CVGetImage");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin CVGetImage");
     // reading the image
     cv::Mat mat;
     stream->read(mat);
 
     // converting the matrix to qimage and then to pixmap
     QImage result = QtOcv::mat2Image(mat);
-    TimeLoggerLog("%s", "[ANALYZE] End CVGetImage");
+    TimeLoggerThroughput("%s", "[ANALYZE] End CVGetImage");
     return result;
 }
 

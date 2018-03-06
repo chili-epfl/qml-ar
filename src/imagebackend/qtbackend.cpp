@@ -94,12 +94,12 @@ void QtCameraBackend::handleFinished()
     emit imageAvailable(PipelineContainer<QImage>
                         (buf.copy(), image_info.checkpointed("Camera")));
 
-    TimeLoggerLog("%s", "[ANALYZE] Begin QtCamera");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin QtCamera");
 }
 
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
-    TimeLoggerProfile("%s", "Received image from camera");
+    TimeLoggerThroughput("%s", "Received image from camera");
 
     // not converting frame if thread is busy
     if(!watcher.isRunning())

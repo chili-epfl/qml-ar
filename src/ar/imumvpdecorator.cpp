@@ -31,8 +31,6 @@ void IMUMVPDecorator::setP(PipelineContainer<QMatrix4x4> p)
 
 void IMUMVPDecorator::setMV(PipelineContainer<QMatrix4x4> mv)
 {
-    TimeLoggerLog("Updating MVP from Provider valid = %d", isValid(mv))
-
     if(!isValid(mv))
     {
         // reset our matrix if no IMU available
@@ -108,8 +106,6 @@ void IMUMVPDecorator::updatePose()
 {
     // no pose => no MV from provider => nothing
     if(!last_imu_pose_available) return;
-
-    TimeLoggerLog("%s", "Updating MVP from IMU");
 
     // difference in pose since last MV from provider
     QMatrix4x4 delta_mv = getCurrentPose() * last_imu_pose.inverted();

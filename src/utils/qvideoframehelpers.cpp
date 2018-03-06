@@ -70,13 +70,11 @@ void QVideoFrameHelpers::halfYUV(uchar* src, uchar* dst, int w, int h)
 
 QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 {
-    TimeLoggerLog("%s", "[ANALYZE] Begin FrameConvert");
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin FrameConvert");
     Q_ASSERT(MAX_SIZE >= frameOriginal.width() * frameOriginal.height() * 3);
 
     // do nothing if no image found
     if(frameOriginal.width() * frameOriginal.height() == 0) return QImage();
-
-    TimeLoggerLog("Source %d %d", frameOriginal.width(), frameOriginal.height());
 
     Q_ASSERT(frameOriginal.width() <= MAX_IMG_SIDE);
     Q_ASSERT(frameOriginal.height() <= MAX_IMG_SIDE);
@@ -129,7 +127,7 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
 
     QImage result = image.copy();
 
-    TimeLoggerLog("%s", "[ANALYZE] End FrameConvert");
+    TimeLoggerThroughput("%s", "[ANALYZE] End FrameConvert");
 
     return(result);
 }
