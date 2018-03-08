@@ -12,7 +12,7 @@ class PipelineContainerInfo
 {
 private:
     // id of the object
-    int id;
+    int id_;
 
     // timestamps and stages in the pipeline
     QVector<qint64> timestamps;
@@ -31,6 +31,9 @@ public:
 
     // string representation
     QString toString();
+
+    // current id
+    int id();
 };
 
 #endif // PIPELINECONTAINERINFO_H

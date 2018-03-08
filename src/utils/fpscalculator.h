@@ -48,6 +48,9 @@ public slots:
     // obtain mean/std FPS
     double mean();
     double std();
+
+signals:
+    void newMean(double);
 };
 
 #endif // FPSCALCULATOR_H

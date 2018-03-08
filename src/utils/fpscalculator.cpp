@@ -63,6 +63,7 @@ void FPSCalculator::newFrame()
     if(values.size() > 0)
     {
         calculateMean();
+        emit newMean(last_mean);
         calculateStd();
     }
 }

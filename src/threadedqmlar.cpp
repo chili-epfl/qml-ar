@@ -132,6 +132,16 @@ bool ThreadedQMLAR::poseValid()
     return !mvp_matrix.isIdentity();
 }
 
+double ThreadedQMLAR::getFrameDrop()
+{
+    return instance->getFrameDrop();
+}
+
+int ThreadedQMLAR::getFrameDelay()
+{
+    return instance->getFrameDelay();
+}
+
 void ThreadedQMLAR::setCameraId(int camera_id)
 {
     emit setCameraIdSignal(camera_id);

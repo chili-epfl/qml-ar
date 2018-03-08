@@ -4,7 +4,7 @@
 
 PipelineContainerInfo::PipelineContainerInfo(int id)
 {
-    this->id = id;
+    this->id_ = id;
 }
 
 void PipelineContainerInfo::checkpoint(QString name)
@@ -30,7 +30,7 @@ QString PipelineContainerInfo::toString()
 {
     QString res;
     QTextStream ts(&res);
-    ts << "ID " << id << " ";
+    ts << "ID " << id_ << " ";
     for(int i = 0; i < stages.size(); i++)
     {
         qint64 delta_t = timestamps[i];
@@ -39,4 +39,9 @@ QString PipelineContainerInfo::toString()
     }
     ts << "TOT " << delta();
     return res;
+}
+
+int PipelineContainerInfo::id()
+{
+    return id_;
 }

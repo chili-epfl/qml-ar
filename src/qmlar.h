@@ -31,6 +31,7 @@ class IMU;
 class FPSCalculator;
 class PoseFilter;
 class LatencyCalculator;
+class FramesDelayCalculator;
 
 /*
  * This class is the C++/QML interface to the
@@ -96,6 +97,12 @@ public:
     // get Latency mean/std
     double getLatencyMean();
     double getLatencyStd();
+
+    // returns framedrop fraction
+    double getFrameDrop();
+
+    // delay in frames to compensate for latency
+    int getFrameDelay();
 public slots:
     // initialize from camera id (default value -1)
     void setCameraId(int camera_id = -1);
@@ -225,11 +232,20 @@ private:
     // 3D pose low-pass filter
     PoseFilter* pose_filter;
 
+    // delay in frames calculator
+    FramesDelayCalculator* delay;
+
     // connect underlying objects
     void connectAll();
 
     // threads for objects
     QVector<QThread*> threads;
+
+    // number of frames received
+    int n_frames_received;
+
+    // fraction of frames dropped
+    double framedrop_fraction;
 signals:
     // notify QML part when new matrix is available
     void newMVPMatrix(QMatrix4x4 mvp);

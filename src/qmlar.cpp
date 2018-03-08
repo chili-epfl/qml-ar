@@ -30,12 +30,13 @@
 #include "fpscalculator.h"
 #include "posefilter.h"
 #include "latencycalculator.h"
+#include "framesdelaycalculator.h"
 
 QMLAR::QMLAR()
 {
     // initially, object is not initialized
     is_initialized = false;
-    camera_id = -2;
+    camera_id = -2; // invalid id at first
     image_filename = "";
     raw_provider = NULL;
     perspective_camera = NULL;
@@ -45,16 +46,18 @@ QMLAR::QMLAR()
     last_info = new PipelineContainerInfo();
 
     // reserve threads
-    for(int i = 0; i < 13; i++)
+    for(int i = 0; i < 14; i++) // magic number here, see connectAll()
         threads.append(new QThread());
 
     // allowing up to 10 parallel tasks
     // (separate from previous call)
-    QThreadPool::globalInstance()->setMaxThreadCount(10);
+    QThreadPool::globalInstance()->setMaxThreadCount(10); // magic number
 
     // no fps calculator yet
     fps = NULL;
     latency = NULL;
+    delay = NULL;
+    n_frames_received = 0;
 }
 
 int QMLAR::getCameraId()
@@ -152,6 +155,11 @@ void QMLAR::setDots(PipelineContainer<QPair<QImage, QVector<QVector2D> >> image_
 void QMLAR::setInfo(PipelineContainerInfo info)
 {
     *last_info = info;
+
+    // calculating framedrop
+    n_frames_received++;
+    framedrop_fraction = 1 - (1. * n_frames_received / (info.id() + 1));
+
     TimeLoggerLatency("[ANALYZE] LAT %s", info.toString().toStdString().c_str());
 }
 
@@ -196,6 +204,19 @@ double QMLAR::getLatencyStd()
     if(latency)
         return latency->std();
     return 0;
+}
+
+double QMLAR::getFrameDrop()
+{
+    return framedrop_fraction;
+}
+
+int QMLAR::getFrameDelay()
+{
+    if(delay)
+        return delay->lastDelay();
+    else
+        return 0;
 }
 
 void QMLAR::startCamera()
@@ -351,6 +372,11 @@ void QMLAR::connectAll()
     connect(pose_filter, &PoseFilter::newInfo, this, &QMLAR::setInfo);
 
     connect(this, &QMLAR::newFilterAlpha, pose_filter, &PoseFilter::setAlpha);
+
+    // frame delay
+    connect(latency, &LatencyCalculator::newMean, delay, &FramesDelayCalculator::setMeanLatency);
+    connect(fps, &FPSCalculator::newMean, delay, &FramesDelayCalculator::setMeanFPS);
+    connect(delay, &FramesDelayCalculator::newDelay, marker_backend, &MarkerBackEnd::setDelay);
 }
 
 QString QMLAR::getImageFilename()
@@ -420,7 +446,11 @@ void QMLAR::initialize()
     // calculating mean/std fps based on 100 calls
     fps = new FPSCalculator(100);
 
+    // calculating latency
     latency = new LatencyCalculator();
+
+    // calculating delay based on latency and fps
+    delay = new FramesDelayCalculator();
 
     // moving objects to threads
     // index in threads array
@@ -438,6 +468,7 @@ void QMLAR::initialize()
     fps->moveToThread(threads[thread_to_use++]);
     pose_filter->moveToThread(threads[thread_to_use++]);
     latency->moveToThread(threads[thread_to_use++]);
+    delay->moveToThread(threads[thread_to_use++]);
 
     // connecting everything
     connectAll();
@@ -450,5 +481,5 @@ void QMLAR::initialize()
     is_initialized = true;
 
     // 10 functions can know that object is initialized
-    init_sem.release(10);
+    init_sem.release(10); // magic number
 }

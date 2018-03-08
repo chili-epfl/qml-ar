@@ -1,6 +1,8 @@
 #include <QLinkedList>
 #include <QVideoFrame>
+#include <QDebug>
 #include "delayfilter.h"
+#include "qvideoframehelpers.h"
 
 class DelayFilterRunnable : public QVideoFilterRunnable {
 public:
@@ -11,12 +13,15 @@ QVideoFrame DelayFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
 { Q_UNUSED(surfaceFormat) Q_UNUSED(flags)
 
     static QLinkedList<QVideoFrame> buffer;
-    buffer.push_back(QVideoFrame(*input));
+    buffer.push_back(QVideoFrameHelpers::cloneAndroidFrame(input));
+    qDebug() << "Add texture" << input->handle().toUInt() << input->size();
 
-    QVideoFrame result = buffer.last();
+    QVideoFrame result = buffer.first();
 
-    //if (buffer.size() >= 10)
-    //    buffer.pop_front();
+    if (buffer.size() >= 5)
+        buffer.pop_front();
+
+    qDebug() << "buffer size: " << buffer.size();
 
     return result;
 }

@@ -30,6 +30,9 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(bool markers_visible READ markers_visible NOTIFY newMarkers)
     Q_PROPERTY(bool pose_valid READ poseValid NOTIFY newMVPMatrix)
     Q_PROPERTY(double filter_alpha READ getFilterAlpha WRITE setFilterAlpha)
+    Q_PROPERTY(double framedrop READ getFrameDrop NOTIFY imageUpdated)
+    Q_PROPERTY(int frame_delay READ getFrameDelay NOTIFY imageUpdated)
+
 private:
     // instance to QMLAR object
     QMLAR* instance;
@@ -76,6 +79,12 @@ public:
 
     // is pose valid?
     bool poseValid();
+
+    // framedrop fraction
+    double getFrameDrop();
+
+    // returns delay in frames
+    int getFrameDelay();
 
 public slots:
     // initialize from camera id (default value -1)

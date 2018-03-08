@@ -20,6 +20,9 @@ void LatencyCalculator::update()
     // saving
     latency_mean = new_mean;
     latency_std = new_std;
+
+    // telling others
+    emit newMean(latency_mean);
 }
 
 LatencyCalculator::LatencyCalculator()

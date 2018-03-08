@@ -3,6 +3,7 @@
 
 #include "imageproviderasync.h"
 #include "markerdetector.h"
+#include <QLinkedList>
 
 /*
  * A backend for QML for marker detection preview
@@ -19,13 +20,25 @@ public:
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
     virtual ~MarkerBackEnd();
+
 public slots:
     // slots to set data
     void setCamera(PipelineContainer<QImage> cam);
     void setPreview(PipelineContainer<QImage> prev);
+    void setDelay(int delay);
+
 private:
     // buffers for preview image and raw image
     QImage preview, camera;
+
+    // storing this amount of frames
+    static const int MAX_BUFFER_SIZE = 10;
+
+    // stored camera images
+    QLinkedList<QImage> camera_buffer;
+
+    // delay for camera
+    int delay_in_frames;
 };
 
 #endif // UCHIYABACKEND_H
