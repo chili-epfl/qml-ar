@@ -43,6 +43,8 @@ public:
     static QList<QVideoFrame::PixelFormat> supportedPixelFormats();
 
     // clone android frame
+    // see see https://bugreports.qt.io/browse/QTBUG-48567
+    // response by Christoph Keller, 29 Apr '17 12:57 PM
     static QVideoFrame cloneAndroidFrame(QVideoFrame* input);
 
     // convert QVideoFrame to QImage
