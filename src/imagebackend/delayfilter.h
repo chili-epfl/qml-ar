@@ -11,6 +11,7 @@
 class DelayFilter : public QAbstractVideoFilter {
 public:
     QVideoFilterRunnable *createFilterRunnable();
+
 signals:
     void finished(QObject *result);
 };

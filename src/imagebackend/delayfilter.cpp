@@ -13,7 +13,7 @@ QVideoFrame DelayFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
 { Q_UNUSED(surfaceFormat) Q_UNUSED(flags)
 
     static QLinkedList<QVideoFrame> buffer;
-    buffer.push_back(QVideoFrameHelpers::cloneAndroidFrame(input));
+    buffer.push_back(*input);
     qDebug() << "Add texture" << input->handle().toUInt() << input->size();
 
     QVideoFrame result = buffer.first();
