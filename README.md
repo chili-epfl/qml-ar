@@ -57,5 +57,11 @@ Currently, camera image rendering is done on CPU in this mode, which also result
 Moreover, the image looks far away (whereas objects look close) since the image is not shifted.
 Framework tested on Xiaomi Redmi 4A, and both with Google Cardboard and Gear VR.
 
+## Battery usage
+SM-T810 discharges from 100% to 10% in 2 hours 20 minutes. Temperature (half of the back surface lying on a table) rises up to 50 °C.<br />
+<img src="/notebooks/battery-SMT810/BatteryLog06Mar18.csv_level.png" width="250px" />
+<img src="/notebooks/battery-SMT810/BatteryLog06Mar18.csv_temperature.png" width="250px" />
+<img src="/notebooks/battery-SMT810/BatteryLog06Mar18.csv_voltage.png" width="250px" />
+
 ## Contact
 <a href="mailto:sergei.volodin@epfl.ch">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
