@@ -24,3 +24,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 ##### SOURCES/HEADERS (this project)
 SOURCES += main.cpp
+RESOURCES += assets.qrc
+
+# adding assets/ folder
+# See https://stackoverflow.com/questions/20573838/qt-5-2-including-external-file-into-an-android-package
+# https://forum.qt.io/topic/69946/qt-android-assets/4
+# https://falsinsoft.blogspot.ch/2017/01/qt-creator-include-additional-files.html
+assets.path = /assets
+assets.files += $$PWD/../example/assets/*
+assets.depends += FORCE
+INSTALLS += assets

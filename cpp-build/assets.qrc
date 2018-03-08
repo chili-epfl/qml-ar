@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="assets/markers.json">../example/assets/markers.json</file>
+        <file alias="assets/camera_matrix.json">../example/assets/camera_matrix.json</file>
+    </qresource>
+</RCC>
