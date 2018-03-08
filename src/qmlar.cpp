@@ -41,7 +41,7 @@ QMLAR::QMLAR()
     raw_provider = NULL;
     perspective_camera = NULL;
     camera_wrapper = NULL;
-    marker_backend = new MarkerBackEnd();
+    marker_backend = new MarkerBackEnd(true);
     marker_storage = new MarkerStorage();
     last_info = new PipelineContainerInfo();
 
@@ -377,6 +377,7 @@ void QMLAR::connectAll()
     connect(latency, &LatencyCalculator::newMean, delay, &FramesDelayCalculator::setMeanLatency);
     connect(fps, &FPSCalculator::newMean, delay, &FramesDelayCalculator::setMeanFPS);
     connect(delay, &FramesDelayCalculator::newDelay, marker_backend, &MarkerBackEnd::setDelay);
+    connect(latency, &LatencyCalculator::newMean, mvp_imu_decorated, &IMUMVPDecorator::setMVPLatency);
 }
 
 QString QMLAR::getImageFilename()
@@ -429,7 +430,7 @@ void QMLAR::initialize()
     blacken_rest = new BlackenRest(predictor);
 
     // decorating MVP with IMU
-    mvp_imu_decorated = new IMUMVPDecorator(imu);
+    mvp_imu_decorated = new IMUMVPDecorator(imu, IMUMVPDecorator::DELAY_CORRECT);
 
     // creating image scaler
     scaler = new ImageScaler(image_width);

@@ -9,8 +9,9 @@
 
 using namespace cv;
 
-MarkerBackEnd::MarkerBackEnd() : ImageProviderAsync()
+MarkerBackEnd::MarkerBackEnd(bool do_delay) : ImageProviderAsync()
 {
+    this->do_delay = do_delay;
     preview = QVideoFrameHelpers::empty();
     camera = QVideoFrameHelpers::empty();
 }
@@ -21,7 +22,7 @@ QImage MarkerBackEnd::requestImage(const QString &id, QSize *size, const QSize &
         return preview;
     else if(id == "camera")
     {
-        qDebug() << "delay" << delay_in_frames;
+        if(!do_delay) return camera;
         if(camera_buffer.isEmpty()) return camera;
         return QLinkedListAt<QImage>(camera_buffer, delay_in_frames);
     }
@@ -50,5 +51,4 @@ void MarkerBackEnd::setPreview(PipelineContainer<QImage> prev)
 void MarkerBackEnd::setDelay(int delay)
 {
     delay_in_frames = delay;
-    qDebug() << "setDelay" << delay;
 }

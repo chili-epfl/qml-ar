@@ -14,7 +14,8 @@
 class MarkerBackEnd : public ImageProviderAsync
 { Q_OBJECT
 public:
-    MarkerBackEnd();
+    // set to true to delay images by latency
+    MarkerBackEnd(bool do_delay = true);
 
     // obtain processed image
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
@@ -39,6 +40,9 @@ private:
 
     // delay for camera
     int delay_in_frames;
+
+    // use latency delay
+    bool do_delay;
 };
 
 #endif // UCHIYABACKEND_H
