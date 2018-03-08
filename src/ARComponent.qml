@@ -374,8 +374,10 @@ Item {
 
             text: "FPS: " + Math.round(AR.FPSMean)
                   + " ± " + Math.round(AR.FPSStd) + " / "
-                  + "LAT: " + Math.round(AR.LatencyMean)
-                  + " ± " + Math.round(AR.LatencyStd) + " ms"
+                  + "Lat: " + Math.round(AR.LatencyMean)
+                  + " ± " + Math.round(AR.LatencyStd) + " ms / "
+                  + "F.Drop: " + Math.round(AR.framedrop * 100) + "% / "
+                  + "F.Delay: " + AR.frame_delay
             anchors.left: parent.left
             anchors.top: parent.top
         }
