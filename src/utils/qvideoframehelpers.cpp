@@ -129,9 +129,7 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     }
 
     // the resulting QImage
-    QImage image(img,
-                 w,
-                 h, fmt);
+    QImage image(img, w, h, fmt);
 
     // unmapping source from memory
     frame.unmap();

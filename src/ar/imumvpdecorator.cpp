@@ -22,7 +22,7 @@ IMUMVPDecorator::IMUMVPDecorator(IMU *imu, int delay_mode)
     this->delay_mode = delay_mode;
 
     // update resulting MVP on new pose from IMU
-    connect(imu, SIGNAL(stateChanged()), this, SLOT(updatePose()));
+    connect(imu, SIGNAL(rotationChanged(QQuaternion)), this, SLOT(IMUUpdated(QQuaternion)));
 
     timer.setParent(this);
 
@@ -52,6 +52,9 @@ void IMUMVPDecorator::setMV(PipelineContainer<QMatrix4x4> mv)
 
     // MV from provider
     last_mv = mv.o();
+
+    // setting latency to object latency
+    setMVPLatency(QDateTime::currentMSecsSinceEpoch() - mv.info().start());
 
     // id from provider
     object_in_process = mv.info();
@@ -91,6 +94,32 @@ void IMUMVPDecorator::setMVPLatency(double latency)
     mvp_latency = latency;
 }
 
+void IMUMVPDecorator::IMUUpdated(QQuaternion imu_rotation)
+{
+    // resulting 4x4 rotation matrix
+    QMatrix4x4 res;
+
+    // initializing with I
+    res.setToIdentity();
+
+    // obtaining rotation axis
+    float x, y, z, theta;
+    imu_rotation.getAxisAndAngle(&x, &y, &z, &theta);
+
+    // new axis in OpenCV coordinate system
+    // swapping x and y
+    QVector3D new_axis(y, x, z);
+
+    // rotating matrix by (axis, angle)
+    res.rotate(qRadiansToDegrees(theta), new_axis);
+
+    // saving
+    current_imu_pose = res;
+
+    // updating output
+    updatePose();
+}
+
 QMatrix4x4 IMUMVPDecorator::getLatencyCorrectedIMUPose()
 {
     return getDelayedIMUPose(qRound(mvp_latency));
@@ -106,7 +135,16 @@ QMatrix4x4 IMUMVPDecorator::getDelayedIMUPose(int delay)
     // searching for closest IMU pose
     for(it = current; it != imu_poses.end(); it++)
     {
-        if((*current).timestamp - (*it).timestamp > delay) break;
+        if((*current).timestamp - (*it).timestamp > delay)
+        {
+            // choosing min over current and prev
+            int delta1 = (*current).timestamp - (*it).timestamp;
+            int delta2 = (*current).timestamp - (*(it - 1)).timestamp;
+
+            // will do it-- later
+            if(delta1 < delta2) it++;
+            break;
+        }
     }
 
     // one back
@@ -119,33 +157,11 @@ QMatrix4x4 IMUMVPDecorator::getDelayedIMUPose(int delay)
 
 QMatrix4x4 IMUMVPDecorator::getCurrentIMUPose()
 {
-    // resulting 4x4 rotation matrix
-    QMatrix4x4 res;
-
-    // initializing with I
-    res.setToIdentity();
-
     // identity if no pose available
     if(!imu->isStartupComplete())
-        return res;
+        return QMatrix4x4();
 
-    // obtaining rotation axis
-    QVector3D axis = imu->getRotAxis();
-
-    // new axis in OpenCV coordinate system
-    QVector3D new_axis;
-
-    // swapping x and y
-    new_axis.setX(axis.y());
-    new_axis.setY(axis.x());
-
-    // keeping z
-    new_axis.setZ(axis.z());
-
-    // rotating matrix by (axis, angle)
-    res.rotate(imu->getRotAngle(), new_axis);
-
-    return res;
+    return current_imu_pose;
 }
 
 void IMUMVPDecorator::updatePose()

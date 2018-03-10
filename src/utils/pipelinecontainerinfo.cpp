@@ -26,6 +26,12 @@ qint64 PipelineContainerInfo::delta()
     return timestamps.last() - timestamps.first();
 }
 
+qint64 PipelineContainerInfo::start()
+{
+    if(timestamps.size() == 0) return 0;
+    return timestamps.first();
+}
+
 QString PipelineContainerInfo::toString()
 {
     QString res;

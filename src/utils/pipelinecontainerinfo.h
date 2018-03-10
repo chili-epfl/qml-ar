@@ -17,7 +17,6 @@ private:
     // timestamps and stages in the pipeline
     QVector<qint64> timestamps;
     QVector<QString> stages;
-
 public:
     // initialize
     PipelineContainerInfo(int id = 0);
@@ -28,6 +27,9 @@ public:
 
     // last - first
     qint64 delta();
+
+    // start time
+    qint64 start();
 
     // string representation
     QString toString();

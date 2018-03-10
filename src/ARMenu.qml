@@ -117,7 +117,7 @@ Item {
             minimumValue: 0.0
             stepSize: 0.01
             maximumValue: 1.0
-            value: 0.7
+            value: 1.0
             styleHints: 1
             onValueChanged: {AR.filter_alpha = value;}
         }

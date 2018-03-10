@@ -377,7 +377,6 @@ void QMLAR::connectAll()
     connect(latency, &LatencyCalculator::newMean, delay, &FramesDelayCalculator::setMeanLatency);
     connect(fps, &FPSCalculator::newMean, delay, &FramesDelayCalculator::setMeanFPS);
     connect(delay, &FramesDelayCalculator::newDelay, marker_backend, &MarkerBackEnd::setDelay);
-    connect(latency, &LatencyCalculator::newMean, mvp_imu_decorated, &IMUMVPDecorator::setMVPLatency);
 }
 
 QString QMLAR::getImageFilename()
@@ -442,7 +441,7 @@ void QMLAR::initialize()
     hue_threshold = new HueThreshold();
 
     // creating pose filter
-    pose_filter = new PoseFilter(0.5);
+    pose_filter = new PoseFilter(1.0);
 
     // calculating mean/std fps based on 100 calls
     fps = new FPSCalculator(100);

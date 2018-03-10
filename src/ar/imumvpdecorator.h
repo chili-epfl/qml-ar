@@ -39,6 +39,9 @@ private:
     // last P
     QMatrix4x4 last_p;
 
+    // current IMU rotation
+    QMatrix4x4 current_imu_pose;
+
     // last pose from IMU at the
     // moment last_mv was updated
     QMatrix4x4 last_imu_pose;
@@ -97,6 +100,9 @@ public slots:
 
     // latency of MVP matrix
     void setMVPLatency(double latency);
+
+    // set imu rotation
+    void IMUUpdated(QQuaternion imu_rotation);
 };
 
 #endif // IMUMVPDECORATOR_H
