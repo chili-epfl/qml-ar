@@ -12,7 +12,7 @@
 //#define PROFILE_PIPELINE_THROUGHPUT
 
 // output info for measuring latency
-#define PROFILE_PIPELINE_LATENCY
+//#define PROFILE_PIPELINE_LATENCY
 
 // Define to force usage of QVideoProbe on Linux
 //#define QT_BACKEND_FORCE_VIDEOPROBE
