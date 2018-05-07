@@ -95,6 +95,9 @@ Item {
     width: 300
     height: 300
 
+    // called when clicked on the activity
+    signal clickedOnActivity(real x_mm, real y_mm);
+
     // initialize AR component on loading
     // properties must be set beforehand
     Component.onCompleted: {
@@ -204,6 +207,45 @@ Item {
         id: scene
         anchors.fill: parent
         anchors.margins: 0
+
+        // Detect moust clicks inside to allow for drag&drop
+        MouseArea {
+            id: scene_mouse_area
+            anchors.fill: parent
+            onClicked: {
+                // checking if the pose is valid
+                if(!AR.pose_valid) return;
+
+                // register the click
+                var x_ndc = +2. * mouseX / width  - 1;
+                var y_ndc = -2. * mouseY / height + 1;
+
+                // send it still to others
+                // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
+                onClicked: mouse.accepted = false;
+
+                // MVP matrix from AR
+                var mat = AR.mvp_matrix;
+
+                // inverse transformation
+                var world_xyz1 = Qt.matrix4x4(mat.m11, mat.m12, mat.m14, 0,
+                                        mat.m21, mat.m22, mat.m24, 0,
+                                        mat.m31, mat.m32, mat.m34, 0,
+                                        0      , 0      , 0      , 1).inverted().times(Qt.vector4d(x_ndc, y_ndc, 1, 1));
+
+                // outputtting
+                var x_mm = world_xyz1.x / world_xyz1.z;
+                var y_mm = world_xyz1.y / world_xyz1.z
+
+                // debug output
+                console.log("Clicked at " + x_mm + ", " + y_mm);
+
+                // calling the signal
+                clickedOnActivity(x_mm, y_mm);
+            }
+            z: 20
+            propagateComposedEvents: true
+        }
 
         // indicator showing loading circle
         QQC.BusyIndicator {

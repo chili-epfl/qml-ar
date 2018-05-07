@@ -3,6 +3,7 @@ import QtQuick.Window 2.2
 import AR 1.0
 import QtMultimedia 5.9
 import QtQml 2.2
+import QtQuick.Controls 2.3
 
 Window {
     id: window
@@ -55,5 +56,26 @@ Window {
 
         // use image instead of viewfinder
         force_image: false
+
+        // do an action when clicked on the plane with the markers
+        onClickedOnActivity: {
+            popup_text.text = "Clicked at x = " + Math.round(x_mm, 1) + "mm y = " + Math.round(y_mm, 1) + "mm z = 0mm.\nPress outside to exit";
+            popup.open();
+        }
     }
+
+    // popup to display the clicked coordinates
+    Popup {
+           id: popup
+           x: 100
+           y: 100
+           width: parent.width
+           height: parent.height / 5
+           modal: true
+           focus: true
+           closePolicy: Popup.CloseOnPressOutside
+           Text {
+               id: popup_text
+           }
+       }
 }
