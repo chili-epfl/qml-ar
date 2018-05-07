@@ -65,7 +65,7 @@ SM-T810 discharges from 100% to 10% in 2 hours 20 minutes. Temperature (half of 
 
 ## Clicked point estimation
 The library also is capable of estimating the position in the world for a point clicked on the screen. See the signal `clickedOnActivity` of the `ARComponent`. The program assumes that the world point is at the plane with markers (z = 0).<br />
-<img src="/example/screenshots/linux_3dpoint.png" width="250px" />
+<img src="/example/screenshots/linux_3dpoint.jpg" width="250px" />
 
 ## Contact
 <a href="mailto:sergei.volodin@epfl.ch">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
