@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/camera_matrix.json</file>
+        <file>assets/markers.json</file>
+    </qresource>
+</RCC>
