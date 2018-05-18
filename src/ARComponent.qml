@@ -1,4 +1,4 @@
-import QtQuick 2.6
+import QtQuick 2.7
 import AR 1.0
 import QtQuick.Scene3D 2.0
 import QtQuick.Controls 1.4 as QQC
@@ -198,10 +198,18 @@ Item {
 
             // starting camera
             AR.startCamera();
+            slides.sourceItem = viewfinder;
         }
         console.log("End loading viewfinder");
     }
 
+ShaderEffectSource {
+    id: slides
+    x: 600
+    width:250
+    height: 250
+    visible: true
+}
     // scene which displays camera image and OpenGL scene
     Rectangle {
         id: scene
