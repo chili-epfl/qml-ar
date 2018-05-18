@@ -213,16 +213,16 @@ Item {
             id: scene_mouse_area
             anchors.fill: parent
             onClicked: {
+                // send it still to others
+                // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
+                mouse.accepted = false;
+
                 // checking if the pose is valid
                 if(!AR.pose_valid) return;
 
                 // register the click
                 var x_ndc = +2. * mouseX / width  - 1;
                 var y_ndc = -2. * mouseY / height + 1;
-
-                // send it still to others
-                // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
-                onClicked: mouse.accepted = false;
 
                 // MVP matrix from AR
                 var mat = AR.mvp_matrix;
