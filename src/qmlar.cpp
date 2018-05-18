@@ -54,6 +54,7 @@ QMLAR::QMLAR()
     QThreadPool::globalInstance()->setMaxThreadCount(10); // magic number
 
     // no fps calculator yet
+    framedrop_fraction = 0;
     fps = NULL;
     latency = NULL;
     delay = NULL;
@@ -68,7 +69,11 @@ int QMLAR::getCameraId()
 
 void QMLAR::setCameraId(int camera_id)
 {
-    Q_ASSERT(!is_initialized);
+    if(is_initialized)
+    {
+        TimeLoggerLog("%s", "Already initialized, nothing to do");
+        return;
+    }
     TimeLoggerLog("Using camera %d", camera_id);
     this->camera_id = camera_id;
 
@@ -85,7 +90,11 @@ void QMLAR::setCameraId(int camera_id)
 
 void QMLAR::setImageFilename(QString filename)
 {
-    Q_ASSERT(!is_initialized);
+    if(is_initialized)
+    {
+        TimeLoggerLog("%s", "Already initialized, nothing to do");
+        return;
+    }
     TimeLoggerLog("Opening image %s", filename.toStdString().c_str());
     image_filename = filename;
     raw_provider = new ImageBackend(filename);
@@ -109,7 +118,11 @@ int QMLAR::getImageWidth()
 
 void QMLAR::setImageWidth(int new_width)
 {
-    Q_ASSERT(!is_initialized);
+    if(is_initialized)
+    {
+        TimeLoggerLog("%s", "Already initialized, nothing to do");
+        return;
+    }
     image_width = new_width;
 }
 
@@ -481,5 +494,5 @@ void QMLAR::initialize()
     is_initialized = true;
 
     // 10 functions can know that object is initialized
-    init_sem.release(10); // magic number
+    init_sem.release(999); // magic number
 }
