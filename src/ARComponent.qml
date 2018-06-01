@@ -91,6 +91,9 @@ Item {
     // use Augmented Virtual Reality (left-right pair)
     property bool avr_mode: false
 
+    // disable the hidden menu
+    property bool disable_menu: false
+
     // initial width and height
     width: 300
     height: 300
@@ -326,7 +329,7 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: hiddenMenu.visible = !hiddenMenu.visible
+                onClicked: if(!root.disable_menu) hiddenMenu.visible = !hiddenMenu.visible
             }
         }
 
