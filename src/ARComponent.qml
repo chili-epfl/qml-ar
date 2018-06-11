@@ -101,6 +101,9 @@ Item {
     // called when clicked on the activity
     signal clickedOnActivity(real x_mm, real y_mm);
 
+    // called when the 3d scene is fully loaded
+    signal scene_loaded();
+
     // initialize AR component on loading
     // properties must be set beforehand
     Component.onCompleted: {
@@ -312,6 +315,7 @@ Item {
 
                     // load scene on component loading
                     root.load_scene3d();
+                    scene_loaded();
                 }
             }
         }
