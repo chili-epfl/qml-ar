@@ -224,7 +224,10 @@ Item {
                 mouse.accepted = false;
 
                 // checking if the pose is valid
-                if(!AR.pose_valid) return;
+                if(!AR.pose_valid) {
+                    console.log('Clicked on AR component, but no pose available');
+                    return;
+                }
 
                 // register the click
                 var x_ndc = +2. * mouseX / width  - 1;
