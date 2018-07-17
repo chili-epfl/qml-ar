@@ -97,6 +97,9 @@ Item {
     // True if markers are visible now, otherwise false
     property bool markers_visible: AR.markers_visible
 
+    // MVP matrix export
+    property var mvp_matrix: AR.mvp_matrix
+
     // initial width and height
     width: 300
     height: 300
