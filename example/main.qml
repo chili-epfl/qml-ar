@@ -62,6 +62,11 @@ Window {
             popup_text.text = "Clicked at x = " + Math.round(x_mm, 1) + "mm y = " + Math.round(y_mm, 1) + "mm z = 0mm.\nPress outside to exit";
             popup.open();
         }
+
+        // write a message to console when marker visibility changes
+        onMarkers_visibleChanged: {
+            console.log('Markers visible? ' + markers_visible)
+        }
     }
 
     // popup to display the clicked coordinates

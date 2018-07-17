@@ -94,6 +94,9 @@ Item {
     // disable the hidden menu
     property bool disable_menu: false
 
+    // True if markers are visible now, otherwise false
+    property bool markers_visible: AR.markers_visible
+
     // initial width and height
     width: 300
     height: 300
