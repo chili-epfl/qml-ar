@@ -1,3 +1,11 @@
+/**
+ * @file imagescaler.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef IMAGESCALER_H
 #define IMAGESCALER_H
 
@@ -24,7 +32,9 @@ private:
     PipelineContainer<QImage> input_buffer;
     bool input_buffer_nonempty;
 
-    // input id which is being processed
+    /**
+    * @brief Input id which is being processed
+    */
     PipelineContainerInfo object_in_process;
 public:
     ImageScaler(int target_width);

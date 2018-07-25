@@ -1,3 +1,11 @@
+/**
+ * @file opencvbackend.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef CV_BACKEND_H
 #define CV_BACKEND_H
 
@@ -16,49 +24,77 @@
 class OpenCVCameraBackend : public ImageProviderAsync
 { Q_OBJECT
 public:
-    // empty constructor
+    /**
+    * @brief Empty constructor
+    */
     OpenCVCameraBackend();
 
     virtual ~OpenCVCameraBackend();
 
-    // copy constructor
+    /**
+    * @brief Copy constructor
+    */
     OpenCVCameraBackend(const OpenCVCameraBackend &backend);
 
-    // initialize with camera_id
+    /**
+    * @brief Initialize with camera_id
+    */
     OpenCVCameraBackend(int cam_id = 0);
 
-    // get image from the camera
+    /**
+    * @brief Get image from the camera
+    */
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
-    // request new image from camera
+    /**
+    * @brief Request new image from camera
+    */
     void request();
 
-    // obtain image from OpenCV
+    /**
+    * @brief Obtain image from OpenCV
+    */
     QImage getImage();
 private:
-    // open the camera
+    /**
+    * @brief Open the camera
+    */
     void setupCV();
 
-    // id of the camera in VideoCapture(...)
+    /**
+    * @brief Id of the camera in VideoCapture(...)
+    */
     int camera_id;
 
-    // camera opened?
+    /**
+    * @brief Camera opened?
+    */
     bool is_initialized = false;
 
-    // buffer for the image
+    /**
+    * @brief Buffer for the image
+    */
     QImage buf;
 
-    // CV VideoCapture
+    /**
+    * @brief CV VideoCapture
+    */
     cv::VideoCapture* stream = NULL;
 
-    // thread worker
+    /**
+    * @brief Thread worker
+    */
     QFutureWatcher<QImage> watcher;
 
-    // last image identity
+    /**
+    * @brief Last image identity
+    */
     int image_id;
 
 public slots:
-    // get result from future
+    /**
+    * @brief Get result from future
+    */
     void handleFinished();
 };
 

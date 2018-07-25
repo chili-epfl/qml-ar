@@ -1,7 +1,17 @@
+/**
+ * @file cameraframegrabber.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef CAMERAFRAMEGRABBER_H
 #define CAMERAFRAMEGRABBER_H
 
-// Qt includes
+    /**
+    * @brief Qt includes
+    */
 #include <QAbstractVideoSurface>
 #include <QList>
 
@@ -22,16 +32,22 @@ class CameraFrameGrabber : public QAbstractVideoSurface
 public:
     explicit CameraFrameGrabber(QObject *parent = 0);
 
-    // dummy function returning a list
+    /**
+    * @brief Dummy function returning a list
+    */
     QList<QVideoFrame::PixelFormat> supportedPixelFormats(QAbstractVideoBuffer::HandleType handleType) const;
 
-    // callback for the parent object
-    // should be called on each new frame (e.g. by QCamera)
+    /**
+    * @brief Callback for the parent object
+    * Should be called on each new frame (e.g. by QCamera)
+    */
     bool present(const QVideoFrame &frame);
 
 signals:
-    // this will be emited after present() was called
-    // and the image was successfully obtained
+    /**
+    * @brief This will be emited after present() was called
+    * And the image was successfully obtained
+    */
     void frameAvailable(QImage frame);
 
 public slots:

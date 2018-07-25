@@ -1,3 +1,11 @@
+/**
+ * @file framesdelaycalculator.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef FRAMESDELAYCALCULATOR_H
 #define FRAMESDELAYCALCULATOR_H
 
@@ -13,7 +21,9 @@ class FramesDelayCalculator : public QObject
 public:
     FramesDelayCalculator();
 
-    // returns last value
+    /**
+    * @brief Returns last value
+    */
     int lastDelay();
 
 public slots:
@@ -21,17 +31,25 @@ public slots:
     void setMeanFPS(double fps_ms);
 
 private:
-    // mean latency from camera to markers
+    /**
+    * @brief Mean latency from camera to markers
+    */
     double mean_latency;
     double mean_fps;
 
-    // result in frames
+    /**
+    * @brief Result in frames
+    */
     int result;
 
-    // update local result
+    /**
+    * @brief Update local result
+    */
     void update();
 
-    // returns delay in frames
+    /**
+    * @brief Returns delay in frames
+    */
     int getDelay();
 
 signals:

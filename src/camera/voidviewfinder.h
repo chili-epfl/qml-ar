@@ -1,7 +1,17 @@
+/**
+ * @file voidviewfinder.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef VOIDVIEWFINDER_H
 #define VOIDVIEWFINDER_H
 
-// Qt includes
+    /**
+    * @brief Qt includes
+    */
 #include <QAbstractVideoSurface>
 #include <QList>
 

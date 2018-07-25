@@ -1,3 +1,11 @@
+/**
+ * @file qmlarplugin.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef CELLULOARQMLPLUGIN_H
 #define CELLULOARQMLPLUGIN_H
 
@@ -17,10 +25,14 @@ class QMLARQMLPlugin : public QQmlExtensionPlugin
   Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 
 public:
-    // register QMLAR singleton
+    /**
+    * @brief Register QMLAR singleton
+    */
     void registerTypes(const char *uri);
 
-    // Define the singleton type provider function (callback).
+    /**
+    * @brief Define the singleton type provider function (callback).
+    */
     static QObject* get_qml_ar(QQmlEngine *engine, QJSEngine *scriptEngine);
 };
 

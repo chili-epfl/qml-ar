@@ -1,3 +1,11 @@
+/**
+ * @file qmlar.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef CELLULOAR_H
 #define CELLULOAR_H
 
@@ -11,7 +19,9 @@
 
 #include "markerstorage.h"
 
-// forward declarations
+    /**
+    * @brief Forward declarations
+    */
 class ImageProviderAsync;
 class UchiyaMarkerDetector;
 class PerspectiveCamera;
@@ -41,7 +51,9 @@ class FramesDelayCalculator;
 class QMLAR : public QObject
 { Q_OBJECT
 public:
-    // enum for initialization type
+    /**
+    * @brief Enum for initialization type
+    */
     enum InitType
     {
         INIT_CAMERA,
@@ -49,7 +61,9 @@ public:
     };
     Q_ENUMS(InitType)
 
-    // enum for output type
+    /**
+    * @brief Enum for output type
+    */
     enum OutputImage
     {
         OUTPUT_CAMERA,
@@ -57,37 +71,57 @@ public:
     };
     Q_ENUMS(OutputImage)
 
-    // initialization type
+    /**
+    * @brief Initialization type
+    */
     int init_type;
 
-    // empty constructor
-    // object must be initialized with
-    // one of the methods below
+    /**
+    * @brief Empty constructor
+    * Object must be initialized with
+    * One of the methods below
+    */
     QMLAR();
 
-    // returns camera id to be used
-    // as raw input
+    /**
+    * @brief Returns camera id to be used
+    * As raw input
+    */
     int getCameraId();
 
-    // return filename of the image to be used as input
+    /**
+    * @brief Return filename of the image to be used as input
+    */
     QString getImageFilename();
 
-    // returns resulting MVP matrix
+    /**
+    * @brief Returns resulting MVP matrix
+    */
     QMatrix4x4 getMVPMatrix();
 
-    // returns image width
+    /**
+    * @brief Returns image width
+    */
     int getImageWidth();
 
-    // get processed image provider
+    /**
+    * @brief Get processed image provider
+    */
     QQuickImageProvider* getImageProvider();
 
-    // return camera object
+    /**
+    * @brief Return camera object
+    */
     QObject *getCamera();
 
-    // return list of blobs
+    /**
+    * @brief Return list of blobs
+    */
     QVariantList getBlobs();
 
-    // return list of marker corners
+    /**
+    * @brief Return list of marker corners
+    */
     QVariantList getMarkers();
 
     // get FPS mean/std
@@ -98,129 +132,207 @@ public:
     double getLatencyMean();
     double getLatencyStd();
 
-    // returns framedrop fraction
+    /**
+    * @brief Returns framedrop fraction
+    */
     double getFrameDrop();
 
-    // delay in frames to compensate for latency
+    /**
+    * @brief Delay in frames to compensate for latency
+    */
     int getFrameDelay();
 public slots:
-    // initialize from camera id (default value -1)
+    /**
+    * @brief Initialize from camera id (default value -1)
+    */
     void setCameraId(int camera_id = -1);
 
-    // initialize from image
+    /**
+    * @brief Initialize from image
+    */
     void setImageFilename(QString filename);
 
-    // set width of the image to process (on startup)
+    /**
+    * @brief Set width of the image to process (on startup)
+    */
     void setImageWidth(int new_width);
 
-    // start camera if required
+    /**
+    * @brief Start camera if required
+    */
     void startCamera();
 
-    // set MVP for QML
+    /**
+    * @brief Set MVP for QML
+    */
     void setMVP(PipelineContainer<QMatrix4x4> mvp);
     void setMV(PipelineContainer<QMatrix4x4> mv);
     void setP(PipelineContainer<QMatrix4x4> p);
 
-    // set blobs from detector
+    /**
+    * @brief Set blobs from detector
+    */
     void setBlobs(PipelineContainer<QVector<QVector2D>> blobs);
 
-    // set markers
+    /**
+    * @brief Set markers
+    */
     void setMarkers(PipelineContainer<MarkerStorage> storage);
 
-    // sets mean and std hue of dots
+    /**
+    * @brief Sets mean and std hue of dots
+    */
     void hueAvailable(double mean, double std);
 
-    // set image and dots from detector
+    /**
+    * @brief Set image and dots from detector
+    */
     void setDots(PipelineContainer<QPair<QImage, QVector<QVector2D>>> image_dots);
 
-    // set last info
+    /**
+    * @brief Set last info
+    */
     void setInfo(PipelineContainerInfo info);
 
 private:
-    // initialization semaphore
+    /**
+    * @brief Initialization semaphore
+    */
     QSemaphore init_sem;
 
-    // vector with blobs
+    /**
+    * @brief Vector with blobs
+    */
     QVector<QVector2D> last_blobs;
 
-    // storage for markers
+    /**
+    * @brief Storage for markers
+    */
     MarkerStorage* marker_storage;
 
-    // info from mvp provider
+    /**
+    * @brief Info from mvp provider
+    */
     PipelineContainerInfo* last_info;
 
-    // mvp buffer for QML
+    /**
+    * @brief Mvp buffer for QML
+    */
     QMatrix4x4 mvp_buffer;
     QMatrix4x4 mv_buffer, p_buffer;
 
-    // width of the input camera image
+    /**
+    * @brief Width of the input camera image
+    */
     int image_width;
 
-    // name of the image to be used
-    // as raw input
+    /**
+    * @brief Name of the image to be used
+    * As raw input
+    */
     QString image_filename;
 
-    // camera id to be used
-    // as raw input
+    /**
+    * @brief Camera id to be used
+    * As raw input
+    */
     int camera_id;
 
-    // true iff can obtain MVP matrix
+    /**
+    * @brief True iff can obtain MVP matrix
+    */
     bool is_initialized;
 
-    // instantiate objects
+    /**
+    * @brief Instantiate objects
+    */
     void initialize();
 
-    // image provider (camera)
+    /**
+    * @brief Image provider (camera)
+    */
     ImageProviderAsync* raw_provider;
 
-    // marker detector
+    /**
+    * @brief Marker detector
+    */
     UchiyaMarkerDetector* detector;
 
-    // camera matrix
+    /**
+    * @brief Camera matrix
+    */
     CalibratedCamera* camera_matrix;
 
-    // perspective camera model
+    /**
+    * @brief Perspective camera model
+    */
     PerspectiveCamera* perspective_camera;
 
-    // marker backend for visualizing
-    // detected markers
+    /**
+    * @brief Marker backend for visualizing
+    * Detected markers
+    */
     MarkerBackEnd* marker_backend;
 
-    // ModelViewProjection matrix
-    // provider
+    /**
+    * @brief ModelViewProjection matrix
+    * Provider
+    */
     MarkerMVPProvider* mvp_provider;
 
-    // Inertial Measurement object
+    /**
+    * @brief Inertial Measurement object
+    */
     IMU* imu;
 
-    // MVP decorated with last pose from IMU
+    /**
+    * @brief MVP decorated with last pose from IMU
+    */
     IMUMVPDecorator* mvp_imu_decorated;
 
-    // Pose Estimator
+    /**
+    * @brief Pose Estimator
+    */
     PosePredictor* predictor;
 
-    // Tracking object
+    /**
+    * @brief Tracking object
+    */
     BlackenRest* blacken_rest;
 
-    // blob detector
+    /**
+    * @brief Blob detector
+    */
     BlobDetector* blob_detector;
 
-    // drawn blobs
+    /**
+    * @brief Drawn blobs
+    */
     QImage detected_blobs;
 
-    // maximal number of dots to detect
+    /**
+    * @brief Maximal number of dots to detect
+    */
     const int max_dots = 50;
 
-    // camera wrapper
+    /**
+    * @brief Camera wrapper
+    */
     QtCamera2QML* camera_wrapper;
 
-    // scaler for input images
+    /**
+    * @brief Scaler for input images
+    */
     ImageScaler* scaler;
 
-    // detector of dots color interval
+    /**
+    * @brief Detector of dots color interval
+    */
     HSVIntervalDetector* hsv_interval;
 
-    // Hue HSV thresholder
+    /**
+    * @brief Hue HSV thresholder
+    */
     HueThreshold* hue_threshold;
 
     // fps mean/std values
@@ -229,39 +341,61 @@ private:
     // latency mean/std values
     LatencyCalculator* latency;
 
-    // 3D pose low-pass filter
+    /**
+    * @brief 3D pose low-pass filter
+    */
     PoseFilter* pose_filter;
 
-    // delay in frames calculator
+    /**
+    * @brief Delay in frames calculator
+    */
     FramesDelayCalculator* delay;
 
-    // connect underlying objects
+    /**
+    * @brief Connect underlying objects
+    */
     void connectAll();
 
-    // threads for objects
+    /**
+    * @brief Threads for objects
+    */
     QVector<QThread*> threads;
 
-    // number of frames received
+    /**
+    * @brief Number of frames received
+    */
     int n_frames_received;
 
-    // fraction of frames dropped
+    /**
+    * @brief Fraction of frames dropped
+    */
     double framedrop_fraction;
 signals:
-    // notify QML part when new matrix is available
+    /**
+    * @brief Notify QML part when new matrix is available
+    */
     void newMVPMatrix(QMatrix4x4 mvp);
     void newMVMatrix(QMatrix4x4 mv);
     void newPMatrix(QMatrix4x4 p);
 
-    // notify about new image
+    /**
+    * @brief Notify about new image
+    */
     void imageUpdated();
 
-    // on new blobs from detector
+    /**
+    * @brief On new blobs from detector
+    */
     void newBlobs(QVariantList);
 
-    // on new markers
+    /**
+    * @brief On new markers
+    */
     void newMarkers(QVariantList);
 
-    // set filter alpha
+    /**
+    * @brief Set filter alpha
+    */
     void newFilterAlpha(double alpha);
 };
 

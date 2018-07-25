@@ -1,3 +1,11 @@
+/**
+ * @file blobdetector.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef BLOBDETECTOR_H
 #define BLOBDETECTOR_H
 
@@ -18,35 +26,55 @@
 class BlobDetector : public ImageProviderAsync
 { Q_OBJECT
 private:
-    // size for blurring the image
+    /**
+    * @brief Size for blurring the image
+    */
     cv::Size blur_size;
 
-    // cv blob detector with parameters
+    /**
+    * @brief Cv blob detector with parameters
+    */
     cv::SimpleBlobDetector::Params parameters;
     cv::Ptr<cv::SimpleBlobDetector> detector;
 
-    // detected blobs
+    /**
+    * @brief Detected blobs
+    */
     std::vector<cv::KeyPoint> keypoints;
 
-    // last input image
+    /**
+    * @brief Last input image
+    */
     QImage last_input;
 
-    // true if detectBlobs was called
+    /**
+    * @brief True if detectBlobs was called
+    */
     bool is_initialized;
 
-    // resulting matrix
+    /**
+    * @brief Resulting matrix
+    */
     cv::Mat result;
 
-    // buffered output
+    /**
+    * @brief Buffered output
+    */
     QImage last_output;
 
-    // for handling background job
+    /**
+    * @brief For handling background job
+    */
     QFutureWatcher<QPair<QVector<QVector2D>, QImage>> watcher;
 
-    // maximum numbers of dots to detect
+    /**
+    * @brief Maximum numbers of dots to detect
+    */
     int max_blobs;
 
-    // input buffer for background task
+    /**
+    * @brief Input buffer for background task
+    */
     bool buffer_is_nonempty;
     QImage input_buffer;
 public:
@@ -56,29 +84,45 @@ public:
 
     BlobDetector(int max_blobs);
 
-    // detect blobs on a qimage
+    /**
+    * @brief Detect blobs on a qimage
+    */
     QVector<QVector2D> detectBlobs(QImage source);
 
-    // draws resulting blobs
+    /**
+    * @brief Draws resulting blobs
+    */
     QImage drawBlobs();
 
-    // return the blobs
+    /**
+    * @brief Return the blobs
+    */
     std::vector<cv::KeyPoint> getBlobs();
 
-    // returns drawn blobs
+    /**
+    * @brief Returns drawn blobs
+    */
     QPair<QVector<QVector2D>, QImage> getAndDraw(QImage img);
 
-    // returns last image
+    /**
+    * @brief Returns last image
+    */
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 public slots:
-    // set input to background thread
+    /**
+    * @brief Set input to background thread
+    */
     void setInput(PipelineContainer<QImage> img);
 
-    // get result from background thread
+    /**
+    * @brief Get result from background thread
+    */
     void handleFinished();
 signals:
-    // emitted on new blobs
-    // need Qt::QueuedConnection
+    /**
+    * @brief Emitted on new blobs
+    * Need Qt::QueuedConnection
+    */
     void blobsUpdated(QVector<QVector2D>);
 };
 

@@ -1,3 +1,11 @@
+/**
+ * @file calibratedcamerafilestorage.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef CALIBRATEDCAMERAFILESTORAGE_H
 #define CALIBRATEDCAMERAFILESTORAGE_H
 
@@ -30,12 +38,16 @@
 class CalibratedCameraFileStorage : public CalibratedCamera, public ConfigJSON
 { Q_OBJECT
 public:
-    // empty constructor (need to populate later)
+    /**
+    * @brief Empty constructor (need to populate later)
+    */
     CalibratedCameraFileStorage() : CalibratedCamera() {}
 
     virtual ~CalibratedCameraFileStorage() {}
 
-    // read config on creation
+    /**
+    * @brief Read config on creation
+    */
     CalibratedCameraFileStorage(QString filename);
 
     // fill with data from a file/other QIODevice

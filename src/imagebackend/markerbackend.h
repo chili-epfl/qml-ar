@@ -1,3 +1,11 @@
+/**
+ * @file markerbackend.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef UCHIYABACKEND_H
 #define UCHIYABACKEND_H
 
@@ -14,34 +22,50 @@
 class MarkerBackEnd : public ImageProviderAsync
 { Q_OBJECT
 public:
-    // set to true to delay images by latency
+    /**
+    * @brief Set to true to delay images by latency
+    */
     MarkerBackEnd(bool do_delay = true);
 
-    // obtain processed image
+    /**
+    * @brief Obtain processed image
+    */
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
     virtual ~MarkerBackEnd();
 
 public slots:
-    // slots to set data
+    /**
+    * @brief Slots to set data
+    */
     void setCamera(PipelineContainer<QImage> cam);
     void setPreview(PipelineContainer<QImage> prev);
     void setDelay(int delay);
 
 private:
-    // buffers for preview image and raw image
+    /**
+    * @brief Buffers for preview image and raw image
+    */
     QImage preview, camera;
 
-    // storing this amount of frames
+    /**
+    * @brief Storing this amount of frames
+    */
     static const int MAX_BUFFER_SIZE = 10;
 
-    // stored camera images
+    /**
+    * @brief Stored camera images
+    */
     QLinkedList<QImage> camera_buffer;
 
-    // delay for camera
+    /**
+    * @brief Delay for camera
+    */
     int delay_in_frames;
 
-    // use latency delay
+    /**
+    * @brief Use latency delay
+    */
     bool do_delay;
 };
 

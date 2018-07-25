@@ -1,3 +1,11 @@
+/**
+ * @file markerdetector.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 ﻿#ifndef MARKERDETECTOR_H
 #define MARKERDETECTOR_H
 
@@ -23,37 +31,57 @@
 class MarkerDetector: public QObject
 { Q_OBJECT
 signals:
-    // children call it when a new matrix should be computed
+    /**
+    * @brief Children call it when a new matrix should be computed
+    */
     void markersUpdated(PipelineContainer<MarkerStorage>);
 
-    // called on new preview image
+    /**
+    * @brief Called on new preview image
+    */
     void previewUpdated(PipelineContainer<QImage>);
 
 public slots:
-    // set input camera image
+    /**
+    * @brief Set input camera image
+    */
     void setInput(PipelineContainer<QImage> camera);
 
-    // called on new result from thread
+    /**
+    * @brief Called on new result from thread
+    */
     void handleFinished();
 
 protected:
-    // marker positions
+    /**
+    * @brief Marker positions
+    */
     MarkerStorage markers;
 
-    // input id
+    /**
+    * @brief Input id
+    */
     PipelineContainerInfo object_in_process;
 
 private:
-    // input image
+    /**
+    * @brief Input image
+    */
     PipelineContainer<QImage> input_buffer;
 
-    // preview image
+    /**
+    * @brief Preview image
+    */
     QImage output_buffer;
 
-    // true if input contains unprocessed data
+    /**
+    * @brief True if input contains unprocessed data
+    */
     int buffer_is_nonempty;
 
-    // for background detection
+    /**
+    * @brief For background detection
+    */
     QFutureWatcher<QPair<MarkerStorage, QImage>> watcher;
 
 public:
@@ -61,11 +89,15 @@ public:
     MarkerDetector(const MarkerDetector &detector);
     virtual ~MarkerDetector() {}
 
-    // get marker positions from a json file
-    // see MarkerStorage for an example
+    /**
+    * @brief Get marker positions from a json file
+    * See MarkerStorage for an example
+    */
     void loadMarkerPositions(QString filename);
 
-    // do marker detection
+    /**
+    * @brief Do marker detection
+    */
     virtual QPair<MarkerStorage, QImage> process(QImage img) = 0;
 };
 

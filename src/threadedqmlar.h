@@ -1,3 +1,11 @@
+/**
+ * @file threadedqmlar.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef THREADEDQMLAR_H
 #define THREADEDQMLAR_H
 
@@ -34,24 +42,36 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(int frame_delay READ getFrameDelay NOTIFY imageUpdated)
 
 private:
-    // instance to QMLAR object
+    /**
+    * @brief Instance to QMLAR object
+    */
     QMLAR* instance;
 
-    // thread to run in
+    /**
+    * @brief Thread to run in
+    */
     QThread* thread;
 
-    // cached alpha filter
+    /**
+    * @brief Cached alpha filter
+    */
     double filter_alpha;
 
-    // buffers for blobs and markers
+    /**
+    * @brief Buffers for blobs and markers
+    */
     QVariantList last_blobs, last_markers;
 
-    // MVP matrix buffer
+    /**
+    * @brief MVP matrix buffer
+    */
     QMatrix4x4 mvp_matrix, mv_matrix, p_matrix;
 public:
     ThreadedQMLAR();
 
-    // getters
+    /**
+    * @brief Getters
+    */
     int getCameraId();
     QString getImageFilename();
     QMatrix4x4 getMVPMatrix();
@@ -63,46 +83,72 @@ public:
     QVariantList getBlobs();
     QVariantList getMarkers();
 
-    // FPS
+    /**
+    * @brief FPS
+    */
     double getFPSMean();
     double getFPSStd();
 
-    // Latency
+    /**
+    * @brief Latency
+    */
     double getLatencyMean();
     double getLatencyStd();
 
-    // at least one marker present
+    /**
+    * @brief At least one marker present
+    */
     bool markers_visible();
 
-    // filtering coefficient
+    /**
+    * @brief Filtering coefficient
+    */
     double getFilterAlpha();
 
-    // is pose valid?
+    /**
+    * @brief Is pose valid?
+    */
     bool poseValid();
 
-    // framedrop fraction
+    /**
+    * @brief Framedrop fraction
+    */
     double getFrameDrop();
 
-    // returns delay in frames
+    /**
+    * @brief Returns delay in frames
+    */
     int getFrameDelay();
 
 public slots:
-    // initialize from camera id (default value -1)
+    /**
+    * @brief Initialize from camera id (default value -1)
+    */
     void setCameraId(int camera_id = -1);
 
-    // initialize from image
+    /**
+    * @brief Initialize from image
+    */
     void setImageFilename(QString filename);
 
-    // set width of the image to process (on startup)
+    /**
+    * @brief Set width of the image to process (on startup)
+    */
     void setImageWidth(int new_width);
 
-    // start camera if required
+    /**
+    * @brief Start camera if required
+    */
     void startCamera();
 
-    // set filtering alpha
+    /**
+    * @brief Set filtering alpha
+    */
     void setFilterAlpha(double alpha);
 
-    // setters for AR->QML communication
+    /**
+    * @brief Setters for AR->QML communication
+    */
     void setBlobs(QVariantList that);
     void setMarkers(QVariantList that);
     void setMVPMatrix(QMatrix4x4);
@@ -110,33 +156,51 @@ public slots:
     void setPMatrix(QMatrix4x4);
 
 signals:
-    // notify QML part when new matrix is available
+    /**
+    * @brief Notify QML part when new matrix is available
+    */
     void newMVPMatrix(QMatrix4x4);
     void newMVMatrix(QMatrix4x4);
     void newPMatrix(QMatrix4x4);
 
-    // notify about new image
+    /**
+    * @brief Notify about new image
+    */
     void imageUpdated();
 
-    // on new blobs from detector
+    /**
+    * @brief On new blobs from detector
+    */
     void newBlobs(QVariantList);
 
-    // on new markers
+    /**
+    * @brief On new markers
+    */
     void newMarkers(QVariantList);
 
-    // initialize from camera id (default value -1)
+    /**
+    * @brief Initialize from camera id (default value -1)
+    */
     void setCameraIdSignal(int camera_id = -1);
 
-    // initialize from image
+    /**
+    * @brief Initialize from image
+    */
     void setImageFilenameSignal(QString filename);
 
-    // set width of the image to process (on startup)
+    /**
+    * @brief Set width of the image to process (on startup)
+    */
     void setImageWidthSignal(int new_width);
 
-    // start camera if required
+    /**
+    * @brief Start camera if required
+    */
     void startCameraSignal();
 
-    // set filtering alpha
+    /**
+    * @brief Set filtering alpha
+    */
     void setFilterAlphaSignal(double alpha);
 };
 

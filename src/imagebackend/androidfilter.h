@@ -1,3 +1,11 @@
+/**
+ * @file androidfilter.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef ANDROIDFILTER_H
 #define ANDROIDFILTER_H
 
@@ -17,7 +25,9 @@ class AndroidFilter : public QAbstractVideoFilter
 public:
     explicit AndroidFilter(QObject *parent = 0);
 
-    // QAbstractVideoFilter interface
+    /**
+    * @brief QAbstractVideoFilter interface
+    */
     QVideoFilterRunnable *createFilterRunnable() override;
 };
 

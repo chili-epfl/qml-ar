@@ -1,3 +1,11 @@
+/**
+ * @file imagebackend.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef IMAGEBACKEND_H
 #define IMAGEBACKEND_H
 
@@ -15,10 +23,14 @@ class ImageBackend : public ImageProviderAsync
 private:
     QImage buffer;
 public:
-    // load image from the file
+    /**
+    * @brief Load image from the file
+    */
     ImageBackend(QString filename);
 
-    // get image
+    /**
+    * @brief Get image
+    */
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 };
 

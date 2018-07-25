@@ -1,3 +1,11 @@
+/**
+ * @file qtcamera2qml.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef QTCAMERA2QML_H
 #define QTCAMERA2QML_H
 

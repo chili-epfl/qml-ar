@@ -1,3 +1,11 @@
+/**
+ * @file hsvmeancolor.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef HSVMEANCOLOR_H
 #define HSVMEANCOLOR_H
 
@@ -14,25 +22,37 @@
 class HSVMeanColor
 {
 private:
-    // sum vector of all hues
+    /**
+    * @brief Sum vector of all hues
+    */
     QVector2D h_vector;
 
-    // all values of H in deg.
+    /**
+    * @brief All values of H in deg.
+    */
     QVector<double> h_values;
 
-    // difference between angles in degrees
+    /**
+    * @brief Difference between angles in degrees
+    */
     static double angleDifference(double a1, double a2);
 public:
     HSVMeanColor();
 
-    // add color to take mean of
+    /**
+    * @brief Add color to take mean of
+    */
     void addColor(QColor c);
     void addColor(int h);
 
-    // return mean hue (0 to 360)
+    /**
+    * @brief Return mean hue (0 to 360)
+    */
     double meanHue();
 
-    // standard deviation
+    /**
+    * @brief Standard deviation
+    */
     double stdHue();
 };
 

@@ -1,3 +1,11 @@
+/**
+ * @file huethreshold.cpp
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "huethreshold.h"
 #include "timelogger.h"
 #include "QtOpenCV/cvmatandqimage.h"
@@ -29,20 +37,26 @@ HueThreshold::HueThreshold()
 
 QImage HueThreshold::thresholdManual(QImage source)
 {
-    //Q_ASSERT(source.format() == QImage::Format_RGB888);
+    /**
+    * @brief Q_ASSERT(source.format() == QImage::Format_RGB888);
+    */
     TimeLoggerThroughput("%s", "[ANALYZE] Begin HueThresholdManual");
 
     QImage copied = source.copy();
 
     hsv = QtOcv::image2Mat_shared(copied);
 
-    // rgb -> hsv
+    /**
+    * @brief Rgb -> hsv
+    */
     cv::cvtColor(hsv, hsv, cv::COLOR_RGB2HSV, 3);
 
     int h_ = source.height();
     int w_ = source.width();
 
-    // checking input size
+    /**
+    * @brief Checking input size
+    */
     Q_ASSERT(h_ * w_ < IMAGE_MAX_PIXELS);
 
     uchar* src = hsv.data;
@@ -89,33 +103,49 @@ QImage HueThreshold::threshold(QImage source)
 {
     TimeLoggerThroughput("%s", "[ANALYZE] Begin HueThreshold");
 
-    // nothing on no ranges
+    /**
+    * @brief Nothing on no ranges
+    */
     if(min_hsv.length() == 0)
         return source;
 
-    // qt -> cv input
+    /**
+    * @brief Qt -> cv input
+    */
     img = QtOcv::image2Mat(source);
 
-    // rgb -> hsv
+    /**
+    * @brief Rgb -> hsv
+    */
     cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
 
-    // sanity check
+    /**
+    * @brief Sanity check
+    */
     Q_ASSERT(min_hsv.length() == max_hsv.length());
 
     for(int i = 0; i < min_hsv.length(); i++)
     {
-        // current mask
+    /**
+    * @brief Current mask
+    */
         cv::inRange(hsv, min_hsv.at(i), max_hsv.at(i), mask);
 
-        // result = mask or result|mask
+    /**
+    * @brief Result = mask or result|mask
+    */
         if(i == 0) result = mask;
         else cv::bitwise_or(mask, result, result);
     }
 
-    // converting to rgb
+    /**
+    * @brief Converting to rgb
+    */
     cv::cvtColor(255 - result, result_rgb, cv::COLOR_GRAY2RGB);
 
-    // resulting mask in qt
+    /**
+    * @brief Resulting mask in qt
+    */
     result_qt = QtOcv::mat2Image(result_rgb);
 
     result_qt.toPixelFormat(QImage::Format_RGB888);
@@ -139,48 +169,66 @@ void HueThreshold::setColor(double mean, double sigma)
 {
     TimeLoggerLog("Got color %.2f +- %.2f", mean, sigma);
 
-    // using sigma
+    /**
+    * @brief Using sigma
+    */
     double delta = sigma;
 
     mean_h = mean;
     delta_h = sigma;
 
-    // saving color range as thresholds
+    /**
+    * @brief Saving color range as thresholds
+    */
     if(mean - delta < 0)
     {
-        // [0, m]
+    /**
+    * @brief [0, m]
+    */
         addMinHue(0);
         addMaxHue(mean);
 
-        // [m-s+360, 360]
+    /**
+    * @brief [m-s+360, 360]
+    */
         addMinHue(mean - delta + 360);
         addMaxHue(360);
     }
     else
     {
-        // [m-s, m]
+    /**
+    * @brief [m-s, m]
+    */
         addMinHue(mean - delta);
         addMaxHue(mean);
     }
 
     if(mean + delta > 360)
     {
-        // [0, m+s-360]
+    /**
+    * @brief [0, m+s-360]
+    */
         addMinHue(0);
         addMaxHue(mean + delta - 360);
 
-        // [m, 360]
+    /**
+    * @brief [m, 360]
+    */
         addMinHue(mean);
         addMaxHue(360);
     }
     else
     {
-        // [m, m+s]
+    /**
+    * @brief [m, m+s]
+    */
         addMinHue(mean);
         addMaxHue(mean + delta);
     }
 
-    // sanity check
+    /**
+    * @brief Sanity check
+    */
     Q_ASSERT(min_hsv.length() == max_hsv.length());
 
     for(int i = 0; i < min_hsv.length(); i++)

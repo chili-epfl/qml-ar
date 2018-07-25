@@ -1,3 +1,11 @@
+/**
+ * @file fpscalculator.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef FPSCALCULATOR_H
 #define FPSCALCULATOR_H
 
@@ -13,28 +21,44 @@
 class FPSCalculator : public QObject
 { Q_OBJECT
 private:
-    // list of values_to_keep FPS values
+    /**
+    * @brief List of values_to_keep FPS values
+    */
     QLinkedList<double> values;
 
-    // timestamps of frames
+    /**
+    * @brief Timestamps of frames
+    */
     QLinkedList<qint64> timestamps;
 
-    // last mean fps
+    /**
+    * @brief Last mean fps
+    */
     double last_mean;
 
-    // last std fps
+    /**
+    * @brief Last std fps
+    */
     double last_std;
 
-    // number of FPS values to store
+    /**
+    * @brief Number of FPS values to store
+    */
     int values_to_keep;
 
-    // number of frames from which to calculate FPS
+    /**
+    * @brief Number of frames from which to calculate FPS
+    */
     int frames_window;
 
-    // calculates mean value
+    /**
+    * @brief Calculates mean value
+    */
     void calculateMean();
 
-    // calculates std
+    /**
+    * @brief Calculates std
+    */
     void calculateStd();
 
 public:
@@ -42,7 +66,9 @@ public:
     FPSCalculator(int to_keep = 500);
 
 public slots:
-    // called on new frame
+    /**
+    * @brief Called on new frame
+    */
     void newFrame();
 
     // obtain mean/std FPS

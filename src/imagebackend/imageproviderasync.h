@@ -1,3 +1,11 @@
+/**
+ * @file imageproviderasync.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef IMAGEPROVIDERASYNC_H
 #define IMAGEPROVIDERASYNC_H
 

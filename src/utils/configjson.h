@@ -1,3 +1,11 @@
+/**
+ * @file configjson.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef CONFIGJSON_H
 #define CONFIGJSON_H
 
@@ -26,13 +34,19 @@ public:
     // fill with data from a file/other QIODevice
     void populate(QIODevice &input);
 
-    // fill with data from file
+    /**
+    * @brief Fill with data from file
+    */
     void populateFromFile(QString filename);
 
-    // fill with data from the string
+    /**
+    * @brief Fill with data from the string
+    */
     void populate(QString data);
 
-    // fill with data from the string
+    /**
+    * @brief Fill with data from the string
+    */
     virtual void readConfig(QJsonObject object) = 0;
 };
 

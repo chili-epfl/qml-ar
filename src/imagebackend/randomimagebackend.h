@@ -1,3 +1,11 @@
+/**
+ * @file randomimagebackend.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef RANDOMIMAGEBACKEND_H
 #define RANDOMIMAGEBACKEND_H
 
@@ -13,19 +21,29 @@
 class RandomImageBackend : public ImageProviderAsync
 { Q_OBJECT
 private:
-    // pointer to data
+    /**
+    * @brief Pointer to data
+    */
     uchar* data;
 
-    // timer to update
+    /**
+    * @brief Timer to update
+    */
     QTimer t;
 
-    // maximum number of images
+    /**
+    * @brief Maximum number of images
+    */
     const int max_images = 100;
 
-    // width and height parameters
+    /**
+    * @brief Width and height parameters
+    */
     int w, h;
 
-    // image to return
+    /**
+    * @brief Image to return
+    */
     int current_image;
 
 public:
@@ -33,7 +51,9 @@ public:
 
 public slots:
 
-    // generate and emit new image
+    /**
+    * @brief Generate and emit new image
+    */
     void updateImage();
 };
 

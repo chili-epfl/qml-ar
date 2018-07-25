@@ -1,3 +1,11 @@
+/**
+ * @file timelogger.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef TIMELOGGER_H
 #define TIMELOGGER_H
 
@@ -19,10 +27,14 @@
 class TimeLogger
 {
 public:
-    // log data
+    /**
+    * @brief Log data
+    */
     static void log(QString filename, int line_number, QString function, const char *format, ...);
 private:
-    // output line to console
+    /**
+    * @brief Output line to console
+    */
     static void print(QString str);
 };
 

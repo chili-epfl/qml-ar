@@ -1,3 +1,11 @@
+/**
+ * @file huethreshold.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef HUETHRESHOLD_H
 #define HUETHRESHOLD_H
 
@@ -19,10 +27,14 @@ public:
     HueThreshold(const HueThreshold &that);
 
 private:
-    // input id
+    /**
+    * @brief Input id
+    */
     PipelineContainerInfo object_in_process;
 
-    // buffers
+    /**
+    * @brief Buffers
+    */
     cv::Mat img;
     cv::Mat hsv;
     cv::Mat result;
@@ -32,46 +44,68 @@ private:
 
     uchar buf[IMAGE_MAX_PIXELS];
 
-    // for results from thread
+    /**
+    * @brief For results from thread
+    */
     QFutureWatcher<QImage> watcher;
 
-    // minimum and maximum values for thresholding
+    /**
+    * @brief Minimum and maximum values for thresholding
+    */
     QVector<cv::Scalar> min_hsv;
     QVector<cv::Scalar> max_hsv;
 
     // min/max hue
     int mean_h, delta_h;
 
-    // true if image is pending processing
+    /**
+    * @brief True if image is pending processing
+    */
     int input_buffer_nonempty;
 
-    // buffer for input images
+    /**
+    * @brief Buffer for input images
+    */
     PipelineContainer<QImage> input_buffer;
 
-    // minimal and maximal SV values
+    /**
+    * @brief Minimal and maximal SV values
+    */
     int min_s, max_s, min_v, max_v;
 
     // set min/max hue values in 0..360
     void addMaxHue(double hue);
     void addMinHue(double hue);
 public slots:
-    // set color to threshold on
+    /**
+    * @brief Set color to threshold on
+    */
     void setColor(double mean, double std);
 
-    // set V, S distribution
+    /**
+    * @brief Set V, S distribution
+    */
     void setV(double mean, double std);
     void setS(double mean, double std);
 
-    // set input image
+    /**
+    * @brief Set input image
+    */
     void setInput(PipelineContainer<QImage> input);
 
-    // handle result from thread
+    /**
+    * @brief Handle result from thread
+    */
     void handleFinished();
 
-    // loop implementation
+    /**
+    * @brief Loop implementation
+    */
     QImage thresholdManual(QImage source);
 
-    // CV implementation
+    /**
+    * @brief CV implementation
+    */
     QImage threshold(QImage source);
     void setVMinMax(double min_, double max_);
     void setSMinMax(double min_, double max_);

@@ -1,3 +1,11 @@
+/**
+ * @file config.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef CONFIG_H
 #define CONFIG_H
 
@@ -5,20 +13,30 @@
  * In this file different compile options are defined
  */
 
-// enables TimeLogger
+    /**
+    * @brief Enables TimeLogger
+    */
 #define ENABLE_DEBUG_OUTPUT
 
-// output info for measuring throughput
-//#define PROFILE_PIPELINE_THROUGHPUT
+    /**
+    * @brief Output info for measuring throughput
+    * #define PROFILE_PIPELINE_THROUGHPUT
+    */
 
-// output info for measuring latency
-//#define PROFILE_PIPELINE_LATENCY
+    /**
+    * @brief Output info for measuring latency
+    * #define PROFILE_PIPELINE_LATENCY
+    */
 
-// Define to force usage of QVideoProbe on Linux
-//#define QT_BACKEND_FORCE_VIDEOPROBE
+    /**
+    * @brief Define to force usage of QVideoProbe on Linux
+    * #define QT_BACKEND_FORCE_VIDEOPROBE
+    */
 
-// Force Qt backend on Linux
-//#define QT_BACKEND_FORCE_ON_LINUX
+    /**
+    * @brief Force Qt backend on Linux
+    * #define QT_BACKEND_FORCE_ON_LINUX
+    */
 
 // implementation of PROFILE_THROUGHPUT/LATENCY
 #ifdef PROFILE_PIPELINE_THROUGHPUT

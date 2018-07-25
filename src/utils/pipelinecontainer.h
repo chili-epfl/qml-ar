@@ -1,3 +1,11 @@
+/**
+ * @file pipelinecontainer.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef PIPELINECONTAINER_H
 #define PIPELINECONTAINER_H
 
@@ -24,14 +32,20 @@ public:
     PipelineContainer(T object);
     PipelineContainer();
 
-    // get current id
+    /**
+    * @brief Get current id
+    */
     int id();
 
-    // get underlying object
+    /**
+    * @brief Get underlying object
+    */
     T& o();
     operator T&();
 
-    // info management
+    /**
+    * @brief Info management
+    */
     void setInfo(PipelineContainerInfo info);
     PipelineContainerInfo info();
     operator PipelineContainerInfo();

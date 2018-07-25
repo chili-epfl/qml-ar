@@ -1,3 +1,11 @@
+/**
+ * @file threadedqmlar.cpp
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "threadedqmlar.h"
 #include "qmlar.h"
 #include "timelogger.h"
@@ -6,23 +14,31 @@ ThreadedQMLAR::ThreadedQMLAR()
 {
     TimeLoggerLog("%s", "Starting Threaded QMLAR");
 
-    // creating AR object and a thread
+    /**
+    * @brief Creating AR object and a thread
+    */
     instance = new QMLAR();
     thread = new QThread();
 
     qRegisterMetaType<Qt::ApplicationState>("Qt::ApplicationState");
 
-    // moving AR to thread
+    /**
+    * @brief Moving AR to thread
+    */
     instance->moveToThread(thread);
 
-    // calls to this object -> another thread
+    /**
+    * @brief Calls to this object -> another thread
+    */
     connect(this, SIGNAL(setCameraIdSignal(int)), instance, SLOT(setCameraId(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(setImageFilenameSignal(QString)), instance, SLOT(setImageFilename(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(setImageWidthSignal(int)), instance, SLOT(setImageWidth(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(startCameraSignal(void)), instance, SLOT(startCamera()), Qt::QueuedConnection);
     connect(this, SIGNAL(setFilterAlphaSignal(double)), instance, SIGNAL(newFilterAlpha(double)));
 
-    // events from AR -> this object
+    /**
+    * @brief Events from AR -> this object
+    */
     connect(instance, SIGNAL(imageUpdated(void)), this, SIGNAL(imageUpdated(void)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newBlobs(QVariantList)), this, SLOT(setBlobs(QVariantList)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newMarkers(QVariantList)), this, SLOT(setMarkers(QVariantList)), Qt::QueuedConnection);
@@ -30,19 +46,25 @@ ThreadedQMLAR::ThreadedQMLAR()
     connect(instance, SIGNAL(newMVMatrix(QMatrix4x4)), this, SLOT(setMVMatrix(QMatrix4x4)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newPMatrix(QMatrix4x4)), this, SLOT(setPMatrix(QMatrix4x4)), Qt::QueuedConnection);
 
-    // starting AR
+    /**
+    * @brief Starting AR
+    */
     thread->start();
 }
 
 int ThreadedQMLAR::getCameraId()
 {
-    // works since is set only once from another thread
+    /**
+    * @brief Works since is set only once from another thread
+    */
     return instance->getCameraId();
 }
 
 QString ThreadedQMLAR::getImageFilename()
 {
-    // works since is set only once from another thread
+    /**
+    * @brief Works since is set only once from another thread
+    */
     return instance->getImageFilename();
 }
 
@@ -63,19 +85,25 @@ QMatrix4x4 ThreadedQMLAR::getPMatrix()
 
 int ThreadedQMLAR::getImageWidth()
 {
-    // works since is set only once from another thread
+    /**
+    * @brief Works since is set only once from another thread
+    */
     return instance->getImageWidth();
 }
 
 QQuickImageProvider *ThreadedQMLAR::getImageProvider()
 {
-    // works since is set only once from another thread
+    /**
+    * @brief Works since is set only once from another thread
+    */
     return instance->getImageProvider();
 }
 
 QObject *ThreadedQMLAR::getCamera()
 {
-    // works since is set only once from another thread
+    /**
+    * @brief Works since is set only once from another thread
+    */
     return instance->getCamera();
 }
 
@@ -91,29 +119,37 @@ QVariantList ThreadedQMLAR::getMarkers()
 
 double ThreadedQMLAR::getFPSMean()
 {
-    // works since mean is a fixed-location variable
-    // which is set from a different thread
+    /**
+    * @brief Works since mean is a fixed-location variable
+    * Which is set from a different thread
+    */
     return instance->getFPSMean();
 }
 
 double ThreadedQMLAR::getFPSStd()
 {
-    // works since std is a fixed-location variable
-    // which is set from a different thread
+    /**
+    * @brief Works since std is a fixed-location variable
+    * Which is set from a different thread
+    */
     return instance->getFPSStd();
 }
 
 double ThreadedQMLAR::getLatencyMean()
 {
-    // works since mean is a fixed-location variable
-    // which is set from a different thread
+    /**
+    * @brief Works since mean is a fixed-location variable
+    * Which is set from a different thread
+    */
     return instance->getLatencyMean();
 }
 
 double ThreadedQMLAR::getLatencyStd()
 {
-    // works since std is a fixed-location variable
-    // which is set from a different thread
+    /**
+    * @brief Works since std is a fixed-location variable
+    * Which is set from a different thread
+    */
     return instance->getLatencyStd();
 }
 

@@ -1,3 +1,11 @@
+/**
+ * @file hsvintervaldetector.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef HSVINTERVALDETECTOR_H
 #define HSVINTERVALDETECTOR_H
 
@@ -15,38 +23,56 @@
  * and deduces the color interval they are in
  */
 
-// now supports only 1 color of dots
+    /**
+    * @brief Now supports only 1 color of dots
+    */
 
 class HSVIntervalDetector : public QObject
 { Q_OBJECT
 private:
-    // found colors
+    /**
+    * @brief Found colors
+    */
     QVector<QColor> colors;
 
-    // for mean hue calculation
+    /**
+    * @brief For mean hue calculation
+    */
     HSVMeanColor mean_hue;
 
-    // minimal number of points to calculate
-    // mean and std
+    /**
+    * @brief Minimal number of points to calculate
+    * Mean and std
+    */
     int min_points;
 
-    // for S, V
+    /**
+    * @brief For S, V
+    */
     MeanStdCalculator mean_s, mean_v;
 
 public:
-    // minimal number of points after which emit results
+    /**
+    * @brief Minimal number of points after which emit results
+    */
     HSVIntervalDetector(int min_points = 500);
     virtual ~HSVIntervalDetector() {}
 
 public slots:
-    // on new set of points
+    /**
+    * @brief On new set of points
+    */
     void newPoints(PipelineContainer<QPair<QImage, QVector<QVector2D>>> points);
 
-    // emits mean and intervals
+    /**
+    * @brief Emits mean and intervals
+    */
     void calculate();
 
 signals:
-    // returns mean and std of color
+    /**
+    * @brief Returns mean and std of color
+    */
     void hAvailable(double, double);
     void sAvailable(double, double);
     void vAvailable(double, double);

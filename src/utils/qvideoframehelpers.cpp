@@ -1,3 +1,11 @@
+/**
+ * @file qvideoframehelpers.cpp
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "qvideoframehelpers.h"
 #include <QElapsedTimer>
@@ -49,7 +57,9 @@ QList<QVideoFrame::PixelFormat> QVideoFrameHelpers::supportedPixelFormats()
 QVideoFrame QVideoFrameHelpers::cloneAndroidFrame(QVideoFrame *input)
 {
 #ifdef Q_OS_ANDROID
-    // Stays in GPU Memory --> FAST
+    /**
+    * @brief Stays in GPU Memory --> FAST
+    */
     GLuint textureId = input->handle().toUInt();
     return QVideoFrame(new TextureBuffer(textureId), input->size(), input->pixelFormat());
 #else
@@ -60,7 +70,9 @@ QVideoFrame QVideoFrameHelpers::cloneAndroidFrame(QVideoFrame *input)
 void QVideoFrameHelpers::halfYUV(uchar* src, uchar* dst, int w, int h)
 {
     //byte[] yuv = new byte[imageWidth/2 * imageHeight/2 * 3 / 2];
-    // halve yuma
+    /**
+    * @brief Halve yuma
+    */
     int i = 0;
     for (int y = 0; y < h; y+=2) {
         for (int x = 0; x < w; x+=2) {
@@ -68,7 +80,9 @@ void QVideoFrameHelpers::halfYUV(uchar* src, uchar* dst, int w, int h)
             i++;
         }
     }
-    // halve U and V color components
+    /**
+    * @brief Halve U and V color components
+    */
     for (int y = 0; y < h / 2; y+=2) {
         for (int x = 0; x < w; x += 4) {
             dst[i] = src[(w * h) + (y * w) + x];
@@ -84,20 +98,28 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     TimeLoggerThroughput("%s", "[ANALYZE] Begin FrameConvert");
     Q_ASSERT(MAX_SIZE >= frameOriginal.width() * frameOriginal.height() * 3);
 
-    // do nothing if no image found
+    /**
+    * @brief Do nothing if no image found
+    */
     if(frameOriginal.width() * frameOriginal.height() == 0) return QImage();
 
     Q_ASSERT(frameOriginal.width() <= MAX_IMG_SIDE);
     Q_ASSERT(frameOriginal.height() <= MAX_IMG_SIDE);
 
-    // mapping frame to memory
+    /**
+    * @brief Mapping frame to memory
+    */
     QVideoFrame frame(frameOriginal);
     frame.map(QAbstractVideoBuffer::ReadOnly);
 
-    // bits of the image as byte array
+    /**
+    * @brief Bits of the image as byte array
+    */
     uchar* img = (uchar*) frame.bits();
 
-    // .. and size
+    /**
+    * @brief .. and size
+    */
     int w = frameOriginal.width();
     int h = frameOriginal.height();
 
@@ -110,11 +132,15 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
     h /= 2;
     img = yuv2;
 
-    // format of the resulting QImage
+    /**
+    * @brief Format of the resulting QImage
+    */
     QImage::Format fmt = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
 
-    // QImage cannot work with NV21 (Android)
-    // this call to yuv2rgb library converts it to RGB888
+    /**
+    * @brief QImage cannot work with NV21 (Android)
+    * This call to yuv2rgb library converts it to RGB888
+    */
     if(frame.pixelFormat() == QVideoFrame::Format_NV21)
     {
         nv21_to_rgb(rgb, img, w, h);
@@ -122,16 +148,22 @@ QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
         fmt = QImage::Format_RGB888;
     }
 
-    // if format is still invalid, the application stops
+    /**
+    * @brief If format is still invalid, the application stops
+    */
     if(fmt == QImage::Format_Invalid)
     {
         qFatal("Cannot determine output format");
     }
 
-    // the resulting QImage
+    /**
+    * @brief The resulting QImage
+    */
     QImage image(img, w, h, fmt);
 
-    // unmapping source from memory
+    /**
+    * @brief Unmapping source from memory
+    */
     frame.unmap();
 
     QImage result = image.copy();

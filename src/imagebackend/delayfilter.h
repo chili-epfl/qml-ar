@@ -1,3 +1,11 @@
+/**
+ * @file delayfilter.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef DELAYFILTER_H
 #define DELAYFILTER_H
 

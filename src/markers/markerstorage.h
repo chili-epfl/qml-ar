@@ -1,3 +1,11 @@
+/**
+ * @file markerstorage.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef MARKERSTORAGE_H
 #define MARKERSTORAGE_H
 
@@ -45,39 +53,57 @@
 class MarkerStorage : public QObject, public ConfigJSON
 { Q_OBJECT
 private:
-    // stored markers
+    /**
+    * @brief Stored markers
+    */
     QMap<int, Marker> markers;
 public:
-    // initialize empty storage
+    /**
+    * @brief Initialize empty storage
+    */
     MarkerStorage();
 
     MarkerStorage(const MarkerStorage& that);
 
     virtual ~MarkerStorage() {}
 
-    // fill with data from object
+    /**
+    * @brief Fill with data from object
+    */
     void readConfig(QJsonObject data);
 
-    // resets projection matrices for each marker
+    /**
+    * @brief Resets projection matrices for each marker
+    */
     void undetect();
 
-    // obtain a marker
-    // calls qFatal on missing key
+    /**
+    * @brief Obtain a marker
+    * Calls qFatal on missing key
+    */
     Marker get(int marker_id);
 
-    // iterators for going through the map
+    /**
+    * @brief Iterators for going through the map
+    */
     QMap<int, Marker>::iterator begin();
     QMap<int, Marker>::iterator end();
 
-    // obtain a pointer to Marker
-    // returns NULL on missing key
+    /**
+    * @brief Obtain a pointer to Marker
+    * Returns NULL on missing key
+    */
     Marker *getPointer(int marker_id);
 
-    // return all of the 3D-2D correspondences
+    /**
+    * @brief Return all of the 3D-2D correspondences
+    */
     WorldImageCorrespondences getCorrespondences();
     MarkerStorage &operator =(const MarkerStorage &that);
 
-    // returns true if at least one marker was detected
+    /**
+    * @brief Returns true if at least one marker was detected
+    */
     bool markersDetected();
 };
 

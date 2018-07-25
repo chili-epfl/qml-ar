@@ -1,3 +1,11 @@
+/**
+ * @file uchiyamarkerdetector.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef UCHIYAMARKERDETECTOR_H
 #define UCHIYAMARKERDETECTOR_H
 
@@ -49,41 +57,59 @@
 class UchiyaMarkerDetector: public MarkerDetector
 { Q_OBJECT
 private:
-    // see main.h from UchiyaMarkers project
+    /**
+    * @brief See main.h from UchiyaMarkers project
+    */
     MyImage m_camimg;
     LLAH m_llah;
 
-    // height and width
+    /**
+    * @brief Height and width
+    */
     int h, w;
 
-    // one side of a square marker in pixels
+    /**
+    * @brief One side of a square marker in pixels
+    */
     const double marker_size_pixels = 600.0f;
 
-    // are the images allocated?
+    /**
+    * @brief Are the images allocated?
+    */
     bool is_initialized;
 
     void camInit(int h, int w);
     void initMarkers();
     void extractMarkers();
 
-    // allocate space for images in memory
+    /**
+    * @brief Allocate space for images in memory
+    */
     void initialize(int h, int w);
 
-    // convert input to IplImage for UchiyaMarkers
+    /**
+    * @brief Convert input to IplImage for UchiyaMarkers
+    */
     void prepareInput(QImage source);
 
 public:
-    // initialize given height and width of the image
+    /**
+    * @brief Initialize given height and width of the image
+    */
     UchiyaMarkerDetector();
 
     virtual ~UchiyaMarkerDetector() {}
 
-    // do marker processing
+    /**
+    * @brief Do marker processing
+    */
     virtual QPair<MarkerStorage, QImage> process(QImage source);
 
 signals:
-    // emits image coords. of blobs which belong
-    // to a marker
+    /**
+    * @brief Emits image coords. of blobs which belong
+    * To a marker
+    */
     void dotsFound(PipelineContainer<QPair<QImage, QVector<QVector2D>>>);
     void dotsAll(PipelineContainer<QVector<QVector2D>>);
 };

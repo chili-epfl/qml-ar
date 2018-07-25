@@ -1,3 +1,11 @@
+/**
+ * @file mymatconverter.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef MYMATCONVERTER_H
 #define MYMATCONVERTER_H
 
@@ -13,14 +21,20 @@
 class MyMatConverter
 {
 public:
-    // QMatrix3x3 is not used since it does not
-    // support multiplication with a vector
+    /**
+    * @brief QMatrix3x3 is not used since it does not
+    * Support multiplication with a vector
+    */
 
-    // convert 3x3 matrix to QMatrix4x4
-    // 3x3 top-left submatrix is used
+    /**
+    * @brief Convert 3x3 matrix to QMatrix4x4
+    * 3x3 top-left submatrix is used
+    */
     static QMatrix4x4 convert3x3(MyMat m);
 
-    // convert column with 3 rows to a QVector3D
+    /**
+    * @brief Convert column with 3 rows to a QVector3D
+    */
     static QVector3D convert3x1(MyMat m);
 };
 

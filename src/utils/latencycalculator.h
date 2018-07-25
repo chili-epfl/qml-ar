@@ -1,3 +1,11 @@
+/**
+ * @file latencycalculator.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef LATENCYCALCULATOR_H
 #define LATENCYCALCULATOR_H
 
@@ -12,31 +20,43 @@
 class LatencyCalculator : public QObject
 { Q_OBJECT
 private:
-    // averaging window
+    /**
+    * @brief Averaging window
+    */
     int frames_window;
 
-    // latency array
+    /**
+    * @brief Latency array
+    */
     QLinkedList<qint64> latency_ms;
 
     // mean/std local copy
     double latency_mean, latency_std;
 
-    // call on new container
+    /**
+    * @brief Call on new container
+    */
     void update();
 
 public:
     LatencyCalculator();
 
-    // result
+    /**
+    * @brief Result
+    */
     double mean();
     double std();
 
 public slots:
-    // called on each processed container
+    /**
+    * @brief Called on each processed container
+    */
     void onNewContainerInfo(PipelineContainerInfo i);
 
 signals:
-    // tells current mean value
+    /**
+    * @brief Tells current mean value
+    */
     void newMean(double);
 };
 

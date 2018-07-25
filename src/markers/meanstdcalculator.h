@@ -1,3 +1,11 @@
+/**
+ * @file meanstdcalculator.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef MEANSTDCALCULATOR_H
 #define MEANSTDCALCULATOR_H
 
@@ -11,18 +19,26 @@
 class MeanStdCalculator : public QObject
 { Q_OBJECT
 private:
-    // values to calculate
+    /**
+    * @brief Values to calculate
+    */
     QVector<double> values;
 public:
     MeanStdCalculator();
 
-    // add value
+    /**
+    * @brief Add value
+    */
     void addValue(double value);
 
-    // returns mean
+    /**
+    * @brief Returns mean
+    */
     double getMean();
 
-    // returns std
+    /**
+    * @brief Returns std
+    */
     double getStd();
 };
 

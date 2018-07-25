@@ -1,3 +1,11 @@
+/**
+ * @file pipelinecontainerinfo.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef PIPELINECONTAINERINFO_H
 #define PIPELINECONTAINERINFO_H
 
@@ -11,30 +19,46 @@
 class PipelineContainerInfo
 {
 private:
-    // id of the object
+    /**
+    * @brief Id of the object
+    */
     int id_;
 
-    // timestamps and stages in the pipeline
+    /**
+    * @brief Timestamps and stages in the pipeline
+    */
     QVector<qint64> timestamps;
     QVector<QString> stages;
 public:
-    // initialize
+    /**
+    * @brief Initialize
+    */
     PipelineContainerInfo(int id = 0);
 
-    // add timestamp and name to vectors
+    /**
+    * @brief Add timestamp and name to vectors
+    */
     void checkpoint(QString name);
     PipelineContainerInfo checkpointed(QString name);
 
-    // last - first
+    /**
+    * @brief Last - first
+    */
     qint64 delta();
 
-    // start time
+    /**
+    * @brief Start time
+    */
     qint64 start();
 
-    // string representation
+    /**
+    * @brief String representation
+    */
     QString toString();
 
-    // current id
+    /**
+    * @brief Current id
+    */
     int id();
 };
 

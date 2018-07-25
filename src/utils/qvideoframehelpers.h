@@ -1,3 +1,11 @@
+/**
+ * @file qvideoframehelpers.h
+ * @brief 
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef QVIDEOFRAMEHELPERS_H
 #define QVIDEOFRAMEHELPERS_H
 
@@ -25,36 +33,56 @@ private:
 class QVideoFrameHelpers
 {
 private:
-    // maximum image side length
+    /**
+    * @brief Maximum image side length
+    */
     static const int MAX_IMG_SIDE = 2000;
 
-    // maximum size for nv21_to_rgb buffer (w x h x 3 channels)
-    // see yuv2rgb.h:68
+    /**
+    * @brief Maximum size for nv21_to_rgb buffer (w x h x 3 channels)
+    * See yuv2rgb.h:68
+    */
     static const int MAX_SIZE = MAX_IMG_SIDE * MAX_IMG_SIDE * 3;
 
-    // buffer for nv21 -> rgb conversion
+    /**
+    * @brief Buffer for nv21 -> rgb conversion
+    */
     static uchar rgb[MAX_SIZE];
 
-    // buffer for halving image two times
+    /**
+    * @brief Buffer for halving image two times
+    */
     static uchar yuv1[MAX_SIZE], yuv2[MAX_SIZE];
 
 public:
-    // return a list with all possible formats
+    /**
+    * @brief Return a list with all possible formats
+    */
     static QList<QVideoFrame::PixelFormat> supportedPixelFormats();
 
-    // clone android frame
+    /**
+    * @brief Clone android frame
+    */
     // see see https://bugreports.qt.io/browse/QTBUG-48567
-    // response by Christoph Keller, 29 Apr '17 12:57 PM
+    /**
+    * @brief Response by Christoph Keller, 29 Apr '17 12:57 PM
+    */
     static QVideoFrame cloneAndroidFrame(QVideoFrame* input);
 
-    // convert QVideoFrame to QImage
-    // supports Android nv21 format (uses yuv2rgb library)
+    /**
+    * @brief Convert QVideoFrame to QImage
+    * Supports Android nv21 format (uses yuv2rgb library)
+    */
     static QImage VideoFrameToImage(const QVideoFrame &frameOriginal);
 
-    // returns empty black image
+    /**
+    * @brief Returns empty black image
+    */
     static QImage empty();
 
-    // downscale YUV image by half
+    /**
+    * @brief Downscale YUV image by half
+    */
     // https://stackoverflow.com/questions/17187193/resize-downsize-yuv420sp-image
     static void halfYUV(uchar *src, uchar *dst, int w, int h);
 };
