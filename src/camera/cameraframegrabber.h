@@ -1,6 +1,6 @@
 /**
  * @file cameraframegrabber.h
- * @brief 
+ * @brief This class implements a Viewfinder interface for the QCamera which stores images
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -9,14 +9,12 @@
 #ifndef CAMERAFRAMEGRABBER_H
 #define CAMERAFRAMEGRABBER_H
 
-    /**
-    * @brief Qt includes
-    */
-#include <QAbstractVideoSurface>
 #include <QList>
+#include <QVideoFrame>
 
-/*
- * This class implements a Viewfinder intrface for the QCamera
+/**
+ * @brief This class implements a Viewfinder interface for the QCamera which stores images
+ *
  * The camera calls the present() method and this class emits frameAvailable signal
  * The signal contains a QImage with the frame
  *
@@ -40,6 +38,7 @@ public:
     /**
     * @brief Callback for the parent object
     * Should be called on each new frame (e.g. by QCamera)
+    * @param frame New frame to process
     */
     bool present(const QVideoFrame &frame);
 
@@ -47,6 +46,7 @@ signals:
     /**
     * @brief This will be emited after present() was called
     * And the image was successfully obtained
+    * @param frame Resulting frame
     */
     void frameAvailable(QImage frame);
 

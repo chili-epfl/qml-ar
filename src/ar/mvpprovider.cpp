@@ -1,5 +1,5 @@
 /**
- * @file mvpprovider.h
+ * @file mvpprovider.cpp
  * @brief This class represents a QML interface
  * to provide ModelViewProjection matrix
  * @author Sergei Volodin

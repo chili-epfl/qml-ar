@@ -1,6 +1,6 @@
 /**
  * @file imagescaler.h
- * @brief 
+ * @brief This class scales images
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +13,8 @@
 #include <QtConcurrent>
 #include "imageproviderasync.h"
 
-/*
- * This class scales images
+/**
+ * @brief This class scales images
  */
 
 class ImageScaler : public ImageProviderAsync

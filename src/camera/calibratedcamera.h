@@ -1,6 +1,7 @@
 /**
  * @file calibratedcamera.h
- * @brief 
+ * @brief This class stores information
+ * about a calibrated camera
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -14,8 +15,8 @@
 #include <QImage>
 #include "pipelinecontainer.h"
 
-/*
- * This class stores information
+/**
+ * @brief This class stores information
  * about a calibrated camera
  */
 
@@ -50,6 +51,7 @@ public:
     /**
     * @brief Initialize with another CalibratedCamera
     * (CalibratedCameraFileStorage, for example)
+    * @param that Other instance of CalibratedCamera
     */
     CalibratedCamera(CalibratedCamera* that);
 
@@ -61,16 +63,27 @@ public:
 
     /**
     * @brief Set the current image resolution in pixels
+    * @param new_width Width in pixels
+    * @param new_height Height in pixels
     */
     void setResolution(int new_width, int new_height);
 
     /**
-    * @brief Get image size
+    * @brief Get image width
     */
     int width();
+
+    /**
+    * @brief Get image height
+    */
     int height();
 
 public slots:
+
+    /**
+    * @brief Set resolution from QImage
+    * @param image QImage to process
+    */
     void setResolutionImage(PipelineContainer<QImage> image);
 
 private:

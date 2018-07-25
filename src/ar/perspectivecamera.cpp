@@ -1,5 +1,5 @@
 /**
- * @file perspectivecamera.h
+ * @file perspectivecamera.cpp
  * @brief This class extends CalibratedCamera
  * by allowing to get Perspective Projection matrix
  * @author Sergei Volodin

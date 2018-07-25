@@ -1,5 +1,5 @@
 /**
- * @file posepredictor.h
+ * @file posepredictor.cpp
  * @brief This abstract class represent a predictor for camera pose
  * (rot., transl.)
  * @author Sergei Volodin

@@ -1,3 +1,11 @@
+/**
+ * @file qlinkedlistat.cpp
+ * @brief Helper for QLinkedList
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "qlinkedlistat.h"
 
 #ifndef QLINKEDLISTAT_CPP

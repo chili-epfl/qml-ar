@@ -1,3 +1,12 @@
+/**
+ * @file timelogger.cpp
+ * @brief This class allows to output a line along with
+ * thread number and a timestamp
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include <stdio.h>
 #include <QThread>

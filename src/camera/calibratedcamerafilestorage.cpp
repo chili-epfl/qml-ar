@@ -1,3 +1,12 @@
+/**
+ * @file calibratedcamerafilestorage.cpp
+ * @brief This class implements CalibratedCamera
+ * and allows to load information from a file
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "calibratedcamerafilestorage.h"
 #include <QJsonArray>
 

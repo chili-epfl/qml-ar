@@ -1,3 +1,14 @@
+/**
+ * @file qmlarplugin.cpp
+ * @brief This class registers QMLAR
+ * as a singleton object in QML
+ * and QMLARMarkers image provider
+ * with markers debug info
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "qmlarplugin.h"
 #include "androidfilter.h"
 #include "delayfilter.h"

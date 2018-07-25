@@ -1,6 +1,7 @@
 /**
  * @file qmlar.h
- * @brief 
+ * @brief This class is the C++/QML interface to the
+ * QML AR library
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -19,9 +20,7 @@
 
 #include "markerstorage.h"
 
-    /**
-    * @brief Forward declarations
-    */
+//Forward declarations
 class ImageProviderAsync;
 class UchiyaMarkerDetector;
 class PerspectiveCamera;
@@ -43,8 +42,8 @@ class PoseFilter;
 class LatencyCalculator;
 class FramesDelayCalculator;
 
-/*
- * This class is the C++/QML interface to the
+/**
+ * @brief This class is the C++/QML interface to the
  * QML AR library
  */
 

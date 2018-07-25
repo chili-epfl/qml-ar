@@ -1,6 +1,7 @@
 /**
  * @file hsvmeancolor.h
- * @brief 
+ * @brief This class calculates mean Hue
+ * in HSV models
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -14,8 +15,8 @@
 #include <QColor>
 
 
-/*
- * This class calculates mean Hue
+/**
+ * @brief This class calculates mean Hue
  * in HSV models
  */
 

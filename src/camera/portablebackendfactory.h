@@ -1,6 +1,7 @@
 /**
  * @file portablebackendfactory.h
- * @brief 
+ * @brief This class returns a camera backend
+ * that runs both on Android and Linux
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -11,8 +12,8 @@
 
 #include "imageproviderasync.h"
 
-/*
- * This class returns a camera backend
+/**
+ * @brief This class returns a camera backend
  * that runs both on Android and Linux
  */
 
@@ -28,6 +29,7 @@ public:
     /**
     * @brief -1 is an invalid value telling the method
     * To use the default one (platform-specific)
+    * @param camera_id Index of the camera
     */
     static ImageProviderAsync* getBackend(int camera_id = -1);
 

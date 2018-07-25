@@ -1,3 +1,11 @@
+/**
+ * @file imagescaler.cpp
+ * @brief This class scales images
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "imagescaler.h"
 #include "qvideoframehelpers.h"

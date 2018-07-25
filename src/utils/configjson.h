@@ -1,6 +1,7 @@
 /**
  * @file configjson.h
- * @brief 
+ * @brief This class implements a JSON config reader
+ * It should be inherited to add JSON functionality
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +14,8 @@
 #include <QString>
 #include <QJsonObject>
 
-/*
- * This class implements a JSON config reader
+/**
+ * @brief This class implements a JSON config reader
  * It should be inherited to add JSON functionality
  *
  * Method populate(QJsonObject), if added in your class,

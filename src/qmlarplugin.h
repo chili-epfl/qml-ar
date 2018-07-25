@@ -1,6 +1,9 @@
 /**
  * @file qmlarplugin.h
- * @brief 
+ * @brief This class registers QMLAR
+ * as a singleton object in QML
+ * and QMLARMarkers image provider
+ * with markers debug info
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +16,8 @@
 #include <QQmlEngine>
 #include <QJSEngine>
 
-/*
- * This class registers QMLAR
+/**
+ * @brief This class registers QMLAR
  * as a singleton object in QML
  * and QMLARMarkers image provider
  * with markers debug info

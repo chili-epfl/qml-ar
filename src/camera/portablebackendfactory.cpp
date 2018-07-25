@@ -1,3 +1,12 @@
+/**
+ * @file portablebackendfactory.cpp
+ * @brief This class returns a camera backend
+ * that runs both on Android and Linux
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "portablebackendfactory.h"
 #include "qtbackend.h"

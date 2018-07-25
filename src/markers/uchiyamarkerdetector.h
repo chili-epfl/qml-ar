@@ -1,6 +1,7 @@
 /**
  * @file uchiyamarkerdetector.h
- * @brief 
+ * @brief Wrapper around C-style UchiyaMarkers project
+ * obtained from main.cpp file from UchiyaMarkers project
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -17,9 +18,10 @@
 #include <QVector>
 #include <QVector2D>
 
-/*
- * Wrapper around C-style UchiyaMarkers project
+/**
+ * @brief Wrapper around C-style UchiyaMarkers project
  * obtained from main.cpp file from UchiyaMarkers project
+ *
  * Notice: some functionality was removed
  *
  * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):

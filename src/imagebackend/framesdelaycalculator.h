@@ -1,6 +1,7 @@
 /**
  * @file framesdelaycalculator.h
- * @brief 
+ * @brief This class calculates the delay in frames based on desired latency and
+ * actual FPS
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -9,8 +10,8 @@
 #ifndef FRAMESDELAYCALCULATOR_H
 #define FRAMESDELAYCALCULATOR_H
 
-/*
- * This class calculates the delay in frames based on desired latency and
+/**
+ * @brief This class calculates the delay in frames based on desired latency and
  * actual FPS
  */
 

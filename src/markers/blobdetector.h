@@ -1,6 +1,8 @@
 /**
  * @file blobdetector.h
- * @brief 
+ * @brief This class detects blobs on a QImage
+ * and returns a QImage with white pixels
+ * at blob positions
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -17,8 +19,8 @@
 #include <QVector>
 #include <QVector2D>
 
-/*
- * This class detects blobs on a QImage
+/**
+ * @brief This class detects blobs on a QImage
  * and returns a QImage with white pixels
  * at blob positions
  */

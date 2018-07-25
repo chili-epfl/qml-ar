@@ -1,6 +1,7 @@
 /**
  * @file randomimagebackend.h
- * @brief 
+ * @brief This class takes input from pre-created
+ * byte array and outputs it as a QImage
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +14,8 @@
 #include <QImage>
 #include <QTimer>
 
-/*
- * This class takes input from pre-created
+/**
+ * @brief This class takes input from pre-created
  * byte array and outputs it as a QImage
  */
 

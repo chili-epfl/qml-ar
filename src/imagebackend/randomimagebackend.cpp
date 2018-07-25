@@ -1,3 +1,12 @@
+/**
+ * @file randomimagebackend.cpp
+ * @brief This class takes input from pre-created
+ * byte array and outputs it as a QImage
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "randomimagebackend.h"
 #include "timelogger.h"
 

@@ -1,6 +1,6 @@
 /**
  * @file latencycalculator.h
- * @brief 
+ * @brief This class calculates latency based on PipelineContainerInfos
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +13,8 @@
 #include "pipelinecontainerinfo.h"
 #include <QLinkedList>
 
-/*
- * This class calculates latency based on PipelineContainerInfos
+/**
+ * @brief This class calculates latency based on PipelineContainerInfos
  */
 
 class LatencyCalculator : public QObject

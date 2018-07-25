@@ -1,6 +1,7 @@
 /**
  * @file mymatconverter.h
- * @brief 
+ * @brief This class converts Uchiya MyMat
+ * to QVector/QMatrix
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +14,8 @@
 #include <QMatrix4x4>
 #include "uchiya/mylib/mymat.h"
 
-/*
- * This class converts Uchiya MyMat
+/**
+ * @brief This class converts Uchiya MyMat
  * to QVector/QMatrix
  */
 

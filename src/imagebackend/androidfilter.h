@@ -1,6 +1,6 @@
 /**
  * @file androidfilter.h
- * @brief 
+ * @brief A class for fixing video output on android
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -12,8 +12,9 @@
 #include <QAbstractVideoFilter>
 #include "qvideoframehelpers.h"
 
-/*
- * A class for fixing video output on android
+/**
+ * @brief A class for fixing video output on android
+ *
  * see https://bugreports.qt.io/browse/QTBUG-48567
  * response by Christoph Keller, 29 Apr '17 12:57 PM
  */

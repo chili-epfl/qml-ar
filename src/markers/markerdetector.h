@@ -1,6 +1,7 @@
 /**
  * @file markerdetector.h
- * @brief 
+ * @brief This class stores a common interface for
+ * marker detectors
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -18,8 +19,8 @@
 #include "pipelinecontainer.h"
 #include <QtConcurrent>
 
-/*
- * This class stores a common interface for
+/**
+ * @brief This class stores a common interface for
  * marker detectors
  *
  * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):

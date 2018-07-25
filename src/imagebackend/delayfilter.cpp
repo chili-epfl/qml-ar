@@ -1,3 +1,11 @@
+/**
+ * @file delayfilter.cpp
+ * @brief This class delays VideoOutput by N frames
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include <QLinkedList>
 #include <QVideoFrame>
 #include <QDebug>

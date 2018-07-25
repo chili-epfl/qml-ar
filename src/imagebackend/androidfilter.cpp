@@ -1,3 +1,11 @@
+/**
+ * @file androidfilter.cpp
+ * @brief A class for fixing video output on android
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "androidfilter.h"
 
 class AndroidFilterRunnable : public QVideoFilterRunnable

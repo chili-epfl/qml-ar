@@ -1,3 +1,12 @@
+/**
+ * @file configjson.cpp
+ * @brief This class implements a JSON config reader
+ * It should be inherited to add JSON functionality
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "configjson.h"
 #include <QFile>
 #include <QJsonDocument>

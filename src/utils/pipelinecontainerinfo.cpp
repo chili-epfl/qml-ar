@@ -1,3 +1,12 @@
+/**
+ * @file pipelinecontainerinfo.cpp
+ * @brief This class contains information which travels with
+ * a pipeline container
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "pipelinecontainerinfo.h"
 #include <QDateTime>
 #include <QTextStream>

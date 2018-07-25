@@ -1,3 +1,11 @@
+/**
+ * @file cameraframegrabber.cpp
+ * @brief This class implements a Viewfinder interface for the QCamera which stores images
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "cameraframegrabber.h"
 #include "qvideoframehelpers.h"
 #include <QOpenGLContext>

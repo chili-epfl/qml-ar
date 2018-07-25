@@ -1,6 +1,7 @@
 /**
  * @file hsvintervaldetector.h
- * @brief 
+ * @brief This class receives matched points
+ * and deduces the color interval they are in
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -18,14 +19,12 @@
 #include "meanstdcalculator.h"
 #include "pipelinecontainer.h"
 
-/*
- * This class receives matched points
+/**
+ * @brief This class receives matched points
  * and deduces the color interval they are in
+ *
+ * Now supports only 1 color of dots
  */
-
-    /**
-    * @brief Now supports only 1 color of dots
-    */
 
 class HSVIntervalDetector : public QObject
 { Q_OBJECT

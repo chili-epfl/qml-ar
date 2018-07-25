@@ -1,3 +1,12 @@
+/**
+ * @file imagebackend.cpp
+ * @brief This class implements a QQuickImageProvider
+ * showing a constant image from a file
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "imagebackend.h"
 #include <QDebug>
 

@@ -1,3 +1,12 @@
+/**
+ * @file mymatconverter.cpp
+ * @brief This class converts Uchiya MyMat
+ * to QVector/QMatrix
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "mymatconverter.h"
 
 QMatrix4x4 MyMatConverter::convert3x3(MyMat m)

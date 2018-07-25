@@ -1,6 +1,6 @@
 /**
  * @file qtcamera2qml.h
- * @brief 
+ * @brief This is a wrapper over a QCamera which allows using it in QML
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -12,8 +12,8 @@
 #include <QObject>
 #include <QCamera>
 
-/*
- * This is a wrapper over a QCamera which allows using it in QML
+/**
+ * @brief This is a wrapper over a QCamera which allows using it in QML
  */
 
 class QtCamera2QML : public QObject

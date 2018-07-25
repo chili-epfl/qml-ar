@@ -1,6 +1,6 @@
 /**
  * @file opencvbackend.h
- * @brief 
+ * @brief OpenCV camera backend for QML
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -16,8 +16,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include "imageproviderasync.h"
 
-/*
- * OpenCV camera backend for QML
+/**
+ * @brief OpenCV camera backend for QML
+ *
  * Uses cv::VideoCapture
  */
 

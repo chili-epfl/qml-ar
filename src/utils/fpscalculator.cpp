@@ -1,3 +1,12 @@
+/**
+ * @file fpscalculator.cpp
+ * @brief This class calculates the frequency of frames
+ * when the caller calls newFrame
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "fpscalculator.h"
 #include <QDateTime>
 #include <QtMath>

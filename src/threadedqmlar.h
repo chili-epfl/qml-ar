@@ -1,6 +1,8 @@
 /**
  * @file threadedqmlar.h
- * @brief 
+ * @brief This class is a wrapper around QMLAR object
+ * which is placed at a separate thread and controlled
+ * by this object
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -14,8 +16,8 @@
 #include <QQuickImageProvider>
 #include "qmlar.h"
 
-/*
- * This class is a wrapper around QMLAR object
+/**
+ * @brief This class is a wrapper around QMLAR object
  * which is placed at a separate thread and controlled
  * by this object
  */

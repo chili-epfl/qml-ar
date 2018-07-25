@@ -1,6 +1,7 @@
 /**
  * @file timelogger.h
- * @brief 
+ * @brief This class allows to output a line along with
+ * thread number and a timestamp
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -12,8 +13,8 @@
 #include <QString>
 #include "config.h"
 
-/*
- * This class allows to output a line along with
+/**
+ * @brief This class allows to output a line along with
  * thread number and a timestamp
  */
 

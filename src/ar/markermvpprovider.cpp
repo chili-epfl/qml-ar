@@ -1,5 +1,5 @@
 /**
- * @file markermvpprovider.h
+ * @file markermvpprovider.cpp
  * @brief This class implements MVPProvider
  * using pose from a detected markers,
  * @author Sergei Volodin

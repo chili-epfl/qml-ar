@@ -1,6 +1,7 @@
 /**
  * @file huethreshold.h
- * @brief 
+ * @brief This class outputs binarized image
+ * taking colors in [hue-delta, hue+delta]
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -12,8 +13,9 @@
 #include "imageproviderasync.h"
 #include "opencv2/highgui.hpp"
 #include <QtConcurrent>
-/*
- * This class outputs binarized image
+
+/**
+ * @brief This class outputs binarized image
  * taking colors in [hue-delta, hue+delta]
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file qlinkedlistat.h
- * @brief 
+ * @brief Helper for QLinkedList
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -12,9 +12,9 @@
 #include <QLinkedList>
 #include <QImage>
 
-    /**
-    * @brief Get N'th element in qlinkedlist (starting from 0)
-    */
+/**
+* @brief Get N'th element in qlinkedlist (starting from 0)
+*/
 template<class T> T QLinkedListAt(QLinkedList<T> &list, int N);
 
 #include "qlinkedlistat.cpp"

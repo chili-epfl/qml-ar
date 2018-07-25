@@ -1,3 +1,12 @@
+/**
+ * @file markerdetector.cpp
+ * @brief This class stores a common interface for
+ * marker detectors
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "marker.h"
 #include "markerdetector.h"

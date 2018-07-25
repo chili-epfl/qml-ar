@@ -1,6 +1,7 @@
 /**
  * @file marker.h
- * @brief 
+ * @brief This class holds the position in the sheet
+ * of a single marker
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -15,9 +16,10 @@
 #include <QJsonObject>
 #include "worldimage.h"
 
-/*
- * This class holds the position in the sheet
+/**
+ * @brief This class holds the position in the sheet
  * of a single marker
+ *
  * coordinates: top-left corner
  *
  * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):

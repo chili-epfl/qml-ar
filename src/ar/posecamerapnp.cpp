@@ -1,5 +1,5 @@
 /**
- * @file posecamerapnp.h
+ * @file posecamerapnp.cpp
  * @brief This class converts camera + 3D-2D correspondences
  * to a camera pose
  * @author Sergei Volodin

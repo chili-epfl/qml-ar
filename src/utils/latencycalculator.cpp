@@ -1,3 +1,11 @@
+/**
+ * @file latencycalculator.cpp
+ * @brief This class calculates latency based on PipelineContainerInfos
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "latencycalculator.h"
 #include <QtMath>
 

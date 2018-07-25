@@ -1,6 +1,7 @@
 /**
  * @file imageproviderasync.h
- * @brief 
+ * @brief This class is an interface for image providers which emit a signal
+ * on new image
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -14,8 +15,8 @@
 #include <QImage>
 #include "pipelinecontainer.h"
 
-/*
- * This class is an interface for image providers which emit a signal
+/**
+ * @brief This class is an interface for image providers which emit a signal
  * on new image
  */
 

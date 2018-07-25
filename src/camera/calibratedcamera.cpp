@@ -1,3 +1,12 @@
+/**
+ * @file calibratedcamera.cpp
+ * @brief This class stores information
+ * about a calibrated camera
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "calibratedcamera.h"
 

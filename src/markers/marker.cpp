@@ -1,3 +1,12 @@
+/**
+ * @file marker.cpp
+ * @brief This class holds the position in the sheet
+ * of a single marker
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "marker.h"
 #include <QTextStream>
 

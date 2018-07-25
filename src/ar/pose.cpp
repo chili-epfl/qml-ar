@@ -1,5 +1,5 @@
 /**
- * @file pose.h
+ * @file pose.cpp
  * @brief This class holds the pose (Translation+Rotation)
  * of the camera
  * @author Sergei Volodin

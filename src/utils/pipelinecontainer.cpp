@@ -1,3 +1,12 @@
+/**
+ * @file pipelinecontainer.cpp
+ * @brief This template class wraps an object
+ * adding additional information: id, timestamp
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef PIPELINECONTAINER_CPP
 #define PIPELINECONTAINER_CPP
 #include <QtCore>

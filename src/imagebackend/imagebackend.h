@@ -1,6 +1,7 @@
 /**
  * @file imagebackend.h
- * @brief 
+ * @brief This class implements a QQuickImageProvider
+ * showing a constant image from a file
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +14,8 @@
 #include <QFile>
 #include <QImage>
 
-/*
- * This class implements a QQuickImageProvider
+/**
+ * @brief This class implements a QQuickImageProvider
  * showing a constant image from a file
  */
 

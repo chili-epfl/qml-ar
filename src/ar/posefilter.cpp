@@ -1,5 +1,5 @@
 /**
- * @file posefilter.h
+ * @file posefilter.cpp
  * @brief This class implements low-pass filter on Pose (Rotation + Translation)
  * @author Sergei Volodin
  * @version 1.0

@@ -1,6 +1,7 @@
 /**
  * @file hsvmeancolor.cpp
- * @brief 
+ * @brief This class calculates mean Hue
+ * in HSV models
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -17,27 +18,19 @@ HSVMeanColor::HSVMeanColor()
 
 void HSVMeanColor::addColor(int h)
 {
-    /**
-    * @brief Hue in radians
-    */
+    // hue in radians
     double h_radians = qDegreesToRadians((double) h);
 
-    /**
-    * @brief Adding this to sum
-    */
+    // adding this to sum
     h_vector += QVector2D(qCos(h_radians), qSin(h_radians));
 
-    /**
-    * @brief Saving h
-    */
+    // saving h
     h_values.append(h);
 }
 
 void HSVMeanColor::addColor(QColor c)
 {
-    /**
-    * @brief Obtaining h, s, v
-    */
+    // obtaining h, s, v
     int h, s, v;
     c.getHsv(&h, &s, &v);
     addColor(h);
@@ -45,9 +38,7 @@ void HSVMeanColor::addColor(QColor c)
 
 double HSVMeanColor::meanHue()
 {
-    /**
-    * @brief Returning angle of the vector
-    */
+    // returning angle of the vector
     return qRadiansToDegrees(qAtan2(h_vector.y(), h_vector.x()));
 }
 
@@ -60,35 +51,23 @@ double HSVMeanColor::angleDifference(double a1, double a2)
 
 double HSVMeanColor::stdHue()
 {
-    /**
-    * @brief Mean color
-    */
+    // mean color
     double mean = meanHue();
 
-    /**
-    * @brief Resulting sigma
-    */
+    // resulting sigma
     double result = 0;
 
-    /**
-    * @brief Adding (xi - mu) ^2
-    */
+    // adding (xi - mu) ^2
     QVector<double>::iterator it;
     for(it = h_values.begin(); it != h_values.end(); it++)
         result += qPow(angleDifference(mean, *it), 2);
 
-    /**
-    * @brief Dividing by N
-    */
+    // dividing by N
     result /= h_values.size();
 
-    /**
-    * @brief Taking square
-    */
+    // taking square
     result = qSqrt(result);
 
-    /**
-    * @brief Resulting sigma
-    */
+    // resulting sigma
     return result;
 }

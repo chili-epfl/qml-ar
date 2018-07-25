@@ -1,3 +1,13 @@
+/**
+ * @file blobdetector.cpp
+ * @brief This class detects blobs on a QImage
+ * and returns a QImage with white pixels
+ * at blob positions
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "blobdetector.h"
 #include "opencv2/imgproc.hpp"
 #include "QtOpenCV/cvmatandqimage.h"

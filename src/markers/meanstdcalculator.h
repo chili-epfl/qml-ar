@@ -1,6 +1,6 @@
 /**
  * @file meanstdcalculator.h
- * @brief 
+ * @brief This class calculates mean and std values
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -12,8 +12,8 @@
 #include <QObject>
 #include <QVector>
 
-/*
- * This class calculates mean and std values
+/**
+ * @brief This class calculates mean and std values
  */
 
 class MeanStdCalculator : public QObject

@@ -1,6 +1,6 @@
 /**
  * @file qvideoframehelpers.h
- * @brief 
+ * @brief Helpers for QVideoFrame used in this project
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +13,8 @@
 #include <QVideoFrame>
 #include <QOpenGLContext>
 
-/*
- * Helpers for QVideoFrame used in this project
+/**
+ * @brief Qt interface for a texture
  */
 
 class TextureBuffer : public QAbstractVideoBuffer
@@ -29,6 +29,11 @@ public:
 private:
     GLuint m_id;
 };
+
+
+/**
+ * @brief Helpers for QVideoFrame used in this project
+ */
 
 class QVideoFrameHelpers
 {

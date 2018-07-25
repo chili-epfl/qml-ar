@@ -1,3 +1,11 @@
+/**
+ * @file meanstdcalculator.cpp
+ * @brief This class calculates mean and std values
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "meanstdcalculator.h"
 #include <QtMath>
 

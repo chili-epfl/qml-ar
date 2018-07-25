@@ -1,6 +1,7 @@
 /**
  * @file voidviewfinder.h
- * @brief 
+ * @brief A ViewFinder for QCamera which does nothing
+ * when frames do arrive
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -9,14 +10,12 @@
 #ifndef VOIDVIEWFINDER_H
 #define VOIDVIEWFINDER_H
 
-    /**
-    * @brief Qt includes
-    */
+// Qt includes
 #include <QAbstractVideoSurface>
 #include <QList>
 
-/*
- * A ViewFinder for QCamera which does nothing
+/**
+ * @brief A ViewFinder for QCamera which does nothing
  * when frames do arrive
  */
 

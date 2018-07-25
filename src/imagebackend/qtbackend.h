@@ -1,3 +1,11 @@
+/**
+ * @file qtbackend.h
+ * @brief QCamera backend for QML
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef QTBACKEND_H
 #define QTBACKEND_H
 
@@ -10,81 +18,118 @@
 #include "voidviewfinder.h"
 #include "imageproviderasync.h"
 
-/*
- *  QCamera backend for QML
- *  works on Linux and Android
+/**
+ * QCamera backend for QML
+ *
+ * works on Linux and Android
  */
 
 class QtCameraBackend : public ImageProviderAsync
 { Q_OBJECT
 
 public:
-    // cam_id indicates the camera index in QCameraInfo::availableCameras()
+    /**
+    * @brief Cam_id indicates the camera index in QCameraInfo::availableCameras()
+    */
     QtCameraBackend(int cam_id = 0);
 
-    // callback for main thread
+    /**
+    * @brief Callback for main thread
+    */
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
     virtual ~QtCameraBackend();
 
-    // convert frame -> image
+    /**
+    * @brief Convert frame -> image
+    */
     void convert(QVideoFrame *frame, QImage *image);
 
-    // return underlying camera object
+    /**
+    * @brief Return underlying camera object
+    */
     QCamera* getCamera();
 
-    // start camera
+    /**
+    * @brief Start camera
+    */
     void start();
 protected:
-    // last image id
+    /**
+    * @brief Last image id
+    */
     int image_id;
 
-    // information about current image
+    /**
+    * @brief Information about current image
+    */
     PipelineContainerInfo image_info;
 
-    // is frame available?
+    /**
+    * @brief Is frame available?
+    */
     bool frame_available = 0;
 
     QVideoFrame last_frame;
 
-    // image buffer
-    // is written in processQImage slot
-    // is read in requestPixmap
-    // TODO: thread safety (now can crash randomly)
+    /**
+    * @brief Image buffer
+    * Is written in processQImage slot
+    * Is read in requestPixmap
+    * TODO: thread safety (now can crash randomly)
+    */
     QImage buf;
 
-    // camera object
+    /**
+    * @brief Camera object
+    */
     QCamera* camera;
 
-// LINUX
+    /**
+    * @brief LINUX
+    */
     CameraFrameGrabber* frameGrabber;
-//
 
-// ANDROID
-    // QVideoProbe for Android version
+    /**
+    * @brief ANDROID
+    * QVideoProbe for Android version
+    */
     QVideoProbe* probe;
 
-    // void viewfinder for Android version
+    /**
+    * @brief Void viewfinder for Android version
+    */
     VoidViewFinder* viewfinder;
-//
 
-    // initialize the object after setting camera ptr
+    /**
+    * @brief Initialize the object after setting camera ptr
+    */
     void init();
 
-    // if set to true, will install a void viewfinder
+    /**
+    * @brief If set to true, will install a void viewfinder
+    */
     bool need_viewfinder;
 
-    // thread result
+    /**
+    * @brief Thread result
+    */
     QFutureWatcher<QImage> watcher;
 
 public slots:
-    // set this image as buffer
+    /**
+    * @brief Set this image as buffer
+    */
     void processQImage(QImage img);
 
-    // process frame in thread
+    /**
+    * @brief Process frame in thread
+    */
     void processQVideoFrame(const QVideoFrame &frame);
 
-    // called on thread finish
+    /**
+    * @brief Called on thread finish
+    */
     void handleFinished();
 };
 

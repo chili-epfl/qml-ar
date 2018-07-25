@@ -1,3 +1,12 @@
+/**
+ * @file framesdelaycalculator.cpp
+ * @brief This class calculates the delay in frames based on desired latency and
+ * actual FPS
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "framesdelaycalculator.h"
 
 FramesDelayCalculator::FramesDelayCalculator()

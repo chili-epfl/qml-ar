@@ -1,3 +1,14 @@
+/**
+ * @file markerstorage.cpp
+ * @brief This class stores the set of used markers
+ * loads them from a file and outputs
+ * the coordinates of each of them
+ * on a request
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "markerstorage.h"
 
 #include <QJsonDocument>

@@ -1,6 +1,7 @@
 /**
  * @file calibratedcamerafilestorage.h
- * @brief 
+ * @brief This class implements CalibratedCamera
+ * and allows to load information from a file
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -12,8 +13,8 @@
 #include "calibratedcamera.h"
 #include "configjson.h"
 
-/*
- * This class implements CalibratedCamera
+/**
+ * @brief This class implements CalibratedCamera
  * and allows to load information from a file
  *
  *
@@ -34,7 +35,6 @@
  *
  */
 
-
 class CalibratedCameraFileStorage : public CalibratedCamera, public ConfigJSON
 { Q_OBJECT
 public:
@@ -47,10 +47,14 @@ public:
 
     /**
     * @brief Read config on creation
+    * @param filename Confix file to read
     */
     CalibratedCameraFileStorage(QString filename);
 
-    // fill with data from a file/other QIODevice
+    /**
+    * @brief fill with data from a file/other QIODevice
+    * @param config Json object to read
+    */
     void readConfig(QJsonObject config);
 };
 

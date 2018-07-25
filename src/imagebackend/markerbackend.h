@@ -1,6 +1,6 @@
 /**
  * @file markerbackend.h
- * @brief 
+ * @brief A backend for QML for marker detection preview
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +13,9 @@
 #include "markerdetector.h"
 #include <QLinkedList>
 
-/*
- * A backend for QML for marker detection preview
+/**
+ * @brief A backend for QML for marker detection preview
+ *
  * this class is a decorator on top of the camera
  * with a marker detector as a parameter
  */

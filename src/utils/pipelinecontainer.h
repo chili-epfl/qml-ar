@@ -1,6 +1,7 @@
 /**
  * @file pipelinecontainer.h
- * @brief 
+ * @brief This template class wraps an object
+ * adding additional information: id, timestamp
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -13,8 +14,8 @@
 #include <QDateTime>
 #include "pipelinecontainerinfo.h"
 
-/*
- * This template class wraps an object
+/**
+ * @brief This template class wraps an object
  * adding additional information: id, timestamp
  *
  * Designed to be used in a pipeline of Qt objects

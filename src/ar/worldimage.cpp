@@ -1,5 +1,5 @@
 /**
- * @file worldimage.h
+ * @file worldimage.cpp
  * @brief This class stores the correspondences
  * between Real World 3D points
  * and projected points on camera image

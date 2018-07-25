@@ -1,6 +1,7 @@
 /**
  * @file fpscalculator.h
- * @brief 
+ * @brief This class calculates the frequency of frames
+ * when the caller calls newFrame
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -12,9 +13,10 @@
 #include <QObject>
 #include <QLinkedList>
 
-/*
- * This class calculates the frequency of frames
+/**
+ * @brief This class calculates the frequency of frames
  * when the caller calls newFrame
+ *
  * Results can be obtained via mean() and std()
  */
 

@@ -1,6 +1,7 @@
 /**
  * @file pipelinecontainerinfo.h
- * @brief 
+ * @brief This class contains information which travels with
+ * a pipeline container
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -11,8 +12,8 @@
 
 #include <QVector>
 
-/*
- * This class contains information which travels with
+/**
+ * @brief This class contains information which travels with
  * a pipeline container
  */
 

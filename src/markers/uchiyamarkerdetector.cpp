@@ -1,6 +1,7 @@
 /**
  * @file uchiyamarkerdetector.cpp
- * @brief 
+ * @brief Wrapper around C-style UchiyaMarkers project
+ * obtained from main.cpp file from UchiyaMarkers project
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -25,10 +26,8 @@
 
 using std::vector;
 
-    /**
-    * @brief See main.cpp and main.h from
-    * UchiyaMarkers project
-    */
+// see main.cpp and main.h from
+// UchiyaMarkers project
 
 UchiyaMarkerDetector::UchiyaMarkerDetector(): MarkerDetector()
 {
@@ -49,146 +48,102 @@ void UchiyaMarkerDetector::initMarkers()
 {
     m_llah.Init(m_camimg.w, m_camimg.h);		// set image size
 
-    /**
-    * @brief Going through all markers
-    */
+    // going through all markers
     QMap<int, Marker>::iterator marker_in_map;
     for(marker_in_map = markers.begin(); marker_in_map != markers.end(); marker_in_map++)
     {
-    /**
-    * @brief Will write marker config here
-    */
+        // will write marker config here
         QString s;
         QTextStream ss(&s);
 
-    /**
-    * @brief Dots as json array
-    */
+        // dots as json array
         QJsonArray dots = marker_in_map.value().getConfig().value("dots_uchiya").toArray();
 
-    /**
-    * @brief Going through dots and adding them to ss
-    */
+        // going through dots and adding them to ss
         QJsonArray::iterator dot;
         ss << dots.size() << "\n";
         for(dot = dots.begin(); dot != dots.end(); dot++)
         {
-    /**
-    * @brief Adding dot coordinates
-    */
+            // adding dot coordinates
             ss << (*dot).toObject().value("x").toDouble() << " "
                << (*dot).toObject().value("y").toDouble() << "\n";
         }
 
-    /**
-    * @brief Rewinding the stream
-    */
+        // rewinding the stream
         ss.seek(0);
 
-    /**
-    * @brief Adding paper with stream as input
-    */
+        // adding paper with stream as input
         m_llah.AddPaper(ss);
 
-    /**
-    * @brief Marker added
-    */
+        // marker added
         TimeLoggerLog("Marker %d loaded", marker_in_map.key());
     }
 }
 
 void UchiyaMarkerDetector::extractMarkers()
 {
-    /**
-    * @brief List of detected markers
-    */
+    // list of detected markers
     visible *papers = m_llah.GetVisiblePaper();
 
-    /**
-    * @brief Forget all detected markers
-    * This removes point correspondences
-    */
+    // forget all detected markers
+    // this removes point correspondences
     markers.undetect();
 
-    /**
-    * @brief Largest markers (if any)
-    */
+    // largest markers (if any)
     Marker* biggest_marker = NULL;
     double biggest_determinant = 0;
 
-    /**
-    * @brief For detected papers
-    */
+    // for detected papers
     for(visible::iterator itpa=(*papers).begin(); itpa!=(*papers).end(); itpa++)
     {
-    /**
-    * @brief Id of the marker in Uchiya library
-    */
+        // id of the marker in Uchiya library
         int id = (*itpa)->id - 1;
 
-    /**
-    * @brief Marker in the storage
-    */
+        // marker in the storage
         Marker* m = markers.getPointer(id);
 
-    /**
-    * @brief No marker in the database
-    * This happens if camera saw a marker
-    * Not from this activity
-    */
+        // no marker in the database
+        // this happens if camera saw a marker
+        // not from this activity
         if(m == NULL) continue;
 
-    /**
-    * @brief Homography matrix from Uchiya library
-    * Top-left 3x3 submatrix is used
-    * Warning: matrix uses mirrored y axis
-    */
+        // homography matrix from Uchiya library
+        // top-left 3x3 submatrix is used
+        // warning: matrix uses mirrored y axis
         QMatrix4x4 homography = MyMatConverter::convert3x3((*itpa)->H);
 
-    /**
-    * @brief Using only 1 biggest marker to speed up
-    * (parts of image which are not biggest marker
-    * Will be blackened on next iteration)
-    * Biggest = by marker area ~ H determinant
-    * TODO: use visible area instead of total area
-    */
+        // using only 1 biggest marker to speed up
+        // (parts of image which are not biggest marker
+        // will be blackened on next iteration)
+        // biggest = by marker area ~ H determinant
+        // TODO: use visible area instead of total area
         QMatrix4x4 homography_1 = homography;
         homography_1(3, 3) = 1;
         double det = fabs(homography_1.determinant());
         if(det > biggest_determinant)
         {
-    /**
-    * @brief Forgetting old marker
-    */
+            // forgetting old marker
             if(biggest_marker)
                 biggest_marker->undetect();
 
-    /**
-    * @brief Saving new marker
-    */
+            // saving new marker
             biggest_determinant = det;
             biggest_marker = m;
         }
         else break;
 
-    /**
-    * @brief Basic idea:
-    * 1. Need: correspondences world <-> image
-    * 2. Homography * Uchiya Coordinates (0-600 x 0-600) = Image coordinates of corners
-    * 3. Obtaining world coordinates of marker corners from MarkerStorage
-    * 4. Adding pairs (world corner, image corner) to Marker as a correspondence
-    */
+        // Basic idea:
+        // 1. Need: correspondences world <-> image
+        // 2. Homography * Uchiya Coordinates (0-600 x 0-600) = Image coordinates of corners
+        // 3. Obtaining world coordinates of marker corners from MarkerStorage
+        // 4. Adding pairs (world corner, image corner) to Marker as a correspondence
 
-    /**
-    * @brief Get marker size in mm
-    */
+        // get marker size in mm
         double marker_size = m->getSizeMM();
 
-    /**
-    * @brief Fill in the marker corners in the actual sheet (mm)
-    * Corners (in order): top-left, bottom-left, top-right, bottom-right
-    * Positioning (mm)    (0, 0)    (0, s)       (s, 0)     (s, s)
-    */
+        // fill in the marker corners in the actual sheet (mm)
+        // corners (in order): top-left, bottom-left, top-right, bottom-right
+        // positioning (mm)    (0, 0)    (0, s)       (s, 0)     (s, s)
         QVector3D marker_tl = m->getPositionMM();
         QVector3D marker_bl = marker_tl;
         QVector3D marker_br = marker_tl;
@@ -198,81 +153,57 @@ void UchiyaMarkerDetector::extractMarkers()
         marker_br += QVector3D(marker_size, marker_size, 0);
         marker_tr += QVector3D(marker_size, 0          , 0);
 
-    /**
-    * @brief Marker coordinate system (marker has size 600)
-    */
+        // marker coordinate system (marker has size 600)
         QVector3D marker_uchiya_tl_affine = QVector3D(0  , 600, 0);
         QVector3D marker_uchiya_bl_affine = QVector3D(0  , 0  , 0);
         QVector3D marker_uchiya_br_affine = QVector3D(600, 0  , 0);
         QVector3D marker_uchiya_tr_affine = QVector3D(600, 600, 0);
 
-    /**
-    * @brief Add all of the points to a vector
-    */
+        // add all of the points to a vector
         QVector<QVector3D> marker_corners;
         marker_corners.append(marker_tl);
         marker_corners.append(marker_bl);
         marker_corners.append(marker_br);
         marker_corners.append(marker_tr);
 
-    /**
-    * @brief All of the marker corners corresponding to real world corners
-    */
+        // all of the marker corners corresponding to real world corners
         QVector<QVector3D> marker_uchiya_affine_corners;
         marker_uchiya_affine_corners.push_back(marker_uchiya_tl_affine);
         marker_uchiya_affine_corners.push_back(marker_uchiya_bl_affine);
         marker_uchiya_affine_corners.push_back(marker_uchiya_br_affine);
         marker_uchiya_affine_corners.push_back(marker_uchiya_tr_affine);
 
-    /**
-    * @brief Length should be equal since number of corners is the same
-    */
+        // length should be equal since number of corners is the same
         Q_ASSERT(marker_uchiya_affine_corners.size() == marker_corners.size());
         Q_ASSERT(marker_uchiya_affine_corners.size() == 4);
 
-    /**
-    * @brief Go through the vector, compute image point and
-    * Add a correspondence
-    */
+        // go through the vector, compute image point and
+        // add a correspondence
         for(int i = 0; i < marker_corners.size(); i++)
         {
-    /**
-    * @brief Obtain current marker point in the world coordinates
-    */
+            // obtain current marker point in the world coordinates
             QVector3D world_marker_point = marker_corners[i];
 
-    /**
-    * @brief Get uchiya marker coordinates point to 2D form (ignore z)
-    */
+            // get uchiya marker coordinates point to 2D form (ignore z)
             QVector4D uchiya_marker_point_affine = marker_uchiya_affine_corners[i];
             uchiya_marker_point_affine.setZ(1);
 
-    /**
-    * @brief Obtain marker image point using homography matrix
-    */
+            // obtain marker image point using homography matrix
             QVector4D image_marker_point_affine = homography.map(uchiya_marker_point_affine);
 
-    /**
-    * @brief Check if the z dimension is nonzero
-    * Otherwise, perspective division is impossible
-    * (point is certainly invisible)
-    */
+            // check if the z dimension is nonzero
+            // otherwise, perspective division is impossible
+            // (point is certainly invisible)
             Q_ASSERT(image_marker_point_affine.z() != 0);
 
-    /**
-    * @brief Convert image point from affine to 2D form
-    */
+            // convert image point from affine to 2D form
             QVector2D image_marker_point = QVector2D(image_marker_point_affine.x() / image_marker_point_affine.z(),
                                                      image_marker_point_affine.y() / image_marker_point_affine.z());
 
-    /**
-    * @brief Uchiya library mirrors y axis
-    */
+            // Uchiya library mirrors y axis
             image_marker_point.setY(h - image_marker_point.y());
 
-    /**
-    * @brief Add the calculated correspondence
-    */
+            // add the calculated correspondence
             m->addCorrespondence(world_marker_point, image_marker_point);
         }
     }
@@ -289,20 +220,16 @@ void UchiyaMarkerDetector::prepareInput(QImage source)
 
 QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
 {
-    /**
-    * @brief If the image is invalid, no need for marker detection
-    * This happens at the start of the application
-    */
+    // if the image is invalid, no need for marker detection
+    // this happens at the start of the application
     if(source.height() * source.width() <= 0)
     {
         TimeLoggerLog("%s", "Empty image");
         return qMakePair(markers, source);
     }
 
-    /**
-    * @brief Initialize marker detection pipeline
-    * When we know the camera image size
-    */
+    // initialize marker detection pipeline
+    // when we know the camera image size
     if(!is_initialized)
     {
         TimeLoggerLog("%s", "Initializing UchiyaMarkerDetector");
@@ -311,33 +238,23 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
 
     TimeLoggerThroughput("%s", "[ANALYZE] Begin Uchiya");
 
-    /**
-    * @brief Copying input
-    */
+    // copying input
     if(source.isGrayscale())
     {
-    /**
-    * @brief Copying grayscale bits
-    */
+        // copying grayscale bits
         m_llah.Extract(source);
     }
     else
     {
-    /**
-    * @brief Copying input to OpenCV matrices
-    */
+        // copying input to OpenCV matrices
         prepareInput(source);
-    /**
-    * @brief Passing detected blobs to the library
-    */
+        // passing detected blobs to the library
         m_llah.Extract(m_camimg);
     }
 
     TimeLoggerThroughput("%s", "[ANALYZE] Begin UchiyaSetPts");
     m_llah.SetPts();
-    /**
-    * @brief M_llah.SetPts(blob_detector.getBlobs());
-    */
+    //m_llah.SetPts(blob_detector.getBlobs());
     m_llah.CoordinateTransform(source.height());
     TimeLoggerThroughput("%s", "[ANALYZE] End UchiyaSetPts");
 
@@ -354,32 +271,24 @@ QPair<MarkerStorage, QImage> UchiyaMarkerDetector::process(QImage source)
         TimeLoggerThroughput("%s", "[ANALYZE] End UchiyaMatching");
     }
 
-    /**
-    * @brief Extracting WorldImage correspondences
-    */
+    // extracting WorldImage correspondences
     extractMarkers();
 
     TimeLoggerThroughput("%s", "End marker detection");
 
     PipelineContainerInfo info = object_in_process.checkpointed("UchiyaMarkerDetector");
 
-    /**
-    * @brief Sending obtained dots
-    */
+    // sending obtained dots
     emit dotsFound(PipelineContainer<QPair<QImage, QVector<QVector2D> > >
                    (qMakePair(source, m_llah.foundDots()), info));
     emit dotsAll(PipelineContainer<QVector<QVector2D> >
                  (m_llah.foundDots(true), info));
 
-    /**
-    * @brief Returning markers
-    */
+    // returning markers
     QPair<MarkerStorage, QImage> result = qMakePair(markers, QImage());
 
     TimeLoggerThroughput("%s", "[ANALYZE] End Uchiya");
 
-    /**
-    * @brief Returning markers
-    */
+    // returning markers
     return result;
 }

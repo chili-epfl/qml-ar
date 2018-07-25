@@ -1,3 +1,11 @@
+/**
+ * @file opencvbackend.cpp
+ * @brief OpenCV camera backend for QML
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "opencvbackend.h"
 #include "qvideoframehelpers.h"

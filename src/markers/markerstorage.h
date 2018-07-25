@@ -1,6 +1,9 @@
 /**
  * @file markerstorage.h
- * @brief 
+ * @brief This class stores the set of used markers
+ * loads them from a file and outputs
+ * the coordinates of each of them
+ * on a request
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -14,11 +17,12 @@
 #include "marker.h"
 #include "configjson.h"
 
-/*
- * This class stores the set of used markers
+/**
+ * @brief This class stores the set of used markers
  * loads them from a file and outputs
  * the coordinates of each of them
  * on a request
+ *
  * coordinates: top-left corner
  *
  * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):

@@ -1,3 +1,11 @@
+/**
+ * @file qtbackend.cpp
+ * @brief QCamera backend for QML
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "qtbackend.h"
 #include "qvideoframehelpers.h"
