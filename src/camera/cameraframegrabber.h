@@ -11,6 +11,7 @@
 
 #include <QList>
 #include <QVideoFrame>
+#include <QAbstractVideoSurface>
 
 /**
  * @brief This class implements a Viewfinder interface for the QCamera which stores images
