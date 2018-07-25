@@ -6,7 +6,7 @@
  * @date 2018-07-25
  */
 
-﻿#ifndef MARKERDETECTOR_H
+#ifndef MARKERDETECTOR_H
 #define MARKERDETECTOR_H
 
 #include <QObject>
