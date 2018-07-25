@@ -1,3 +1,11 @@
+/**
+ * @file posefilter.h
+ * @brief This class implements low-pass filter on Pose (Rotation + Translation)
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "posefilter.h"
 
 PoseFilter::PoseFilter(double alpha)

@@ -1,3 +1,12 @@
+/**
+ * @file perspectivecamera.h
+ * @brief This class extends CalibratedCamera
+ * by allowing to get Perspective Projection matrix
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "perspectivecamera.h"
 #include <QCameraLens>
 

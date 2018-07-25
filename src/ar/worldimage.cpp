@@ -1,3 +1,13 @@
+/**
+ * @file worldimage.h
+ * @brief This class stores the correspondences
+ * between Real World 3D points
+ * and projected points on camera image
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "worldimage.h"
 #include "calibratedcamera.h"
 

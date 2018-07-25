@@ -1,3 +1,12 @@
+/**
+ * @file mvpprovider.h
+ * @brief This class represents a QML interface
+ * to provide ModelViewProjection matrix
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "mvpprovider.h"
 #include "timelogger.h"
 

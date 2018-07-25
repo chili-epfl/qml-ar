@@ -1,3 +1,12 @@
+/**
+ * @file mvpprovider.h
+ * @brief This class represents a QML interface
+ * to provide ModelViewProjection matrix
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef MVPPROVIDER_H
 #define MVPPROVIDER_H
 
@@ -5,8 +14,8 @@
 #include <QObject>
 #include "pipelinecontainer.h"
 
-/*
- * This class represents a QML interface
+/**
+ * @brief This class represents a QML interface
  * to provide ModelViewProjection matrix
  *
  * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):
@@ -18,36 +27,74 @@
 class MVPProvider : public QObject
 { Q_OBJECT
 protected:
-    // last ModelViewProjection matrix
+    /**
+    * @brief Last ModelViewProjection matrix
+    */
     QMatrix4x4 mvp_matrix;
 
-    // last ModelView matrix
+    /**
+    * @brief Last ModelView matrix
+    */
     QMatrix4x4 mv_matrix;
 
-    // last ModelViewProjection matrix
+    /**
+    * @brief Last ModelViewProjection matrix
+    */
     QMatrix4x4 p_matrix;
 
-    // current input id
+    /**
+    * @brief Current input id
+    */
     PipelineContainerInfo object_in_process;
 
-    // set MVP matrix internally
+    /**
+    * @brief Set MVP matrix internally
+    */
     void setMVPMatrix(QMatrix4x4 mat);
 public:
-    // initialize with eye matrix
+    /**
+    * @brief Initialize with eye matrix
+    */
     MVPProvider();
 
-    // invalidate matrix
-    // makes all objects invisible
+    /**
+    * @brief Invalidate matrix
+    * Makes all objects invisible
+    */
     void reset();
 
-    // true if result is an actual matrix
+    /**
+    * @brief True if result is an actual matrix
+    * @param mat Matrix to check
+    */
     static bool isValid(QMatrix4x4 mat);
 signals:
 
-    // emitted when new MVP matrix is available
+    /**
+    * @brief Emitted when new MVP matrix is available
+    * @param I resulting matrix
+    */
     void newMVPMatrix(PipelineContainer<QMatrix4x4>);
+
+    /**
+    * @brief Emitted when new MVP matrix is available
+    * @param I resulting matrix
+    */
+
     void newPMatrix(PipelineContainer<QMatrix4x4>);
+
+    /**
+    * @brief Emitted when new MVP matrix is available
+    * @param I resulting matrix
+    */
+
     void newMVMatrix(PipelineContainer<QMatrix4x4>);
+
+    /**
+    * @brief Emitted when new info is available
+    * @param I resulting timing info
+    */
+
     void newInfo(PipelineContainerInfo);
 };
 

@@ -1,3 +1,12 @@
+/**
+ * @file pose.h
+ * @brief This class holds the pose (Translation+Rotation)
+ * of the camera
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef POSE_H
 #define POSE_H
 
@@ -5,8 +14,8 @@
 #include <QMatrix3x3>
 #include <QMatrix4x4>
 
-/*
- * This class holds the pose (Translation+Rotation)
+/**
+ * @brief This class holds the pose (Translation+Rotation)
  * of the camera
  *
  * INPUT/OUTPUT COORDINATE SYSTEM (OpenCV/QML):
@@ -22,28 +31,47 @@ private:
     QMatrix3x3 rotation;
     bool is_valid;
 public:
-    // construct invalid pose
+    /**
+    * @brief Construct invalid pose
+    */
     Pose();
 
-    // construct using 4x4 matrix
+    /**
+    * @brief Construct using 4x4 matrix
+    * @param map Matrix to convert to pose
+    */
     Pose(QMatrix4x4 map);
 
-    // construct valid pose with translation and rotation
+    /**
+    * @brief Construct valid pose with translation and rotation
+    * @param t Translation
+    * @param r Rotation matrix
+    */
     Pose(QVector3D t, QMatrix3x3 r);
 
-    // is pose valid
+    /**
+    * @brief Is pose valid
+    */
     bool isValid();
 
-    // returns translation vector
+    /**
+    * @brief Returns translation vector
+    */
     QVector3D getTranslation();
 
-    // return rotation vector
+    /**
+    * @brief Return rotation vector
+    */
     QMatrix3x3 getRotation();
 
-    // return rotation + translation
+    /**
+    * @brief Return rotation + translation
+    */
     QMatrix4x4 get4Matrix();
 
-    // get string representation
+    /**
+    * @brief Get string representation
+    */
     QString toString();
 };
 

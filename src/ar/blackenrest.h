@@ -5,7 +5,17 @@
 #include "imageproviderasync.h"
 #include "markerstorage.h"
 
-/*
+/**
+ * @file blackenrest.h
+ * @brief Paints image parts not containing markers in black
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
+/**
+ * @brief Paints image parts not containing markers in black
+ *
  * This class decorates marker detector and marker mvp provider
  * Adding the ability to detect markers only on predicted area
  * by blackening everything else on the image, except for the
@@ -18,39 +28,86 @@
 class BlackenRest : public ImageProviderAsync
 { Q_OBJECT
 private:
-    // info of the object in process
+
+    /**
+     * @brief Info of the object in process
+     */
     PipelineContainerInfo object_in_process;
 
-    // predictor of the pose (1 frame interval)
+    /**
+     * @brief predictor of the pose (1 frame interval)
+     */
+
     PosePredictor* predictor;
 
-    // do use region of the image
+    /**
+     * @brief do use region of the image
+     */
+
     bool use_region;
 
-    // MVP storage
+    /**
+     * @brief MVP storage
+     */
+
     QMatrix4x4 MV, P;
 
-    // storage for markers
+    /**
+     * @brief storage for markers
+     */
+
     MarkerStorage storage;
 
-    // blacken an image where there are no markers
+    /**
+     * @brief blacken an image where there are no markers
+     */
+
     QImage blacken(QImage source);
 public:
+
+    /**
+     * @brief Initialize using a PosePredictor for prediction of pose
+     * in short intervals of time between MV updates
+     * @param p PosePredictor object pointer
+     */
+
     BlackenRest(PosePredictor* p);
 
 signals:
-    // blackened image
+
+    /**
+     * @brief Blackened image (output)
+     * @param I resulting image
+     */
+
     void imageAvailable(PipelineContainer<QImage>);
 
 public slots:
-    // called on new MVP matrix from provider
+
+    /**
+     * @brief To be called to set/update P (projection) matrix
+     * @param p P matrix
+     */
+
     void onNewPMatrix(PipelineContainer<QMatrix4x4> p);
+
+    /**
+     * @brief To be called to set/update MV (ModelView) matrix
+     * @param mv MV matrix
+     */
+
     void onNewMVMatrix(PipelineContainer<QMatrix4x4> mv);
 
-    // called on new available markers
+    /**
+     * @brief To be called on new available detected markers
+     */
+
     void onNewMarkers(PipelineContainer<MarkerStorage> storage);
 
-    // process input
+    /**
+     * @brief Set input and process it. Calls imageAvailable at the end.
+     */
+
     void setInput(PipelineContainer<QImage> img);
 };
 

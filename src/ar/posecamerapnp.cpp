@@ -1,3 +1,12 @@
+/**
+ * @file posecamerapnp.h
+ * @brief This class converts camera + 3D-2D correspondences
+ * to a camera pose
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "posecamerapnp.h"
 #include <QtCore>
 #include <QMatrix4x4>

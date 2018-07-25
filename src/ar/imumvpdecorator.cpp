@@ -1,3 +1,11 @@
+/**
+ * @file imumvpdecorator.cpp
+ * @brief This class decorates an MVP provider by adding IMU delta movement
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "imumvpdecorator.h"
 #include <QtMath>

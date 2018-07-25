@@ -1,3 +1,12 @@
+/**
+ * @file pose.h
+ * @brief This class holds the pose (Translation+Rotation)
+ * of the camera
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "pose.h"
 #include <QMatrix4x4>
 

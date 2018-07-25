@@ -1,3 +1,13 @@
+/**
+ * @file worldimage.h
+ * @brief This class stores the correspondences
+ * between Real World 3D points
+ * and projected points on camera image
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef WORLDIMAGECORRESPONDENCES_H
 #define WORLDIMAGECORRESPONDENCES_H
 
@@ -7,8 +17,8 @@
 #include "pose.h"
 #include <QVector>
 
-/*
- * This class stores the correspondences
+/**
+ * @brief This class stores the correspondences
  * between Real World 3D points
  * and projected points on camera image
  *
@@ -21,33 +31,56 @@
 class WorldImageCorrespondences
 {
 private:
-    // points in 3D
+    /**
+    * @brief Points in 3D
+    */
     QVector<QVector3D> world_points;
 
-    // corresponding points in 2D
+    /**
+    * @brief Corresponding points in 2D
+    */
     QVector<QVector2D> image_points;
 
-    // check if internal structure is valid
+    /**
+    * @brief Check if internal structure is valid
+    */
     void assertValid();
 public:
     WorldImageCorrespondences();
 
-    // add a single correspondence
+    /**
+    * @brief Add a single correspondence
+    * @param world_point Vector representing a point in world coordinate system
+    * @param image_point Vector representing a point in image coordinate system
+    */
     void add(QVector3D world_point, QVector2D image_point);
 
-    // merge with another list of correspondences
+    /**
+    * @brief Merge with another list of correspondences
+    * @param that Other object of same type whose data to take
+    */
     void join(WorldImageCorrespondences& that);
 
-    // remove all correspondences
+    /**
+    * @brief Remove all correspondences
+    */
     void clear();
 
-    // number of correspondences
+    /**
+    * @brief Number of correspondences
+    */
     int size();
 
-    // returns world point at index i
+    /**
+    * @brief Returns world point at index i
+    * @param index Index starting from 0
+    */
     QVector3D getWorldPoint(int index);
 
-    // returns image point at index i
+    /**
+    * @brief Returns image point at index i
+    * @param index Index starting from 0
+    */
     QVector3D getImagePoint(int index);
 };
 

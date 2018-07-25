@@ -1,3 +1,12 @@
+/**
+ * @file linearposepredictor.cpp
+ * @brief This class implements linear Pose Predictor
+ * which assumes angular/linear velocities to be constant
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include <QQuaternion>
 #include "linearposepredictor.h"
 

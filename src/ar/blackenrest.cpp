@@ -1,3 +1,11 @@
+/**
+ * @file blackenrest.cpp
+ * @brief Paints image parts not containing markers in black
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "timelogger.h"
 #include "blackenrest.h"
 #include <QPainter>

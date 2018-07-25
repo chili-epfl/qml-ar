@@ -1,3 +1,12 @@
+/**
+ * @file markermvpprovider.h
+ * @brief This class implements MVPProvider
+ * using pose from a detected markers,
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #include "markermvpprovider.h"
 #include "posecamerapnp.h"
 #include <QCameraLens>

@@ -1,3 +1,12 @@
+/**
+ * @file markermvpprovider.h
+ * @brief This class implements MVPProvider
+ * using pose from a detected markers,
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef MARKERMVPPROVIDER_H
 #define MARKERMVPPROVIDER_H
 
@@ -5,8 +14,8 @@
 #include "markerdetector.h"
 #include "perspectivecamera.h"
 
-/*
- * This class implements MVPProvider
+/**
+ * @brief This class implements MVPProvider
  * using pose from a detected markers,
  * a calibrated camera's matrix
  * multiplies them and outputs MVP
@@ -28,16 +37,35 @@ class MarkerMVPProvider : public MVPProvider
 private:
     PerspectiveCamera* camera;
 
-    // near and far are in millimeters (positive)
+    /**
+    * @brief Get perspective matrix P
+    * @param n Near, in mm (>0)
+    * @param f Far, in mm (>0)
+    */
     QMatrix4x4 getP(double n = 1, double f = 10000);
+
+    /**
+    * @brief Get ModelView matrix MV
+    * @param storage Detected markers to process
+    */
+
     QMatrix4x4 getMV(MarkerStorage storage);
 
 public:
+
+    /**
+    * @brief Initialize using a perspective camera
+    * @param c PerspectiveCamera object pointer
+    */
     MarkerMVPProvider(PerspectiveCamera *c);
 
 public slots:
-    // this functions actually compute matrices
+    /**
+    * @brief This function actually compute matrices
+    * @param storage Detected markers to process
+    */
     void recompute(PipelineContainer<MarkerStorage> storage);
 };
 
 #endif // MARKERMVPPROVIDER_H
+

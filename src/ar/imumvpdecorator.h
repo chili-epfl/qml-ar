@@ -1,3 +1,11 @@
+/**
+ * @file imumvpdecorator.h
+ * @brief This class decorates an MVP provider by adding IMU delta movement
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-07-25
+ */
+
 #ifndef IMUMVPDECORATOR_H
 #define IMUMVPDECORATOR_H
 
@@ -7,102 +15,182 @@
 #include <QLinkedList>
 #include <QTimer>
 
-/*
- * This class decorates an MVP provider
- * by adding IMU delta movement
+/**
+ * @brief Pose with a timestamp
+ */
+
+class TimeStampedIMUPose {
+public:
+
+    /**
+     * @brief The pose
+     */
+    QMatrix4x4 pose;
+
+    /**
+     * @brief Timestamp of the pose
+     */
+    qint64 timestamp;
+
+    /**
+     * @brief Construct from pose, remembers current time
+     */
+    TimeStampedIMUPose(QMatrix4x4 pose);
+};
+
+/**
+ * @brief This class decorates an MVP providerby adding IMU delta movement
+ *
  * If underlying MVP provider got matrix MV1 at t1
  * Then before next matrix MV2 at t2
  * this class will output a matrix based on MV1
  * with added rotation from IMU
  */
 
-// pose with a timestamp
-class TimeStampedIMUPose {
-public:
-    QMatrix4x4 pose;
-    qint64 timestamp;
-    TimeStampedIMUPose(QMatrix4x4 pose);
-};
-
 class IMUMVPDecorator : public MVPProvider
 { Q_OBJECT
 private:
-    // reset if no markers detected within this interval
+    /**
+    * @brief Reset if no markers detected within this interval
+    */
     int reset_ms;
 
-    // underlying IMU object
+    /**
+    * @brief Underlying IMU object
+    */
     IMU* imu;
 
-    // last MV from provider
+    /**
+    * @brief Last MV from provider
+    */
     QMatrix4x4 last_mv;
 
-    // last P
+    /**
+    * @brief Last P
+    */
     QMatrix4x4 last_p;
 
-    // current IMU rotation
+    /**
+    * @brief Current IMU rotation
+    */
     QMatrix4x4 current_imu_pose;
 
-    // last pose from IMU at the
-    // moment last_mv was updated
+    /**
+    * @brief Last pose from IMU at the
+    * Moment last_mv was updated
+    */
     QMatrix4x4 last_imu_pose;
 
-    // true if last_imu_pose is valid
+    /**
+    * @brief True if last_imu_pose is valid
+    */
     bool last_imu_pose_available;
 
-    // returns current IMU pose
+    /**
+    * @brief Returns current IMU pose
+    */
     QMatrix4x4 getCurrentIMUPose();
 
-    // timer for resetting pose after a certain amount of seconds
+    /**
+    * @brief Timer for resetting pose after a certain amount of seconds
+    */
     QElapsedTimer since_update;
 
-    // timer for checking if waited for too long
+    /**
+    * @brief Timer for checking if waited for too long
+    */
     QTimer timer;
 
-    // latency of mvp matrix
+    /**
+    * @brief Latency of mvp matrix
+    */
     double mvp_latency;
 
-    // Poses from mvp
+    /**
+    * @brief Poses from mvp
+    */
     QLinkedList<TimeStampedIMUPose> imu_poses;
 
-    // max freq * 2 seconds
+    /**
+    * @brief Max freq * 2 seconds
+    */
     static const int MAX_IMU_POSES = 2000;
 
-    // get pose delay mseconds ago
+    /**
+    * @brief Get pose delay mseconds ago
+    */
     QMatrix4x4 getDelayedIMUPose(int delay);
 
-    // IMU pose corrected by image latency
+    /**
+    * @brief IMU pose corrected by image latency
+    */
     QMatrix4x4 getLatencyCorrectedIMUPose();
 
-    // current delay mode
+    /**
+    * @brief Current delay mode
+    */
     int delay_mode;
 public:
-    // decorate MVP provider and an IMU
+    /**
+    * @brief Decorate MVP provider and an IMU
+    * @param imu IMU object pointer
+    * @param delay_mode How to process data?
+    * @see DelayMode
+    */
     IMUMVPDecorator(IMU* imu, int delay_mode = DELAY_NONE);
 
-    // delay mode
-    // None: use current IMU readings
-    // All: use old (-latency in time) IMU readings
-    // Correct: transform resulting MVP by M_now - M_picture_taken
-    enum DelayMode {DELAY_NONE, DELAY_ALL, DELAY_CORRECT};
+    /**
+    * @brief Delay mode enum
+    */
+    enum DelayMode {
+        /// @brief Use current IMU readings
+        DELAY_NONE,
+
+        /// @brief Use old (-latency in time) IMU readings
+        DELAY_ALL,
+
+        /// @brief Transform resulting MVP by M_now - M_picture_taken
+        DELAY_CORRECT
+
+    };
 
 public slots:
-    // update resulting MVP matrix
+    /**
+    * @brief Update resulting MVP matrix
+    */
     void updatePose();
 
-    // set matrices which to decorate
-    // with high-frequency IMU updates
+    /**
+    * @brief Set matrices which to decorate with high-frequency IMU updates
+    * @param p P matrix
+    */
     void setP(PipelineContainer<QMatrix4x4> p);
+
+    /**
+    * @brief Set matrices which to decorate with high-frequency IMU updates
+    * @param mv MV matrix
+    */
+
     void setMV(PipelineContainer<QMatrix4x4> mv);
 
-    // check if no MVP matrix obtained
-    // for too long
+    /**
+    * @brief Check if no MVP matrix obtained for too long
+    */
     void checkIfTooLong();
 
-    // latency of MVP matrix
+    /**
+    * @brief Latency of MVP matrix
+    * @param latency latency in ms
+    */
     void setMVPLatency(double latency);
 
-    // set imu rotation
+    /**
+    * @brief Set IMU rotation
+    * @param imu_rotation rotation by IMU now
+    */
     void IMUUpdated(QQuaternion imu_rotation);
 };
 
 #endif // IMUMVPDECORATOR_H
+
+
