@@ -78,7 +78,9 @@ SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
     $$PWD/src/utils/latencycalculator.cpp \
     $$PWD/src/imagebackend/delayfilter.cpp \
     $$PWD/src/imagebackend/framesdelaycalculator.cpp \
-    $$PWD/src/utils/qlinkedlistat.cpp
+    $$PWD/src/utils/qlinkedlistat.cpp \
+    $$PWD/src/imagebackend/nv21videofilter.cpp \
+    $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
 
 HEADERS += \
     $$PWD/src/imagebackend/opencvbackend.h \
@@ -129,7 +131,9 @@ HEADERS += \
     $$PWD/src/utils/latencycalculator.h \
     $$PWD/src/imagebackend/delayfilter.h \
     $$PWD/src/imagebackend/framesdelaycalculator.h \
-    $$PWD/src/utils/qlinkedlistat.h
+    $$PWD/src/utils/qlinkedlistat.h \
+    $$PWD/src/imagebackend/nv21videofilter.h \
+    $$PWD/src/imagebackend/nv21videofilterrunnable.h
 
 QML_SOURCES += \
     $$PWD/src/ARComponent.qml \
