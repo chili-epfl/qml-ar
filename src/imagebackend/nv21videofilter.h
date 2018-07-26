@@ -13,6 +13,8 @@
 
 /**
  * @brief The NV21VideoFilter class manages NV21VideoFilterRunnable
+ *
+ * Based on https://github.com/aseba-community/thymio-ar/blob/eb942a5e96761303512a07dc6e5057749ff8939e/vision-video-filter.h
  */
 
 class NV21VideoFilter : public QAbstractVideoFilter

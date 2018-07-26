@@ -16,6 +16,8 @@ class NV21VideoFilter;
 
 /**
  * @brief The NV21VideoFilterRunnable class converts NV21 format to RGB888
+ *
+ * Based on https://github.com/aseba-community/thymio-ar/blob/eb942a5e96761303512a07dc6e5057749ff8939e/vision-video-filter.h
  */
 
 class NV21VideoFilterRunnable : public QVideoFilterRunnable
