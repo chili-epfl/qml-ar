@@ -10,12 +10,12 @@
 #include "nv21videofilter.h"
 #include <QImage>
 
-NV21VideoFilterRunnable::VisionVideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr)
+NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr)
 {
 
 }
 
-NV21VideoFilterRunnable::~VisionVideoFilterRunnable()
+NV21VideoFilterRunnable::~NV21VideoFilterRunnable()
 {
     if (gl != nullptr) {
         gl->glDeleteFramebuffers(1, &framebuffer);
@@ -26,6 +26,11 @@ NV21VideoFilterRunnable::~VisionVideoFilterRunnable()
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame, const QVideoSurfaceFormat &surfaceFormat, QVideoFilterRunnable::RunFlags flags)
 {
     Q_UNUSED(surfaceFormat); Q_UNUSED(flags);
+    return run(inputFrame);
+}
+
+QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
+{
     auto size(inputFrame->size());
     auto height(size.height());
     auto width(size.width());

@@ -13,6 +13,7 @@
 #include "androidfilter.h"
 #include "delayfilter.h"
 #include "threadedqmlar.h"
+#include "nv21videofilter.h"
 
 void QMLARQMLPlugin::registerTypes(const char *uri)
 {
@@ -20,6 +21,7 @@ void QMLARQMLPlugin::registerTypes(const char *uri)
     qmlRegisterSingletonType<QMLAR>("AR", 1, 0, "AR", get_qml_ar);
     qmlRegisterType<AndroidFilter>("AR", 1, 0, "AndroidFilter");
     qmlRegisterType<DelayFilter>("AR", 1, 0, "DelayFilter");
+    qmlRegisterType<NV21VideoFilter>("AR", 1, 0, "NV21VideoFilter");
 }
 
 QObject *QMLARQMLPlugin::get_qml_ar(QQmlEngine *engine, QJSEngine *scriptEngine)

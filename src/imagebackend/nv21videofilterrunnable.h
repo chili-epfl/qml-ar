@@ -27,9 +27,9 @@ public:
      * @brief VisionVideoFilterRunnable constructor
      * @param filter parent manager object
      */
-    explicit VisionVideoFilterRunnable(NV21VideoFilter* filter);
+    explicit NV21VideoFilterRunnable(NV21VideoFilter* filter);
 
-    ~VisionVideoFilterRunnable();
+    ~NV21VideoFilterRunnable();
 
     /**
      * @brief Process single frame
@@ -39,6 +39,13 @@ public:
      * @return Frame is returned unchanged
      */
     QVideoFrame run(QVideoFrame* input, const QVideoSurfaceFormat& surfaceFormat, RunFlags flags);
+
+    /**
+     * @brief Process single frame
+     * @param input Input frame from camera
+     * @return Frame is returned unchanged
+     */
+    QVideoFrame run(QVideoFrame* input);
 private:
 
     /**

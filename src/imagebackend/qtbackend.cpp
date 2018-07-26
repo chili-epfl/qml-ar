@@ -110,9 +110,6 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     TimeLoggerThroughput("%s", "Received image from camera");
 
-    NV21VideoFilterRunnable runn;
-    runn.run(*frame, QVideoSurfaceFormat::BottomToTop, QVideoFilterRunnable::LastInChain);
-
     // not converting frame if thread is busy
     if(!watcher.isRunning())
     {
