@@ -10,6 +10,9 @@
 #define NV21VIDEOFILTER_H
 
 #include <QAbstractVideoFilter>
+#include "imageproviderasync.h"
+
+class NV21VideoFilterRunnable;
 
 /**
  * @brief The NV21VideoFilter class manages NV21VideoFilterRunnable
@@ -31,6 +34,8 @@ public:
      * @return NV21VideoFilterRunnable object
      */
     QVideoFilterRunnable* createFilterRunnable();
+
+    static NV21VideoFilterRunnable* runnable;
 };
 
 #endif // NV21VIDEOFILTER_H

@@ -9,6 +9,8 @@
 #include "nv21videofilter.h"
 #include "nv21videofilterrunnable.h"
 
+NV21VideoFilterRunnable* NV21VideoFilter::runnable = nullptr;
+
 NV21VideoFilter::NV21VideoFilter(QObject *parent) : QAbstractVideoFilter(parent)
 {
 
@@ -16,5 +18,6 @@ NV21VideoFilter::NV21VideoFilter(QObject *parent) : QAbstractVideoFilter(parent)
 
 QVideoFilterRunnable *NV21VideoFilter::createFilterRunnable()
 {
-    return new NV21VideoFilterRunnable(this);
+    runnable = new NV21VideoFilterRunnable(this);
+    return runnable;
 }

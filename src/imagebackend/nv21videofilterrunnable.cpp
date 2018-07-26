@@ -9,6 +9,8 @@
 #include "nv21videofilterrunnable.h"
 #include "nv21videofilter.h"
 #include <QImage>
+#include <cstdio>
+#include <QTextStream>
 
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr)
 {
@@ -35,7 +37,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     auto height(size.height());
     auto width(size.width());
 
-    auto outputHeight = 20;//height;
+    auto outputHeight = 600;//height;
     auto outputWidth(outputHeight * width / height);
 
     Q_ASSERT(inputFrame->handleType() == QAbstractVideoBuffer::HandleType::GLTextureHandle);
@@ -118,13 +120,13 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     gl->glDisable(GL_BLEND);
     gl->glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    QImage result(outputWidth, outputHeight, QImage::Format_Grayscale8);
+    image = QImage(outputWidth, outputHeight, QImage::Format_Grayscale8);
 
     gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
     gl->glReadPixels(0, 0, outputWidth, outputHeight, QOpenGLTexture::Red, QOpenGLTexture::UInt8,
-                     result.bits());
+                     image.bits());
 
-    qDebug() << result;
+    image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
 
     return *inputFrame;
 }

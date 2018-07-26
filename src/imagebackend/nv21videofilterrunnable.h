@@ -46,6 +46,8 @@ public:
      * @return Frame is returned unchanged
      */
     QVideoFrame run(QVideoFrame* input);
+
+    QImage image;
 private:
 
     /**
