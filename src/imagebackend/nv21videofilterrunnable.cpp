@@ -52,7 +52,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         auto sampleByPixelF(float(height) / float(outputHeight));
         unsigned int sampleByPixelI(std::ceil(sampleByPixelF));
         auto uvDelta(QVector2D(1, 1) / QVector2D(width, height));
-        auto lumaScaled(QVector3D(0.299, 0.587, 0.114) / (sampleByPixelI * sampleByPixelI));
 
         QString vertex(version);
         vertex += R"(
@@ -70,7 +69,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
             uniform sampler2D image;
             const uint sampleByPixel = %1u;
             const lowp vec2 uvDelta = vec2(%2, %3);
-            const lowp vec3 lumaScaled = vec3(%4, %5, %6);
             out lowp vec3 fragment;
             void main(void) {
                 lowp vec3 sum = vec3(0, 0, 0);
@@ -80,7 +78,11 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                         sum += texture(image, uv).bgr;
                     }
                 }
-                fragment = vec3(dot(sum, lumaScaled),0.0,0.0);
+                lowp float divisor = float(sampleByPixel * sampleByPixel);
+                fragment = vec3(
+                    sum.b / divisor,
+                    sum.g / divisor,
+                    sum.r / divisor);
             }
         )";
 
@@ -88,10 +90,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         program.addShaderFromSourceCode(QOpenGLShader::Fragment, fragment.
                                         arg(sampleByPixelI).
                                         arg(uvDelta.x()).
-                                        arg(uvDelta.y()).
-                                        arg(lumaScaled.x()).
-                                        arg(lumaScaled.y()).
-                                        arg(lumaScaled.z()));
+                                        arg(uvDelta.y()));
         program.link();
         imageLocation = program.uniformLocation("image");
 
