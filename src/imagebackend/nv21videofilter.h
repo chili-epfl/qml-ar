@@ -35,6 +35,9 @@ public:
      */
     QVideoFilterRunnable* createFilterRunnable();
 
+    /**
+     * @brief runnable holds the last Runnable object returned by createFilterRunnable
+     */
     static NV21VideoFilterRunnable* runnable;
 };
 

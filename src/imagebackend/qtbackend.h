@@ -116,11 +116,21 @@ protected:
     */
     QFutureWatcher<QImage> watcher;
 
+    /**
+    * @brief Use output of VideoFilter (gpu-based)?
+    */
+    bool use_gpu = false;
+
 public slots:
     /**
     * @brief Set this image as buffer
     */
     void processQImage(QImage img);
+
+    /**
+    * @brief Set this image as buffer and send it to listeners
+    */
+    void processAndSendQImage(PipelineContainer<QImage> img);
 
     /**
     * @brief Process frame in thread

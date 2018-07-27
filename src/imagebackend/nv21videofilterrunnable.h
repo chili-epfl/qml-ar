@@ -11,6 +11,7 @@
 
 #include <QVideoFilterRunnable>
 #include <QtOpenGL>
+#include "pipelinecontainer.h"
 
 class NV21VideoFilter;
 
@@ -20,8 +21,8 @@ class NV21VideoFilter;
  * Based on https://github.com/aseba-community/thymio-ar/blob/eb942a5e96761303512a07dc6e5057749ff8939e/vision-video-filter.h
  */
 
-class NV21VideoFilterRunnable : public QVideoFilterRunnable
-{
+class NV21VideoFilterRunnable : public QObject, public QVideoFilterRunnable
+{ Q_OBJECT
 public:
     /**
      * @brief VisionVideoFilterRunnable constructor
@@ -79,5 +80,11 @@ private:
      * @brief result buffer
      */
     GLuint renderbuffer;
+
+    // source image id
+    int image_id;
+
+signals:
+    void imageConverted(PipelineContainer<QImage>);
 };
 #endif // NV21VIDEOFILTERRUNNABLE_H

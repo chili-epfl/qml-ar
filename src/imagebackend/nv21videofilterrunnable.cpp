@@ -12,7 +12,7 @@
 #include <cstdio>
 #include <QTextStream>
 
-NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr)
+NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr), image_id(0)
 {
 
 }
@@ -33,6 +33,10 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame, const QVideoSu
 
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 {
+    PipelineContainerInfo image_info = PipelineContainerInfo(image_id);
+    image_id++;
+    image_info.checkpoint("Grabbed");
+
     auto size(inputFrame->size());
     auto height(size.height());
     auto width(size.width());
@@ -41,7 +45,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     auto outputWidth(outputHeight * width / height);
 
     Q_ASSERT(inputFrame->handleType() == QAbstractVideoBuffer::HandleType::GLTextureHandle);
-
 
     if (gl == nullptr) {
         auto context(QOpenGLContext::currentContext());
@@ -119,19 +122,13 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     gl->glDisable(GL_BLEND);
     gl->glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    qDebug() << "outputHeight" << outputHeight << "outputWidth" << outputWidth << "height" << height << "width" << width;
-
     image = QImage(outputWidth, outputHeight, QImage::Format_RGB888);
 
     gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
     gl->glReadPixels(0, 0, outputWidth, outputHeight, QOpenGLTexture::RGB, QOpenGLTexture::UInt8,
                      image.bits());
 
-    static int i = 0;
-    if(i == 10) {
-        image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
-    }
-    i += 1;
+    emit imageConverted(PipelineContainer<QImage>(image.copy(), image_info));
 
     return *inputFrame;
 }

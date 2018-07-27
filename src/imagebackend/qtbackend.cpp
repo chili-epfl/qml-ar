@@ -14,6 +14,7 @@
 #include <QException>
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
+#include "nv21videofilter.h"
 #include "nv21videofilterrunnable.h"
 
 QtCameraBackend::QtCameraBackend(int cam_id) : ImageProviderAsync()
@@ -26,6 +27,7 @@ QtCameraBackend::QtCameraBackend(int cam_id) : ImageProviderAsync()
     need_viewfinder = 1;
     frame_available = 0;
     image_id = 0;
+    use_gpu = true;
     init();
 }
 
@@ -84,6 +86,19 @@ QImage QtCameraBackend::requestImage(const QString &id, QSize *size, const QSize
 QtCameraBackend::~QtCameraBackend() {
 }
 
+void QtCameraBackend::processAndSendQImage(PipelineContainer<QImage> img)
+{
+    buf = img.o();
+
+    qDebug() << "Processed QImage";
+
+    // sending image
+    emit imageAvailable(PipelineContainer<QImage>
+                        (img.o(), img.info().checkpointed("Camera")));
+
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin QtCamera");
+}
+
 void QtCameraBackend::processQImage(QImage img)
 {
     buf = img;
@@ -109,6 +124,19 @@ void QtCameraBackend::handleFinished()
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     TimeLoggerThroughput("%s", "Received image from camera");
+
+    qDebug() << "Processing QVideoFrame";
+
+    // at some point viewfinder and filters should be ready, so it's safe to dereference pointer to the videofilter
+    NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
+    if(runnable && use_gpu) {
+        // switching to videofilter output and disabling videoprobe
+        probe->setSource((QMediaObject*) nullptr);
+        disconnect(probe, SIGNAL(videoFrameProbed(const QVideoFrame &)), this, SLOT(processQVideoFrame(const QVideoFrame &)));
+        connect(runnable, &NV21VideoFilterRunnable::imageConverted, this, &QtCameraBackend::processAndSendQImage, Qt::QueuedConnection);
+        qDebug() << "Switched to VideoFilterInput";
+        return;
+    }
 
     // not converting frame if thread is busy
     if(!watcher.isRunning())
