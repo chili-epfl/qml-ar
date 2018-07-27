@@ -37,7 +37,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     auto height(size.height());
     auto width(size.width());
 
-    auto outputHeight = 600;//height;
+    auto outputHeight = height / 4;
     auto outputWidth(outputHeight * width / height);
 
     Q_ASSERT(inputFrame->handleType() == QAbstractVideoBuffer::HandleType::GLTextureHandle);
@@ -71,7 +71,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
             const uint sampleByPixel = %1u;
             const lowp vec2 uvDelta = vec2(%2, %3);
             const lowp vec3 lumaScaled = vec3(%4, %5, %6);
-            out lowp float fragment;
+            out lowp vec3 fragment;
             void main(void) {
                 lowp vec3 sum = vec3(0, 0, 0);
                 for (uint x = 0u; x < sampleByPixel; ++x) {
@@ -80,7 +80,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                         sum += texture(image, uv).bgr;
                     }
                 }
-                fragment = dot(sum, lumaScaled);
+                fragment = vec3(dot(sum, lumaScaled),0.0,0.0);
             }
         )";
 
@@ -97,7 +97,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
         gl->glGenRenderbuffers(1, &renderbuffer);
         gl->glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-        gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::R8_UNorm, outputWidth, outputHeight);
+        gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::RGB8_UNorm, outputWidth, outputHeight);
         gl->glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
         gl->glGenFramebuffers(1, &framebuffer);
@@ -120,13 +120,19 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     gl->glDisable(GL_BLEND);
     gl->glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    image = QImage(outputWidth, outputHeight, QImage::Format_Grayscale8);
+    qDebug() << "outputHeight" << outputHeight << "outputWidth" << outputWidth << "height" << height << "width" << width;
+
+    image = QImage(outputWidth, outputHeight, QImage::Format_RGB888);
 
     gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    gl->glReadPixels(0, 0, outputWidth, outputHeight, QOpenGLTexture::Red, QOpenGLTexture::UInt8,
+    gl->glReadPixels(0, 0, outputWidth, outputHeight, QOpenGLTexture::RGB, QOpenGLTexture::UInt8,
                      image.bits());
 
-    image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
+    static int i = 0;
+    if(i == 10) {
+        image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
+    }
+    i += 1;
 
     return *inputFrame;
 }
