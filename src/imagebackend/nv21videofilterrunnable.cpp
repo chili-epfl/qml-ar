@@ -233,15 +233,18 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
     TimeLoggerLog("%s", "NV12 pixelStore OK");
 
+    image_info = PipelineContainerInfo(image_id);
+    image_id++;
+    image_info.checkpoint("Grabbed");
+
     // this call is very long
     //if(image_id % 5 == 0) {
         gl->glReadPixels(0, 0, image.width(), image.height(), QOpenGLTexture::Red, QOpenGLTexture::UInt8, image.bits());
         //image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
-        TimeLoggerLog("%s", "NV12 readPixels OK");
+        //TimeLoggerLog("%s", "NV12 readPixels OK");
     //}
 
-    image_info = PipelineContainerInfo(image_id);
-    image_id++;
+
     emit imageConverted(PipelineContainer<QImage>
                         (image, image_info.checkpointed("NV21")));
 
