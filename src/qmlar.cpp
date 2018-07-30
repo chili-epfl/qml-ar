@@ -311,30 +311,30 @@ void QMLAR::connectAll()
     qRegisterMetaType<PipelineContainer<QMatrix4x4>>("PipelineContainer<QMatrix4x4>");
     qRegisterMetaType<PipelineContainerInfo>("PipelineContainerInfo");
 
-    connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
-    connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);
+    connect(raw_provider, &ImageProviderAsync::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
+    connect(raw_provider, &ImageProviderAsync::imageAvailable, this, &QMLAR::imageUpdated);
 
     //connect(mvp_provider, &MarkerMVPProvider::newMVPMatrix, this, &QMLAR::setMVP);
 
     // camera -> scaler
-    connect(raw_provider, &ImageProviderAsync::imageAvailable, scaler, &ImageScaler::setInput);
+    //connect(raw_provider, &ImageProviderAsync::imageAvailable, scaler, &ImageScaler::setInput);
 
     // camera -> QML
-    connect(scaler, &ImageScaler::imageAvailable, marker_backend, &MarkerBackEnd::setCamera);
+    connect(raw_provider, &ImageProviderAsync::imageAvailable, marker_backend, &MarkerBackEnd::setCamera);
 
     // scaler -> blacken_rest
-    connect(scaler, &ImageScaler::imageAvailable, blacken_rest, &BlackenRest::setInput);
+    connect(raw_provider, &ImageProviderAsync::imageAvailable, blacken_rest, &BlackenRest::setInput);
 
     // scaler -> resolution
-    connect(scaler, &ImageScaler::imageAvailable, perspective_camera, &CalibratedCamera::setResolutionImage);
+    connect(raw_provider, &ImageProviderAsync::imageAvailable, perspective_camera, &CalibratedCamera::setResolutionImage);
 
 //    // blacken_rest -> blobs
 //    connect(blacken_rest, &BlackenRest::imageAvailable, blob_detector, &BlobDetector::setInput);
 
     // blacken_rest -> threshold
-    connect(blacken_rest, &BlackenRest::imageAvailable, hue_threshold, &HueThreshold::setInput);
+    //connect(blacken_rest, &BlackenRest::imageAvailable, hue_threshold, &HueThreshold::setInput);
 
-    connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+    connect(blacken_rest, &BlackenRest::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
     // blobs -> markers
     //connect(blob_detector, &BlobDetector::imageAvailable, detector, &UchiyaMarkerDetector::setInput);

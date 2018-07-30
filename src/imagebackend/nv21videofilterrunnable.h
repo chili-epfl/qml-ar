@@ -11,6 +11,7 @@
 
 #include <QVideoFilterRunnable>
 #include <QtOpenGL>
+#include <QtConcurrent>
 #include "pipelinecontainer.h"
 
 class NV21VideoFilter;
@@ -29,6 +30,8 @@ public:
      * @param filter parent manager object
      */
     explicit NV21VideoFilterRunnable(NV21VideoFilter* filter);
+
+    NV21VideoFilterRunnable* parent;
 
     ~NV21VideoFilterRunnable();
 
@@ -49,6 +52,8 @@ public:
     QVideoFrame run(QVideoFrame* input);
 
     QImage image;
+    void convert();
+    NV21VideoFilterRunnable(const NV21VideoFilterRunnable &backend);
 private:
 
     /**
@@ -84,7 +89,25 @@ private:
     // source image id
     int image_id;
 
+    PipelineContainerInfo image_info;
+
+    /**
+    * @brief Thread result
+    */
+    QFutureWatcher<void> watcher;
+
+    QOpenGLContext *currentContext;
+
+    QVideoFrame* frame;
+
 signals:
     void imageConverted(PipelineContainer<QImage>);
+
+public slots:
+
+    /**
+    * @brief Called on thread finish
+    */
+    void handleFinished();
 };
 #endif // NV21VIDEOFILTERRUNNABLE_H
