@@ -14,6 +14,28 @@
 #include <cstdio>
 #include <QTextStream>
 
+class TextureVideoBuffer : public QAbstractVideoBuffer
+{
+public:
+    TextureVideoBuffer(GLuint textureId)
+        : QAbstractVideoBuffer(GLTextureHandle)
+        , m_textureId(textureId)
+    {}
+
+    ~TextureVideoBuffer() {}
+
+    MapMode mapMode() const { return NotMapped; }
+    uchar *map(MapMode, int*, int*) { return 0; }
+    void unmap() {}
+
+    QVariant handle() const
+    {
+        return QVariant::fromValue<unsigned int>(m_textureId);
+    }
+
+private:
+    GLuint m_textureId;
+};
 
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& backend) : QObject(nullptr)
 {
@@ -76,7 +98,7 @@ void NV21VideoFilterRunnable::handleFinished()
 
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 {
-    TimeLoggerLog("%s", "NV12 start");
+    TimeLoggerLog("%s", "NV21 start");
 
     auto size(inputFrame->size());
     auto height(size.height());
@@ -85,21 +107,21 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     auto outputHeight = height / 4;
     auto outputWidth(outputHeight * width / height);
 
-    //TimeLoggerLog("%s", "NV12 auto OK");
+    //TimeLoggerLog("%s", "NV21 auto OK");
 
     Q_ASSERT(inputFrame->handleType() == QAbstractVideoBuffer::HandleType::GLTextureHandle);
 
-    //TimeLoggerLog("%s", "NV12 assert OK");
+    //TimeLoggerLog("%s", "NV21 assert OK");
 
     if (gl == nullptr) {
-        //TimeLoggerLog("%s", "NV12 need GL...");
+        //TimeLoggerLog("%s", "NV21 need GL...");
         auto context(QOpenGLContext::currentContext());
 
-        //TimeLoggerLog("%s %d", "NV12 Context OK", context);
+        //TimeLoggerLog("%s %d", "NV21 Context OK", context);
 
         gl = context->extraFunctions();
 
-        //TimeLoggerLog("%s", "NV12 extra OK");
+        //TimeLoggerLog("%s", "NV21 extra OK");
 
         auto version(context->isOpenGLES() ? "#version 300 es\n" : "#version 130\n");
 
@@ -205,7 +227,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         gl->glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    //TimeLoggerLog("%s", "NV12 context OK");
+    //TimeLoggerLog("%s", "NV21 context OK");
 
     gl->glActiveTexture(GL_TEXTURE0);
     gl->glBindTexture(QOpenGLTexture::Target2D, inputFrame->handle().toUInt());
@@ -221,37 +243,59 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     gl->glDisable(GL_BLEND);
     gl->glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    //TimeLoggerLog("%s", "NV12 convert OK"); // takes 60ms to the end from here, <1 from top.
+    //TimeLoggerLog("%s", "NV21 convert OK"); // takes 60ms to the end from here, <1 from top.
 
     if(image.width() == 0) {
         image = QImage(outputWidth, outputHeight, QImage::Format_Grayscale8);
     }
 
-    //TimeLoggerLog("%s", "NV12 image OK");
+    //TimeLoggerLog("%s", "NV21 image OK");
 
     gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-    TimeLoggerLog("%s", "NV12 pixelStore OK");
+    TimeLoggerLog("%s", "NV21 pixelStore OK");
 
     image_info = PipelineContainerInfo(image_id);
     image_id++;
     image_info.checkpoint("Grabbed");
 
-    gl->glActiveTexture(GL_TEXTURE0);
+    //gl->glActiveTexture(GL_TEXTURE0);
     //gl->glBindTexture(QOpenGLTexture::Target2D, inputFrame->handle().toUInt());
-    gl->glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::R8_UNorm, 0, 0, 500, 500, 0);
+
 
 
     // this call is very long
     //if(image_id % 5 == 0) {
         //gl->glReadPixels(0, 0, image.width(), image.height(), QOpenGLTexture::Red, QOpenGLTexture::UInt8, image.bits());
         //image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
-        //TimeLoggerLog("%s", "NV12 readPixels OK");
+        //TimeLoggerLog("%s", "NV21 readPixels OK");
     //}
+
+
+    // Create one OpenGL texture
+    GLuint textureID;
+    gl->glGenTextures(1, &textureID);
+
+    TimeLoggerLog("%s %d", "NV21 gentexture OK", textureID);
+
+    // "Bind" the newly created texture : all future texture functions will modify this texture
+    gl->glBindTexture(GL_TEXTURE_2D, textureID);
+    gl->glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::R8_UNorm, 0, 0, 100, 100, 0);
+
+    TimeLoggerLog("%s", "NV21 copyteximage OK");
+
+    QVideoFrame frame = QVideoFrame(new TextureVideoBuffer(textureID),
+                                    QSize(outputWidth, outputHeight),
+                                    inputFrame->pixelFormat());
+                                    //QVideoFrame::Format_Y8);
+
+    TimeLoggerLog("%s", "NV21 frame OK");
 
 
     emit imageConverted(PipelineContainer<QImage>
                         (image, image_info.checkpointed("NV21")));
+
+    return frame;
 
 //    if(!watcher.isRunning()) {
 //        image_info = PipelineContainerInfo(image_id);
@@ -260,7 +304,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 //        watcher.setFuture(future);
 //    }
 
-    //TimeLoggerLog("%s", "NV12 sent");
+    //TimeLoggerLog("%s", "NV21 sent");
 
     return *inputFrame;
 }
