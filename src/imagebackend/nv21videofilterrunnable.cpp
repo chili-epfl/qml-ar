@@ -237,9 +237,14 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     image_id++;
     image_info.checkpoint("Grabbed");
 
+    gl->glActiveTexture(GL_TEXTURE0);
+    //gl->glBindTexture(QOpenGLTexture::Target2D, inputFrame->handle().toUInt());
+    gl->glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::R8_UNorm, 0, 0, 500, 500, 0);
+
+
     // this call is very long
     //if(image_id % 5 == 0) {
-        gl->glReadPixels(0, 0, image.width(), image.height(), QOpenGLTexture::Red, QOpenGLTexture::UInt8, image.bits());
+        //gl->glReadPixels(0, 0, image.width(), image.height(), QOpenGLTexture::Red, QOpenGLTexture::UInt8, image.bits());
         //image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
         //TimeLoggerLog("%s", "NV12 readPixels OK");
     //}
