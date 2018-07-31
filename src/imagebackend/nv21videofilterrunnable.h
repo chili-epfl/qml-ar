@@ -9,6 +9,8 @@
 #ifndef NV21VIDEOFILTERRUNNABLE_H
 #define NV21VIDEOFILTERRUNNABLE_H
 
+#define private public
+#define protected public
 #include <QVideoFilterRunnable>
 #include <QtOpenGL>
 #include <QtConcurrent>
@@ -101,6 +103,8 @@ private:
     QVideoFrame* frame;
 
     GLuint textureID;
+
+    QOpenGLFramebufferObject obj;
 
 signals:
     void imageConverted(PipelineContainer<QImage>);

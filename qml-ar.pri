@@ -2,7 +2,7 @@
 # Name of the application
 
 # Qt configuration for Quick applications
-QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender sensors concurrent
+QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender sensors concurrent multimedia-private
 CONFIG += qt c++11 nostrip
 
 # turning on optimization

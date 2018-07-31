@@ -12,31 +12,115 @@
 #include "timelogger.h"
 #include <QImage>
 #include <QOpenGLContext>
+#include <qvideoframe.h>
 #include <cstdio>
 #include <QTextStream>
+
+QImage imageWrapper(const QVideoFrame &frame)
+{
+    if (frame.handleType() == QAbstractVideoBuffer::GLTextureHandle) {
+        // Slow and inefficient path. Ideally what's on the GPU should remain on the GPU, instead of readbacks like this.
+        QImage img(frame.width(), frame.height(), QImage::Format_RGBA8888);
+        GLuint textureId = frame.handle().toUInt();
+        QOpenGLContext *ctx = QOpenGLContext::currentContext();
+        QOpenGLFunctions *f = ctx->functions();
+        GLuint fbo;
+        f->glGenFramebuffers(1, &fbo);
+        GLuint prevFbo;
+        f->glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *) &prevFbo);
+        f->glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        f->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0);
+        f->glReadPixels(0, 0, frame.width(), frame.height(), GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
+        f->glBindFramebuffer(GL_FRAMEBUFFER, prevFbo);
+        return img;
+    } else
+    {
+        if (!frame.isReadable()) {
+            qWarning("imageFromVideoFrame: No mapped image data available for read");
+            return QImage();
+        }
+
+        QImage::Format fmt = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
+        if (fmt != QImage::Format_Invalid)
+            return QImage(frame.bits(), frame.width(), frame.height(), fmt);
+
+        qWarning("imageFromVideoFrame: No matching QImage format");
+    }
+
+    return QImage();
+}
+
+
+class QVideoFramePrivate : public QSharedData
+{
+public:
+    QVideoFramePrivate()
+        : startTime(-1)
+        , endTime(-1)
+        , mappedBytes(0)
+        , planeCount(0)
+        , pixelFormat(QVideoFrame::Format_Invalid)
+        , fieldType(QVideoFrame::ProgressiveFrame)
+        , buffer(0)
+        , mappedCount(0)
+    {
+        memset(data, 0, sizeof(data));
+        memset(bytesPerLine, 0, sizeof(bytesPerLine));
+    }
+
+    QVideoFramePrivate(const QSize &size, QVideoFrame::PixelFormat format)
+        : size(size)
+        , startTime(-1)
+        , endTime(-1)
+        , mappedBytes(0)
+        , planeCount(0)
+        , pixelFormat(format)
+        , fieldType(QVideoFrame::ProgressiveFrame)
+        , buffer(0)
+        , mappedCount(0)
+    {
+        memset(data, 0, sizeof(data));
+        memset(bytesPerLine, 0, sizeof(bytesPerLine));
+    }
+
+    ~QVideoFramePrivate()
+    {
+        if (buffer)
+            buffer->release();
+    }
+
+    QSize size;
+    qint64 startTime;
+    qint64 endTime;
+    uchar *data[4];
+    int bytesPerLine[4];
+    int mappedBytes;
+    int planeCount;
+    QVideoFrame::PixelFormat pixelFormat;
+    QVideoFrame::FieldType fieldType;
+    QAbstractVideoBuffer *buffer;
+    int mappedCount;
+    QMutex mapMutex;
+    QVariantMap metadata;
+
+private:
+    Q_DISABLE_COPY(QVideoFramePrivate)
+};
+
 
 class TextureVideoBuffer : public QAbstractVideoBuffer
 {
 public:
-    TextureVideoBuffer(GLuint textureId)
-        : QAbstractVideoBuffer(GLTextureHandle)
-        , m_textureId(textureId)
-    {}
-
-    ~TextureVideoBuffer() {}
-
+    TextureVideoBuffer(uint id) : QAbstractVideoBuffer(GLTextureHandle), m_id(id) { }
     MapMode mapMode() const { return NotMapped; }
-    uchar *map(MapMode, int*, int*) { return 0; }
-    void unmap() {}
-
-    QVariant handle() const
-    {
-        return QVariant::fromValue<unsigned int>(m_textureId);
-    }
+    uchar *map(MapMode, int *, int *) { return 0; }
+    void unmap() { }
+    QVariant handle() const { return QVariant::fromValue<uint>(m_id); }
 
 private:
-    GLuint m_textureId;
+    GLuint m_id;
 };
+
 
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& backend) : QObject(nullptr)
 {
@@ -96,6 +180,12 @@ void NV21VideoFilterRunnable::handleFinished()
 
     TimeLoggerThroughput("%s", "[ANALYZE] Begin NV21VideoFilter");
 }
+
+struct QVF {
+  typedef QVideoFramePrivate* QVideoFrame::*type;
+  friend type get(QVF);
+};
+
 
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 {
@@ -282,14 +372,35 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
     TimeLoggerLog("%s", "NV21 copyteximage OK");
 
+    QVideoFramePrivate* priv = (QVideoFramePrivate*) inputFrame->d.data();
+
+    qDebug() << "PRIV" << priv << priv->buffer << typeid(*(priv->buffer)).name() << typeid(priv).name();
+    qDebug() << "PRIVPRIV" << priv->buffer->d_ptr; //0x00
+
+
     QVideoFrame frame = QVideoFrame(new TextureVideoBuffer(textureID),
                                     QSize(outputWidth, outputHeight),
                                     inputFrame->pixelFormat());
                                     //QVideoFrame::Format_Y8);
     //qDebug() << "MAP0" << frame.map(QAbstractVideoBuffer::ReadOnly);
 
+    qDebug() << "MappedCount0" << inputFrame->d->mappedCount; // 0
+    qDebug() << "MappedCount1" << frame.d->mappedCount; // 0
+    //obj.toImage()
+    int planes1 = inputFrame->d->buffer->mapPlanes(QAbstractVideoBuffer::ReadOnly, &inputFrame->d->mappedBytes,
+                                                   inputFrame->d->bytesPerLine, inputFrame->d->data);
+    qDebug() << "Planes1 " << planes1; // 0! because of the AndroidFilter... class TextureBuffer : public QAbstractVideoBuffer!!
+//25AndroidTextureVideoBuffer!!
+
+    int planes = frame.d->buffer->mapPlanes(QAbstractVideoBuffer::ReadOnly, &frame.d->mappedBytes, frame.d->bytesPerLine, frame.d->data);
+    qDebug() << "Planes " << planes; // 0
+
+    qDebug() << "PRIVPRIV1" << frame.d->buffer->d_ptr; // 0
+
+    QImage res = imageWrapper(frame); // works in this thread
+
     //QImage res = QVideoFrameHelpers::VideoFrameBinToImage(frame);
-    //res.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
+    res.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
     TimeLoggerLog("%s", "NV21 frame OK");
 
 

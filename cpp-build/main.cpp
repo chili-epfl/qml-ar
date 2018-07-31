@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     ar.getImageProvider();
     ar.setImageWidth(600);
     ar.setCameraId(1);
+    ar.startCamera();
 
     return app.exec();
 }

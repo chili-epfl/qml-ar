@@ -7,7 +7,7 @@ VideoOutput {
     id: viewfinder
     visible: true
     anchors.fill: parent
-    filters: [androidFilter, nv21filter]//, delayFilter]
+    filters: [nv21filter, androidFilter]//, delayFilter]
     //autoOrientation: true
 
     AndroidFilter {
