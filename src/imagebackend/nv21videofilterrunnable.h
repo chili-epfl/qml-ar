@@ -100,6 +100,8 @@ private:
 
     QVideoFrame* frame;
 
+    GLuint textureID;
+
 signals:
     void imageConverted(PipelineContainer<QImage>);
 

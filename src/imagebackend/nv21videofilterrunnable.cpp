@@ -8,6 +8,7 @@
 
 #include "nv21videofilterrunnable.h"
 #include "nv21videofilter.h"
+#include "qvideoframehelpers.h"
 #include "timelogger.h"
 #include <QImage>
 #include <QOpenGLContext>
@@ -225,6 +226,10 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         gl->glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         gl->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
         gl->glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // Create one OpenGL texture
+        gl->glGenTextures(1, &textureID);
+        TimeLoggerLog("%s %d", "NV21 gentexture OK", textureID);
     }
 
     //TimeLoggerLog("%s", "NV21 context OK");
@@ -271,16 +276,9 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         //TimeLoggerLog("%s", "NV21 readPixels OK");
     //}
 
-
-    // Create one OpenGL texture
-    GLuint textureID;
-    gl->glGenTextures(1, &textureID);
-
-    TimeLoggerLog("%s %d", "NV21 gentexture OK", textureID);
-
     // "Bind" the newly created texture : all future texture functions will modify this texture
     gl->glBindTexture(GL_TEXTURE_2D, textureID);
-    gl->glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::R8_UNorm, 0, 0, 100, 100, 0);
+    gl->glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::R8_UNorm, 0, 0, outputWidth, outputHeight, 0);
 
     TimeLoggerLog("%s", "NV21 copyteximage OK");
 
@@ -288,7 +286,10 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                                     QSize(outputWidth, outputHeight),
                                     inputFrame->pixelFormat());
                                     //QVideoFrame::Format_Y8);
+    //qDebug() << "MAP0" << frame.map(QAbstractVideoBuffer::ReadOnly);
 
+    //QImage res = QVideoFrameHelpers::VideoFrameBinToImage(frame);
+    //res.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
     TimeLoggerLog("%s", "NV21 frame OK");
 
 

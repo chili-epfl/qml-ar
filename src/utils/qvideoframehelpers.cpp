@@ -12,6 +12,8 @@
 #include <QList>
 #include <QVideoFrame>
 #include "yuv2rgb.h"
+#include <QTextStream>
+#include <QDebug>
 
 uchar QVideoFrameHelpers::rgb[MAX_SIZE];
 uchar QVideoFrameHelpers::yuv1[MAX_SIZE];
@@ -85,6 +87,54 @@ void QVideoFrameHelpers::halfYUV(uchar* src, uchar* dst, int w, int h)
             i++;
         }
     }
+}
+
+QImage QVideoFrameHelpers::VideoFrameBinToImage(const QVideoFrame &frameOriginal)
+{
+    TimeLoggerThroughput("%s", "[ANALYZE] Begin FrameConvert");
+    Q_ASSERT(MAX_SIZE >= frameOriginal.width() * frameOriginal.height() * 3);
+
+    // do nothing if no image found
+    if(frameOriginal.width() * frameOriginal.height() == 0) return QImage();
+
+    Q_ASSERT(frameOriginal.width() <= MAX_IMG_SIDE);
+    Q_ASSERT(frameOriginal.height() <= MAX_IMG_SIDE);
+
+    // mapping frame to memory
+    QVideoFrame frame(frameOriginal);
+    frame.map(QAbstractVideoBuffer::ReadOnly);
+
+    // bits of the image as byte array
+    uchar* img = (uchar*) frame.bits();
+
+    // .. and size
+    int w = frameOriginal.width();
+    int h = frameOriginal.height();
+
+    qDebug() << "MAP" << img << w << h;
+
+    // the resulting QImage
+    QImage image(img,
+                 w,
+                 h, QImage::Format_Grayscale8);
+
+    for(int i = 0; i < h; i++) {
+        QString s;
+        QTextStream ss(&s);
+        for(int j = 0; j < w; j++) {
+            ss << img[i * w + j];
+        }
+        qDebug() << s;
+    }
+
+    // unmapping source from memory
+    frame.unmap();
+
+    QImage result = image.copy();
+
+    TimeLoggerThroughput("%s", "[ANALYZE] End FrameConvert");
+
+    return(result);
 }
 
 QImage QVideoFrameHelpers::VideoFrameToImage(const QVideoFrame &frameOriginal)
