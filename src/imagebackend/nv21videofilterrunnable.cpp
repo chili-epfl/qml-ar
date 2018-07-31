@@ -16,112 +16,6 @@
 #include <cstdio>
 #include <QTextStream>
 
-QImage imageWrapper(const QVideoFrame &frame)
-{
-    if (frame.handleType() == QAbstractVideoBuffer::GLTextureHandle) {
-        // Slow and inefficient path. Ideally what's on the GPU should remain on the GPU, instead of readbacks like this.
-        QImage img(frame.width(), frame.height(), QImage::Format_RGBA8888);
-        GLuint textureId = frame.handle().toUInt();
-        QOpenGLContext *ctx = QOpenGLContext::currentContext();
-        QOpenGLFunctions *f = ctx->functions();
-        GLuint fbo;
-        f->glGenFramebuffers(1, &fbo);
-        GLuint prevFbo;
-        f->glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *) &prevFbo);
-        f->glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-        f->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0);
-        f->glReadPixels(0, 0, frame.width(), frame.height(), GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
-        f->glBindFramebuffer(GL_FRAMEBUFFER, prevFbo);
-        return img;
-    } else
-    {
-        if (!frame.isReadable()) {
-            qWarning("imageFromVideoFrame: No mapped image data available for read");
-            return QImage();
-        }
-
-        QImage::Format fmt = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
-        if (fmt != QImage::Format_Invalid)
-            return QImage(frame.bits(), frame.width(), frame.height(), fmt);
-
-        qWarning("imageFromVideoFrame: No matching QImage format");
-    }
-
-    return QImage();
-}
-
-
-class QVideoFramePrivate : public QSharedData
-{
-public:
-    QVideoFramePrivate()
-        : startTime(-1)
-        , endTime(-1)
-        , mappedBytes(0)
-        , planeCount(0)
-        , pixelFormat(QVideoFrame::Format_Invalid)
-        , fieldType(QVideoFrame::ProgressiveFrame)
-        , buffer(0)
-        , mappedCount(0)
-    {
-        memset(data, 0, sizeof(data));
-        memset(bytesPerLine, 0, sizeof(bytesPerLine));
-    }
-
-    QVideoFramePrivate(const QSize &size, QVideoFrame::PixelFormat format)
-        : size(size)
-        , startTime(-1)
-        , endTime(-1)
-        , mappedBytes(0)
-        , planeCount(0)
-        , pixelFormat(format)
-        , fieldType(QVideoFrame::ProgressiveFrame)
-        , buffer(0)
-        , mappedCount(0)
-    {
-        memset(data, 0, sizeof(data));
-        memset(bytesPerLine, 0, sizeof(bytesPerLine));
-    }
-
-    ~QVideoFramePrivate()
-    {
-        if (buffer)
-            buffer->release();
-    }
-
-    QSize size;
-    qint64 startTime;
-    qint64 endTime;
-    uchar *data[4];
-    int bytesPerLine[4];
-    int mappedBytes;
-    int planeCount;
-    QVideoFrame::PixelFormat pixelFormat;
-    QVideoFrame::FieldType fieldType;
-    QAbstractVideoBuffer *buffer;
-    int mappedCount;
-    QMutex mapMutex;
-    QVariantMap metadata;
-
-private:
-    Q_DISABLE_COPY(QVideoFramePrivate)
-};
-
-
-class TextureVideoBuffer : public QAbstractVideoBuffer
-{
-public:
-    TextureVideoBuffer(uint id) : QAbstractVideoBuffer(GLTextureHandle), m_id(id) { }
-    MapMode mapMode() const { return NotMapped; }
-    uchar *map(MapMode, int *, int *) { return 0; }
-    void unmap() { }
-    QVariant handle() const { return QVariant::fromValue<uint>(m_id); }
-
-private:
-    GLuint m_id;
-};
-
-
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& backend) : QObject(nullptr)
 {
     this->parent = (NV21VideoFilterRunnable*) &backend;
@@ -140,7 +34,7 @@ NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f)
 NV21VideoFilterRunnable::~NV21VideoFilterRunnable()
 {
     if (gl != nullptr) {
-        gl->glDeleteFramebuffers(1, &framebuffer);
+        //gl->glDeleteFramebuffers(1, &framebuffer);
         gl->glDeleteRenderbuffers(1, &renderbuffer);
     }
 }
@@ -152,28 +46,25 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame, const QVideoSu
 }
 
 void NV21VideoFilterRunnable::convert() {
-    QVideoFrame* inputFrame = parent->frame;
     QWindow* surf = new QWindow;
     surf->setSurfaceType(QWindow::OpenGLSurface);
-    //Needs geometry to be a valid surface, but size is not important
-    surf->setGeometry(-1, -1, 1, 1);
+    surf->setFormat(parent->currentContext->format());
+    surf->setScreen(parent->currentContext->screen());
     surf->create();
 
-
     QOpenGLContext* context = new QOpenGLContext;
-    context->setFormat(surf->requestedFormat());
+    context->setFormat(parent->currentContext->format());
+    context->setScreen(parent->currentContext->screen());
     context->setShareContext(parent->currentContext);
     context->create();
     context->makeCurrent(surf);
 
-
-
-    parent->image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
+    parent->image = parent->obj->toImage();//.convertToFormat(QImage::Format_Grayscale8);
+    //parent->image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
 }
 
 void NV21VideoFilterRunnable::handleFinished()
 {
-    return;
     // sending image
     emit imageConverted(PipelineContainer<QImage>
                         (image, image_info.checkpointed("NV21")));
@@ -294,8 +185,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                         fragment = 1.0;
                     }
                     else fragment = 0.0;
-
-                //fragment = rgb;
             }
         )";
 
@@ -312,17 +201,15 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::R8_UNorm, outputWidth, outputHeight);
         gl->glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-        gl->glGenFramebuffers(1, &framebuffer);
-        gl->glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        //gl->glGenFramebuffers(1, &framebuffer);
+        obj = new QOpenGLFramebufferObject(outputWidth, outputHeight);
+        Q_ASSERT(obj->bind());
+        //gl->glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         gl->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
         gl->glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        // Create one OpenGL texture
-        gl->glGenTextures(1, &textureID);
-        TimeLoggerLog("%s %d", "NV21 gentexture OK", textureID);
     }
 
-    //TimeLoggerLog("%s", "NV21 context OK");
+    TimeLoggerLog("%s", "NV21 context OK");
 
     gl->glActiveTexture(GL_TEXTURE0);
     gl->glBindTexture(QOpenGLTexture::Target2D, inputFrame->handle().toUInt());
@@ -333,90 +220,20 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     program.bind();
     program.setUniformValue(imageLocation, 0);
     program.enableAttributeArray(0);
-    gl->glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    gl->glBindFramebuffer(GL_FRAMEBUFFER, obj->handle());
     gl->glViewport(0, 0, outputWidth, outputHeight);
     gl->glDisable(GL_BLEND);
     gl->glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    //TimeLoggerLog("%s", "NV21 convert OK"); // takes 60ms to the end from here, <1 from top.
-
-    if(image.width() == 0) {
-        image = QImage(outputWidth, outputHeight, QImage::Format_Grayscale8);
-    }
-
-    //TimeLoggerLog("%s", "NV21 image OK");
-
     gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-    TimeLoggerLog("%s", "NV21 pixelStore OK");
+    if(!watcher.isRunning()) {
+        image_info = PipelineContainerInfo(image_id);
+        image_id++;
+        QFuture<void> future = QtConcurrent::run(*this, &NV21VideoFilterRunnable::convert);
+        watcher.setFuture(future);
+    }
 
-    image_info = PipelineContainerInfo(image_id);
-    image_id++;
-    image_info.checkpoint("Grabbed");
-
-    //gl->glActiveTexture(GL_TEXTURE0);
-    //gl->glBindTexture(QOpenGLTexture::Target2D, inputFrame->handle().toUInt());
-
-
-
-    // this call is very long
-    //if(image_id % 5 == 0) {
-        //gl->glReadPixels(0, 0, image.width(), image.height(), QOpenGLTexture::Red, QOpenGLTexture::UInt8, image.bits());
-        //image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
-        //TimeLoggerLog("%s", "NV21 readPixels OK");
-    //}
-
-    // "Bind" the newly created texture : all future texture functions will modify this texture
-    gl->glBindTexture(GL_TEXTURE_2D, textureID);
-    gl->glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::R8_UNorm, 0, 0, outputWidth, outputHeight, 0);
-
-    TimeLoggerLog("%s", "NV21 copyteximage OK");
-
-    QVideoFramePrivate* priv = (QVideoFramePrivate*) inputFrame->d.data();
-
-    qDebug() << "PRIV" << priv << priv->buffer << typeid(*(priv->buffer)).name() << typeid(priv).name();
-    qDebug() << "PRIVPRIV" << priv->buffer->d_ptr; //0x00
-
-
-    QVideoFrame frame = QVideoFrame(new TextureVideoBuffer(textureID),
-                                    QSize(outputWidth, outputHeight),
-                                    inputFrame->pixelFormat());
-                                    //QVideoFrame::Format_Y8);
-    //qDebug() << "MAP0" << frame.map(QAbstractVideoBuffer::ReadOnly);
-
-    qDebug() << "MappedCount0" << inputFrame->d->mappedCount; // 0
-    qDebug() << "MappedCount1" << frame.d->mappedCount; // 0
-    //obj.toImage()
-    int planes1 = inputFrame->d->buffer->mapPlanes(QAbstractVideoBuffer::ReadOnly, &inputFrame->d->mappedBytes,
-                                                   inputFrame->d->bytesPerLine, inputFrame->d->data);
-    qDebug() << "Planes1 " << planes1; // 0! because of the AndroidFilter... class TextureBuffer : public QAbstractVideoBuffer!!
-//25AndroidTextureVideoBuffer!!
-
-    int planes = frame.d->buffer->mapPlanes(QAbstractVideoBuffer::ReadOnly, &frame.d->mappedBytes, frame.d->bytesPerLine, frame.d->data);
-    qDebug() << "Planes " << planes; // 0
-
-    qDebug() << "PRIVPRIV1" << frame.d->buffer->d_ptr; // 0
-
-    QImage res = imageWrapper(frame); // works in this thread
-
-    //QImage res = QVideoFrameHelpers::VideoFrameBinToImage(frame);
-    res.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append("/converted.png"));
-    TimeLoggerLog("%s", "NV21 frame OK");
-
-
-    emit imageConverted(PipelineContainer<QImage>
-                        (image, image_info.checkpointed("NV21")));
-
-    return frame;
-
-//    if(!watcher.isRunning()) {
-//        image_info = PipelineContainerInfo(image_id);
-//        image_id++;
-//        QFuture<void> future = QtConcurrent::run(*this, &NV21VideoFilterRunnable::convert);
-//        watcher.setFuture(future);
-//    }
-
-    //TimeLoggerLog("%s", "NV21 sent");
+    TimeLoggerLog("%s", "NV21 sent");
 
     return *inputFrame;
 }

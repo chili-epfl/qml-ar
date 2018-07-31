@@ -104,7 +104,7 @@ private:
 
     GLuint textureID;
 
-    QOpenGLFramebufferObject obj;
+    QOpenGLFramebufferObject* obj;
 
 signals:
     void imageConverted(PipelineContainer<QImage>);
