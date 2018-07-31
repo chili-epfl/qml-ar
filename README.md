@@ -32,11 +32,12 @@ Linux:
 3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod) *Up to 5 cores required, GPU is used for image rendering*
 
 ## Installation
-1. `git submodule init && git submodule update`
-2. Create a symlink called `opencv-android` pointing to the OpenCV for Android
-3. `mkdir build_linux; cd build_linux; qmake ..; make -j10 install`
-4. Same for Android, also `export ANDROID_NDK_ROOT=/path/to/ndk` required
-5. Open Qt Creator, open `example/ar-chest.pro`, compile and run on Desktop/Android
+1. `git clone git@github.com:chili-epfl/qml-ar.git` (master branch is usually working)
+2. `cd qml-ar; git submodule init && git submodule update`
+3. Create a symlink called `opencv-android` pointing to the OpenCV for Android
+4. **Linux:** `mkdir build_linux; cd build_linux; qmake ..; make -j10 install`
+5. **Android:** `export ANDROID_NDK_ROOT=/path/to/ndk ; mkdir build_android; cd build_android; qmake ..; make -j10 install` (same as for Linux but with ANDROID_NDK_ROOT variable)
+6. Open Qt Creator, open `example/ar-chest.pro`, compile and run on Desktop/Android
 
 ## Running
 1. Download pdf and print the example file with markers:<br /><a href="/example/demo_sheet/ar_demo_sheet.pdf"><img src="/example/demo_sheet/ar_demo_sheet.png" width="200" /></a>
