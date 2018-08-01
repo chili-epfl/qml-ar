@@ -5,7 +5,7 @@ language: cpp
 os:
   - linux
 
-dist: bionic
+dist: trusty
 
 compiler:
   - gcc
@@ -13,7 +13,7 @@ compiler:
 env:
   global:
   matrix:
-    - QT=510 BREW=@ex PPA=beineri/opt-qt-5.11.1-bionic
+    - QT=510 BREW=@ex PPA=beineri/opt-qt-5.10.1-trusty
 
 addons:
   coverity_scan:
