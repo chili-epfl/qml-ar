@@ -32,6 +32,8 @@ Linux:
 3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod) *Up to 5 cores required, GPU is used for image rendering*
 
 ## Installation
+[![Build Status](https://travis-ci.org/chili-epfl/qml-ar.svg?branch=master)](https://travis-ci.org/chili-epfl/qml-ar)
+
 1. `git clone git@github.com:chili-epfl/qml-ar.git` (master branch is usually working)
 2. `cd qml-ar; git submodule init && git submodule update`
 3. Create a symlink called `opencv-android` pointing to the OpenCV for Android
