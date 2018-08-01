@@ -34,7 +34,7 @@ before_install:
 
 install:
   - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" != */opt-* ]] || sudo apt-get -qy install qt${QT}base qt${QT}xmlpatterns libopencv-dev'
-  - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" == */opt-* ]] || sudo apt-get -qy install qt5-qmake qtbase5-dev libqt5xmlpatterns5-dev qt${QT}quickcontrols qt${QT}multimedia qt${QT}3d qt${QT}sensors'
+  - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" == */opt-* ]] || sudo apt-get -qy install qt5-qmake qtbase5-dev libqt5xmlpatterns5-dev qt${QT}quickcontrols qt${QT}multimedia qt${QT}3d qt${QT}sensors qt${QT}quickcontrols2'
   - qmake -v
 
 before_script:
@@ -45,4 +45,4 @@ before_script:
   - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR"
 
 script:
-  - make -j10 -C "$TRAVIS_BUILD_DIR-build" all
+  - make -j10 -C "$TRAVIS_BUILD_DIR-build" install
