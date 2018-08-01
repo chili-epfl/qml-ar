@@ -3,9 +3,9 @@
 TEMPLATE = app
 
 # including base file
-include(../qml-ar.pri)
+include(../../qml-ar.pri)
 
-TARGET = qml-ar
+TARGET = qml-ar-cpp
 
 # Qt configuration for Quick applications
 QT += multimedia opengl multimediawidgets 3dinput 3drender
@@ -31,6 +31,6 @@ RESOURCES += assets.qrc
 # https://forum.qt.io/topic/69946/qt-android-assets/4
 # https://falsinsoft.blogspot.ch/2017/01/qt-creator-include-additional-files.html
 assets.path = /assets
-assets.files += $$PWD/../example/assets/*
+assets.files += $$PWD/../00_chest/assets/*
 assets.depends += FORCE
 INSTALLS += assets

@@ -4,18 +4,18 @@ This module allows to add an AR component to your QML application simply by impo
 ## Gallery:
 Android:
 <p>
-<img src="/example/screenshots/android1.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/example/screenshots/android2.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/example/screenshots/android3.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/example/screenshots/android4.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/example/screenshots/android_mixed.jpg?raw=true" height="200" alt="Mixed reality output" />
+<img src="/examples/00_chest/screenshots/android1.jpg?raw=true" height="200" alt="Sample application on Android" />
+<img src="/examples/00_chest/screenshots/android2.jpg?raw=true" height="200" alt="Sample application on Android" />
+<img src="/examples/00_chest/screenshots/android3.jpg?raw=true" height="200" alt="Sample application on Android" />
+<img src="/examples/00_chest/screenshots/android4.jpg?raw=true" height="200" alt="Sample application on Android" />
+<img src="/examples/00_chest/screenshots/android_mixed.jpg?raw=true" height="200" alt="Mixed reality output" />
 </p>
 
 Linux:
 <p>
-<img src="/example/screenshots/linux1.jpg?raw=true" height="200" alt="Sample application on Linux" />
-<img src="/example/screenshots/linux2.jpg?raw=true" height="200" alt="Sample application on Linux" />
-<img src="/example/screenshots/linux3.jpg?raw=true" height="200" alt="Sample application on Linux" />
+<img src="/examples/00_chest/screenshots/linux1.jpg?raw=true" height="200" alt="Sample application on Linux" />
+<img src="/examples/00_chest/screenshots/linux2.jpg?raw=true" height="200" alt="Sample application on Linux" />
+<img src="/examples/00_chest/screenshots/linux3.jpg?raw=true" height="200" alt="Sample application on Linux" />
 </p>
 
 ## Prerequisites (Common)
@@ -37,10 +37,10 @@ Linux:
 3. Create a symlink called `opencv-android` pointing to the OpenCV for Android
 4. **Linux:** `mkdir build_linux; cd build_linux; qmake ..; make -j10 install`
 5. **Android:** `export ANDROID_NDK_ROOT=/path/to/ndk ; mkdir build_android; cd build_android; qmake ..; make -j10 install` (same as for Linux but with ANDROID_NDK_ROOT variable)
-6. Open Qt Creator, open `example/ar-chest.pro`, compile and run on Desktop/Android
+6. Open Qt Creator, open `examples/00_chest/ar-chest.pro`, compile and run on Desktop/Android
 
 ## Running
-1. Download pdf and print the example file with markers:<br /><a href="/example/demo_sheet/ar_demo_sheet.pdf"><img src="/example/demo_sheet/ar_demo_sheet.png" width="200" /></a>
+1. Download pdf and print the example file with markers:<br /><a href="/examples/00_chest/demo_sheet/ar_demo_sheet.pdf"><img src="/examples/00_chest/demo_sheet/ar_demo_sheet.png" width="200" /></a>
 2. Attach camera to your PC (device 1 is used by default). Point camera towards the printed sheet
 3. A chest from Qt examples and a cuboid should appear
 
@@ -51,7 +51,7 @@ Linux:
 You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
 
 ## Mixed reality
-<img src="/example/screenshots/android_mixed.jpg?raw=true" height="300" alt="Mixed reality output" />
+<img src="/examples/00_chest/screenshots/android_mixed.jpg?raw=true" height="300" alt="Mixed reality output" />
 Mixed reality is supported both on Android and Linux.
 See comments in the files of the example application on how to enable this mode.
 Currently, camera image rendering is done on CPU in this mode, which also results in low resolution and low FPS.
@@ -66,7 +66,7 @@ SM-T810 discharges from 100% to 10% in 2 hours 20 minutes. Temperature (half of 
 
 ## Clicked point estimation
 The library also is capable of estimating the position in the world for a point clicked on the screen. See the signal `clickedOnActivity` of the `ARComponent`. The program assumes that the world point is at the plane with markers (z = 0).<br />
-<img src="/example/screenshots/linux_3dpoint.jpg" width="250px" />
+<img src="/examples/00_chest/screenshots/linux_3dpoint.jpg" width="250px" />
 
 ## Contact
 <a href="mailto:sergei.volodin@epfl.ch">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
