@@ -5,7 +5,7 @@ language: cpp
 os:
   - linux
 
-dist: trusty
+dist: bionic
 
 compiler:
   - gcc
@@ -13,11 +13,7 @@ compiler:
 env:
   global:
   matrix:
-    - QT=510 BREW=@ex PPA=beineri/opt-qt-5.10.1-trusty
-
-matrix:
-  exclude:
-    - { os: osx, env: QT=510 BREW=@ex PPA=beineri/opt-qt-5.10.1-trusty }
+    - QT=510 BREW=@ex PPA=ppa:beineri/opt-qt-5.11.1-bionic
 
 addons:
   coverity_scan:
@@ -38,7 +34,7 @@ before_install:
 
 install:
 #  - '[ "$TRAVIS_OS_NAME" != linux ] || sudo apt-get -qy install '
-  - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" != */opt-* ]] || sudo apt-get -qy install qt${QT}base qt${QT}xmlpatterns'
+  - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" != */opt-* ]] || sudo apt-get -qy install qt${QT}base qt${QT}xmlpatterns libopencv-dev python3-opencv'
   - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" == */opt-* ]] || sudo apt-get -qy install qt5-qmake qtbase5-dev libqt5xmlpatterns5-dev'
   - qmake -v
 
