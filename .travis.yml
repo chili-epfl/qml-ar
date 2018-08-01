@@ -37,9 +37,11 @@ install:
   - mkdir build
   - cd build
   - cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local ..
-  - make -j10 install
+  - make -j10
+  - sudo make install
   - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/opencv/lib/
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opencv/lib/pkgconfig
+  - sudo ldconfig
   - qmake -v
 
 before_script:
@@ -51,5 +53,5 @@ before_script:
   - qmake -o "$TRAVIS_BUILD_DIR-example-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR/examples/00_chest/ar-chest.pro"
 
 script:
-  - make -j10 -C "$TRAVIS_BUILD_DIR-build" install
-  - make -j10 -C "$TRAVIS_BUILD_DIR-example-build" install
+  - sudo make -j10 -C "$TRAVIS_BUILD_DIR-build" install
+  - make -j10 -C "$TRAVIS_BUILD_DIR-example-build"
