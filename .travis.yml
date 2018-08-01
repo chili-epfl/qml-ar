@@ -13,7 +13,7 @@ compiler:
 env:
   global:
   matrix:
-    - QT=510 BREW=@ex PPA=ppa:beineri/opt-qt-5.11.1-bionic
+    - QT=510 BREW=@ex PPA=beineri/opt-qt-5.11.1-bionic
 
 addons:
   coverity_scan:
