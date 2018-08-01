@@ -6,6 +6,8 @@ include(qml-ar.pri)
 # creating a plugin
 CONFIG += plugin
 
+CONFIG += no_moc_predefs
+
 # Installation
 TEMPLATE = lib
 TARGET = qmlarplugin
