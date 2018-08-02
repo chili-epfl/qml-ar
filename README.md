@@ -66,11 +66,30 @@ $ mkdir build_android; cd build_android; /path/to/qt5_android/bin/qmake ..; make
 
 Example for Ubuntu Trusty for step 2: `mkdir build_linux; cd build_linux; qmake ..; make -j10; sudo make install; cd ..`
 
-## A simple example
+## A simple demo
 1. Open Qt Creator, open `qml-ar/examples/00_chest/ar-chest.pro`, compile and run on Desktop/Android
 2. Download and print a pdf file with markers:<br /><a href="/examples/00_chest/demo_sheet/ar_demo_sheet.pdf"><img src="/examples/00_chest/demo_sheet/ar_demo_sheet.png" width="200" /></a>
 3. Attach camera to your PC (device 1 is used by default). Point camera towards the printed sheet
 4. A chest from Qt examples and a cuboid should appear, like on the screenshots above.
+
+## The simplest demo
+The project `01_simplest` is specifically designed to show how easy it is to obtain minimal functionality:
+
+```
+// main.qml
+import QtQuick.Window 2.2; import AR 1.0
+Window { visible: true; height: 500; width: 500
+  ARComponent { arSceneComponent: Qt.createComponent("Activity.qml"); width: 500 }
+}
+
+// Activity.qml
+import Qt3D.Core 2.0; import Qt3D.Extras 2.0
+Entity { components: [
+        PhongMaterial { ambient: Qt.rgba(0.5, 0.5, 0.5, 1); },
+        CuboidMesh { xExtent: 50; yExtent: 50; zExtent: 50 } ] }
+```
+
+<img src="/examples/01_simplest/screenshot_linux.jpg?raw=true" height="100" alt="The simplest example" />
 
 ## Dependencies
 *All of these are downloaded automatically using `git clone --recursive`:*
