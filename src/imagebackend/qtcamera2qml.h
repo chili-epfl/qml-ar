@@ -18,13 +18,26 @@
 
 class QtCamera2QML : public QObject
 { Q_OBJECT
+
+    /** @brief The property returning the media object from QCamera which is possible to use by Viewfinder in QML
+     */
     Q_PROPERTY(QObject *mediaObject READ mediaObject NOTIFY never)
 private:
     QCamera* camera;
+
 public:
+    /**
+     * @brief QtCamera2QML wrapper contructor
+     * @param cam The QCamera object
+     */
     QtCamera2QML(QCamera* cam);
+
+    /**
+     * @brief Return QCamera's media object for QML
+     */
     QObject* mediaObject();
 signals:
+    /** @brief Never called */
     void never();
 };
 

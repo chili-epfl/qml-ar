@@ -72,30 +72,30 @@ signals:
 
     /**
     * @brief Emitted when new MVP matrix is available
-    * @param I resulting matrix
+    * @param mvp resulting matrix
     */
-    void newMVPMatrix(PipelineContainer<QMatrix4x4>);
+    void newMVPMatrix(PipelineContainer<QMatrix4x4> mvp);
 
     /**
-    * @brief Emitted when new MVP matrix is available
-    * @param I resulting matrix
+    * @brief Emitted when new P matrix is available
+    * @param p resulting matrix
     */
 
-    void newPMatrix(PipelineContainer<QMatrix4x4>);
+    void newPMatrix(PipelineContainer<QMatrix4x4> p);
 
     /**
-    * @brief Emitted when new MVP matrix is available
-    * @param I resulting matrix
+    * @brief Emitted when new MV matrix is available
+    * @param mv resulting matrix
     */
 
-    void newMVMatrix(PipelineContainer<QMatrix4x4>);
+    void newMVMatrix(PipelineContainer<QMatrix4x4> mv);
 
     /**
     * @brief Emitted when new info is available
-    * @param I resulting timing info
+    * @param info resulting timing info
     */
 
-    void newInfo(PipelineContainerInfo);
+    void newInfo(PipelineContainerInfo info);
 };
 
 #endif // MVPPROVIDER_H

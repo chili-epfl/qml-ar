@@ -25,20 +25,29 @@ class CalibratedCamera : public QObject
 protected:
     /**
     * @brief Camera matrix
+    * see https://docs.opencv.org/3.0-beta/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
     */
-    // see https://docs.opencv.org/3.0-beta/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
     QMatrix3x3 A;
 
     /**
-    * @brief Width and height of the images in pixels
-    * When the camera was calibrated
+    * @brief Width of the images in pixels when the camera was calibrated
     */
-    int calibration_w, calibration_h;
+    int calibration_w;
 
     /**
-    * @brief Current image width and height in pixels
+    * @brief Height of the images in pixels when the camera was calibrated
     */
-    int image_w, image_h;
+    int calibration_h;
+
+    /**
+    * @brief Current image width in pixels
+    */
+    int image_w;
+
+    /**
+    * @brief Current image height in pixels
+    */
+    int image_h;
 
 public:
     /**

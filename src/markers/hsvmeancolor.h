@@ -44,6 +44,10 @@ public:
     * @brief Add color to take mean of
     */
     void addColor(QColor c);
+
+    /**
+     * @brief addColor from Hue (0-360)
+     */
     void addColor(int h);
 
     /**

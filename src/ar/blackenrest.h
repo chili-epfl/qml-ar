@@ -77,10 +77,10 @@ signals:
 
     /**
      * @brief Blackened image (output)
-     * @param I resulting image
+     * @param image The resulting image
      */
 
-    void imageAvailable(PipelineContainer<QImage>);
+    void imageAvailable(PipelineContainer<QImage> image);
 
 public slots:
 

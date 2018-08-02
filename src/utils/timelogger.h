@@ -14,8 +14,10 @@
 #include "config.h"
 
 /**
- * @brief This class allows to output a line along with
- * thread number and a timestamp
+ * @def TimeLoggerLog
+ * @brief This macro provides printf-like syntax which is enabled only if ENABLE_DEBUG_OUTPUT is defined.
+ * The time, thread number and time in ms since last print are also displayed.
+ * @see ENABLE_DEBUG_OUTPUT
  */
 
 #ifdef ENABLE_DEBUG_OUTPUT
@@ -24,6 +26,11 @@
 #else
 #define TimeLoggerLog(...) {}
 #endif
+
+/**
+ * @brief This class allows to output a line along with
+ * thread number and a timestamp
+ */
 
 class TimeLogger
 {

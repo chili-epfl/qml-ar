@@ -23,12 +23,19 @@
 class ImageProviderAsync : public QObject, public QQuickImageProvider
 { Q_OBJECT
 public:
+    /**
+     * @brief ImageProviderAsync constructor
+     */
     ImageProviderAsync();
 
     virtual ~ImageProviderAsync() {}
 
 signals:
-    void imageAvailable(PipelineContainer<QImage>);
+    /**
+     * @brief imageAvailable emitted when new image is ready
+     * @param image the ready image
+     */
+    void imageAvailable(PipelineContainer<QImage> image);
 };
 
 #endif // IMAGEPROVIDERASYNC_H

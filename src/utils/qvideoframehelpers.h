@@ -20,10 +20,19 @@
 class TextureBuffer : public QAbstractVideoBuffer
 {
 public:
+    /** @brief Default contructor */
     TextureBuffer(uint id) : QAbstractVideoBuffer(GLTextureHandle), m_id(id) { }
+
+    /** @brief Dummy value */
     MapMode mapMode() const { return NotMapped; }
+
+    /** @brief Dummy value */
     uchar *map(MapMode, int *, int *) { return 0; }
+
+    /** @brief Dummy value */
     void unmap() { }
+
+    /** @brief Dummy value */
     QVariant handle() const { return QVariant::fromValue<GLuint>(m_id); }
 
 private:

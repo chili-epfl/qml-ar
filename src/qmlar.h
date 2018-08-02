@@ -123,12 +123,16 @@ public:
     */
     QVariantList getMarkers();
 
-    // get FPS mean/std
+    /** @brief Get mean FPS */
     double getFPSMean();
+
+    /** @brief Get standard deviation of FPS */
     double getFPSStd();
 
-    // get Latency mean/std
+    /** @brief Get mean latency (ms) */
     double getLatencyMean();
+
+    /** @brief Get std. of latency */
     double getLatencyStd();
 
     /**
@@ -165,7 +169,15 @@ public slots:
     * @brief Set MVP for QML
     */
     void setMVP(PipelineContainer<QMatrix4x4> mvp);
+
+    /**
+    * @brief Set MV for QML
+    */
     void setMV(PipelineContainer<QMatrix4x4> mv);
+
+    /**
+    * @brief Set P for QML
+    */
     void setP(PipelineContainer<QMatrix4x4> p);
 
     /**
@@ -374,7 +386,15 @@ signals:
     * @brief Notify QML part when new matrix is available
     */
     void newMVPMatrix(QMatrix4x4 mvp);
+
+    /**
+    * @brief Notify QML part when new matrix is available
+    */
     void newMVMatrix(QMatrix4x4 mv);
+
+    /**
+    * @brief Notify QML part when new matrix is available
+    */
     void newPMatrix(QMatrix4x4 p);
 
     /**

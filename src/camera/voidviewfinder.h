@@ -23,10 +23,13 @@ class VoidViewFinder : public QAbstractVideoSurface
 {
     Q_OBJECT
 public:
+    /** @brief Constructor */
     explicit VoidViewFinder(QObject *parent = 0) {Q_UNUSED(parent)}
 
+    /** @brief Dummy function */
     QList<QVideoFrame::PixelFormat> supportedPixelFormats(QAbstractVideoBuffer::HandleType handleType) const;
 
+    /** @brief Dummy function */
     bool present(const QVideoFrame &frame) {Q_UNUSED(frame); return true;}
 };
 

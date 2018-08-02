@@ -1,5 +1,5 @@
 /**
- * @file AR3Dscene.qml
+ * @file AR3DScene.qml
  * @brief This component defines the camera settings and loads the user-defined 3D scene
  * @author Sergei Volodin
  * @version 1.0

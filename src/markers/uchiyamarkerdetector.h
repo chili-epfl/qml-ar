@@ -109,10 +109,13 @@ public:
 
 signals:
     /**
-    * @brief Emits image coords. of blobs which belong
-    * To a marker
+    * @brief Emits image coords. of blobs which belong to a marker
     */
     void dotsFound(PipelineContainer<QPair<QImage, QVector<QVector2D>>>);
+
+    /**
+    * @brief Emits image coords. of ALL blobs (which might also not belong to any marker)
+    */
     void dotsAll(PipelineContainer<QVector<QVector2D>>);
 };
 

@@ -65,15 +65,38 @@ private:
     void setPositionMM(QVector2D position_mm_);
 public:
     Marker();
+
+    /**
+     * @brief Marker constructor
+     * @param x_mm x position in mm
+     * @param y_mm y position in mm
+     */
     Marker(double x_mm, double y_mm);
+
+    /**
+     * @brief Marker constructor
+     * @param position_mm_ position vector (x, y) in mm
+     */
     Marker(QVector2D position_mm_);
 
     /**
-    * @brief Setters
+    * @brief Set name of the marker
     */
     void setName(QString name_);
+
+    /**
+     * @brief Set ID of the marker
+     */
     void setId(int id_);
+
+    /**
+     * @brief Set size of the marker square in mm
+     */
     void setSizeMM(double size_);
+
+    /**
+     * @brief Set marker configuration
+     */
     void setConfig(const QJsonObject value);
 
     /**
@@ -107,6 +130,10 @@ public:
     */
     void undetect();
 
+    /**
+     * @brief Get string description of a marker
+     * @return String representation
+     */
     QString toString();
 };
 

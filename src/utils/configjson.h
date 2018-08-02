@@ -26,13 +26,17 @@
 class ConfigJSON
 {
 public:
+    /** @brief Constructor */
     ConfigJSON();
 
+    /** @brief Copy contructor */
     ConfigJSON(ConfigJSON& that);
 
     virtual ~ConfigJSON() {}
 
-    // fill with data from a file/other QIODevice
+    /**
+     * @brief Fill with data from a file/other QIODevice
+     */
     void populate(QIODevice &input);
 
     /**

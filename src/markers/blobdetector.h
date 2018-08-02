@@ -80,10 +80,16 @@ private:
     bool buffer_is_nonempty;
     QImage input_buffer;
 public:
+    /** @brief Constructor */
     BlobDetector();
     virtual ~BlobDetector() {}
+
+    /** @brief Copy contructor */
     BlobDetector(const BlobDetector &detector);
 
+    /** @brief Constructor
+     * @param max_blobs Maximal number of blobs to detect
+     */
     BlobDetector(int max_blobs);
 
     /**

@@ -19,9 +19,11 @@
 
 class DelayFilter : public QAbstractVideoFilter {
 public:
+    /** @brief Factory method */
     QVideoFilterRunnable *createFilterRunnable();
 
 signals:
+    /** @brief Emitted on end of conversion */
     void finished(QObject *result);
 };
 

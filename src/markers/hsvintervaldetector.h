@@ -70,11 +70,19 @@ public slots:
 
 signals:
     /**
-    * @brief Returns mean and std of color
+    * @brief Returns mean/std Hue
     */
-    void hAvailable(double, double);
-    void sAvailable(double, double);
-    void vAvailable(double, double);
+    void hAvailable(double mean, double std);
+
+    /**
+    * @brief Returns mean/std Saturation
+    */
+    void sAvailable(double mean, double std);
+
+    /**
+    * @brief Returns mean/std Value
+    */
+    void vAvailable(double mean, double std);
 };
 
 #endif // HSVINTERVALDETECTOR_H

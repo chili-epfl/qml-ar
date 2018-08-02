@@ -42,9 +42,13 @@ public:
     LatencyCalculator();
 
     /**
-    * @brief Result
+    * @brief Resulting mean value
     */
     double mean();
+
+    /**
+    * @brief Resulting std value
+    */
     double std();
 
 public slots:
