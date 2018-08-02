@@ -13,9 +13,25 @@
 ImageBackend::ImageBackend(QString filename) : ImageProviderAsync()
 {
     QImage img(filename);
+    image_id = 0;
     Q_ASSERT(!img.isNull());
-    buffer = img;
-    emit imageAvailable(buffer);
+    buffer = img.convertToFormat(QImage::Format_RGB888);
+    timer.setInterval(100);
+    connect(&timer, &QTimer::timeout, this, &ImageBackend::update);
+    timer.start();
+}
+
+ImageBackend::~ImageBackend()
+{
+
+}
+
+void ImageBackend::update()
+{
+    qDebug() << "SENT";
+    PipelineContainerInfo info(image_id++);
+    emit imageAvailable(PipelineContainer<QImage>
+                        (buffer, info.checkpointed("Sent")));
 }
 
 QImage ImageBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)

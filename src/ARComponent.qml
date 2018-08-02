@@ -52,10 +52,10 @@ Item {
     property int camera_id: -1
 
     /** Path to image to open in AR.INIT_IMAGE mode
-     * Default value: assets/dots.sample.png
+     * Default value: assets/sample.png
      * @see init_type
      */
-    property string image_filename: "assets/dots.sample.png"
+    property string image_filename: ":/assets/sample.png"
 
     /** Set the image width for image processing pipeline (CPU-based).
      * Must be set before creation, otherwise has no effect.
