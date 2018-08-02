@@ -1,14 +1,25 @@
+/**
+ * @file ARMenu.qml
+ * @brief This component implements the hidden menu for ARComponent
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-08-02
+ */
+
 import QtQuick 2.6
 import AR 1.0
-
-// Hidden menu for AR module
 import QtQuick.Controls 1.5
 
+/**
+ * @brief This component implements the hidden menu for ARComponent
+ */
 Item {
+    /** Set to ARComponent instance */
     property var activity
 
     id: root
 
+    // show blobs?
     Rectangle {
         id: blobs_menu
         anchors.left: parent.left
@@ -34,6 +45,7 @@ Item {
         }
     }
 
+    // show markers?
     Rectangle {
         id: markers_menu
         anchors.left: blobs_menu.right
@@ -60,6 +72,7 @@ Item {
         }
     }
 
+    // show fps?
     Rectangle {
         id: fps_menu
         anchors.left: markers_menu.right
@@ -85,6 +98,7 @@ Item {
         }
     }
 
+    // filtering alpha coefficient
     Rectangle {
         id: filtering_param
         anchors.left: parent.left
@@ -102,6 +116,7 @@ Item {
         }
     }
 
+    // filering alpha slider
     Rectangle {
         id: filtering_param_slider
         anchors.left: filtering_param.right
