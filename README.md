@@ -1,5 +1,9 @@
 ## AR module for QML
-This module allows to add an AR component to your QML application simply by importing our library. The framework uses <a href="http://limu.ait.kyushu-u.ac.jp/~uchiyama/me/code/UCHIYAMARKERS/index.html">Random dot markers</a> by Hideaki Uchiyama, which are chosen over other possibilities due to their small negative visual impact on the scene they are put on.
+This module adds seamless Augmented Reality to your Qt/QML application.
+
+The framework uses <a href="http://limu.ait.kyushu-u.ac.jp/~uchiyama/me/code/UCHIYAMARKERS/index.html">Random dot markers</a> by Hideaki Uchiyama, which are chosen over other possibilities due to their small negative visual impact on the scene they are put on.
+
+The image processing is done using OpenCV.
 
 ## Gallery:
 Android:
@@ -23,28 +27,30 @@ Linux:
 2. git
 
 ## Prerequisites (Linux)
-1. <a href="https://github.com/opencv/opencv">OpenCV for Desktop</a> (tested with bf418ba34)
+1. <a href="https://github.com/opencv/opencv">OpenCV for Desktop</a> (tested with bf418ba34).
 2. Tested on 4xAMD A8-7410 APU (GPU not used)
 
 ## Prerequisites (Android)
-1. <a href="https://sourceforge.net/projects/opencvlibrary/files/opencv-android/">OpenCV for Android</a> (tested with 3.3.1)
-2. Android SDK (tested with r22.3) and NDK (tested with r15c), need to be set up with Qt
+1. <a href="https://sourceforge.net/projects/opencvlibrary/files/opencv-android/">OpenCV for Android</a> (tested with 3.3.1). Put the symlink pointing to the OpenCV for Android as `qml-ar/opencv-android` (inside the repo).
+2. Android SDK (tested with r22.3) and NDK (tested with r15c), need to be set up with Qt. Run `export ANDROID_NDK_ROOT=/path/to/ndk` before compilation.
 3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod) *Up to 5 cores required, GPU is used for image rendering*
 
 ## Installation
 [![Build Status](https://travis-ci.org/chili-epfl/qml-ar.svg?branch=master)](https://travis-ci.org/chili-epfl/qml-ar)
 
-1. `git clone git@github.com:chili-epfl/qml-ar.git` (master branch is usually working)
-2. `cd qml-ar; git submodule init && git submodule update`
-3. Create a symlink called `opencv-android` pointing to the OpenCV for Android
-4. **Linux:** `mkdir build_linux; cd build_linux; qmake ..; make -j10 install`
-5. **Android:** `export ANDROID_NDK_ROOT=/path/to/ndk ; mkdir build_android; cd build_android; qmake ..; make -j10 install` (same as for Linux but with ANDROID_NDK_ROOT variable)
-6. Open Qt Creator, open `examples/00_chest/ar-chest.pro`, compile and run on Desktop/Android
+1. Build and install the library
+```
+$ git clone --recursive https://github.com/chili-epfl/qml-ar.git
+$ mkdir build_linux; cd build_linux; /path/to/qt5_desktop/bin/qmake ..; make -j10 install; cd ..
+$ mkdir build_android; cd build_android; /path/to/qt5_android/bin/qmake ..; make -j10 install; cd ..
+```
+(`make install` command might require `sudo`)
 
-## Running
-1. Download pdf and print the example file with markers:<br /><a href="/examples/00_chest/demo_sheet/ar_demo_sheet.pdf"><img src="/examples/00_chest/demo_sheet/ar_demo_sheet.png" width="200" /></a>
-2. Attach camera to your PC (device 1 is used by default). Point camera towards the printed sheet
-3. A chest from Qt examples and a cuboid should appear
+## A simple example
+1. Open Qt Creator, open `qml-ar/examples/00_chest/ar-chest.pro`, compile and run on Desktop/Android
+2. Download and print a pdf file with markers:<br /><a href="/examples/00_chest/demo_sheet/ar_demo_sheet.pdf"><img src="/examples/00_chest/demo_sheet/ar_demo_sheet.png" width="200" /></a>
+3. Attach camera to your PC (device 1 is used by default). Point camera towards the printed sheet
+4. A chest from Qt examples and a cuboid should appear, like on the screenshots above.
 
 ## Application Structure
 <img src="/doc/components_v2.png" />
