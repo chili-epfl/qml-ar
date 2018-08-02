@@ -53,4 +53,4 @@ script:
   - make -j10 -C "$TRAVIS_BUILD_DIR-example-build" # COMPILE EX00
   - make -j10 -C "$TRAVIS_BUILD_DIR-example-image-build" # COMPILE EX02
   - cd "$TRAVIS_BUILD_DIR-example-image-build" # TEST
-  - ./ar-image # must return 0, it does so if it detects markers on the input image
+  - ./ar_image # must return 0, it does so if it detects markers on the input image
