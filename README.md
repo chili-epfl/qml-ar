@@ -56,13 +56,15 @@ Example for Ubuntu Trusty: *need to download things by hand in GUI, including Qt
 ## Installation
 [![Build Status for Linux](https://travis-ci.org/chili-epfl/qml-ar.svg?branch=master)](https://travis-ci.org/chili-epfl/qml-ar)
 
-1. Build and install the library
+Build and install the library:
 ```
 $ git clone --recursive https://github.com/chili-epfl/qml-ar.git; cd qml-ar
 $ mkdir build_linux; cd build_linux; /path/to/qt5_desktop/bin/qmake ..; make -j10 install; cd ..
 $ mkdir build_android; cd build_android; /path/to/qt5_android/bin/qmake ..; make -j10 install; cd ..
 ```
 (`make install` command might require `sudo`)
+
+Example for Ubuntu Trusty for step 2: `mkdir build_linux; cd build_linux; qmake ..; make -j10; sudo make install; cd ..`
 
 ## A simple example
 1. Open Qt Creator, open `qml-ar/examples/00_chest/ar-chest.pro`, compile and run on Desktop/Android
