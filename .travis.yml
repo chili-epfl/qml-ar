@@ -35,14 +35,22 @@ install:
   - qmake -v
 
 before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
   - '[[ "$TRAVIS_OS_NAME" != linux || "$CXX" != g++     ]] || export QMAKESPEC=linux-g++'
   - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" != */opt-* ]] || . /opt/qt$QT/bin/qt$QT-env.sh'
   - '[[ "$TRAVIS_OS_NAME" != linux || "$PPA" == */opt-* ]] || export QT_SELECT=qt5'
   - mkdir -p "$TRAVIS_BUILD_DIR-build"
   - mkdir -p "$TRAVIS_BUILD_DIR-example-build"
+  - mkdir -p "$TRAVIS_BUILD_DIR-example-image-build"
   - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR/qml-ar.pro"
   - qmake -o "$TRAVIS_BUILD_DIR-example-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR/examples/00_chest/ar-chest.pro"
+  - qmake -o "$TRAVIS_BUILD_DIR-example-image-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR/examples/02_image/ar-image.pro"
 
 script:
-  - sudo make -j10 -C "$TRAVIS_BUILD_DIR-build" install
-  - make -j10 -C "$TRAVIS_BUILD_DIR-example-build"
+  - sudo make -j10 -C "$TRAVIS_BUILD_DIR-build" install # COMPILE LIBRARY
+  - make -j10 -C "$TRAVIS_BUILD_DIR-example-build" # COMPILE EX00
+  - make -j10 -C "$TRAVIS_BUILD_DIR-example-image-build" # COMPILE EX02
+  - cd "$TRAVIS_BUILD_DIR-example-image-build" # TEST
+  - ./ar-image # must return 0, it does so if it detects markers on the input image
