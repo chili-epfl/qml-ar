@@ -40,7 +40,7 @@ Item {
     property string image_filename: "assets/dots.sample.png"
 
     // scale image to this width
-    property int image_width: 600
+    property int image_width: 640
 
     // set this to the actual surface with 3D models
     // will create an object of this component
@@ -48,7 +48,7 @@ Item {
     property var arSceneComponent
 
     // parameters for the arScene
-    property var arSceneParameters
+    property var arSceneParameters: ({})
 
     // the resulting object will be stored here
     property var arSceneObject
@@ -62,13 +62,13 @@ Item {
 
     // set to true to preserve width attribute
     // and set height so that image ratio is preserved
-    property bool force_width: false
+    property bool force_width: true
 
     // do show fps?
     property bool show_fps: true
 
     // what to show on the component?
-    property int output_type: AR.OUTPUT_MARKERS
+    property int output_type: AR.OUTPUT_CAMERA
 
     // resulting output url
     property string output_url: ""
@@ -80,10 +80,10 @@ Item {
     property real scaleDots: 1.0
 
     // show blobs?
-    property bool show_blobs: true
+    property bool show_blobs: false
 
     // show markers?
-    property bool show_markers: true
+    property bool show_markers: false
 
     // use image even if viewfinder available
     property bool force_image: false
