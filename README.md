@@ -26,25 +26,45 @@ Linux:
 1. <a href="https://www.qt.io/download">Qt 5</a> (tested with 5.10.0) and Qt Creator (tested with 4.5.0), tested on Desktop and Android kits
 2. git
 
+Example for Ubuntu Trusty:
+```
+$ sudo apt-get update
+$ sudo apt-get install -qy git software-properties-common; QT=510;
+$ sudo add-apt-repository -y ppa:beineri/opt-qt-5.10.1-trusty; sudo apt-get update
+$ sudo apt-get -qy install qt${QT}base qt${QT}xmlpatterns libpulse-dev libglib2.0-dev build-essential libgtk2.0-dev pkg-config qt5-qmake qtbase5-dev libqt5xmlpatterns5-dev qt${QT}quickcontrols qt${QT}multimedia qt${QT}3d qt${QT}sensors qt${QT}quickcontrols2
+$ export QMAKESPEC=linux-g++
+$ . /opt/qt$QT/bin/qt$QT-env.sh
+```
+
 ## Prerequisites (Linux)
 1. <a href="https://github.com/opencv/opencv">OpenCV for Desktop</a> (tested with bf418ba34).
 2. Tested on 4xAMD A8-7410 APU (GPU not used)
 
+Example for Ubuntu Trusty:
+```
+$ sudo add-apt-repository -y ppa:lkoppel/opencv; sudo apt-get update
+$ sudo apt-get -qy install libopencv-dev
+```
+
 ## Prerequisites (Android)
 1. <a href="https://sourceforge.net/projects/opencvlibrary/files/opencv-android/">OpenCV for Android</a> (tested with 3.3.1). Put the symlink pointing to the OpenCV for Android as `qml-ar/opencv-android` (inside the repo).
 2. Android SDK (tested with r22.3) and NDK (tested with r15c), need to be set up with Qt. Run `export ANDROID_NDK_ROOT=/path/to/ndk` before compilation.
-3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod) *Up to 5 cores required, GPU is used for image rendering*
+3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod). *Up to 5 cores required, GPU is used for image rendering*
+
+Example for Ubuntu Trusty: *need to download things by hand in GUI, including Qt for Android.*
 
 ## Installation
-[![Build Status](https://travis-ci.org/chili-epfl/qml-ar.svg?branch=master)](https://travis-ci.org/chili-epfl/qml-ar)
+[![Build Status for Linux](https://travis-ci.org/chili-epfl/qml-ar.svg?branch=master)](https://travis-ci.org/chili-epfl/qml-ar)
 
-1. Build and install the library
+Build and install the library:
 ```
-$ git clone --recursive https://github.com/chili-epfl/qml-ar.git
+$ git clone --recursive https://github.com/chili-epfl/qml-ar.git; cd qml-ar
 $ mkdir build_linux; cd build_linux; /path/to/qt5_desktop/bin/qmake ..; make -j10 install; cd ..
 $ mkdir build_android; cd build_android; /path/to/qt5_android/bin/qmake ..; make -j10 install; cd ..
 ```
 (`make install` command might require `sudo`)
+
+Example for Ubuntu Trusty for step 2: `mkdir build_linux; cd build_linux; qmake ..; make -j10; sudo make install; cd ..`
 
 ## A simple example
 1. Open Qt Creator, open `qml-ar/examples/00_chest/ar-chest.pro`, compile and run on Desktop/Android
@@ -52,8 +72,23 @@ $ mkdir build_android; cd build_android; /path/to/qt5_android/bin/qmake ..; make
 3. Attach camera to your PC (device 1 is used by default). Point camera towards the printed sheet
 4. A chest from Qt examples and a cuboid should appear, like on the screenshots above.
 
+## Dependencies
+*All of these are downloaded automatically using `git clone --recursive`:*
+  - [yuv2rgb](https://github.com/andrechen/yuv2rgb.git): Library for converting NV21 data from Android camera to RGB data.
+  - [uchiya](https://github.com/chili-epfl/ARUchiya.git): Random dot markers by Hideaki Uchiyama, adapted for Qt build.
+  - [QtOpenCV](https://github.com/dbzhang800/QtOpenCV.git): Abstraction over OpenCV calls done in Qt-style.
+  - [qml-imu](https://github.com/chili-epfl/qml-imu.git): Library for obtaining phone orientation on Android using Qt Sensors and a Kalman filter.
+
 ## Application Structure
 <img src="/doc/components_v2.png" />
+
+## Build documentation
+```
+$ sudo apt-get -y install doxygen doxyqml
+$ doxygen
+```
+
+The docs will appear inside the `doc/` folder.
 
 ## Adding markers to your scene
 You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
@@ -77,4 +112,4 @@ The library also is capable of estimating the position in the world for a point 
 <img src="/examples/00_chest/screenshots/linux_3dpoint.jpg" width="250px" />
 
 ## Contact
-<a href="mailto:sergei.volodin@epfl.ch">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
+<a href="http://sergeivolodin.github.io">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
