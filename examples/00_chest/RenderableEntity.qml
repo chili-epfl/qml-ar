@@ -51,16 +51,30 @@
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 
+/** @brief This is a helper component which renders Mesh+Material in Qt3D */
+
 Entity {
     id: root
 
+    /** @brief Position of the mesh */
     property vector3d position: Qt.vector3d(0, 0, 0)
+
+    /** @brief Scale of the mesh */
     property real scale: 1.0
+
+    /** @brief Rotation: angle of the mesh */
     property real rotationAngle: 0.0
+
+    /** @brief Rotation: axis of the mesh */
     property vector3d rotationAxis: Qt.vector3d(1, 0, 0)
+
+    /** @brief The source file with mesh description */
     property alias source: mesh.source
+
+    /** @brief Material for the mesh */
     property Material material
 
+    // transform + mesh + material
     components: [ transform, mesh, root.material ]
 
     // @disable-check M300

@@ -1,14 +1,25 @@
+/**
+ * @file Activity.qml
+ * @brief This file renders the scene in Qt3D
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-08-03
+ */
+
 import QtQuick 2.1
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
 
+/** @brief This file renders the scene in Qt3D */
 Entity {
     id: activity
 
-    // chest coordinates
+    /** @brief Chest x position (in mm) */
     property var chest_x
+
+    /** @brief Chest y position (in mm) */
     property var chest_y
 
     // cuboid on top-left corner
@@ -18,6 +29,7 @@ Entity {
             PhongMaterial {
                 id: materialPhong
             },
+
             // @disable-check M300
             Transform {
                 id: transform
@@ -29,6 +41,8 @@ Entity {
             },
             CuboidMesh {
                 id: cubeMesh
+
+                // size of the cuboid
                 xExtent: 50
                 yExtent: 50
                 zExtent: 10
@@ -57,6 +71,7 @@ Entity {
     // chest on bottom-down corner
     RenderableEntity {
         id: chest
+        // Mesh
         source: "/assets/Chest.obj"
         position: Qt.vector3d(activity.chest_x, activity.chest_y, 0)
         rotationAngle: -90
@@ -65,7 +80,7 @@ Entity {
         material: DiffuseMapMaterial {
             id: material
             // @disable-check M16
-            diffuse: TextureLoader { source: "/assets/diffuse.webp" }
+            diffuse: TextureLoader { source: "/assets/diffuse.webp" } // Texture
             specular: Qt.rgba( 0.5, .5, .5, 1.0 )
             shininess: 2.0
         }
