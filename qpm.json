@@ -9,7 +9,7 @@
     "url": "https://github.com/chili-epfl/qml-ar.git"
   },
   "version": {
-    "label": "1.0"
+    "label": "1.0.0"
   },
   "dependencies": [
   ],
