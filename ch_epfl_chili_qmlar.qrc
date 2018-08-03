@@ -1,0 +1,6 @@
+
+<RCC>
+    <qresource prefix="/ch/epfl/chili/qmlar">
+        <file>qmldir</file>
+    </qresource>
+</RCC>
