@@ -8,7 +8,7 @@
 
 import QtQuick.Window 2.2
 import QtQuick 2.6
-import AR 1.0
+import ch.epfl.chili.qmlar 1.0
 
 /** @brief This project shows how to manage properties of your the 3D scene */
 Window {

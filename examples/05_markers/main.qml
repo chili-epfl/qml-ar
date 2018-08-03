@@ -9,7 +9,7 @@
 
 import QtQuick.Window 2.2
 import QtQuick 2.6
-import AR 1.0
+import ch.epfl.chili.qmlar 1.0
 
 /** @brief This project renders a cube at (0, 0, 0) using qml-ar.
  * Moreover, it show how to react on markers dissapearance. */

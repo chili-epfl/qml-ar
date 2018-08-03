@@ -11,7 +11,7 @@
  */
 
 import QtQuick.Window 2.2
-import AR 1.0
+import ch.epfl.chili.qmlar 1.0
 
 /** @brief This project renders a Chest and a cuboid using qml-ar */
 Window {
