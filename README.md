@@ -91,6 +91,9 @@ Entity { components: [
 
 <img src="/examples/01_simplest/screenshot_linux.jpg?raw=true" height="100" alt="The simplest example" />
 
+## More demos
+See README in the `examples/` folder.
+
 ## Dependencies
 *All of these are downloaded automatically using `git clone --recursive`:*
   - [yuv2rgb](https://github.com/andrechen/yuv2rgb.git): Library for converting NV21 data from Android camera to RGB data.
