@@ -46,7 +46,7 @@ before_script:
   - mkdir -p "$TRAVIS_BUILD_DIR-example-image-build"
   - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR/qml-ar.pro"
   - qmake -o "$TRAVIS_BUILD_DIR-example-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR/examples/00_chest/ar-chest.pro"
-  - qmake -o "$TRAVIS_BUILD_DIR-example-image-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR/examples/02_image/ar-image.pro"
+  - qmake -o "$TRAVIS_BUILD_DIR-example-image-build" -r -Wall -Wlogic -Wparser CONFIG+=debug_and_release "$TRAVIS_BUILD_DIR/examples/98_test_image/ar-image.pro"
 
 script:
   - sudo make -j10 -C "$TRAVIS_BUILD_DIR-build" install # COMPILE LIBRARY
