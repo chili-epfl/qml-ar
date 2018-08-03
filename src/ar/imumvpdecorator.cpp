@@ -135,7 +135,10 @@ QMatrix4x4 IMUMVPDecorator::getLatencyCorrectedIMUPose()
 
 QMatrix4x4 IMUMVPDecorator::getDelayedIMUPose(int delay)
 {
-    Q_ASSERT(!imu_poses.isEmpty());
+    // return pose if no matrix available
+    if(imu_poses.isEmpty()) {
+        return last_mv;
+    }
 
     QLinkedList<TimeStampedIMUPose>::iterator current = imu_poses.begin();
     QLinkedList<TimeStampedIMUPose>::iterator it;
