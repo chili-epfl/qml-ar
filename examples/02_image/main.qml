@@ -1,6 +1,6 @@
 /**
  * @file main.qml
- * @brief This file renders a cube at (0, 0, 0) using qml-ar.
+ * @brief This project renders a cube at (0, 0, 0) using qml-ar.
  * Image input is used instead of a camera.
  * @author Sergei Volodin
  * @version 1.0
@@ -10,7 +10,7 @@
 import QtQuick.Window 2.2
 import AR 1.0
 
-/** This file renders a cube at (0, 0, 0) using qml-ar.
+/** This project renders a cube at (0, 0, 0) using qml-ar.
  * Image input is used instead of a camera. */
 Window {
     // some window parameters

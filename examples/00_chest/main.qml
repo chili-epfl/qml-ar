@@ -1,6 +1,6 @@
 /**
  * @file main.qml
- * @brief This file renders a Chest and a cuboid using qml-ar
+ * @brief This project renders a Chest and a cuboid using qml-ar
  *
  * The cuboid will be at (0, 0) and the chest at (210, 297)
  * The default camera on Desktop is "1" (second), and front on
@@ -13,7 +13,7 @@
 import QtQuick.Window 2.2
 import AR 1.0
 
-/** @brief This file renders a Chest and a cuboid using qml-ar */
+/** @brief This project renders a Chest and a cuboid using qml-ar */
 Window {
     id: window
     visible: true

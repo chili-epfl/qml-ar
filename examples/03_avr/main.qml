@@ -1,6 +1,6 @@
 /**
  * @file main.qml
- * @brief This file renders a cube at (0, 0, 0) using qml-ar.
+ * @brief This project renders a cube at (0, 0, 0) using qml-ar.
  * The Augmented Virtual Reality (or Mixed Reality) is enabled.
  *
  * The default camera on Desktop is "1" (second), and front on
@@ -13,7 +13,7 @@
 import QtQuick.Window 2.2
 import AR 1.0
 
-/** @brief This file renders a cube at (0, 0, 0) using qml-ar in AVR */
+/** @brief This project renders a cube at (0, 0, 0) using qml-ar in AVR */
 Window {
     // some window parameters
     visible: true
