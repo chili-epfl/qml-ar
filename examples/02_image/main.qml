@@ -1,6 +1,17 @@
+/**
+ * @file main.qml
+ * @brief This file renders a cube at (0, 0, 0) using qml-ar.
+ * Image input is used instead of a camera.
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-08-03
+ */
+
 import QtQuick.Window 2.2
 import AR 1.0
 
+/** This file renders a cube at (0, 0, 0) using qml-ar.
+ * Image input is used instead of a camera. */
 Window {
     // some window parameters
     id: root
@@ -18,13 +29,5 @@ Window {
 
         // setting width
         width: 500
-
-        // close the app if markers detected
-        onMvp_matrixChanged: {
-            if(AR.pose_valid && AR.markers.length > 0) {
-                console.log('Matrix available, closing the app');
-                Qt.quit();
-            }
-        }
     }
 }
