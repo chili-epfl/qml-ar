@@ -1,4 +1,4 @@
-module AR
+module ch.epfl.chili.qmlar
 ARComponent 1.0 ARComponent.qml
 AR3DScene 1.0 AR3DScene.qml
 ARBlobs 1.0 ARBlobs.qml

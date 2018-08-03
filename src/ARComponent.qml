@@ -8,7 +8,7 @@
  */
 
 import QtQuick 2.6
-import AR 1.0
+import ch.epfl.chili.qmlar 1.0
 import QtQuick.Scene3D 2.0
 import QtQuick.Controls 1.4 as QQC
 import Qt3D.Core 2.0

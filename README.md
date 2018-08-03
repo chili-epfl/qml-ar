@@ -77,7 +77,7 @@ The project `01_simplest` is specifically designed to show how easy it is to obt
 
 ```
 // main.qml
-import QtQuick.Window 2.2; import AR 1.0
+import QtQuick.Window 2.2; import ch.epfl.chili.qmlar 1.0
 Window { visible: true; height: 500; width: 500
   ARComponent { arSceneComponent: Qt.createComponent("Activity.qml"); width: 500 }
 }

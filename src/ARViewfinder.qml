@@ -8,7 +8,7 @@
 
 import QtQuick 2.0
 import QtMultimedia 5.4
-import AR 1.0
+import ch.epfl.chili.qmlar 1.0
 
 /**
  * @brief This component implements camera image display on Android using OpenGL textures (fast!)

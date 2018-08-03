@@ -7,7 +7,7 @@
  */
 
 import QtQuick 2.0
-import AR 1.0
+import ch.epfl.chili.qmlar 1.0
 
 /**
  * @brief This component shows markers detected by the AR library
