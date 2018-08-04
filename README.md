@@ -104,6 +104,15 @@ See README in the `examples/` folder.
 ## Application Structure
 <img src="/doc/components_v2.png" />
 
+^^ Add critical path/bottleneck from Slides (red squares)
+
+1. Choice of markers (Uchiya). Other pose estimation methods. Use cases.
+2. Choice of a platform (OpenCV)
+3. Implementation details (classes, signals, pipeline, GPU/CPU). How to switch implementations.
+4. Performance. Number of threads. FPS, Latency. Bottlenecks. Images for Desktop/Android. Tracking. IMU methods. Different classes.
+5. Inkscape extension demo (from Slides)
+6. Possible extensions (random color, hide dots, robustness, FPS: GPU)...
+
 ## Build documentation
 ```
 $ sudo apt-get -y install doxygen doxyqml
