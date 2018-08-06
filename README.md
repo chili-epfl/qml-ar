@@ -101,17 +101,17 @@ See README in the `examples/` folder.
   - [QtOpenCV](https://github.com/dbzhang800/QtOpenCV.git): Abstraction over OpenCV calls done in Qt-style.
   - [qml-imu](https://github.com/chili-epfl/qml-imu.git): Library for obtaining phone orientation on Android using Qt Sensors and a Kalman filter.
 
-## Application Structure
-
-4. Performance. Number of threads. FPS, Latency. Bottlenecks. Images for Desktop/Android. Tracking. IMU methods. Different classes.
-5. Inkscape extension demo (from Slides)
-6. Possible extensions (random color, hide dots, robustness, FPS: GPU)...
+## The QML-AR detailed description
 
 The markers were chosen due to their relative small visual impact on the scene. The traditional black-and-white AR markers such as <a href="https://github.com/chili-epfl/chilitags">Chilitags</a>, when put on the scene, distract the eye because of their high contrast (this ease of finding them is the reason they are chosen as an object for detection). The aim of this project was to find a less visually noticeable alternative to traditional markers, or *seamless* markers. Of all of the types of seamless markers the <a href="http://limu.ait.kyushu-u.ac.jp/~uchiyama/me/code/UCHIYAMARKERS/index.html">Random Dots</a> project done by Hideaki Uchiyama was chosen because of the simplicity of the concept over the other markers (such as complex shapes, circles of dots, lines etc) and because of the availability of the source code for the project.
 
 The original Uchiya library was written for Windows/GLUT and it a proof of concept. The goal of this project was to make it fully-configurable and able to run on Android mobile devices and Linux platforms. This was achieved using shaders and threads to speed up the code. Moreover, one of the features is support of Qt/QML, which is the target framework for this library. This project uses OpenCV to process images and does not use any AR-specific graphical processing library.
 
-The application relies heavily on the Qt-specific tools, such as signals and slots, and the QtConcurrent function calls to parallelize the image processing. The whole library consists of many C++ classes which are then connected together to form a processing pipeline in the `QMLAR` class. This class is then wrapped inside the `ThreadedQMLAR` class and exported to QML. The library creates about a dozen threads.
+The application relies heavily on the Qt-specific tools, such as signals and slots, and the QtConcurrent function calls to parallelize the image processing. The whole library consists of many C++ classes which are then connected together to form a processing pipeline in the `QMLAR` class. This class is then wrapped inside the `ThreadedQMLAR` class and exported to QML. The library creates about a dozen threads. The jupyter notebook `notebooks/draw_qt_graph.ipynb` allows to plot a graph of the pipeline based on the source code:
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/notebooks/qml-ar-connect.png" width="300px" />
+
+The performance of the current version is about **30FPS / 30ms latency** on Linux and **25FPS / 60ms Latency on Android**. The main bottlenecks on Android are the NV21&rArr;RGB conversion on CPU and the HSV threshold, which take together more than a half of frame processing time. To analyze performance, the corresponding defines inside the `config.h` file should be turned on, then the logs from the device are collected and analyzed using tools in the `/performance` folder. The scripts produce the output similar to this, which allows to find the component which is the bottleneck:
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/performance/perf_android_example_T1732.png" width="300px" />
 
 The diagram below shows the path each image takes before the pose can be inferred from that image. First, the image is grabbed from the camera using an Image Provider, which is a platform-specific class object. An `OpenCVCameraBackend` is used on Linux and a `QtCameraBackend` is used on Android. The latter needs to take the image from the GPU and is expected to be rewritten using shaders, incuding the next few steps in the pipeline. This is the last step in the pipeline which uses the GPU (and the Linux version doesn't use it at all)
 
@@ -129,7 +129,12 @@ The class also tries to correct for the latency in the pipeline using the follow
 
 On Linux, no IMU is assumed to exist, and also the image is rendered using updates for the `Image` QML component, which in turn requests a QImage obtained using the OpenCV backend. This method seems quite fast on Linux despite it's inefficiency and doesn't lead to a decrease in FPS.
 
-At the end, the application exports the MVP matrix to a QML component `ARComponent`, which uses it as the `Camera` parameter in Qt3D. This component is also capable of loading the user-defined scene.
+At the end, the application exports the MVP matrix to a QML component `ARComponent`, which uses it as the `Camera` parameter in Qt3D. This component is also capable of loading the user-defined scene. This is the main component for interaction with the library from QML.
+
+### Possible extensions
+1. Random-color dots instead of just red dots
+2. Hiding dots on the AR image
+3. More GPU use on Android to speed up the pipeline
 
 ## Build documentation
 ```
@@ -141,6 +146,8 @@ The docs will appear inside the `doc/` folder.
 
 ## Adding markers to your scene
 You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
+
+<img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar-inkscape/master/notebooks/inks1.png" /> <img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar-inkscape/master/notebooks/inks2.png" />
 
 ## Mixed reality
 <img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android_mixed.jpg" height="300" alt="Mixed reality output" />
