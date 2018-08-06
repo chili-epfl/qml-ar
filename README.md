@@ -101,8 +101,40 @@ See README in the `examples/` folder.
   - [QtOpenCV](https://github.com/dbzhang800/QtOpenCV.git): Abstraction over OpenCV calls done in Qt-style.
   - [qml-imu](https://github.com/chili-epfl/qml-imu.git): Library for obtaining phone orientation on Android using Qt Sensors and a Kalman filter.
 
-## Application Structure
+## The QML-AR detailed description
+
+The markers were chosen due to their relative small visual impact on the scene. The traditional black-and-white AR markers such as <a href="https://github.com/chili-epfl/chilitags">Chilitags</a>, when put on the scene, distract the eye because of their high contrast (this ease of finding them is the reason they are chosen as an object for detection). The aim of this project was to find a less visually noticeable alternative to traditional markers, or *seamless* markers. Of all of the types of seamless markers the <a href="http://limu.ait.kyushu-u.ac.jp/~uchiyama/me/code/UCHIYAMARKERS/index.html">Random Dots</a> project done by Hideaki Uchiyama was chosen because of the simplicity of the concept over the other markers (such as complex shapes, circles of dots, lines etc) and because of the availability of the source code for the project.
+
+The original Uchiya library was written for Windows/GLUT and it a proof of concept. The goal of this project was to make it fully-configurable and able to run on Android mobile devices and Linux platforms. This was achieved using shaders and threads to speed up the code. Moreover, one of the features is support of Qt/QML, which is the target framework for this library. This project uses OpenCV to process images and does not use any AR-specific graphical processing library.
+
+The application relies heavily on the Qt-specific tools, such as signals and slots, and the QtConcurrent function calls to parallelize the image processing. The whole library consists of many C++ classes which are then connected together to form a processing pipeline in the `QMLAR` class. This class is then wrapped inside the `ThreadedQMLAR` class and exported to QML. The library creates about a dozen threads. The jupyter notebook `notebooks/draw_qt_graph.ipynb` allows to plot a graph of the pipeline based on the source code:
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/notebooks/qml-ar-connect.png" width="300px" />
+
+The performance of the current version is about **30FPS / 30ms latency** on Linux and **25FPS / 60ms Latency on Android**. The main bottlenecks on Android are the NV21&rArr;RGB conversion on CPU and the HSV threshold, which take together more than a half of frame processing time. To analyze performance, the corresponding defines inside the `config.h` file should be turned on, then the logs from the device are collected and analyzed using tools in the `/performance` folder. The scripts produce the output similar to this, which allows to find the component which is the bottleneck:
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/performance/perf_android_example_T1732.png" width="300px" />
+
+The diagram below shows the path each image takes before the pose can be inferred from that image. First, the image is grabbed from the camera using an Image Provider, which is a platform-specific class object. An `OpenCVCameraBackend` is used on Linux and a `QtCameraBackend` is used on Android. The latter needs to take the image from the GPU and is expected to be rewritten using shaders, incuding the next few steps in the pipeline. This is the last step in the pipeline which uses the GPU (and the Linux version doesn't use it at all)
+
 <img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/doc/components_v2.png" />
+
+After obtaining the image in the main memory, the part of it which does not contain markers is painted black using `BlackenRest`. The detected marker position from the previous iteration is used. At the first iteration or at the iteration right after the markers were lost, this component has no effect. This is a small heuristic which allows to speed up the process of tracking, since blobs now can be detected only on non-blackened area containing markers on the previous frame. This technique therefore requires a decent framerate.
+
+After blackening, the image is binarized using a `HueThreshold` instance. The app supports dynamic calibration of the HSV values, however, at this point it is hardcoded to detect only <font color="red">red</font> dots. This can be changed inside the `qmlar.cpp` file. Then the image is fed inside the Uchiya library which outputs the homography mapping an undistorted marker image with dots to the actual camera shot. These are used to calculate the four marker corners for each detected marker. This data is then fed inside the `MarkerMVPProvider` which obtains the extrinsic camera parameters (or the ModelView matrix) using a `cv::solvePnP` call.
+
+The marker parameters (coordinates of dots and the location of the marker) are contained inside the `/assets/markers.json` file of the *application*, see the <a href="https://github.com/chili-epfl/qml-ar-inkscape">repository of the tool which creates markers</a> for format description. The camera parameters are inside the `/assets/camera_matrix.json` with `camera_matrix` containing the flattened matrix components along with `width` and `height` of the image at calibration time. See `/examples/00_chest/assets/camera_matrix.json` in this repository for an example. Camera is calibrated using standard OpenCV tools.
+
+On Android, there is also an additional step which makes the use of the IMU pose to correct the MVP in between camera frames to increase the frequency of updates and decrease the latency, thus making the AR view more smooth. Since the onboard phone's inertial sensors don't have enough precision for the position to be estimate (it drifts significantly even during the small time between camera frames), only the angle is corrected using the `IMUMVPDecorator` class. This class simply modifies the MVP by rotating it additionally by the &Delta;MVP estimated from the IMU, thus, increasing the perceived FPS of pose updates.
+
+The class also tries to correct for the latency in the pipeline using the following method: time of the shot (when the photo was grabbed from the device) is remembered for each element in the pipeline. Moreover, the IMU measurements are kept for the last few second. Then, when it's time to send a new pose to QML, the class additionally rotates the pose by the difference between current IMU reading and the reading when the shot was taken. Since on Android a texture output is used for the camera image, which doesn't add any delay, along with this latency correction method it allows to decrease the perceived latency quite significantly since most of the movements the user makes are the camera rotations. Note that this method doesn't compensate neither for the translational latency nor for the latency when *the object* is rotated, not the camera (since no IMU readings are available in that case).
+
+On Linux, no IMU is assumed to exist, and also the image is rendered using updates for the `Image` QML component, which in turn requests a QImage obtained using the OpenCV backend. This method seems quite fast on Linux despite it's inefficiency and doesn't lead to a decrease in FPS.
+
+At the end, the application exports the MVP matrix to a QML component `ARComponent`, which uses it as the `Camera` parameter in Qt3D. This component is also capable of loading the user-defined scene. This is the main component for interaction with the library from QML.
+
+### Possible extensions
+1. Random-color dots instead of just red dots
+2. Hiding dots on the AR image
+3. More GPU use on Android to speed up the pipeline
 
 ## Build documentation
 ```
@@ -114,6 +146,8 @@ The docs will appear inside the `doc/` folder.
 
 ## Adding markers to your scene
 You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
+
+<img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar-inkscape/master/notebooks/inks1.png" /> <img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar-inkscape/master/notebooks/inks2.png" />
 
 ## Mixed reality
 <img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android_mixed.jpg" height="300" alt="Mixed reality output" />
