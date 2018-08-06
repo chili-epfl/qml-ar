@@ -171,3 +171,13 @@ The library also is capable of estimating the position in the world for a point 
 
 ## Contact
 <a href="http://sergeivolodin.github.io">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
+
+## qpm
+The project is also available at the qpm Qt repository as <a href="https://www.qpm.io/packages/ch.epfl.chili.qmlar/index.html">ch.epfl.chili.qmlar</a> and can be installed using
+
+```
+qpm install ch.epfl.chili.qmlar
+
+```
+
+However, this ability is not tested enough yet.
