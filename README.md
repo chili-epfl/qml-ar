@@ -103,7 +103,6 @@ See README in the `examples/` folder.
 
 ## Application Structure
 
-3. Implementation details (classes, signals, pipeline, GPU/CPU). How to switch implementations.
 4. Performance. Number of threads. FPS, Latency. Bottlenecks. Images for Desktop/Android. Tracking. IMU methods. Different classes.
 5. Inkscape extension demo (from Slides)
 6. Possible extensions (random color, hide dots, robustness, FPS: GPU)...
@@ -112,7 +111,11 @@ The markers were chosen due to their relative small visual impact on the scene. 
 
 The original Uchiya library was written for Windows/GLUT and it a proof of concept. The goal of this project was to make it fully-configurable and able to run on Android mobile devices and Linux platforms. This was achieved using shaders and threads to speed up the code. Moreover, one of the features is support of Qt/QML, which is the target framework for this library. This project uses OpenCV to process images and does not use any AR-specific graphical processing library.
 
-The diagram below shows the path each image takes before the pose can be inferred from that image. First, the image is grabbed from the camera using an Image Provider, which is a platform-specific class object. An `OpenCVCameraBackend` is used on Linux and a `QtCameraBackend` is used on Android. The latter needs to take the image from the GPU and is expected to be rewritten using shaders, incuding the next few steps in the pipeline.
+The application relies heavily on the Qt-specific tools, such as signals and slots, and the QtConcurrent function calls to parallelize the image processing. The whole library consists of many C++ classes which are then connected together to form a processing pipeline in the `QMLAR` class. This class is then wrapped inside the `ThreadedQMLAR` class and exported to QML. The library creates about a dozen threads.
+
+The diagram below shows the path each image takes before the pose can be inferred from that image. First, the image is grabbed from the camera using an Image Provider, which is a platform-specific class object. An `OpenCVCameraBackend` is used on Linux and a `QtCameraBackend` is used on Android. The latter needs to take the image from the GPU and is expected to be rewritten using shaders, incuding the next few steps in the pipeline. This is the last step in the pipeline which uses the GPU (and the Linux version doesn't use it at all)
+
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/doc/components_v2.png" />
 
 After obtaining the image in the main memory, the part of it which does not contain markers is painted black using `BlackenRest`. The detected marker position from the previous iteration is used. At the first iteration or at the iteration right after the markers were lost, this component has no effect. This is a small heuristic which allows to speed up the process of tracking, since blobs now can be detected only on non-blackened area containing markers on the previous frame. This technique therefore requires a decent framerate.
 
@@ -120,9 +123,13 @@ After blackening, the image is binarized using a `HueThreshold` instance. The ap
 
 The marker parameters (coordinates of dots and the location of the marker) are contained inside the `/assets/markers.json` file of the *application*, see the <a href="https://github.com/chili-epfl/qml-ar-inkscape">repository of the tool which creates markers</a> for format description. The camera parameters are inside the `/assets/camera_matrix.json` with `camera_matrix` containing the flattened matrix components along with `width` and `height` of the image at calibration time. See `/examples/00_chest/assets/camera_matrix.json` in this repository for an example. Camera is calibrated using standard OpenCV tools.
 
+On Android, there is also an additional step which makes the use of the IMU pose to correct the MVP in between camera frames to increase the frequency of updates and decrease the latency, thus making the AR view more smooth. Since the onboard phone's inertial sensors don't have enough precision for the position to be estimate (it drifts significantly even during the small time between camera frames), only the angle is corrected using the `IMUMVPDecorator` class. This class simply modifies the MVP by rotating it additionally by the &Delta;MVP estimated from the IMU, thus, increasing the perceived FPS of pose updates.
 
+The class also tries to correct for the latency in the pipeline using the following method: time of the shot (when the photo was grabbed from the device) is remembered for each element in the pipeline. Moreover, the IMU measurements are kept for the last few second. Then, when it's time to send a new pose to QML, the class additionally rotates the pose by the difference between current IMU reading and the reading when the shot was taken. Since on Android a texture output is used for the camera image, which doesn't add any delay, along with this latency correction method it allows to decrease the perceived latency quite significantly since most of the movements the user makes are the camera rotations. Note that this method doesn't compensate neither for the translational latency nor for the latency when *the object* is rotated, not the camera (since no IMU readings are available in that case).
 
-<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/doc/components_v2.png" />
+On Linux, no IMU is assumed to exist, and also the image is rendered using updates for the `Image` QML component, which in turn requests a QImage obtained using the OpenCV backend. This method seems quite fast on Linux despite it's inefficiency and doesn't lead to a decrease in FPS.
+
+At the end, the application exports the MVP matrix to a QML component `ARComponent`, which uses it as the `Camera` parameter in Qt3D. This component is also capable of loading the user-defined scene.
 
 ## Build documentation
 ```
