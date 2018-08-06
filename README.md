@@ -8,18 +8,18 @@ The image processing is done using OpenCV.
 ## Gallery:
 Android:
 <p>
-<img src="/examples/00_chest/screenshots/android1.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/examples/00_chest/screenshots/android2.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/examples/00_chest/screenshots/android3.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/examples/00_chest/screenshots/android4.jpg?raw=true" height="200" alt="Sample application on Android" />
-<img src="/examples/00_chest/screenshots/android_mixed.jpg?raw=true" height="200" alt="Mixed reality output" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android1.jpg" height="200" alt="Sample application on Android" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android2.jpg" height="200" alt="Sample application on Android" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android3.jpg" height="200" alt="Sample application on Android" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android4.jpg" height="200" alt="Sample application on Android" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android_mixed.jpg" height="200" alt="Mixed reality output" />
 </p>
 
 Linux:
 <p>
-<img src="/examples/00_chest/screenshots/linux1.jpg?raw=true" height="200" alt="Sample application on Linux" />
-<img src="/examples/00_chest/screenshots/linux2.jpg?raw=true" height="200" alt="Sample application on Linux" />
-<img src="/examples/00_chest/screenshots/linux3.jpg?raw=true" height="200" alt="Sample application on Linux" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/linux1.jpg" height="200" alt="Sample application on Linux" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/linux2.jpg" height="200" alt="Sample application on Linux" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/linux3.jpg" height="200" alt="Sample application on Linux" />
 </p>
 
 ## Prerequisites (Common)
@@ -68,7 +68,7 @@ Example for Ubuntu Trusty for step 2: `mkdir build_linux; cd build_linux; qmake 
 
 ## A simple demo
 1. Open Qt Creator, open `qml-ar/examples/00_chest/ar-chest.pro`, compile and run on Desktop/Android
-2. Download and print a pdf file with markers:<br /><a href="/examples/00_chest/demo_sheet/ar_demo_sheet.pdf"><img src="/examples/00_chest/demo_sheet/ar_demo_sheet.png" width="200" /></a>
+2. Download and print a pdf file with markers:<br /><a href="/examples/00_chest/demo_sheet/ar_demo_sheet.pdf"><img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/demo_sheet/ar_demo_sheet.png" width="200" /></a>
 3. Attach camera to your PC (device 1 is used by default). Point camera towards the printed sheet
 4. A chest from Qt examples and a cuboid should appear, like on the screenshots above.
 
@@ -89,7 +89,7 @@ Entity { components: [
         CuboidMesh { xExtent: 50; yExtent: 50; zExtent: 50 } ] }
 ```
 
-<img src="/examples/01_simplest/screenshot_linux.jpg?raw=true" height="100" alt="The simplest example" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/01_simplest/screenshot_linux.jpg" height="100" alt="The simplest example" />
 
 ## More demos
 See README in the `examples/` folder.
@@ -102,7 +102,7 @@ See README in the `examples/` folder.
   - [qml-imu](https://github.com/chili-epfl/qml-imu.git): Library for obtaining phone orientation on Android using Qt Sensors and a Kalman filter.
 
 ## Application Structure
-<img src="/doc/components_v2.png" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/doc/components_v2.png" />
 
 ^^ Add critical path/bottleneck from Slides (red squares)
 
@@ -125,7 +125,7 @@ The docs will appear inside the `doc/` folder.
 You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
 
 ## Mixed reality
-<img src="/examples/00_chest/screenshots/android_mixed.jpg?raw=true" height="300" alt="Mixed reality output" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android_mixed.jpg" height="300" alt="Mixed reality output" />
 Mixed reality is supported both on Android and Linux.
 See comments in the files of the example application on how to enable this mode.
 Currently, camera image rendering is done on CPU in this mode, which also results in low resolution and low FPS.
@@ -134,13 +134,13 @@ Framework tested on Xiaomi Redmi 4A, and both with Google Cardboard and Gear VR.
 
 ## Battery usage
 SM-T810 discharges from 100% to 10% in 2 hours 20 minutes. Temperature (half of the back surface lying on a table) rises up to 50 °C.<br />
-<img src="/notebooks/battery-SMT810/BatteryLog06Mar18.csv_level.png" width="250px" />
-<img src="/notebooks/battery-SMT810/BatteryLog06Mar18.csv_temperature.png" width="250px" />
-<img src="/notebooks/battery-SMT810/BatteryLog06Mar18.csv_voltage.png" width="250px" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/notebooks/battery-SMT810/BatteryLog06Mar18.csv_level.png" width="250px" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/notebooks/battery-SMT810/BatteryLog06Mar18.csv_temperature.png" width="250px" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/notebooks/battery-SMT810/BatteryLog06Mar18.csv_voltage.png" width="250px" />
 
 ## Clicked point estimation
 The library also is capable of estimating the position in the world for a point clicked on the screen. See the signal `clickedOnActivity` of the `ARComponent`. The program assumes that the world point is at the plane with markers (z = 0).<br />
-<img src="/examples/00_chest/screenshots/linux_3dpoint.jpg" width="250px" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/linux_3dpoint.jpg" width="250px" />
 
 ## Contact
 <a href="http://sergeivolodin.github.io">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
