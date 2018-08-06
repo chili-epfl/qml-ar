@@ -115,7 +115,7 @@ The performance of the current version is about **30FPS / 30ms latency** on Linu
 
 The diagram below shows the path each image takes before the pose can be inferred from that image. First, the image is grabbed from the camera using an Image Provider, which is a platform-specific class object. An `OpenCVCameraBackend` is used on Linux and a `QtCameraBackend` is used on Android. The latter needs to take the image from the GPU and is expected to be rewritten using shaders, incuding the next few steps in the pipeline. This is the last step in the pipeline which uses the GPU (and the Linux version doesn't use it at all)
 
-<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/doc/components_v2.png" />
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/doc/components_v3.png" />
 
 After obtaining the image in the main memory, the part of it which does not contain markers is painted black using `BlackenRest`. The detected marker position from the previous iteration is used. At the first iteration or at the iteration right after the markers were lost, this component has no effect. This is a small heuristic which allows to speed up the process of tracking, since blobs now can be detected only on non-blackened area containing markers on the previous frame. This technique therefore requires a decent framerate.
 
