@@ -102,16 +102,27 @@ See README in the `examples/` folder.
   - [qml-imu](https://github.com/chili-epfl/qml-imu.git): Library for obtaining phone orientation on Android using Qt Sensors and a Kalman filter.
 
 ## Application Structure
-<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/doc/components_v2.png" />
 
-^^ Add critical path/bottleneck from Slides (red squares)
-
-1. Choice of markers (Uchiya). Other pose estimation methods. Use cases.
-2. Choice of a platform (OpenCV)
 3. Implementation details (classes, signals, pipeline, GPU/CPU). How to switch implementations.
 4. Performance. Number of threads. FPS, Latency. Bottlenecks. Images for Desktop/Android. Tracking. IMU methods. Different classes.
 5. Inkscape extension demo (from Slides)
 6. Possible extensions (random color, hide dots, robustness, FPS: GPU)...
+
+The markers were chosen due to their relative small visual impact on the scene. The traditional black-and-white AR markers such as <a href="https://github.com/chili-epfl/chilitags">Chilitags</a>, when put on the scene, distract the eye because of their high contrast (this ease of finding them is the reason they are chosen as an object for detection). The aim of this project was to find a less visually noticeable alternative to traditional markers, or *seamless* markers. Of all of the types of seamless markers the <a href="http://limu.ait.kyushu-u.ac.jp/~uchiyama/me/code/UCHIYAMARKERS/index.html">Random Dots</a> project done by Hideaki Uchiyama was chosen because of the simplicity of the concept over the other markers (such as complex shapes, circles of dots, lines etc) and because of the availability of the source code for the project.
+
+The original Uchiya library was written for Windows/GLUT and it a proof of concept. The goal of this project was to make it fully-configurable and able to run on Android mobile devices and Linux platforms. This was achieved using shaders and threads to speed up the code. Moreover, one of the features is support of Qt/QML, which is the target framework for this library. This project uses OpenCV to process images and does not use any AR-specific graphical processing library.
+
+The diagram below shows the path each image takes before the pose can be inferred from that image. First, the image is grabbed from the camera using an Image Provider, which is a platform-specific class object. An `OpenCVCameraBackend` is used on Linux and a `QtCameraBackend` is used on Android. The latter needs to take the image from the GPU and is expected to be rewritten using shaders, incuding the next few steps in the pipeline.
+
+After obtaining the image in the main memory, the part of it which does not contain markers is painted black using `BlackenRest`. The detected marker position from the previous iteration is used. At the first iteration or at the iteration right after the markers were lost, this component has no effect. This is a small heuristic which allows to speed up the process of tracking, since blobs now can be detected only on non-blackened area containing markers on the previous frame. This technique therefore requires a decent framerate.
+
+After blackening, the image is binarized using a `HueThreshold` instance. The app supports dynamic calibration of the HSV values, however, at this point it is hardcoded to detect only <font color="red">red</font> dots. This can be changed inside the `qmlar.cpp` file. Then the image is fed inside the Uchiya library which outputs the homography mapping an undistorted marker image with dots to the actual camera shot. These are used to calculate the four marker corners for each detected marker. This data is then fed inside the `MarkerMVPProvider` which obtains the extrinsic camera parameters (or the ModelView matrix) using a `cv::solvePnP` call.
+
+The marker parameters (coordinates of dots and the location of the marker) are contained inside the `/assets/markers.json` file of the *application*, see the <a href="https://github.com/chili-epfl/qml-ar-inkscape">repository of the tool which creates markers</a> for format description. The camera parameters are inside the `/assets/camera_matrix.json` with `camera_matrix` containing the flattened matrix components along with `width` and `height` of the image at calibration time. See `/examples/00_chest/assets/camera_matrix.json` in this repository for an example. Camera is calibrated using standard OpenCV tools.
+
+
+
+<img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/doc/components_v2.png" />
 
 ## Build documentation
 ```
