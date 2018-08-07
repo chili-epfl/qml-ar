@@ -100,11 +100,7 @@ private:
 
     QOpenGLContext *currentContext;
 
-    QVideoFrame* frame;
-
-    GLuint textureID;
-
-    QOpenGLFramebufferObject* obj;
+    QOpenGLFramebufferObject* out_fbo;
 
 signals:
     void imageConverted(PipelineContainer<QImage>);

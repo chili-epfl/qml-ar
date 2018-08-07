@@ -2,7 +2,7 @@
 # Name of the application
 
 # Qt configuration for Quick applications
-QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender sensors concurrent multimedia-private
+QT += qml quick multimedia opengl multimediawidgets 3dinput 3drender sensors concurrent
 CONFIG += qt c++11 nostrip
 
 # turning on optimization
@@ -193,6 +193,8 @@ android {
             -Wl,--end-group\
 
 
+    LIBS += -lEGL -lnativewindow -Wl,-Bdynamic
+
     LIBS += -L$${OPENCV_PATH}/sdk/native/3rdparty/libs/armeabi-v7a \
             -Wl,--start-group\
             -lcpufeatures\
@@ -208,7 +210,7 @@ android {
             -Wl,--end-group\
 
 # neon instructions (for yuv2rgb)
-    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions
+    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions -DANDROID_NDK
     DEFINES += ARM_NEON_ENABLE
 }
 
@@ -261,5 +263,14 @@ HEADERS += \
     $$PWD/qml-imu/src/ExtendedKalmanFilter.h \
     $$PWD/qml-imu/src/IMU.h \
     $$PWD/qml-imu/src/AccelerometerBiasEstimator.h
+
+# GraphicBuffer library
+SOURCES += \
+    $$PWD/GraphicBuffer/GraphicBuffer.cpp \
+    $$PWD/GraphicBuffer/DynamicLibrary.cpp
+
+HEADERS += \
+    $$PWD/GraphicBuffer/GraphicBuffer.h \
+    $$PWD/GraphicBuffer/DynamicLibrary.h
 
 INCLUDEPATH += $$PWD/qml-imu/src/
