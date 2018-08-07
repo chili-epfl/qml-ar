@@ -70,6 +70,9 @@ protected:
     */
     bool frame_available = 0;
 
+    /**
+     * @brief Last frame from the camera
+     */
     QVideoFrame last_frame;
 
     /**

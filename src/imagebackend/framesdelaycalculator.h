@@ -20,6 +20,7 @@
 class FramesDelayCalculator : public QObject
 { Q_OBJECT
 public:
+    /** @brief Constructor */
     FramesDelayCalculator();
 
     /**
@@ -28,7 +29,16 @@ public:
     int lastDelay();
 
 public slots:
+    /**
+     * @brief setMeanLatency
+     * @param lat_ms Mean latency in ms
+     */
     void setMeanLatency(double lat_ms);
+
+    /**
+     * @brief setMeanFPS
+     * @param fps_ms Mean fps
+     */
     void setMeanFPS(double fps_ms);
 
 private:
@@ -36,6 +46,10 @@ private:
     * @brief Mean latency from camera to markers
     */
     double mean_latency;
+
+    /**
+     * @brief Mean FPS from camera to markers
+     */
     double mean_fps;
 
     /**
@@ -54,7 +68,11 @@ private:
     int getDelay();
 
 signals:
-    void newDelay(int);
+    /**
+     * @brief newDelay
+     * @param delay new delay in frames
+     */
+    void newDelay(int delay);
 };
 
 #endif // FRAMESDELAYCALCULATOR_H

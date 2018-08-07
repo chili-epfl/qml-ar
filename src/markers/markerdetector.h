@@ -86,8 +86,12 @@ private:
     QFutureWatcher<QPair<MarkerStorage, QImage>> watcher;
 
 public:
+    /** @brief Constructor */
     MarkerDetector();
+
+    /** @brief Copy constructor */
     MarkerDetector(const MarkerDetector &detector);
+
     virtual ~MarkerDetector() {}
 
     /**

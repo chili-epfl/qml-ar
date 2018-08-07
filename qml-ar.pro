@@ -6,6 +6,8 @@ include(qml-ar.pri)
 # creating a plugin
 CONFIG += plugin
 
+CONFIG += no_moc_predefs
+
 # Installation
 TEMPLATE = lib
 TARGET = qmlarplugin
@@ -13,7 +15,7 @@ CONFIG += plugin
 CONFIG -= android_install
 
 TARGET = $$qtLibraryTarget($$TARGET)
-uri = AR
+uri = ch.epfl.chili.qmlar
 
 #File installation
 qmldir.files = qmldir

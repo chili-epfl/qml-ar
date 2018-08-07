@@ -29,6 +29,7 @@ class CameraFrameGrabber : public QAbstractVideoSurface
 {
     Q_OBJECT
 public:
+    /** @brief Constructor */
     explicit CameraFrameGrabber(QObject *parent = 0);
 
     /**

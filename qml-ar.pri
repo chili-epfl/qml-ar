@@ -145,6 +145,9 @@ QML_SOURCES += \
 
 DISTFILES = $$QML_SOURCES
 
+RESOURCES += \
+    $$PWD/ch_epfl_chili_qmlar.qrc
+
 ##### LIBRARIES
 # QtOpenCV library
 QT_OPENCV_PATH = $$PWD/QtOpenCV

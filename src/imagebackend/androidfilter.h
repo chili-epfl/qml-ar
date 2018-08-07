@@ -24,6 +24,7 @@ class AndroidFilter : public QAbstractVideoFilter
     Q_OBJECT
 
 public:
+    /** @brief Constructor */
     explicit AndroidFilter(QObject *parent = 0);
 
     /**

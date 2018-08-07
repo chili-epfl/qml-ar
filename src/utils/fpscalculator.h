@@ -64,7 +64,7 @@ private:
     void calculateStd();
 
 public:
-    // number of last values to use for mean/std
+    /** @brief number of last values to use for mean/std */
     FPSCalculator(int to_keep = 500);
 
 public slots:
@@ -73,11 +73,14 @@ public slots:
     */
     void newFrame();
 
-    // obtain mean/std FPS
+    /** @brief Get mean value of FPS */
     double mean();
+
+    /** @brief Get std value of FPS */
     double std();
 
 signals:
+    /** @brief Emitted on update */
     void newMean(double);
 };
 

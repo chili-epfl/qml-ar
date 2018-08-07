@@ -67,6 +67,7 @@ public:
     */
     MarkerStorage();
 
+    /** @brief Copy constructor */
     MarkerStorage(const MarkerStorage& that);
 
     virtual ~MarkerStorage() {}
@@ -88,9 +89,13 @@ public:
     Marker get(int marker_id);
 
     /**
-    * @brief Iterators for going through the map
+    * @brief Iterators for going through the map: begin
     */
     QMap<int, Marker>::iterator begin();
+
+    /**
+    * @brief Iterators for going through the map: end
+    */
     QMap<int, Marker>::iterator end();
 
     /**
@@ -103,6 +108,10 @@ public:
     * @brief Return all of the 3D-2D correspondences
     */
     WorldImageCorrespondences getCorrespondences();
+
+    /**
+     * @brief Replace current correspondences with other correspondences
+     */
     MarkerStorage &operator =(const MarkerStorage &that);
 
     /**

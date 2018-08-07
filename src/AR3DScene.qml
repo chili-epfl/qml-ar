@@ -1,5 +1,13 @@
+/**
+ * @file AR3DScene.qml
+ * @brief This component defines the camera settings and loads the user-defined 3D scene
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-08-02
+ */
+
 import QtQuick 2.6
-import AR 1.0
+import ch.epfl.chili.qmlar 1.0
 import QtQuick.Scene3D 2.0
 
 import Qt3D.Core 2.0
@@ -7,7 +15,7 @@ import Qt3D.Render 2.0
 import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
 
-// 3D scene which uses OpenGL
+/** @brief This component defines the camera settings and loads the user-defined 3D scene */
 Scene3D {
     id: scene3d
     //anchors.fill: parent
@@ -17,18 +25,18 @@ Scene3D {
     aspects: ["input", "logic"]
     cameraAspectRatioMode: Scene3D.AutomaticAspectRatio
 
-    // set this to the actual surface with 3D models
-    // will create an object of this component
-    // and add this to ar scene
+    /** Set this to the actual surface with 3D models.
+     * Will create an object of this component.
+     * and add this to 3D scene. */
     property var arSceneComponent
 
-    // parameters for the arScene
+    /** parameters for the arScene */
     property var arSceneParameters
 
-    // the resulting object will be stored here
+    /** the resulting object will be stored here */
     property var arSceneObject
 
-    // delta MVP x axis (in ???)
+    /** delta MVP x axis (in mm?) */
     property double delta_x: 0
 
     // entity with camera which creates user's components inside

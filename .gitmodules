@@ -1,12 +1,12 @@
 [submodule "yuv2rgb"]
 	path = yuv2rgb
-	url = git@github.com:andrechen/yuv2rgb.git
+	url = https://github.com/andrechen/yuv2rgb.git
 [submodule "uchiya"]
 	path = uchiya
-	url = git@github.com:chili-epfl/ARUchiya.git
+	url = https://github.com/chili-epfl/ARUchiya.git
 [submodule "QtOpenCV"]
 	path = QtOpenCV
-	url = git@github.com:dbzhang800/QtOpenCV.git
+	url = https://github.com/dbzhang800/QtOpenCV.git
 [submodule "qml-imu"]
 	path = qml-imu
-	url = git@github.com:chili-epfl/qml-imu.git
+	url = https://github.com/chili-epfl/qml-imu.git

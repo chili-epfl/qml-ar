@@ -12,8 +12,10 @@
 #include "delayfilter.h"
 #include "qvideoframehelpers.h"
 
+/** @brief A filter which delays the output by an integer number of frames */
 class DelayFilterRunnable : public QVideoFilterRunnable {
 public:
+    /** @brief Do delay */
     QVideoFrame run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags);
 };
 

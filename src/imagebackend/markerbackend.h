@@ -37,17 +37,31 @@ public:
 
 public slots:
     /**
-    * @brief Slots to set data
+    * @brief Set camera image
     */
     void setCamera(PipelineContainer<QImage> cam);
+
+    /**
+     * @brief Set preview (markers) image
+     */
     void setPreview(PipelineContainer<QImage> prev);
+
+    /**
+     * @brief Set delay in frames
+     * @param delay number of frames to delay
+     */
     void setDelay(int delay);
 
 private:
     /**
-    * @brief Buffers for preview image and raw image
+    * @brief Preview buffer
     */
-    QImage preview, camera;
+    QImage preview;
+
+    /**
+     * @brief Camera buffer
+     */
+    QImage camera;
 
     /**
     * @brief Storing this amount of frames

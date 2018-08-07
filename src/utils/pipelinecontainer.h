@@ -29,8 +29,20 @@ private:
     int id_;
     PipelineContainerInfo info_;
 public:
+    /**
+     * @brief Initialize the container
+     * @param object The object to wrap
+     * @param info The additional info to store
+     */
     PipelineContainer(T object, PipelineContainerInfo info);
+
+    /**
+     * @brief Initialize the container with empty info
+     * @param object Thect to wrap
+     */
     PipelineContainer(T object);
+
+    /** @brief Default constructor */
     PipelineContainer();
 
     /**
@@ -42,13 +54,25 @@ public:
     * @brief Get underlying object
     */
     T& o();
+
+    /**
+    * @brief Get underlying object
+    */
     operator T&();
 
     /**
     * @brief Info management
     */
     void setInfo(PipelineContainerInfo info);
+
+    /**
+     * @brief Get current info
+     */
     PipelineContainerInfo info();
+
+    /**
+     * @brief Get current info
+     */
     operator PipelineContainerInfo();
 };
 

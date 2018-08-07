@@ -1,5 +1,14 @@
+/**
+ * @file ARComponent.qml
+ * @brief This component is included inside user applications and displays AR scene
+ by implementing the QML interface to the QMLAR library
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-08-02
+ */
+
 import QtQuick 2.6
-import AR 1.0
+import ch.epfl.chili.qmlar 1.0
 import QtQuick.Scene3D 2.0
 import QtQuick.Controls 1.4 as QQC
 import Qt3D.Core 2.0
@@ -8,14 +17,13 @@ import Qt3D.Input 2.0
 import Qt3D.Extras 2.0
 import QtMultimedia 5.9 as QMM
 
-/*
- * This component implements the QML interface to the QMLAR library
+/** @brief This component is included inside user applications and displays AR scene
+ * by implementing the QML interface to the QMLAR library.
+ * See README.md for more examples
+
  * Usage:
- * 1. Set init_type (at creation)
- * 2. Set camera_id/image_filename (at creation)
- * 3. Set other parameters at creation
- * 4. Set arSceneComponent (loaded using Qt.createComponent)
- *     with arSceneParameters
+ * 1. Set width
+ * 2. Set arSceneComponent (loaded using Qt.createComponent) with arSceneParameters
  *
  * Coordinates are in millimeters
  * System (QML): x right, y down, origin: top-left
@@ -29,85 +37,138 @@ Item {
         verticalCenter: parent.verticalCenter
     }
 
-    // initialization type (camera/image)
-    // See QMLAR.InitTypes enum
+    /** Set the image source, one of
+     * AR.INIT_CAMERA -- use camera backend.
+     * AR.INIT_IMAGE -- use fixed image (from FS) backend.
+     * Default value is AR.INIT_CAMERA.
+     * @see QMLAR InitTypes enum
+     */
     property int init_type: AR.INIT_CAMERA
 
-    // id of the camera to use
+    /** ID of the camera to use. Set to -1 to use the default value.
+     * Usually the builtin webcam is 0 and the USB cam is 1.
+     * Default value is -1.
+     */
     property int camera_id: -1
 
-    // path to image to open
-    property string image_filename: "assets/dots.sample.png"
+    /** Path to image to open in AR.INIT_IMAGE mode
+     * Default value: assets/sample.png
+     * @see init_type
+     */
+    property string image_filename: ":/assets/sample.png"
 
-    // scale image to this width
-    property int image_width: 600
+    /** Set the image width for image processing pipeline (CPU-based).
+     * Must be set before creation, otherwise has no effect.
+     * Default value: 640
+     */
+    property int image_width: 640
 
-    // set this to the actual surface with 3D models
-    // will create an object of this component
-    // and add this to ar scene
+    /** A component containing a 3D scene (with .createObject() method)
+     * @see arSceneParameters
+     * @see arSceneObject
+     */
     property var arSceneComponent
 
-    // parameters for the arScene
-    property var arSceneParameters
+    /** Parameters to the arSceneComponent passed on creation
+     * Default value: ({})
+     * @see arSceneComponent
+     */
+    property var arSceneParameters: ({})
 
-    // the resulting object will be stored here
+    /** The resulting object created by arSceneComponent.createObject() call
+     * Useful for modifying scene properties at runtime.
+     * @see arSceneComponent
+     */
     property var arSceneObject
 
-    // will contain Scene3D component
+    /** (internal) The AR3DScene.qml object, containing camera and render settings */
     property var scene3d
 
-    // same for avr_mode
+    /** (internal) The AR3DScene.qml object, containing LEFT camera and render settings.
+     * Used only in AVR mode
+     * @see avr_mode
+     */
     property var scene3d_left
+
+    /** (internal) The AR3DScene.qml object, containing RIGHT camera and render settings.
+     * Used only in AVR mode
+     * @see avr_mode
+     */
     property var scene3d_right
 
-    // set to true to preserve width attribute
-    // and set height so that image ratio is preserved
-    property bool force_width: false
+    /** Set to true to resize the component based on width property preserving aspect ration.
+     * Valid only before startup, further changes have no effect.
+     * If false, no size adjustments will be made.
+     * Default value: true
+     * @see width
+     */
+    property bool force_width: true
 
-    // do show fps?
+    /** Show FPS/Latency/Framedrop status at the top of the component?
+     * Default value: true
+     */
     property bool show_fps: true
 
-    // what to show on the component?
-    property int output_type: AR.OUTPUT_MARKERS
+    /** What to show on the component?
+     * AR.OUTPUT_MARKERS -- display dots and markers from the detector.
+     * AR.OUTPUT_CAMERA -- display raw camera image.
+     * Has no effect on Android if camera is used, because it uses Viewfinder to output image.
+     * Default value: AR.OUTPUT_CAMERA
+     */
+    property int output_type: AR.OUTPUT_CAMERA
 
-    // resulting output url
+    /** (internal) QQuickImageProvider url, used if viewfinder is unavailable. This image is updated using a Timer */
     property string output_url: ""
 
-    // viewfinder object
+    /** (internal) The viewfinder object for Android */
     property var viewfinder
 
-    // scale processing_image pixels -> screen pixels
+    /** (internal) The scaling coefficient for ARBlobs */
     property real scaleDots: 1.0
 
-    // show blobs?
-    property bool show_blobs: true
+    /** Display detected blobs?
+     * Default value: false */
+    property bool show_blobs: false
 
-    // show markers?
-    property bool show_markers: true
+    /** Display detected markers?
+     * Default value: false */
+    property bool show_markers: false
 
-    // use image even if viewfinder available
+    /** Force using QImage+Timer instead of Viewfinder (debug option)
+     * Default value: false
+     */
     property bool force_image: false
 
-    // use Augmented Virtual Reality (left-right pair)
+    /** Enable Augmented Virtual Reality (AVR) mode, showing 2 cameras, for left and right eye
+     * Default value: false */
     property bool avr_mode: false
 
-    // disable the hidden menu
+    /** Disables the ability to enter the hidden menu by pressing at the center of the screen
+     * Default value: false */
     property bool disable_menu: false
 
-    // True if markers are visible now, otherwise false
+    /** An output which shows whether or not markers are visible right now */
     property bool markers_visible: AR.markers_visible
 
-    // MVP matrix export
+    /** Returns 4x4 ModelViewProjection matrix used for rendering */
     property var mvp_matrix: AR.mvp_matrix
 
-    // initial width and height
+    /** Initial width */
     width: 300
+
+    /** Initial height */
     height: 300
 
-    // called when clicked on the activity
+    /** A signal which is called at each click on the AR component
+     * @param x_mm The clicked point x coordinate (right) on the activity in mm
+     * @param y_mm The clicked point y coordinate (down) on the activity in mm
+
+     * Emitted only of markers are visible now.*/
     signal clickedOnActivity(real x_mm, real y_mm);
 
-    // called when the 3d scene is fully loaded
+    /** A signal which is called when the arSceneComponent has finished loading
+     * @see arSceneComponent
+     * @see arSceneObject */
     signal scene_loaded();
 
     // initialize AR component on loading
@@ -163,6 +224,7 @@ Item {
         init_timer.running = true;
     }
 
+    /** (internal) load the 3D scene */
     function load_scene3d() {
         console.log("Begin loading scene3d");
         var component = Qt.createComponent("AR3DScene.qml");
@@ -198,7 +260,7 @@ Item {
         console.log("End loading scene3d");
     }
 
-    // create viewfinder component
+    /** (internal) create viewfinder component */
     function load_viewfinder() {
         console.log("Begin loading viewfinder");
         var component = Qt.createComponent("ARViewfinder.qml");
@@ -329,6 +391,7 @@ Item {
             }
         }
 
+        // hidden menu switch
         Rectangle {
             id: hiddenMenuEnabler
             z: 10
@@ -346,6 +409,7 @@ Item {
             }
         }
 
+        // the hidden menu
         ARMenu {
             z: 15
             anchors.top: hiddenMenuEnabler.bottom
@@ -357,6 +421,7 @@ Item {
             visible: false
         }
 
+        // displaying blobs on request
         ARBlobs {
             id: blobs
             visible: root.show_blobs
@@ -364,6 +429,7 @@ Item {
             z: 10
         }
 
+        // displaying markers on request
         ARMarkers {
             id: markers
             visible: root.show_markers

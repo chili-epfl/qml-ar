@@ -48,6 +48,7 @@ private:
     int current_image;
 
 public:
+    /** @brief Constructor */
     RandomImageBackend(int w = 640, int h = 480, int dt_ms = 10);
 
 public slots:

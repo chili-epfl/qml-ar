@@ -14,18 +14,25 @@
 #include "opencv2/highgui.hpp"
 #include <QtConcurrent>
 
+/** @brief Maximal number of pixels in an image
+ */
+
+#define IMAGE_MAX_PIXELS (640 * 480)
+
 /**
  * @brief This class outputs binarized image
  * taking colors in [hue-delta, hue+delta]
  */
 
-#define IMAGE_MAX_PIXELS (640 * 480)
-
 class HueThreshold : public ImageProviderAsync
 { Q_OBJECT
 public:
+    /** @brief Constructor */
     HueThreshold();
+
     virtual ~HueThreshold() {}
+
+    /** @brief Copy constructor */
     HueThreshold(const HueThreshold &that);
 
 private:
@@ -85,9 +92,14 @@ public slots:
     void setColor(double mean, double std);
 
     /**
-    * @brief Set V, S distribution
+    * @brief Set V distribution
     */
     void setV(double mean, double std);
+
+
+    /**
+    * @brief Set S distribution
+    */
     void setS(double mean, double std);
 
     /**
@@ -109,7 +121,19 @@ public slots:
     * @brief CV implementation
     */
     QImage threshold(QImage source);
+
+    /**
+     * @brief Set min/max Value
+     * @param min_ min value
+     * @param max_ max value
+     */
     void setVMinMax(double min_, double max_);
+
+    /**
+     * @brief Set min/max Saturation
+     * @param min_ min saturation
+     * @param max_ max saturation
+     */
     void setSMinMax(double min_, double max_);
 };
 

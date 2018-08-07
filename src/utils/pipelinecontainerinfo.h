@@ -40,6 +40,10 @@ public:
     * @brief Add timestamp and name to vectors
     */
     void checkpoint(QString name);
+
+    /**
+     * @brief Checkpoint and return the resulting ContainerInfo
+     */
     PipelineContainerInfo checkpointed(QString name);
 
     /**

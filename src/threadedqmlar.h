@@ -24,23 +24,58 @@
 
 class ThreadedQMLAR : public QObject
 { Q_OBJECT
+    /** @brief Number of the camera to use. If set, using camera input */
     Q_PROPERTY(int camera_id WRITE setCameraId READ getCameraId)
+
+    /** @brief Path to the image to use. If set, will use image input */
     Q_PROPERTY(QString image_filename WRITE setImageFilename READ getImageFilename)
+
+    /** @brief QCamera mediaobject for Viewfinder (if available) */
     Q_PROPERTY(QObject* camera READ getCamera)
+
+    /** @brief OpenGL ModelViewProjection matrix from the pipeline */
     Q_PROPERTY(QMatrix4x4 mvp_matrix READ getMVPMatrix NOTIFY newMVPMatrix)
+
+    /** @brief OpenGL ModelView matrix from the pipeline */
     Q_PROPERTY(QMatrix4x4 mv_matrix READ getMVMatrix NOTIFY newMVPMatrix)
+
+    /** @brief OpenGL Projection matrix from the pipeline */
     Q_PROPERTY(QMatrix4x4 p_matrix READ getPMatrix NOTIFY newMVPMatrix)
+
+    /** @brief The width of the image to be used inside the pipeline */
     Q_PROPERTY(int image_width READ getImageWidth WRITE setImageWidth)
+
+    /** @brief The list of blobs on detected markers (QVector2D as element) */
     Q_PROPERTY(QVariantList blobs READ getBlobs NOTIFY newBlobs)
+
+    /** @brief The list of detected markers, each containing an array of marker corners */
     Q_PROPERTY(QVariantList markers READ getMarkers NOTIFY newMarkers)
+
+    /** @brief The mean FPS value at this moment */
     Q_PROPERTY(double FPSMean READ getFPSMean NOTIFY imageUpdated)
+
+    /** @brief The std FPS value at this moment */
     Q_PROPERTY(double FPSStd READ getFPSStd NOTIFY imageUpdated)
+
+    /** @brief The mean Latency value at this moment */
     Q_PROPERTY(double LatencyMean READ getLatencyMean NOTIFY imageUpdated)
+
+    /** @brief The std Latency value at this moment */
     Q_PROPERTY(double LatencyStd READ getLatencyStd NOTIFY imageUpdated)
+
+    /** @brief Are markers visible right now? */
     Q_PROPERTY(bool markers_visible READ markers_visible NOTIFY newMarkers)
+
+    /** @brief Is the pose (MVP/MV matrix) valid at this moment? */
     Q_PROPERTY(bool pose_valid READ poseValid NOTIFY newMVPMatrix)
+
+    /** @brief Filtering coefficient for the pose */
     Q_PROPERTY(double filter_alpha READ getFilterAlpha WRITE setFilterAlpha)
+
+    /** @brief The current percentage of dropped frames at this moment */
     Q_PROPERTY(double framedrop READ getFrameDrop NOTIFY imageUpdated)
+
+    /** @brief Current delay in frames from capture to computed pose */
     Q_PROPERTY(int frame_delay READ getFrameDelay NOTIFY imageUpdated)
 
 private:
@@ -69,32 +104,51 @@ private:
     */
     QMatrix4x4 mvp_matrix, mv_matrix, p_matrix;
 public:
+    /** @brief Empty constructor */
     ThreadedQMLAR();
 
     /**
-    * @brief Getters
+    * @brief Get camera ID
     */
     int getCameraId();
+
+    /** @brief Get path to the image */
     QString getImageFilename();
+
+    /** @brief Get ModelViewProjection matrix */
     QMatrix4x4 getMVPMatrix();
+
+    /** @brief Get ModelView matrix */
     QMatrix4x4 getMVMatrix();
+
+    /** @brief Get projection matrix */
     QMatrix4x4 getPMatrix();
+
+    /** @brief Get width of the image in the pipeline */
     int getImageWidth();
+
+    /** @brief Get current image provider */
     QQuickImageProvider *getImageProvider();
+
+    /** @brief Get QCamera media object, if available */
     QObject* getCamera();
+
+    /** @brief Return list of blobs on markers */
     QVariantList getBlobs();
+
+    /** @brief Return list of detected markers */
     QVariantList getMarkers();
 
-    /**
-    * @brief FPS
-    */
+    /** @brief FPS: mean */
     double getFPSMean();
+
+    /** @brief FPS: std */
     double getFPSStd();
 
-    /**
-    * @brief Latency
-    */
+    /** @brief Latency (ms): mean */
     double getLatencyMean();
+
+    /** @brief Latency (ms): std */
     double getLatencyStd();
 
     /**
@@ -149,12 +203,28 @@ public slots:
     void setFilterAlpha(double alpha);
 
     /**
-    * @brief Setters for AR->QML communication
+    * @brief Set blobs (internal)
     */
     void setBlobs(QVariantList that);
+
+    /**
+    * @brief Set markers (internal)
+    */
     void setMarkers(QVariantList that);
+
+    /**
+    * @brief Set MVP matrix (internal)
+    */
     void setMVPMatrix(QMatrix4x4);
+
+    /**
+    * @brief Set MV matrix (internal)
+    */
     void setMVMatrix(QMatrix4x4);
+
+    /**
+    * @brief Set P matrix (internal)
+    */
     void setPMatrix(QMatrix4x4);
 
 signals:
@@ -162,7 +232,15 @@ signals:
     * @brief Notify QML part when new matrix is available
     */
     void newMVPMatrix(QMatrix4x4);
+
+    /**
+    * @brief Notify QML part when new matrix is available
+    */
     void newMVMatrix(QMatrix4x4);
+
+    /**
+    * @brief Notify QML part when new matrix is available
+    */
     void newPMatrix(QMatrix4x4);
 
     /**

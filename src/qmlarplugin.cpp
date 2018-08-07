@@ -17,11 +17,11 @@
 
 void QMLARQMLPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("AR"));
-    qmlRegisterSingletonType<QMLAR>("AR", 1, 0, "AR", get_qml_ar);
-    qmlRegisterType<AndroidFilter>("AR", 1, 0, "AndroidFilter");
-    qmlRegisterType<DelayFilter>("AR", 1, 0, "DelayFilter");
-    qmlRegisterType<NV21VideoFilter>("AR", 1, 0, "NV21VideoFilter");
+    Q_ASSERT(uri == QLatin1String("ch.epfl.chili.qmlar"));
+    qmlRegisterSingletonType<QMLAR>("ch.epfl.chili.qmlar", 1, 0, "AR", get_qml_ar);
+    qmlRegisterType<AndroidFilter>("ch.epfl.chili.qmlar", 1, 0, "AndroidFilter");
+    qmlRegisterType<DelayFilter>("ch.epfl.chili.qmlar", 1, 0, "DelayFilter");
+    qmlRegisterType<NV21VideoFilter>("ch.epfl.chili.qmlar", 1, 0, "NV21VideoFilter");
 }
 
 QObject *QMLARQMLPlugin::get_qml_ar(QQmlEngine *engine, QJSEngine *scriptEngine)
