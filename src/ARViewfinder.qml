@@ -17,8 +17,9 @@ VideoOutput {
     id: viewfinder
     visible: true
     anchors.fill: parent
+
+    // enable/disable filters
     filters: [nv21filter, androidFilter]//, delayFilter]
-    //autoOrientation: true
 
     // AndroidFilter -- maps+unmaps the data (no change), see the C++ class for explanation
     AndroidFilter {
@@ -30,6 +31,7 @@ VideoOutput {
         id: delayFilter
     }
 
+    // Convert NV21 to RGB
     NV21VideoFilter {
         id: nv21filter
     }
