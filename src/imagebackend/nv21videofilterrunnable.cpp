@@ -30,6 +30,7 @@ NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& 
 {
     this->parent = (NV21VideoFilterRunnable*) &backend;
     gl = nullptr;
+
 }
 
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr), image_id(0)
@@ -199,6 +200,20 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         gl->glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         TimeLoggerLog("%s", "NV21 context OK");
+
+        AHardwareBuffer_Desc desc;
+        desc.format = AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT;
+        desc.height = 100;
+        desc.width = 100;
+        desc.layers = 1;
+        desc.rfu0 = 0;
+        desc.rfu1 = 0;
+        desc.stride = 1;
+        desc.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY | AHARDWAREBUFFER_USAGE_GPU_DATA_BUFFER;
+        AHardwareBuffer* buffer = nullptr;
+        int status = AHardwareBuffer_allocate(&desc, &buffer);
+
+        TimeLoggerLog("%s %d %u", "NV21 HWB", status, buffer);
     }
 
     TimeLoggerLog("%s", "NV21 001");
@@ -210,19 +225,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     gl->glTexParameteri(QOpenGLTexture::Target2D, GL_TEXTURE_MIN_FILTER, QOpenGLTexture::Nearest);
 
     TimeLoggerLog("%s", "NV21 002");
-
-    AHardwareBuffer_Desc desc;
-    desc.format = AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM;
-    desc.height = 1000;
-    desc.width = 1000;
-    desc.layers = 1;
-    desc.rfu0 = 0;
-    desc.rfu1 = 0;
-    desc.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY | AHARDWAREBUFFER_USAGE_GPU_DATA_BUFFER;
-    AHardwareBuffer* buffer = nullptr;
-    int status = AHardwareBuffer_allocate(&desc, &buffer);
-
-    TimeLoggerLog("%s %u %u", "NV21 003", status, buffer);
 
 
     TimeLoggerLog("%s", "NV21 005");
