@@ -10,3 +10,6 @@
 [submodule "qml-imu"]
 	path = qml-imu
 	url = https://github.com/chili-epfl/qml-imu.git
+[submodule "GraphicBuffer"]
+	path = GraphicBuffer
+	url = https://github.com/fuyufjh/GraphicBuffer.git

@@ -193,7 +193,7 @@ android {
             -Wl,--end-group\
 
 
-    LIBS += -lEGL -lnativewindow -Wl,-Bdynamic
+    LIBS += -lEGL
 
     LIBS += -L$${OPENCV_PATH}/sdk/native/3rdparty/libs/armeabi-v7a \
             -Wl,--start-group\

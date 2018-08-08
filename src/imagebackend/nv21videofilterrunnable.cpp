@@ -6,6 +6,12 @@
  * @date 2018-07-26
  */
 
+#define EGL_EGLEXT_PROTOTYPES
+#include "EGL/egl.h"
+#include "EGL/eglext.h"
+#include "GLES/gl.h"
+#define GL_GLEXT_PROTOTYPES
+#include "GLES/glext.h"
 #include "nv21videofilterrunnable.h"
 #include "nv21videofilter.h"
 #include "qvideoframehelpers.h"
@@ -16,15 +22,13 @@
 #include <qvideoframe.h>
 #include <cstdio>
 #include <QTextStream>
-#define EGL_EGLEXT_PROTOTYPES
-#include "EGL/egl.h"
-#include "EGL/eglext.h"
+#include <strings.h>
 #include <memory>
-#include "android/hardware_buffer.h"
+#include "GraphicBuffer/GraphicBuffer.h"
 
-bool isInit = false;
-QWindow* surf;
-QOpenGLContext* context;
+int usage = -1;
+GraphicBuffer* graphicBuf = nullptr;
+EGLClientBuffer* clientBuf = nullptr;
 
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& backend) : QObject(nullptr)
 {
@@ -185,9 +189,8 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
         gl->glGenRenderbuffers(1, &renderbuffer);
         gl->glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-        gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::R8_UNorm, outputWidth, outputHeight);
+        gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::RGBA8_UNorm, outputWidth, outputHeight);
         gl->glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
 //        // 0x502 error for Red and QOpenGLTexture::LuminanceFormat
 //        static QOpenGLFramebufferObjectFormat format;
 //        format.setInternalTextureFormat(QOpenGLTexture::LuminanceFormat);
@@ -201,19 +204,9 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
         TimeLoggerLog("%s", "NV21 context OK");
 
-        AHardwareBuffer_Desc desc;
-        desc.format = AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT;
-        desc.height = 100;
-        desc.width = 100;
-        desc.layers = 1;
-        desc.rfu0 = 0;
-        desc.rfu1 = 0;
-        desc.stride = 1;
-        desc.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY | AHARDWAREBUFFER_USAGE_GPU_DATA_BUFFER;
-        AHardwareBuffer* buffer = nullptr;
-        int status = AHardwareBuffer_allocate(&desc, &buffer);
+        usage = GraphicBuffer::USAGE_HW_TEXTURE | GraphicBuffer::USAGE_SW_READ_OFTEN | GraphicBuffer::USAGE_SW_WRITE_RARELY;
 
-        TimeLoggerLog("%s %d %u", "NV21 HWB", status, buffer);
+        TimeLoggerLog("NV21 HWB %p", graphicBuf);
     }
 
     TimeLoggerLog("%s", "NV21 001");
@@ -226,65 +219,103 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
     TimeLoggerLog("%s", "NV21 002");
 
-
-    TimeLoggerLog("%s", "NV21 005");
-
-//eglCreateImageKHR(eglGetCurrentDisplay(), EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, (EGLClientBuffer) clientBuf, attrs);
-
-    TimeLoggerLog("%s", "NV21 006");
-
     program.bind();
     program.setUniformValue(imageLocation, 0);
     program.enableAttributeArray(0);
+
+    TimeLoggerLog("%s", "NV21 003 NEW");
+
+    graphicBuf = new GraphicBuffer(outputWidth, outputHeight, PIXEL_FORMAT_RGBA_8888, usage);
+
+    // have a buffer here!
+    clientBuf = (EGLClientBuffer*) graphicBuf->getNativeBuffer();
+
+    TimeLoggerLog("%s %p", "NV21 003'", clientBuf);
+
+    EGLint eglImageAttributes[] = {EGL_WIDTH, outputWidth, EGL_HEIGHT, outputHeight, EGL_MATCH_FORMAT_KHR,  EGL_FORMAT_RGBA_8888_KHR, EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE};
+    GLeglImageOES imageEGL = eglCreateImageKHR(eglGetCurrentDisplay(), EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, clientBuf, eglImageAttributes);
+
+    TimeLoggerLog("%s", "NV21 004");
+
+    TimeLoggerLog("%s", "NV21 005");
+
+    unsigned char *readPtr, *writePtr;
+
+    TimeLoggerLog("%s", "NV21 006");
+
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL);
+
     gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
     gl->glViewport(0, 0, outputWidth, outputHeight);
     gl->glDisable(GL_BLEND);
     gl->glDrawArrays(GL_TRIANGLES, 0, 3);
     gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-//    void *readPtr, *writePtr;
-//    graphicBuf->lock(GraphicBuffer::USAGE_SW_READ_OFTEN, &readPtr);
-//    writePtr = image.bits();
-//    int stride = graphicBuf->getStride();
-//    for (int row = 0; row < height; row++) {
-//        memcpy(writePtr, readPtr, width * 4);
-//        readPtr = (void *)(int(readPtr) + stride * 4);
-//        writePtr = (void *)(int(writePtr) + width * 4);
+    TimeLoggerLog("%s", "NV21 006'");
+
+    //int status_unlock = graphicBuf->unlock();
+
+    //TimeLoggerLog("%s %d", "NV21 006 UNL", status_unlock);
+
+    //gl->glFinish();
+
+    TimeLoggerLog("%s", "NV21 006'' FIN");
+
+    int status_lock = graphicBuf->lock(GraphicBuffer::USAGE_SW_READ_OFTEN, (void**) &readPtr);
+
+    TimeLoggerLog("%s %d %p", "NV21 007 LOCK", status_lock, readPtr);
+
+    uchar data[600000];
+    bzero(data, 600000);
+    writePtr = data;
+
+    TimeLoggerLog("%s %p", "NV21 008", writePtr);
+
+    int stride = graphicBuf->getStride();
+
+    TimeLoggerLog("%s %d", "NV21 009", stride);
+
+    for (int row = 0; row < outputHeight / 5; row++) {
+        TimeLoggerLog("%s %d", "NV21 010", row);
+        memcpy(writePtr, readPtr, outputWidth * 4);
+        readPtr = (unsigned char *)(int(readPtr) + outputWidth * 4);
+        writePtr = (unsigned char *)(int(writePtr) + outputWidth * 4);
+    }
+
+    TimeLoggerLog("%s", "NV21 011");
+
+    graphicBuf->unlock();
+
+    image = QImage(data, outputWidth, outputHeight, QImage::Format_RGBA8888);
+
+    TimeLoggerLog("%s", "NV21 012");
+
+    QString s;
+    QTextStream ss(&s);
+    ss << "/shader" << image_id++ << ".png";
+    image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append(s));
+
+    TimeLoggerLog("%s", "NV21 IMsave OK");
+
+//    static QThreadPool pool;
+//    pool.setMaxThreadCount(1);
+
+//    // showing only first 10 pictures
+//    if(image_id >= 10) {
+//        QCoreApplication::exit();
 //    }
-//    graphicBuf->unlock();
 
+//    TimeLoggerLog("%s", "NV21 Render OK");
 
-    static QThreadPool pool;
-    pool.setMaxThreadCount(1);
+////    // convert() in a separate thread produces garbage images
+////    if(!watcher.isRunning()) {
+////        TimeLoggerLog("%s", "NV21 toImage OK");
+////        image_info = PipelineContainerInfo(image_id++).checkpointed("Grabbed");
+////        QFuture<void> future = QtConcurrent::run(&pool, *this, &NV21VideoFilterRunnable::convert);
+////        watcher.setFuture(future);
+////    }
 
-    // showing only first 10 pictures
-    if(image_id >= 10) {
-        QCoreApplication::exit();
-    }
-
-    static int cnt = 0;
-
-    TimeLoggerLog("%s", "NV21 Render OK");
-
-    // convert() in a separate thread produces garbage images
-    if(!watcher.isRunning()) {
-        // around 75ms! too high. Same thing if using cnt%20 == 0
-        image = out_fbo->toImage();
-        TimeLoggerLog("%s", "NV21 toImage OK");
-        image_info = PipelineContainerInfo(image_id++).checkpointed("Grabbed");
-        QFuture<void> future = QtConcurrent::run(&pool, *this, &NV21VideoFilterRunnable::convert);
-        watcher.setFuture(future);
-    }
-
-    cnt++;
-
-    // convert in this thread results in good image (with isInit = true)
-//    image_id++;
-//    parent = this;
-//    //isInit = true;
-//    convert();
-
-    TimeLoggerLog("%s", "NV21 End");
+//    TimeLoggerLog("%s", "NV21 End");
 
     return *inputFrame;
 }
