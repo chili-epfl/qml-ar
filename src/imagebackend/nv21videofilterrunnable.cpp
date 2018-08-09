@@ -13,10 +13,6 @@
 #define GL_GLEXT_PROTOTYPES
 #include "GLES/glext.h"
 
-// GraphicBuffer stuff
-//#include "GraphicBuffer/GraphicBuffer.h"
-//#include <memory>
-
 #include "android/hardware_buffer.h"
 #include "nv21videofilterrunnable.h"
 #include "nv21videofilter.h"
@@ -30,10 +26,6 @@
 #include <QTextStream>
 #include <strings.h>
 
-//int usage = -1;
-//GraphicBuffer* graphicBuf = nullptr;
-//EGLClientBuffer* clientBuf = nullptr;
-
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& backend) : QObject(nullptr)
 {
     this->parent = (NV21VideoFilterRunnable*) &backend;
@@ -42,10 +34,6 @@ NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& 
 
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr), image_id(0)
 {
-    watcher.setParent(this);
-
-    // waiting for async output
-    connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
 }
 
 NV21VideoFilterRunnable::~NV21VideoFilterRunnable()
@@ -62,13 +50,18 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame, const QVideoSu
     return run(inputFrame);
 }
 
-AHardwareBuffer_Desc usage;
+AHardwareBuffer_Desc usage, usage1;
 AHardwareBuffer* graphicBuf = nullptr;
-EGLClientBuffer clientBuf = nullptr;
+EGLAPI EGLClientBuffer clientBuf = nullptr;
+
+EGLDisplay disp = nullptr;
+EGLImageKHR imageEGL = nullptr;
 
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 {
+    image_info = PipelineContainerInfo(image_id).checkpointed("Grabbed");
     int status = -111;
+    int eglerror = -555;
     TimeLoggerLog("%s", "NV21 Start");
 
     auto size(inputFrame->size());
@@ -85,31 +78,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
         gl = context->extraFunctions();
 
-        usage.format = AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM;
-        usage.height = outputHeight;
-        usage.width = outputWidth;
-        usage.layers = 1;
-        usage.rfu0 = 0;
-        usage.rfu1 = 0;
-        usage.stride = 10;
-        usage.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_NEVER | AHARDWAREBUFFER_USAGE_GPU_COLOR_OUTPUT;
-
-        TimeLoggerLog("%s %d %d %d %d", "NV21 usage", usage.format, usage.height, usage.width, usage.usage);
-
-        status = AHardwareBuffer_allocate(&usage, &graphicBuf);
-
-        TimeLoggerLog("%s %d %p", "NV21 allocate", status, graphicBuf);
-
-        graphicBuf = (AHardwareBuffer*) status;
-        status = 0;
-
-        TimeLoggerLog("%s %d %p", "NV21 allocate", status, graphicBuf);
-
-        clientBuf = eglGetNativeClientBufferANDROID(graphicBuf);
-
         this->currentContext = QOpenGLContext::currentContext();
-
-        TimeLoggerLog("%s %p isES %d", "NV21 client", clientBuf, context->isOpenGLES());
 
         auto version(context->isOpenGLES() ? "#version 300 es\n" : "#version 130\n");
 
@@ -129,11 +98,16 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
         QString fragment(version);
         fragment += R"(
+                    #extension GL_OES_EGL_image_external_essl3 : require
+                    //#extension EGL_KHR_image_base : require -> error
+                    //#extension EGL_KHR_image : require -> error
+
                     in lowp vec2 uvBase;
                     uniform sampler2D image;
                     const uint sampleByPixel = %1u;
                     const lowp vec2 uvDelta = vec2(%2, %3);
-                    out lowp float fragment;
+                    //out lowp float fragment;
+                out lowp vec4 fragment;
 
                     lowp vec3 rgb2hsv(lowp vec3 c)
                     {
@@ -179,16 +153,16 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
                         if(0.5 - diff < diff) { diff = 0.5 - diff; }
 
+                        lowp float value;
+
                         if(s >= min_s_ && s <= max_s_ &&
                                 v >= min_v_ && v <= max_v_ &&
-                                diff < delta_h_) { fragment = 1.0; }
-                        else fragment = 0.0;
+                                diff < delta_h_) { value = 1.0; }
+                        else value = 0.0;
+
+                fragment = vec4(1.0, value, value, 1.0);
                     }
         )";
-
-        // Qt calls?
-        // Java NDK?
-        // guy on github
 
         program.addShaderFromSourceCode(QOpenGLShader::Vertex, vertex);
         program.addShaderFromSourceCode(QOpenGLShader::Fragment, fragment.
@@ -202,9 +176,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         gl->glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
         gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::RGBA8_UNorm, outputWidth, outputHeight);
         gl->glBindRenderbuffer(GL_RENDERBUFFER, 0);
-//        // 0x502 error for Red and QOpenGLTexture::LuminanceFormat
-//        static QOpenGLFramebufferObjectFormat format;
-//        format.setInternalTextureFormat(QOpenGLTexture::LuminanceFormat);
 
         // setting third argument to QOpenGLTexture::R8_UNorm results in 0x500 error.
         out_fbo = new QOpenGLFramebufferObject(outputWidth, outputHeight);
@@ -215,19 +186,62 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
         TimeLoggerLog("%s", "NV21 context OK");
 
-        //usage = GraphicBuffer::USAGE_HW_TEXTURE | GraphicBuffer::USAGE_SW_READ_OFTEN | GraphicBuffer::USAGE_SW_WRITE_RARELY;
-        //TimeLoggerLog("NV21 HWB %p", graphicBuf);
+
+        TimeLoggerLog("%s", "NV21 001");
+
+        usage.format = AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
+        usage.height = outputHeight;
+        usage.width = outputWidth;
+        usage.layers = 1;
+        usage.rfu0 = 0;
+        usage.rfu1 = 0;
+        usage.stride = 10;
+        usage.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_NEVER | AHARDWAREBUFFER_USAGE_GPU_COLOR_OUTPUT;
+
+        TimeLoggerLog("%s %d %d %d %d", "NV21 usage", usage.format, usage.height, usage.width, usage.usage);
+
+        // returns -22 if first is NULL
+        status = AHardwareBuffer_allocate(&usage, &graphicBuf);
+
+        TimeLoggerLog("%s %d %p", "NV21 allocate", status, graphicBuf);
+
+        AHardwareBuffer_describe(graphicBuf, &usage1);
+        TimeLoggerLog("NV21 buffer format %d %d", usage.format, usage1.format);
+        TimeLoggerLog("NV21 buffer height %d %d", usage.height, usage1.height);
+        TimeLoggerLog("NV21 buffer width %d %d", usage.width, usage1.width);
+        TimeLoggerLog("NV21 buffer layers %d %d", usage.layers, usage1.layers);
+        TimeLoggerLog("NV21 buffer rfu0 %d %d", usage.rfu0, usage1.rfu0);
+        TimeLoggerLog("NV21 buffer rfu1 %d %d", usage.rfu1, usage1.rfu1);
+        TimeLoggerLog("NV21 buffer stride %d %d", usage.stride, usage1.stride);
+        TimeLoggerLog("NV21 buffer usage %d %d", usage.usage, usage1.usage);
+
+        clientBuf = eglGetNativeClientBufferANDROID(graphicBuf);
+        eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "getNativeClient", eglerror);
+
+        TimeLoggerLog("%s %p ", "NV21 client", clientBuf);
+
+        disp = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+        eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglGetDisplay", eglerror);
+
+    //    EGLint eglImageAttributes[] = {EGL_WIDTH, outputWidth, EGL_HEIGHT, outputHeight,
+    //                                   EGL_MATCH_FORMAT_KHR,  EGL_FORMAT_RGBA_8888_KHR, EGL_IMAGE_PRESERVED_KHR,
+    //                                   EGL_TRUE, EGL_NONE};
+        // specifying width -> getting an error (invalid argument) from createImageKHR
+        // same for format.
+        EGLint eglImageAttributes[] = {EGL_IMAGE_PRESERVED_KHR, EGL_TRUE, EGL_NONE};
+
+        imageEGL = eglCreateImageKHR(disp, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, clientBuf, eglImageAttributes);
+        eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglCreateImageKHR", eglerror);
+        TimeLoggerLog("%s disp %p image %p", "NV21 createImage", disp, imageEGL);
     }
-
-    TimeLoggerLog("%s", "NV21 001");
-
-    EGLDisplay disp = eglGetCurrentDisplay();
-    EGLint eglImageAttributes[] = {EGL_WIDTH, outputWidth, EGL_HEIGHT, outputHeight, EGL_MATCH_FORMAT_KHR,  EGL_FORMAT_RGBA_8888_KHR, EGL_IMAGE_PRESERVED_KHR, EGL_TRUE, EGL_NONE}; // TRUE??
-    GLeglImageOES imageEGL = eglCreateImageKHR(disp, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, clientBuf, eglImageAttributes);
-    TimeLoggerLog("%s disp %p image %p", "NV21 createImage", disp, imageEGL);
 
     gl->glActiveTexture(GL_TEXTURE0);
     gl->glBindTexture(QOpenGLTexture::Target2D, inputFrame->handle().toUInt());
+
+    // WORKS to obtain the source image
+//    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL);
+//    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglImageTargetTexture", eglerror);
+
     gl->glTexParameteri(QOpenGLTexture::Target2D, QOpenGLTexture::DirectionS, QOpenGLTexture::ClampToEdge);
     gl->glTexParameteri(QOpenGLTexture::Target2D, QOpenGLTexture::DirectionT, QOpenGLTexture::ClampToEdge);
     gl->glTexParameteri(QOpenGLTexture::Target2D, GL_TEXTURE_MIN_FILTER, QOpenGLTexture::Nearest);
@@ -238,59 +252,89 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     program.setUniformValue(imageLocation, 0);
     program.enableAttributeArray(0);
 
-    //graphicBuf = new GraphicBuffer(outputWidth, outputHeight, PIXEL_FORMAT_RGBA_8888, usage);
-    // have a buffer here!
-    //clientBuf = (EGLClientBuffer*) graphicBuf->getNativeBuffer();
-    //TimeLoggerLog("%s %p", "NV21 003'", clientBuf);
-
-    unsigned char *readPtr, *writePtr;
-    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL);
-
-    TimeLoggerLog("%s", "NV21 EGLImageTargetTexture");
-
     gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
     gl->glViewport(0, 0, outputWidth, outputHeight);
     gl->glDisable(GL_BLEND);
     gl->glDrawArrays(GL_TRIANGLES, 0, 3);
     gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    gl->glFinish();
 
-    TimeLoggerLog("%s", "NV21 006'");
+    //EGLint TextureHandle;
+    //gl->glGenTextures(1, (unsigned int*) &TextureHandle);
 
-    //int status_unlock = graphicBuf->unlock();
-    //TimeLoggerLog("%s %d", "NV21 006 UNL", status_unlock);
-    //gl->glFinish();
-    //TimeLoggerLog("%s", "NV21 006'' FIN");
+    /*
+     *
+     * D libar-chest.so: (null):0 ((null)): 1533831728971	+1 ms	0x8367f970	[QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame*)@../src/imagebackend/nv21videofilterrunnable.cpp:243]	NV21 GL_EXT_debug_marker GL_ARM_rgba8 GL_ARM_mali_shader_binary GL_OES_depth24 GL_OES_depth_texture GL_OES_depth_texture_cube_map GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_EXT_read_format_bgra GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_standard_derivatives GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_texture_npot GL_OES_vertex_half_float GL_OES_required_internalformat GL_OES_vertex_array_object GL_OES_mapbuffer GL_EXT_texture_format_BGRA8888 GL_EXT_texture_rg GL_EXT_texture_type_2_10_10_10_REV GL_OES_fbo_render_mipmap GL_OES_element_index_uint GL_EXT_shadow_samplers GL_OES_texture_compression_astc GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_hdr GL_KHR_texture_compression_astc_sliced_3d GL_KHR_debug GL_EXT_occlusion_query_boolean GL_EXT
+*/
+//    const char* r1 = (const char*) glGetString(GL_EXTENSIONS);
+//    const char* r2 = eglQueryString(eglGetCurrentDisplay(), EGL_EXTENSIONS);
+//    TimeLoggerLog("NV21 %s /// %s", r1, r2);
 
-    //int status_lock = graphicBuf->lock(GraphicBuffer::USAGE_SW_READ_OFTEN, (void**) &readPtr);
-    status = AHardwareBuffer_lock(graphicBuf, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, NULL, (void**) &readPtr);
-    TimeLoggerLog("%s %d %p", "NV21 007 LOCK", status, readPtr);
+//    EGLint bitmapaddr, pitch, origin;
+//    eglQuerySurface(disp, imageEGL, EGL_BITMAP_POINTER_KHR, &bitmapaddr);
+//    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglQuery1", eglerror);
+
+//    eglQuerySurface(disp, imageEGL, EGL_BITMAP_PITCH_KHR, &pitch);
+//    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglQuery2", eglerror);
+
+//    eglQuerySurface(disp, imageEGL, EGL_BITMAP_ORIGIN_KHR, &origin);
+//    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglQuery3", eglerror);
+
+//    TimeLoggerLog("NV21 addr %d pitch %d origin %d", bitmapaddr, pitch, origin);
+
+    // or +    gl->glBindTexture(GL_TEXTURE_2D, textureID);
+
+//    gl->glActiveTexture(GL_TEXTURE0);
+
+    GLuint outTex;
+    gl->glGenTextures(1, &outTex);
+
+    gl->glBindTexture(GL_TEXTURE_2D, outTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    // THIS LINE MAKES THE SOURCE FRAME APPEAR
+    gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
+//    gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
+    // WORKS with gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
+    gl->glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::RGBA8_UNorm, 0, 0, outputWidth, outputHeight, 0);
+
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL); // this call makes the image original even if I draw on original texture!
+    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglImageTargetTexture", eglerror);
+
+    TimeLoggerLog("%s", "NV21 006'");    
 
     uchar data[600000];
     bzero(data, 600000);
-    writePtr = data;
+    unsigned char *readPtr, *writePtr;
+    writePtr = data;    
 
-    TimeLoggerLog("%s %p", "NV21 008", writePtr);
+    status = AHardwareBuffer_lock(graphicBuf, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, NULL, (void**) &readPtr);
+    int stride = usage1.stride;
+    TimeLoggerLog("%s %d %p stride %d", "NV21 007 LOCK", status, readPtr, stride);
 
-    int stride = 1;//graphicBuf->getStride();
+    //gl->glReadPixels(0, 0, outputWidth, outputHeight, QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, data);
 
-    TimeLoggerLog("%s %d", "NV21 009", stride);
-
+    bool allZeros = true;
     for (int row = 0; row < outputHeight; row++) {
-        //TimeLoggerLog("%s %d", "NV21 010", row);
         memcpy(writePtr, readPtr, outputWidth * 4);
-        readPtr = (unsigned char *)(int(readPtr) + 1200 * 4);
+        for(int col = 0; col < outputWidth * 4; col++) {
+            if(readPtr[col] != 0) allZeros = false;
+        }
+        readPtr = (unsigned char *)(int(readPtr) + stride * 4);
         writePtr = (unsigned char *)(int(writePtr) + outputWidth * 4);
+
     }
 
-    TimeLoggerLog("%s", "NV21 011");
+    TimeLoggerLog("%s %d", "NV21 011 allzeros", allZeros);
 
-    //graphicBuf->unlock();
-    //status = AHardwareBuffer_unlock(graphicBuf, NULL);
+    status = AHardwareBuffer_unlock(graphicBuf, NULL);
 
     TimeLoggerLog("%s %d", "NV21 UNLOCK", status);
 
     image = QImage(data, outputWidth, outputHeight, QImage::Format_RGBA8888);
-    //image = out_fbo->toImage();
 
     TimeLoggerLog("%s", "NV21 012");
 
@@ -299,12 +343,9 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     ss << "/shader" << image_id++ << ".png";
     image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append(s));
 
-    TimeLoggerLog("%s", "NV21 IMsave OK");
+    emit imageConverted(PipelineContainer<QImage>(image.convertToFormat(QImage::Format_Grayscale8), image_info.checkpointed("Sent")));
 
-    // showing only first 10 pictures
-    if(image_id >= 10) {
-        QCoreApplication::exit();
-    }
+    TimeLoggerLog("%s", "NV21 IMsave OK");
 
     return *inputFrame;
 }
