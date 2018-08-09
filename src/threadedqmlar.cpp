@@ -11,6 +11,7 @@
 #include "threadedqmlar.h"
 #include "qmlar.h"
 #include "timelogger.h"
+#include "hardwarebuffer.h"
 
 ThreadedQMLAR::ThreadedQMLAR()
 {

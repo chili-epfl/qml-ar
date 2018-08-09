@@ -54,7 +54,6 @@ public:
     QVideoFrame run(QVideoFrame* input);
 
     QImage image;
-    void convert();
     NV21VideoFilterRunnable(const NV21VideoFilterRunnable &backend);
 private:
 
@@ -104,12 +103,5 @@ private:
 
 signals:
     void imageConverted(PipelineContainer<QImage>);
-
-public slots:
-
-    /**
-    * @brief Called on thread finish
-    */
-    void handleFinished();
 };
 #endif // NV21VIDEOFILTERRUNNABLE_H
