@@ -170,7 +170,7 @@ The library also is capable of estimating the position in the world for a point 
 <img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/linux_3dpoint.jpg" width="250px" />
 
 ## Contact
-<a href="http://sergeivolodin.github.io">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
+<a href="http://sergeivolodin.github.io">Sergei Volodin</a>, <a href="mailto:wafa.johal@gmail.com">Wafa Johal</a>, <a href="mailto:ayberk.ozgur@epfl.ch">Ayberk Özgür</a>, EPFL, <a href="http://chili.epfl.ch">CHILI lab</a>
 
 ## qpm
 The project is also available at the qpm Qt repository as <a href="https://www.qpm.io/packages/ch.epfl.chili.qmlar/index.html">ch.epfl.chili.qmlar</a> and can be installed using
