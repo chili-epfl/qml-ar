@@ -1,0 +1,4 @@
+<map id="CalibratedCameraFileStorage" name="CalibratedCameraFileStorage">
+<area shape="rect" id="node2" href="$classCalibratedCamera.html" title="This class stores information about a calibrated camera. " alt="" coords="5,80,132,107"/>
+<area shape="rect" id="node4" href="$classConfigJSON.html" title="This class implements a JSON config reader It should be inherited to add JSON functionality. " alt="" coords="157,80,253,107"/>
+</map>

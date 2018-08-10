@@ -1,0 +1,15 @@
+<map id="src/threadedqmlar.cpp" name="src/threadedqmlar.cpp">
+<area shape="rect" id="node2" href="$threadedqmlar_8h.html" title="This class is a wrapper around QMLAR object which is placed at a separate thread and controlled by th..." alt="" coords="668,80,783,107"/>
+<area shape="rect" id="node6" href="$qmlar_8h.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="498,155,563,181"/>
+<area shape="rect" id="node30" href="$timelogger_8h.html" title="This class allows to output a line along with thread number and a timestamp. " alt="" coords="816,80,909,107"/>
+<area shape="rect" id="node13" href="$markerstorage_8h.html" title="This class stores the set of used markers loads them from a file and outputs the coordinates of each ..." alt="" coords="227,229,343,256"/>
+<area shape="rect" id="node16" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="355,304,429,331"/>
+<area shape="rect" id="node29" href="$configjson_8h.html" title="This class implements a JSON config reader It should be inherited to add JSON functionality. " alt="" coords="239,304,331,331"/>
+<area shape="rect" id="node18" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="429,379,528,405"/>
+<area shape="rect" id="node20" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="601,453,733,480"/>
+<area shape="rect" id="node28" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="419,453,480,480"/>
+<area shape="rect" id="node23" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="601,528,732,555"/>
+<area shape="rect" id="node25" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="377,603,527,629"/>
+<area shape="rect" id="node27" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="665,603,809,629"/>
+<area shape="rect" id="node31" href="$config_8h.html" title="In this file different compile options are defined. " alt="" coords="951,155,1019,181"/>
+</map>

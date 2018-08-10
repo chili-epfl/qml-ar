@@ -1,0 +1,13 @@
+<map id="src/imagebackend/markerbackend.h" name="src/imagebackend/markerbackend.h">
+<area shape="rect" id="node2" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="158,379,307,405"/>
+<area shape="rect" id="node12" href="$markerdetector_8h.html" title="This class stores a common interface for marker detectors. " alt="" coords="335,80,455,107"/>
+<area shape="rect" id="node6" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="414,453,545,480"/>
+<area shape="rect" id="node8" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="536,528,687,555"/>
+<area shape="rect" id="node10" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="254,528,398,555"/>
+<area shape="rect" id="node15" href="$markerstorage_8h.html" title="This class stores the set of used markers loads them from a file and outputs the coordinates of each ..." alt="" coords="773,155,889,181"/>
+<area shape="rect" id="node18" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="624,229,697,256"/>
+<area shape="rect" id="node26" href="$configjson_8h.html" title="This class implements a JSON config reader It should be inherited to add JSON functionality. " alt="" coords="780,229,872,256"/>
+<area shape="rect" id="node21" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="561,304,659,331"/>
+<area shape="rect" id="node23" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="544,379,676,405"/>
+<area shape="rect" id="node25" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="802,379,863,405"/>
+</map>

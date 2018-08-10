@@ -1,0 +1,5 @@
+<map id="MVPProvider" name="MVPProvider">
+<area shape="rect" id="node3" href="$classIMUMVPDecorator.html" title="This class decorates an MVP providerby adding IMU delta movement. " alt="" coords="5,155,139,181"/>
+<area shape="rect" id="node4" href="$classMarkerMVPProvider.html" title="This class implements MVPProvider using pose from a detected markers, a calibrated camera&#39;s matrix mu..." alt="" coords="163,155,301,181"/>
+<area shape="rect" id="node5" href="$classPoseFilter.html" title="This class implements low&#45;pass filter on Pose (Rotation + Translation) " alt="" coords="326,155,407,181"/>
+</map>

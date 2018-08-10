@@ -1,0 +1,30 @@
+<map id="src/camera/calibratedcamera.h" name="src/camera/calibratedcamera.h">
+<area shape="rect" id="node2" href="$perspectivecamera_8h.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="334,304,514,331"/>
+<area shape="rect" id="node7" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="1158,80,1294,107"/>
+<area shape="rect" id="node8" href="$posecamerapnp_8h.html" title="This class converts camera + 3D&#45;2D correspondences to a camera pose. " alt="" coords="802,155,965,181"/>
+<area shape="rect" id="node10" href="$worldimage_8cpp.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="1264,155,1415,181"/>
+<area shape="rect" id="node27" href="$calibratedcamera_8cpp.html" title="This class stores information about a calibrated camera. " alt="" coords="1698,80,1912,107"/>
+<area shape="rect" id="node28" href="$calibratedcamerafilestorage_8h.html" title="This class implements CalibratedCamera and allows to load information from a file. " alt="" coords="1412,80,1673,107"/>
+<area shape="rect" id="node3" href="$markermvpprovider_8h.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="244,379,425,405"/>
+<area shape="rect" id="node5" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="1206,453,1308,480"/>
+<area shape="rect" id="node6" href="$perspectivecamera_8cpp.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="25,379,220,405"/>
+<area shape="rect" id="node4" href="$markermvpprovider_8cpp.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="57,453,252,480"/>
+<area shape="rect" id="node11" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="1042,155,1189,181"/>
+<area shape="rect" id="node9" href="$posecamerapnp_8cpp.html" title="This class converts camera + 3D&#45;2D correspondences to a camera pose. " alt="" coords="792,229,968,256"/>
+<area shape="rect" id="node12" href="$marker_8cpp.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="1337,229,1497,256"/>
+<area shape="rect" id="node13" href="$markerdetector_8cpp.html" title="This class stores a common interface for marker detectors. " alt="" coords="1012,379,1219,405"/>
+<area shape="rect" id="node14" href="$markerstorage_8h.html" title="This class stores the set of used markers loads them from a file and outputs the coordinates of each ..." alt="" coords="1124,229,1313,256"/>
+<area shape="rect" id="node15" href="$blackenrest_8h.html" title="Paints image parts not containing markers in black. " alt="" coords="1295,304,1432,331"/>
+<area shape="rect" id="node17" href="$markerdetector_8h.html" title="This class stores a common interface for marker detectors. " alt="" coords="815,304,1008,331"/>
+<area shape="rect" id="node22" href="$markerstorage_8cpp.html" title="This class stores the set of used markers loads them from a file and outputs the coordinates of each ..." alt="" coords="588,304,790,331"/>
+<area shape="rect" id="node23" href="$qmlar_8h.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="1827,304,1914,331"/>
+<area shape="rect" id="node16" href="$blackenrest_8cpp.html" title="Paints image parts not containing markers in black. " alt="" coords="1346,379,1496,405"/>
+<area shape="rect" id="node18" href="$markerbackend_8h.html" title="A backend for QML for marker detection preview. " alt="" coords="756,379,988,405"/>
+<area shape="rect" id="node20" href="$uchiyamarkerdetector_8h.html" title="Wrapper around C&#45;style UchiyaMarkers project obtained from main.cpp file from UchiyaMarkers project..." alt="" coords="450,379,680,405"/>
+<area shape="rect" id="node19" href="$markerbackend_8cpp.html" title="A backend for QML for marker detection preview. " alt="" coords="748,453,995,480"/>
+<area shape="rect" id="node21" href="$uchiyamarkerdetector_8cpp.html" title="Wrapper around C&#45;style UchiyaMarkers project obtained from main.cpp file from UchiyaMarkers project..." alt="" coords="442,453,688,480"/>
+<area shape="rect" id="node24" href="$threadedqmlar_8h.html" title="This class is a wrapper around QMLAR object which is placed at a separate thread and controlled by th..." alt="" coords="1840,379,1978,405"/>
+<area shape="rect" id="node26" href="$threadedqmlar_8cpp.html" title="This class is a wrapper around QMLAR object which is placed at a separate thread and controlled by th..." alt="" coords="1940,453,2091,480"/>
+<area shape="rect" id="node25" href="$qmlarplugin_8cpp.html" title="This class registers QMLAR as a singleton object in QML and QMLARMarkers image provider with markers ..." alt="" coords="1782,453,1916,480"/>
+<area shape="rect" id="node29" href="$calibratedcamerafilestorage_8cpp.html" title="This class implements CalibratedCamera and allows to load information from a file. " alt="" coords="1440,155,1714,181"/>
+</map>

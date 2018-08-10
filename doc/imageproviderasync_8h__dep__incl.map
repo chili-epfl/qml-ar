@@ -1,0 +1,24 @@
+<map id="src/imagebackend/imageproviderasync.h" name="src/imagebackend/imageproviderasync.h">
+<area shape="rect" id="node2" href="$blackenrest_8h.html" title="Paints image parts not containing markers in black. " alt="" coords="350,80,487,107"/>
+<area shape="rect" id="node4" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="1236,155,1337,181"/>
+<area shape="rect" id="node5" href="$portablebackendfactory_8h.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="763,80,1000,107"/>
+<area shape="rect" id="node7" href="$imagebackend_8h.html" title="This class implements a QQuickImageProvider showing a constant image from a file. ..." alt="" coords="512,80,739,107"/>
+<area shape="rect" id="node9" href="$imageproviderasync_8cpp.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="2495,80,2769,107"/>
+<area shape="rect" id="node10" href="$imagescaler_8h.html" title="This class scales images. " alt="" coords="1301,80,1515,107"/>
+<area shape="rect" id="node12" href="$markerbackend_8h.html" title="A backend for QML for marker detection preview. " alt="" coords="1539,80,1771,107"/>
+<area shape="rect" id="node14" href="$opencvbackend_8h.html" title="OpenCV camera backend for QML. " alt="" coords="91,80,325,107"/>
+<area shape="rect" id="node16" href="$qtbackend_8h.html" title="QCamera backend for QML. " alt="" coords="1024,80,1227,107"/>
+<area shape="rect" id="node18" href="$randomimagebackend_8h.html" title="This class takes input from pre&#45;created byte array and outputs it as a QImage. " alt="" coords="1795,80,2066,107"/>
+<area shape="rect" id="node20" href="$blobdetector_8h.html" title="This class detects blobs on a QImage and returns a QImage with white pixels at blob positions..." alt="" coords="2090,80,2267,107"/>
+<area shape="rect" id="node22" href="$huethreshold_8h.html" title="This class outputs binarized image taking colors in [hue&#45;delta, hue+delta]. " alt="" coords="2291,80,2471,107"/>
+<area shape="rect" id="node3" href="$blackenrest_8cpp.html" title="Paints image parts not containing markers in black. " alt="" coords="278,155,429,181"/>
+<area shape="rect" id="node6" href="$portablebackendfactory_8cpp.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="719,155,969,181"/>
+<area shape="rect" id="node8" href="$imagebackend_8cpp.html" title="This class implements a QQuickImageProvider showing a constant image from a file. ..." alt="" coords="453,155,694,181"/>
+<area shape="rect" id="node11" href="$imagescaler_8cpp.html" title="This class scales images. " alt="" coords="1361,155,1588,181"/>
+<area shape="rect" id="node13" href="$markerbackend_8cpp.html" title="A backend for QML for marker detection preview. " alt="" coords="1613,155,1859,181"/>
+<area shape="rect" id="node15" href="$opencvbackend_8cpp.html" title="OpenCV camera backend for QML. " alt="" coords="5,155,253,181"/>
+<area shape="rect" id="node17" href="$qtbackend_8cpp.html" title="QCamera backend for QML. " alt="" coords="994,155,1211,181"/>
+<area shape="rect" id="node19" href="$randomimagebackend_8cpp.html" title="This class takes input from pre&#45;created byte array and outputs it as a QImage. " alt="" coords="1883,155,2167,181"/>
+<area shape="rect" id="node21" href="$blobdetector_8cpp.html" title="This class detects blobs on a QImage and returns a QImage with white pixels at blob positions..." alt="" coords="2191,155,2382,181"/>
+<area shape="rect" id="node23" href="$huethreshold_8cpp.html" title="This class outputs binarized image taking colors in [hue&#45;delta, hue+delta]. " alt="" coords="2407,155,2601,181"/>
+</map>

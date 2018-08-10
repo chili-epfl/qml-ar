@@ -1,0 +1,4 @@
+<map id="src/markers/blobdetector.h" name="src/markers/blobdetector.h">
+<area shape="rect" id="node2" href="$blobdetector_8cpp.html" title="This class detects blobs on a QImage and returns a QImage with white pixels at blob positions..." alt="" coords="5,80,196,107"/>
+<area shape="rect" id="node3" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="221,80,322,107"/>
+</map>

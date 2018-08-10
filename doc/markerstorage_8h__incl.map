@@ -1,0 +1,10 @@
+<map id="src/markers/markerstorage.h" name="src/markers/markerstorage.h">
+<area shape="rect" id="node4" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="297,80,371,107"/>
+<area shape="rect" id="node22" href="$configjson_8h.html" title="This class implements a JSON config reader It should be inherited to add JSON functionality. " alt="" coords="139,80,231,107"/>
+<area shape="rect" id="node9" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="415,155,514,181"/>
+<area shape="rect" id="node11" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="399,229,531,256"/>
+<area shape="rect" id="node21" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="674,229,735,256"/>
+<area shape="rect" id="node15" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="347,304,478,331"/>
+<area shape="rect" id="node17" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="193,379,344,405"/>
+<area shape="rect" id="node19" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="482,379,626,405"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="src/markers/blobdetector.cpp" name="src/markers/blobdetector.cpp">
+<area shape="rect" id="node2" href="$blobdetector_8h.html" title="This class detects blobs on a QImage and returns a QImage with white pixels at blob positions..." alt="" coords="445,80,549,107"/>
+<area shape="rect" id="node21" href="$qvideoframehelpers_8h.html" title="Helpers for QVideoFrame used in this project. " alt="" coords="1547,80,1694,107"/>
+<area shape="rect" id="node25" href="$timelogger_8h.html" title="This class allows to output a line along with thread number and a timestamp. " alt="" coords="1775,80,1869,107"/>
+<area shape="rect" id="node6" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="366,155,515,181"/>
+<area shape="rect" id="node9" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="386,229,517,256"/>
+<area shape="rect" id="node11" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="548,304,699,331"/>
+<area shape="rect" id="node13" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="379,304,523,331"/>
+<area shape="rect" id="node27" href="$config_8h.html" title="In this file different compile options are defined. " alt="" coords="1880,155,1948,181"/>
+</map>

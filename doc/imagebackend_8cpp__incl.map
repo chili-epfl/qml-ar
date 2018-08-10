@@ -1,0 +1,7 @@
+<map id="src/imagebackend/imagebackend.cpp" name="src/imagebackend/imagebackend.cpp">
+<area shape="rect" id="node2" href="$imagebackend_8h.html" title="This class implements a QQuickImageProvider showing a constant image from a file. ..." alt="" coords="387,80,505,107"/>
+<area shape="rect" id="node3" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="222,155,371,181"/>
+<area shape="rect" id="node7" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="231,229,362,256"/>
+<area shape="rect" id="node9" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="293,304,444,331"/>
+<area shape="rect" id="node11" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="469,304,613,331"/>
+</map>

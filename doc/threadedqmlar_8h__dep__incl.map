@@ -1,0 +1,4 @@
+<map id="src/threadedqmlar.h" name="src/threadedqmlar.h">
+<area shape="rect" id="node2" href="$qmlarplugin_8cpp.html" title="This class registers QMLAR as a singleton object in QML and QMLARMarkers image provider with markers ..." alt="" coords="5,80,140,107"/>
+<area shape="rect" id="node3" href="$threadedqmlar_8cpp.html" title="This class is a wrapper around QMLAR object which is placed at a separate thread and controlled by th..." alt="" coords="164,80,315,107"/>
+</map>

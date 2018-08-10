@@ -1,0 +1,6 @@
+<map id="src/ar/perspectivecamera.h" name="src/ar/perspectivecamera.h">
+<area shape="rect" id="node2" href="$markermvpprovider_8h.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="56,80,237,107"/>
+<area shape="rect" id="node4" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="224,155,325,181"/>
+<area shape="rect" id="node5" href="$perspectivecamera_8cpp.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="312,80,507,107"/>
+<area shape="rect" id="node3" href="$markermvpprovider_8cpp.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="5,155,200,181"/>
+</map>

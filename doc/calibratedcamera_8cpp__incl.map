@@ -1,0 +1,8 @@
+<map id="src/camera/calibratedcamera.cpp" name="src/camera/calibratedcamera.cpp">
+<area shape="rect" id="node2" href="$timelogger_8h.html" title="This class allows to output a line along with thread number and a timestamp. " alt="" coords="84,80,177,107"/>
+<area shape="rect" id="node5" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="250,80,382,107"/>
+<area shape="rect" id="node4" href="$config_8h.html" title="In this file different compile options are defined. " alt="" coords="97,155,165,181"/>
+<area shape="rect" id="node9" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="472,155,603,181"/>
+<area shape="rect" id="node11" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="475,229,626,256"/>
+<area shape="rect" id="node13" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="651,229,795,256"/>
+</map>

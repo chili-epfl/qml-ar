@@ -1,0 +1,14 @@
+<map id="src/ar/markermvpprovider.h" name="src/ar/markermvpprovider.h">
+<area shape="rect" id="node2" href="$mvpprovider_8h.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="925,379,1029,405"/>
+<area shape="rect" id="node11" href="$markerdetector_8h.html" title="This class stores a common interface for marker detectors. " alt="" coords="570,80,690,107"/>
+<area shape="rect" id="node28" href="$perspectivecamera_8h.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="876,304,1019,331"/>
+<area shape="rect" id="node5" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="562,453,693,480"/>
+<area shape="rect" id="node7" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="337,528,488,555"/>
+<area shape="rect" id="node9" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="626,528,770,555"/>
+<area shape="rect" id="node15" href="$markerstorage_8h.html" title="This class stores the set of used markers loads them from a file and outputs the coordinates of each ..." alt="" coords="161,155,277,181"/>
+<area shape="rect" id="node18" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="353,229,427,256"/>
+<area shape="rect" id="node26" href="$configjson_8h.html" title="This class implements a JSON config reader It should be inherited to add JSON functionality. " alt="" coords="104,229,196,256"/>
+<area shape="rect" id="node21" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="381,304,479,331"/>
+<area shape="rect" id="node23" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="563,379,695,405"/>
+<area shape="rect" id="node25" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="418,379,479,405"/>
+</map>

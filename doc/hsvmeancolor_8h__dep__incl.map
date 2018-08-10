@@ -1,0 +1,6 @@
+<map id="src/markers/hsvmeancolor.h" name="src/markers/hsvmeancolor.h">
+<area shape="rect" id="node2" href="$hsvintervaldetector_8h.html" title="This class receives matched points and deduces the color interval they are in. " alt="" coords="107,80,323,107"/>
+<area shape="rect" id="node5" href="$hsvmeancolor_8cpp.html" title="This class calculates mean Hue in HSV models. " alt="" coords="348,80,549,107"/>
+<area shape="rect" id="node3" href="$hsvintervaldetector_8cpp.html" title="This class receives matched points and deduces the color interval they are in. " alt="" coords="5,155,236,181"/>
+<area shape="rect" id="node4" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="261,155,362,181"/>
+</map>

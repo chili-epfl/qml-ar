@@ -1,0 +1,6 @@
+<map id="src/imagebackend/imagescaler.h" name="src/imagebackend/imagescaler.h">
+<area shape="rect" id="node4" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="201,80,350,107"/>
+<area shape="rect" id="node7" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="395,155,526,181"/>
+<area shape="rect" id="node9" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="421,229,572,256"/>
+<area shape="rect" id="node11" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="597,229,741,256"/>
+</map>

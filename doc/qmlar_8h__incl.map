@@ -1,0 +1,11 @@
+<map id="src/qmlar.h" name="src/qmlar.h">
+<area shape="rect" id="node9" href="$markerstorage_8h.html" title="This class stores the set of used markers loads them from a file and outputs the coordinates of each ..." alt="" coords="178,80,294,107"/>
+<area shape="rect" id="node12" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="489,155,562,181"/>
+<area shape="rect" id="node26" href="$configjson_8h.html" title="This class implements a JSON config reader It should be inherited to add JSON functionality. " alt="" coords="239,155,331,181"/>
+<area shape="rect" id="node14" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="715,229,813,256"/>
+<area shape="rect" id="node16" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="802,304,934,331"/>
+<area shape="rect" id="node25" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="665,304,727,331"/>
+<area shape="rect" id="node20" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="784,379,915,405"/>
+<area shape="rect" id="node22" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="793,453,943,480"/>
+<area shape="rect" id="node24" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="511,453,655,480"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="src/ar/imumvpdecorator.cpp" name="src/ar/imumvpdecorator.cpp">
+<area shape="rect" id="node2" href="$timelogger_8h.html" title="This class allows to output a line along with thread number and a timestamp. " alt="" coords="84,102,177,129"/>
+<area shape="rect" id="node5" href="$imumvpdecorator_8h.html" title="This class decorates an MVP provider by adding IMU delta movement. " alt="" coords="388,102,521,129"/>
+<area shape="rect" id="node4" href="$config_8h.html" title="In this file different compile options are defined. " alt="" coords="97,199,165,225"/>
+<area shape="rect" id="node6" href="$mvpprovider_8h.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="189,199,293,225"/>
+<area shape="rect" id="node9" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="279,273,409,300"/>
+<area shape="rect" id="node11" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="341,348,491,375"/>
+<area shape="rect" id="node13" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="516,348,660,375"/>
+</map>
