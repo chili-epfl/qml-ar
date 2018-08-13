@@ -36,6 +36,19 @@ signals:
      * @param image the ready image
      */
     void imageAvailable(PipelineContainer<QImage> image);
+
+protected:
+    /**
+     * @brief Describes if the object is currently active
+     */
+    bool is_active = true;
+
+public slots:
+    /**
+     * @brief Make this object active/inactive
+     * @param active The new active/inactive parameter
+     */
+    void setActive(bool active) {is_active = active;}
 };
 
 #endif // IMAGEPROVIDERASYNC_H

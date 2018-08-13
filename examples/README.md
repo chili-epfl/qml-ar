@@ -12,5 +12,6 @@ Note that you need to print the `ar_demo_sheet.pdf` on A4
 6. `05_markers`: This project renders a cube at (0, 0, 0) using qml-ar. Moreover, it show how to react on markers dissapearance with a message to the user.
 7. `06_mvp`: This project renders a cube at (0, 0, 0) using qml-ar. Moreover, it show how to obtain the raw MVP matrix from AR lib.
 8. `07_property_setting`: This project shows how to manage properties of your the 3D scene by dynamically changing the cube position.
+8. `08_pause`: This project shows how to pause and restart QMLAR
 9. `98_test_image`: This project is similar to `02_image`, but it exits right after it can detect markers. Useful for testing the library after installation.
 10. `99_cpp_only`: This project shows how to use QML-AR w/o QML (using only Qt GUI).

@@ -107,6 +107,9 @@ void QtCameraBackend::handleFinished()
 
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
+    // doing nothing if deactivated
+    if(!is_active) return;
+
     TimeLoggerThroughput("%s", "Received image from camera");
 
     // not converting frame if thread is busy

@@ -40,6 +40,9 @@ ThreadedQMLAR::ThreadedQMLAR()
     connect(instance, SIGNAL(newMVMatrix(QMatrix4x4)), this, SLOT(setMVMatrix(QMatrix4x4)), Qt::QueuedConnection);
     connect(instance, SIGNAL(newPMatrix(QMatrix4x4)), this, SLOT(setPMatrix(QMatrix4x4)), Qt::QueuedConnection);
 
+    // running by default
+    is_running = true;
+
     // starting AR
     thread->start();
 }
@@ -152,6 +155,11 @@ int ThreadedQMLAR::getFrameDelay()
     return instance->getFrameDelay();
 }
 
+bool ThreadedQMLAR::getRunning()
+{
+    return is_running;
+}
+
 void ThreadedQMLAR::setCameraId(int camera_id)
 {
     emit setCameraIdSignal(camera_id);
@@ -206,4 +214,10 @@ void ThreadedQMLAR::setPMatrix(QMatrix4x4 that)
 {
     this->p_matrix = that;
     emit newPMatrix(p_matrix);
+}
+
+void ThreadedQMLAR::setRunning(bool value)
+{
+    is_running = value;
+    instance->setRunning(is_running);
 }

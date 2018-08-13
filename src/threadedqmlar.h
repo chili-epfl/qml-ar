@@ -78,6 +78,9 @@ class ThreadedQMLAR : public QObject
     /** @brief Current delay in frames from capture to computed pose */
     Q_PROPERTY(int frame_delay READ getFrameDelay NOTIFY imageUpdated)
 
+    /** @brief Pause/stop QMLAR */
+    Q_PROPERTY(int running READ getRunning WRITE setRunning)
+
 private:
     /**
     * @brief Instance to QMLAR object
@@ -103,6 +106,11 @@ private:
     * @brief MVP matrix buffer
     */
     QMatrix4x4 mvp_matrix, mv_matrix, p_matrix;
+
+    /**
+     * @brief Is QMLAR currently running?
+     */
+    bool is_running;
 public:
     /** @brief Empty constructor */
     ThreadedQMLAR();
@@ -176,6 +184,11 @@ public:
     */
     int getFrameDelay();
 
+    /**
+    * @brief Is QMLAR currently active?
+    */
+    bool getRunning();
+
 public slots:
     /**
     * @brief Initialize from camera id (default value -1)
@@ -226,6 +239,11 @@ public slots:
     * @brief Set P matrix (internal)
     */
     void setPMatrix(QMatrix4x4);
+
+    /**
+    * @brief Set running/paused
+    */
+    void setRunning(bool);
 
 signals:
     /**
