@@ -1,6 +1,6 @@
 /**
  * @file nv21videofilterrunnable.h
- * @brief This class converts NV21 format to RGB888
+ * @brief This class converts NV21 input QVideoFrame(texture) to RGB888, also doing downscaling and HSV thresholding
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-26
