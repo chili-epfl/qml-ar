@@ -99,8 +99,6 @@ public:
     */
     // https://stackoverflow.com/questions/17187193/resize-downsize-yuv420sp-image
     static void halfYUV(uchar *src, uchar *dst, int w, int h);
-
-    static QImage VideoFrameBinToImage(const QVideoFrame &frameOriginal);
 };
 
 #endif // QVIDEOFRAMEHELPERS_H
