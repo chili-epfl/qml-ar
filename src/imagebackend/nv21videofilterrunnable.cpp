@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <QTextStream>
 #include <strings.h>
+#include <unistd.h>
 
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& backend) : QObject(nullptr)
 {
@@ -73,10 +74,30 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
     Q_ASSERT(inputFrame->handleType() == QAbstractVideoBuffer::HandleType::GLTextureHandle);
 
+    GLenum err = -7;
+
     if (gl == nullptr) {
         auto context(QOpenGLContext::currentContext());
 
         gl = context->extraFunctions();
+
+        gl->glGenTextures(1, &outTex);
+        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+        gl->glBindTexture(GL_TEXTURE_2D, outTex);
+        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
         this->currentContext = QOpenGLContext::currentContext();
 
@@ -99,6 +120,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         QString fragment(version);
         fragment += R"(
                     #extension GL_OES_EGL_image_external_essl3 : require
+                    #extension GL_OES_EGL_image_external : require
                     //#extension EGL_KHR_image_base : require -> error
                     //#extension EGL_KHR_image : require -> error
 
@@ -160,7 +182,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                                 diff < delta_h_) { value = 1.0; }
                         else value = 0.0;
 
-                fragment = vec4(1.0, value, value, 1.0);
+                fragment = vec4(value, value, value, 1.0);
                     }
         )";
 
@@ -172,20 +194,31 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         program.link();
         imageLocation = program.uniformLocation("image");
 
-        gl->glGenRenderbuffers(1, &renderbuffer);
-        gl->glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-        gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::RGBA8_UNorm, outputWidth, outputHeight);
-        gl->glBindRenderbuffer(GL_RENDERBUFFER, 0);
+//        gl->glGenRenderbuffers(1, &renderbuffer);
+//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+//        gl->glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+//        gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::RGBA8_UNorm, outputWidth, outputHeight);
+//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+//        gl->glBindRenderbuffer(GL_RENDERBUFFER, 0);
+//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
         // setting third argument to QOpenGLTexture::R8_UNorm results in 0x500 error.
         out_fbo = new QOpenGLFramebufferObject(outputWidth, outputHeight);
 
-        Q_ASSERT(out_fbo->bind());
-        gl->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
-        gl->glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//        gl->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
+//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+        gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
+        err = glGetError(); TimeLoggerLog("GL call: %d %d", err, out_fbo->handle());
+
+        gl->glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, outTex, 0);
+        err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
         TimeLoggerLog("%s", "NV21 context OK");
-
 
         TimeLoggerLog("%s", "NV21 001");
 
@@ -236,15 +269,23 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     }
 
     gl->glActiveTexture(GL_TEXTURE0);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
     gl->glBindTexture(QOpenGLTexture::Target2D, inputFrame->handle().toUInt());
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
     // WORKS to obtain the source image
 //    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL);
 //    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglImageTargetTexture", eglerror);
 
     gl->glTexParameteri(QOpenGLTexture::Target2D, QOpenGLTexture::DirectionS, QOpenGLTexture::ClampToEdge);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
     gl->glTexParameteri(QOpenGLTexture::Target2D, QOpenGLTexture::DirectionT, QOpenGLTexture::ClampToEdge);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
     gl->glTexParameteri(QOpenGLTexture::Target2D, GL_TEXTURE_MIN_FILTER, QOpenGLTexture::Nearest);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
     TimeLoggerLog("%s", "NV21 002");
 
@@ -253,14 +294,19 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     program.enableAttributeArray(0);
 
     gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
-    gl->glViewport(0, 0, outputWidth, outputHeight);
-    gl->glDisable(GL_BLEND);
-    gl->glDrawArrays(GL_TRIANGLES, 0, 3);
-    gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    gl->glFinish();
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
-    //EGLint TextureHandle;
-    //gl->glGenTextures(1, (unsigned int*) &TextureHandle);
+    gl->glViewport(0, 0, outputWidth, outputHeight);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+    gl->glDisable(GL_BLEND);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+    gl->glDrawArrays(GL_TRIANGLES, 0, 3);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
+    gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);;
 
     /*
      *
@@ -286,23 +332,24 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
 //    gl->glActiveTexture(GL_TEXTURE0);
 
-    GLuint outTex;
-    gl->glGenTextures(1, &outTex);
-
     gl->glBindTexture(GL_TEXTURE_2D, outTex);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
     // THIS LINE MAKES THE SOURCE FRAME APPEAR
-    gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
+    //gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
 //    gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
+//    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+
     // WORKS with gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
-    gl->glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::RGBA8_UNorm, 0, 0, outputWidth, outputHeight, 0);
+    //glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::RGBA8_UNorm, 0, 0, outputWidth, outputHeight, 0);
+    //err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
     glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL); // this call makes the image original even if I draw on original texture!
     eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglImageTargetTexture", eglerror);
+
+    // WORKS with gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
+//    glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::RGBA8_UNorm, 0, 0, outputWidth, outputHeight, 0);
+//    err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
     TimeLoggerLog("%s", "NV21 006'");    
 
@@ -328,7 +375,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
     }
 
-    TimeLoggerLog("%s %d", "NV21 011 allzeros", allZeros);
+    TimeLoggerLog("%s %d", "NV21 011 allzeros", allZeros);No
 
     status = AHardwareBuffer_unlock(graphicBuf, NULL);
 
@@ -338,10 +385,10 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
     TimeLoggerLog("%s", "NV21 012");
 
-    QString s;
-    QTextStream ss(&s);
-    ss << "/shader" << image_id++ << ".png";
-    image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append(s));
+//    QString s;
+//    QTextStream ss(&s);
+//    ss << "/shader" << image_id++ << ".png";
+//    image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append(s));
 
     emit imageConverted(PipelineContainer<QImage>(image.convertToFormat(QImage::Format_Grayscale8), image_info.checkpointed("Sent")));
 

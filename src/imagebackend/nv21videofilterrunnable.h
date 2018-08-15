@@ -101,6 +101,8 @@ private:
 
     QOpenGLFramebufferObject* out_fbo;
 
+    GLuint outTex;
+
 signals:
     void imageConverted(PipelineContainer<QImage>);
 };
