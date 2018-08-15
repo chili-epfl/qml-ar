@@ -6,6 +6,7 @@
  * @date 2018-07-26
  */
 
+// GLES/GL includes
 #define EGL_EGLEXT_PROTOTYPES
 #include "EGL/egl.h"
 #include "EGL/eglext.h"
@@ -13,35 +14,42 @@
 #define GL_GLEXT_PROTOTYPES
 #include "GLES/glext.h"
 
+// Hardware buffer
 #include "android/hardware_buffer.h"
+
+// QMLAR includes
 #include "nv21videofilterrunnable.h"
 #include "nv21videofilter.h"
-#include "qvideoframehelpers.h"
 #include "timelogger.h"
+
+// Qt includes
 #include <QImage>
-#include <QThreadPool>
 #include <QOpenGLContext>
-#include <qvideoframe.h>
+
+// C functions
 #include <cstdio>
-#include <QTextStream>
-#include <strings.h>
-#include <unistd.h>
 
-NV21VideoFilterRunnable::NV21VideoFilterRunnable(const NV21VideoFilterRunnable& backend) : QObject(nullptr)
-{
-    this->parent = (NV21VideoFilterRunnable*) &backend;
-    gl = nullptr;
-}
+// print or not print return codes
+#ifdef DEBUG_NV21_FILTER
+#define GL_CHECK_ERROR() {error = glGetError(); TimeLoggerLog("GL call: %d", error);}
+#define EGL_CHECK_ERROR() {error = eglGetError(); TimeLoggerLog("EGL call: %d", error);}
+#define HWB_CHECK_ERROR() {TimeLoggerLog("HardwareBuffer call: %d", error);}
+#else
+#define GL_CHECK_ERROR()
+#define EGL_CHECK_ERROR()
+#define HWB_CHECK_ERROR()
+#endif
 
-NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr), image_id(0)
+NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr), image_id(0),
+    graphicBuf(nullptr), clientBuf(nullptr), disp(nullptr), imageEGL(0)
 {
 }
 
 NV21VideoFilterRunnable::~NV21VideoFilterRunnable()
 {
     if (gl != nullptr) {
-        //gl->glDeleteFramebuffers(1, &framebuffer);
-        gl->glDeleteRenderbuffers(1, &renderbuffer);
+        // removing the created texture
+        gl->glDeleteTextures(1, &outTex);
     }
 }
 
@@ -51,62 +59,62 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame, const QVideoSu
     return run(inputFrame);
 }
 
-AHardwareBuffer_Desc usage, usage1;
-AHardwareBuffer* graphicBuf = nullptr;
-EGLAPI EGLClientBuffer clientBuf = nullptr;
-
-EGLDisplay disp = nullptr;
-EGLImageKHR imageEGL = nullptr;
-
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 {
-    image_info = PipelineContainerInfo(image_id).checkpointed("Grabbed");
-    int status = -111;
-    int eglerror = -555;
-    TimeLoggerLog("%s", "NV21 Start");
+    // setting current time to the container to measure latency
+    image_info = PipelineContainerInfo(image_id++).checkpointed("Grabbed");
 
+    // variable to check for errors in functions
+    int error = 0;
+
+    // size of the input frame
     auto size(inputFrame->size());
+
+    // height of the input frame
     auto height(size.height());
+
+    // width of the input frame
     auto width(size.width());
 
+    // output height: scaling down 4x
     auto outputHeight = height / 4;
+
+    // output width: scaling down 4x
     auto outputWidth(outputHeight * width / height);
 
+    // checking that frame is a texture (on Android it's true)
     Q_ASSERT(inputFrame->handleType() == QAbstractVideoBuffer::HandleType::GLTextureHandle);
 
-    GLenum err = -7;
-
+    // on the first run, set up everything
     if (gl == nullptr) {
+        // GL context variable
         auto context(QOpenGLContext::currentContext());
 
+        // functions to use
         gl = context->extraFunctions();
 
-        gl->glGenTextures(1, &outTex);
-        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+        // creating output texture
+        gl->glGenTextures(1, &outTex); GL_CHECK_ERROR();
 
-        gl->glBindTexture(GL_TEXTURE_2D, outTex);
-        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+        // binding output texture to TEXTURE_2D
+        gl->glBindTexture(GL_TEXTURE_2D, outTex); GL_CHECK_ERROR();
 
-        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+        // setting output texture parameters
+        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GL_CHECK_ERROR();
+        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GL_CHECK_ERROR();
+        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); GL_CHECK_ERROR();
+        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); GL_CHECK_ERROR();
 
-        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-        gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-        this->currentContext = QOpenGLContext::currentContext();
-
+        // obtaining current GL family
         auto version(context->isOpenGLES() ? "#version 300 es\n" : "#version 130\n");
 
+        // see https://github.com/aseba-community/thymio-ar/blob/eb942a5e96761303512a07dc6e5057749ff8939e/vision-video-filter.h
+        // this is for averaging the image
         auto sampleByPixelF(float(height) / float(outputHeight));
         unsigned int sampleByPixelI(std::ceil(sampleByPixelF));
         auto uvDelta(QVector2D(1, 1) / QVector2D(width, height));
 
+        // vertex shader for NV21->RGB conversion
         QString vertex(version);
         vertex += R"(
             out vec2 uvBase;
@@ -117,20 +125,27 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
             }
         )";
 
+        // fragment shader
+        // 1. Averages data over pixels (assuming that input texture is RGBA) for downscaling
+        //    Despite the fact that it's NV21 if mapped, it seems that a shader still receives RGBA data
+        //    Meaning that the conversion is done by GPU at some point automagically
+        // 2. Converts RGB->HSV
+        // 3. Thresholds HSV based on parameters
         QString fragment(version);
         fragment += R"(
                     #extension GL_OES_EGL_image_external_essl3 : require
                     #extension GL_OES_EGL_image_external : require
-                    //#extension EGL_KHR_image_base : require -> error
-                    //#extension EGL_KHR_image : require -> error
 
                     in lowp vec2 uvBase;
                     uniform sampler2D image;
                     const uint sampleByPixel = %1u;
                     const lowp vec2 uvDelta = vec2(%2, %3);
                     //out lowp float fragment;
-                out lowp vec4 fragment;
 
+                    // output RGBA
+                    out lowp vec4 fragment;
+
+                    // convert RGB to HSV, see https://gist.github.com/msbarry/cd98f928542f5152111a
                     lowp vec3 rgb2hsv(lowp vec3 c)
                     {
                         lowp vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
@@ -142,51 +157,77 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                         return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
                     }
 
+                    // main function
                     void main(void) {
+                        // sum of input pixels for this output pixels
                         lowp vec3 sum = vec3(0.0, 0.0, 0.0);
+
+                        // summing up the input pixels
                         for (uint x = 0u; x < sampleByPixel; ++x) {
                             for (uint y = 0u; y < sampleByPixel; ++y) {
                                 lowp vec2 uv = uvBase + vec2(x, y) * uvDelta;
                                 sum += texture(image, uv).bgr;
                             }
                         }
+
+                        // dividing by the number of summands
                         lowp float divisor = float(sampleByPixel * sampleByPixel);
                         lowp vec3 rgb = vec3(
                                     sum.b / divisor,
                                     sum.g / divisor,
                                     sum.r / divisor);
 
+                        // obtaining HSV data
                         lowp vec3 hsv = rgb2hsv(rgb);
 
                         lowp float h = hsv.r;
                         lowp float s = hsv.g;
                         lowp float v = hsv.b;
 
+                        // difference in HUE (0-1)
                         lowp float diff;
+
+                        // want this mean hue (0-1)
                         lowp float mean_h_ = 0.0;
+
+                        // maximal deviation in HUE (0-1)
                         lowp float delta_h_ = 20.0 / 360.0;
+
+                        // min saturation (0-1)
                         lowp float min_s_ = 50. / 255.0;
+
+                        // max saturation (0-1)
                         lowp float max_s_ = 1.0;
+
+                        // min value (0-1)
                         lowp float min_v_ = min_s_;
+
+                        // max value (0-1)
                         lowp float max_v_ = 1.0;
 
+                        // calculating shortest distance between angles
                         if(h > 0.0) { diff = h - mean_h_; }
                         else { diff = mean_h_ - h; }
-
                         if(0.5 - diff < diff) { diff = 0.5 - diff; }
 
+                        // output: 1.0 or 0.0
                         lowp float value;
 
+                        // doing the thresholding
                         if(s >= min_s_ && s <= max_s_ &&
                                 v >= min_v_ && v <= max_v_ &&
                                 diff < delta_h_) { value = 1.0; }
                         else value = 0.0;
 
-                fragment = vec4(value, value, value, 1.0);
+                        // output: white or black
+                        fragment = vec4(value, value, value, 1.0);
                     }
         )";
 
+        // creating vertex shader
         program.addShaderFromSourceCode(QOpenGLShader::Vertex, vertex);
+
+        // creating fragment shader
         program.addShaderFromSourceCode(QOpenGLShader::Fragment, fragment.
                                         arg(sampleByPixelI).
                                         arg(uvDelta.x()).
@@ -194,34 +235,16 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         program.link();
         imageLocation = program.uniformLocation("image");
 
-//        gl->glGenRenderbuffers(1, &renderbuffer);
-//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-//        gl->glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-//        gl->glRenderbufferStorage(GL_RENDERBUFFER, QOpenGLTexture::RGBA8_UNorm, outputWidth, outputHeight);
-//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-//        gl->glBindRenderbuffer(GL_RENDERBUFFER, 0);
-//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-        // setting third argument to QOpenGLTexture::R8_UNorm results in 0x500 error.
+        // creating output framebuffer
         out_fbo = new QOpenGLFramebufferObject(outputWidth, outputHeight);
 
-//        gl->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
-//        err = glGetError(); TimeLoggerLog("GL call: %d", err);
+        // and binding it
+        gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle()); GL_CHECK_ERROR();
 
-        gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
-        err = glGetError(); TimeLoggerLog("GL call: %d %d", err, out_fbo->handle());
+        // attaching the created texture as to the framebuffer (texture will contain output RGBA data)
+        gl->glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, outTex, 0); GL_CHECK_ERROR();
 
-        gl->glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, outTex, 0);
-        err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-        TimeLoggerLog("%s", "NV21 context OK");
-
-        TimeLoggerLog("%s", "NV21 001");
-
+        // filling in the usage for HardwareBuffer
         usage.format = AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
         usage.height = outputHeight;
         usage.width = outputWidth;
@@ -229,170 +252,93 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         usage.rfu0 = 0;
         usage.rfu1 = 0;
         usage.stride = 10;
-        usage.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_NEVER | AHARDWAREBUFFER_USAGE_GPU_COLOR_OUTPUT;
+        usage.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_NEVER
+                | AHARDWAREBUFFER_USAGE_GPU_COLOR_OUTPUT;
 
-        TimeLoggerLog("%s %d %d %d %d", "NV21 usage", usage.format, usage.height, usage.width, usage.usage);
+        // creating an Android 8 HardwareBuffer
+        error = AHardwareBuffer_allocate(&usage, &graphicBuf); HWB_CHECK_ERROR();
 
-        // returns -22 if first is NULL
-        status = AHardwareBuffer_allocate(&usage, &graphicBuf);
-
-        TimeLoggerLog("%s %d %p", "NV21 allocate", status, graphicBuf);
-
+        // obtaining buffer description -> can get real stride in the code which follows
         AHardwareBuffer_describe(graphicBuf, &usage1);
-        TimeLoggerLog("NV21 buffer format %d %d", usage.format, usage1.format);
-        TimeLoggerLog("NV21 buffer height %d %d", usage.height, usage1.height);
-        TimeLoggerLog("NV21 buffer width %d %d", usage.width, usage1.width);
-        TimeLoggerLog("NV21 buffer layers %d %d", usage.layers, usage1.layers);
-        TimeLoggerLog("NV21 buffer rfu0 %d %d", usage.rfu0, usage1.rfu0);
-        TimeLoggerLog("NV21 buffer rfu1 %d %d", usage.rfu1, usage1.rfu1);
-        TimeLoggerLog("NV21 buffer stride %d %d", usage.stride, usage1.stride);
-        TimeLoggerLog("NV21 buffer usage %d %d", usage.usage, usage1.usage);
 
-        clientBuf = eglGetNativeClientBufferANDROID(graphicBuf);
-        eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "getNativeClient", eglerror);
+        // obtaining native buffer
+        clientBuf = eglGetNativeClientBufferANDROID(graphicBuf); EGL_CHECK_ERROR();
 
-        TimeLoggerLog("%s %p ", "NV21 client", clientBuf);
+        // obtaining the EGL display
+        disp = eglGetDisplay(EGL_DEFAULT_DISPLAY); EGL_CHECK_ERROR();
 
-        disp = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-        eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglGetDisplay", eglerror);
-
-    //    EGLint eglImageAttributes[] = {EGL_WIDTH, outputWidth, EGL_HEIGHT, outputHeight,
-    //                                   EGL_MATCH_FORMAT_KHR,  EGL_FORMAT_RGBA_8888_KHR, EGL_IMAGE_PRESERVED_KHR,
-    //                                   EGL_TRUE, EGL_NONE};
-        // specifying width -> getting an error (invalid argument) from createImageKHR
-        // same for format.
+        // specifying the image attributes
         EGLint eglImageAttributes[] = {EGL_IMAGE_PRESERVED_KHR, EGL_TRUE, EGL_NONE};
 
+        // creating an EGL image
         imageEGL = eglCreateImageKHR(disp, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, clientBuf, eglImageAttributes);
-        eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglCreateImageKHR", eglerror);
-        TimeLoggerLog("%s disp %p image %p", "NV21 createImage", disp, imageEGL);
+        EGL_CHECK_ERROR();
     }
 
-    gl->glActiveTexture(GL_TEXTURE0);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+    //setting current texture
+    gl->glActiveTexture(GL_TEXTURE0); GL_CHECK_ERROR();
 
+    // binding INPUT texture
     gl->glBindTexture(QOpenGLTexture::Target2D, inputFrame->handle().toUInt());
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
 
-    // WORKS to obtain the source image
-//    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL);
-//    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglImageTargetTexture", eglerror);
+    // specifying INPUT texture parameters
+    gl->glTexParameteri(QOpenGLTexture::Target2D, QOpenGLTexture::DirectionS, QOpenGLTexture::ClampToEdge); GL_CHECK_ERROR();
+    gl->glTexParameteri(QOpenGLTexture::Target2D, QOpenGLTexture::DirectionT, QOpenGLTexture::ClampToEdge); GL_CHECK_ERROR();
+    gl->glTexParameteri(QOpenGLTexture::Target2D, GL_TEXTURE_MIN_FILTER, QOpenGLTexture::Nearest); GL_CHECK_ERROR();
 
-    gl->glTexParameteri(QOpenGLTexture::Target2D, QOpenGLTexture::DirectionS, QOpenGLTexture::ClampToEdge);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-    gl->glTexParameteri(QOpenGLTexture::Target2D, QOpenGLTexture::DirectionT, QOpenGLTexture::ClampToEdge);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-    gl->glTexParameteri(QOpenGLTexture::Target2D, GL_TEXTURE_MIN_FILTER, QOpenGLTexture::Nearest);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-    TimeLoggerLog("%s", "NV21 002");
-
+    // binding our shader program
     program.bind();
     program.setUniformValue(imageLocation, 0);
     program.enableAttributeArray(0);
 
-    gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+    // binding OUTPUT framebuffer
+    gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle()); GL_CHECK_ERROR();
 
-    gl->glViewport(0, 0, outputWidth, outputHeight);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+    // DRAWING the fragments using shader and input frame to out_fbo
+    gl->glViewport(0, 0, outputWidth, outputHeight); GL_CHECK_ERROR();
+    gl->glDisable(GL_BLEND); GL_CHECK_ERROR();
+    gl->glDrawArrays(GL_TRIANGLES, 0, 3); GL_CHECK_ERROR();
+    gl->glPixelStorei(GL_PACK_ALIGNMENT, 1); GL_CHECK_ERROR();
 
-    gl->glDisable(GL_BLEND);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+    // binding the OUTPUT texture
+    gl->glBindTexture(GL_TEXTURE_2D, outTex); GL_CHECK_ERROR();
 
-    gl->glDrawArrays(GL_TRIANGLES, 0, 3);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
+    // attaching an EGLImage to OUTPUT texture
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL); EGL_CHECK_ERROR();
 
-    gl->glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);;
+    // pointer to READ from EGLImage
+    unsigned char *readPtr;
 
-    /*
-     *
-     * D libar-chest.so: (null):0 ((null)): 1533831728971	+1 ms	0x8367f970	[QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame*)@../src/imagebackend/nv21videofilterrunnable.cpp:243]	NV21 GL_EXT_debug_marker GL_ARM_rgba8 GL_ARM_mali_shader_binary GL_OES_depth24 GL_OES_depth_texture GL_OES_depth_texture_cube_map GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_EXT_read_format_bgra GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_standard_derivatives GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_texture_npot GL_OES_vertex_half_float GL_OES_required_internalformat GL_OES_vertex_array_object GL_OES_mapbuffer GL_EXT_texture_format_BGRA8888 GL_EXT_texture_rg GL_EXT_texture_type_2_10_10_10_REV GL_OES_fbo_render_mipmap GL_OES_element_index_uint GL_EXT_shadow_samplers GL_OES_texture_compression_astc GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_hdr GL_KHR_texture_compression_astc_sliced_3d GL_KHR_debug GL_EXT_occlusion_query_boolean GL_EXT
-*/
-//    const char* r1 = (const char*) glGetString(GL_EXTENSIONS);
-//    const char* r2 = eglQueryString(eglGetCurrentDisplay(), EGL_EXTENSIONS);
-//    TimeLoggerLog("NV21 %s /// %s", r1, r2);
+    // pointer to WRITE the image (in memory)
+    unsigned char *writePtr = readBuffer;
 
-//    EGLint bitmapaddr, pitch, origin;
-//    eglQuerySurface(disp, imageEGL, EGL_BITMAP_POINTER_KHR, &bitmapaddr);
-//    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglQuery1", eglerror);
+    // locking the buffer
+    error = AHardwareBuffer_lock(graphicBuf, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, NULL, (void**) &readPtr);
+    HWB_CHECK_ERROR();
 
-//    eglQuerySurface(disp, imageEGL, EGL_BITMAP_PITCH_KHR, &pitch);
-//    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglQuery2", eglerror);
-
-//    eglQuerySurface(disp, imageEGL, EGL_BITMAP_ORIGIN_KHR, &origin);
-//    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglQuery3", eglerror);
-
-//    TimeLoggerLog("NV21 addr %d pitch %d origin %d", bitmapaddr, pitch, origin);
-
-    // or +    gl->glBindTexture(GL_TEXTURE_2D, textureID);
-
-//    gl->glActiveTexture(GL_TEXTURE0);
-
-    gl->glBindTexture(GL_TEXTURE_2D, outTex);
-    err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-    // THIS LINE MAKES THE SOURCE FRAME APPEAR
-    //gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
-//    gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle());
-//    err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-    // WORKS with gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
-    //glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::RGBA8_UNorm, 0, 0, outputWidth, outputHeight, 0);
-    //err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL); // this call makes the image original even if I draw on original texture!
-    eglerror = eglGetError(); TimeLoggerLog("NV21 %s ret %d", "eglImageTargetTexture", eglerror);
-
-    // WORKS with gl->glBindTexture(GL_TEXTURE_2D, inputFrame->handle().toUInt());
-//    glCopyTexImage2D(GL_TEXTURE_2D, 0, QOpenGLTexture::RGBA8_UNorm, 0, 0, outputWidth, outputHeight, 0);
-//    err = glGetError(); TimeLoggerLog("GL call: %d", err);
-
-    TimeLoggerLog("%s", "NV21 006'");    
-
-    uchar data[600000];
-    bzero(data, 600000);
-    unsigned char *readPtr, *writePtr;
-    writePtr = data;    
-
-    status = AHardwareBuffer_lock(graphicBuf, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, NULL, (void**) &readPtr);
+    // obtaining real stride
     int stride = usage1.stride;
-    TimeLoggerLog("%s %d %p stride %d", "NV21 007 LOCK", status, readPtr, stride);
 
-    //gl->glReadPixels(0, 0, outputWidth, outputHeight, QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, data);
-
-    bool allZeros = true;
+    // copying all rows from EGLImage to readBuffer
     for (int row = 0; row < outputHeight; row++) {
         memcpy(writePtr, readPtr, outputWidth * 4);
-        for(int col = 0; col < outputWidth * 4; col++) {
-            if(readPtr[col] != 0) allZeros = false;
-        }
         readPtr = (unsigned char *)(int(readPtr) + stride * 4);
         writePtr = (unsigned char *)(int(writePtr) + outputWidth * 4);
 
     }
 
-    TimeLoggerLog("%s %d", "NV21 011 allzeros", allZeros);No
+    // unlocking the buffer
+    error = AHardwareBuffer_unlock(graphicBuf, NULL); HWB_CHECK_ERROR();
 
-    status = AHardwareBuffer_unlock(graphicBuf, NULL);
+    // wrapping the buffer inside a QImage
+    image = QImage(readBuffer, outputWidth, outputHeight, QImage::Format_RGBA8888);
 
-    TimeLoggerLog("%s %d", "NV21 UNLOCK", status);
+    // converting the image to Grayscale
+    image = image.convertToFormat(QImage::Format_Grayscale8);
 
-    image = QImage(data, outputWidth, outputHeight, QImage::Format_RGBA8888);
+    // sending the black/white image to listeners
+    emit imageConverted(PipelineContainer<QImage>(image, image_info.checkpointed("Sent")));
 
-    TimeLoggerLog("%s", "NV21 012");
-
-//    QString s;
-//    QTextStream ss(&s);
-//    ss << "/shader" << image_id++ << ".png";
-//    image.save(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation).append(s));
-
-    emit imageConverted(PipelineContainer<QImage>(image.convertToFormat(QImage::Format_Grayscale8), image_info.checkpointed("Sent")));
-
-    TimeLoggerLog("%s", "NV21 IMsave OK");
-
+    // returning the input frame unchanged for the preview
     return *inputFrame;
 }
