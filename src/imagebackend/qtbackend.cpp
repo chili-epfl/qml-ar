@@ -90,8 +90,6 @@ void QtCameraBackend::processAndSendQImage(PipelineContainer<QImage> img)
 {
     buf = img.o();
 
-    qDebug() << "Processed QImage";
-
     // sending image
     emit imageAvailable(PipelineContainer<QImage>
                         (img.o(), img.info().checkpointed("Camera")));

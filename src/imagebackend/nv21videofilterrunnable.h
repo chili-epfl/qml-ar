@@ -23,9 +23,11 @@
 #define MAX_INPUT_SIZE 600000
 
 /**
+ * @def DEBUG_NV21_FILTER
  * @brief If defined, the class will print GL/EGL/HardwareBuffer return codes
  */
-#define DEBUG_NV21_FILTER
+//#define DEBUG_NV21_FILTER
+#undef DEBUG_NV21_FILTER
 
 class NV21VideoFilter;
 
