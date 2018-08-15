@@ -68,6 +68,8 @@ QMLAR::QMLAR()
     latency = NULL;
     delay = NULL;
     n_frames_received = 0;
+
+    is_running = true;
 }
 
 int QMLAR::getCameraId()
@@ -183,6 +185,15 @@ void QMLAR::setInfo(PipelineContainerInfo info)
     framedrop_fraction = 1 - (1. * n_frames_received / (info.id() + 1));
 
     TimeLoggerLatency("[ANALYZE] LAT %s", info.toString().toStdString().c_str());
+}
+
+void QMLAR::setRunning(bool running)
+{
+    is_running = running;
+    if(raw_provider) {
+        TimeLoggerLog("%s %d", "Set running to", running);
+        raw_provider->setActive(running);
+    }
 }
 
 QVariantList QMLAR::getMarkers()
@@ -303,6 +314,9 @@ void QMLAR::hueAvailable(double mean, double std)
 
 void QMLAR::connectAll()
 {
+    // updating is_running
+    raw_provider->setActive(is_running);
+
     hue_threshold->setColor(0, 20);
     qRegisterMetaType<PipelineContainer<QImage>>("PipelineContainer<QImage>");
     qRegisterMetaType<PipelineContainer<QPair<QImage, QVector<QVector2D>>>>("PipelineContainer<QPair<QImage, QVector<QVector2D>>>");

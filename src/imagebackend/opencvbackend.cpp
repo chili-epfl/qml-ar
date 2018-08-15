@@ -50,12 +50,16 @@ void OpenCVCameraBackend::handleFinished()
     // obtain previous result
     buf = watcher.result();
 
-    // sending image
-    emit imageAvailable(PipelineContainer<QImage>
-                        (buf.copy(), PipelineContainerInfo(image_id).checkpointed("Camera")));
+    // not sending image if inactive
+    if(is_active)
+    {
+        // sending image
+        emit imageAvailable(PipelineContainer<QImage>
+                            (buf.copy(), PipelineContainerInfo(image_id).checkpointed("Camera")));
 
-    // next image will have different id
-    image_id++;
+        // next image will have different id
+        image_id++;
+    }
 
     // request new frame if this call was successful
     if(buf.width() * buf.height() > 1)
@@ -64,7 +68,7 @@ void OpenCVCameraBackend::handleFinished()
 
 QImage OpenCVCameraBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 { Q_UNUSED(id) Q_UNUSED(size) Q_UNUSED(requestedSize)
-    return buf.copy();
+            return buf.copy();
 }
 
 QImage OpenCVCameraBackend::getImage()

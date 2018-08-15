@@ -205,6 +205,11 @@ public slots:
     */
     void setInfo(PipelineContainerInfo info);
 
+    /**
+    * @brief Set running/paused
+    */
+    void setRunning(bool running);
+
 private:
     /**
     * @brief Initialization semaphore
@@ -381,6 +386,11 @@ private:
     * @brief Fraction of frames dropped
     */
     double framedrop_fraction;
+
+    /**
+     * @brief is QML running or paused?
+     */
+    bool is_running;
 signals:
     /**
     * @brief Notify QML part when new matrix is available

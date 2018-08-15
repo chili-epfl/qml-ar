@@ -1,0 +1,7 @@
+<map id="src/camera/voidviewfinder.h" name="src/camera/voidviewfinder.h">
+<area shape="rect" id="node2" href="$voidviewfinder_8cpp.html" title="A ViewFinder for QCamera which does nothing when frames do arrive. " alt="" coords="18,80,217,107"/>
+<area shape="rect" id="node3" href="$qtbackend_8h.html" title="QCamera backend for QML. " alt="" coords="241,80,444,107"/>
+<area shape="rect" id="node5" href="$qtbackend_8cpp.html" title="QCamera backend for QML. " alt="" coords="406,155,623,181"/>
+<area shape="rect" id="node4" href="$portablebackendfactory_8cpp.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="5,155,256,181"/>
+<area shape="rect" id="node6" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="280,155,381,181"/>
+</map>

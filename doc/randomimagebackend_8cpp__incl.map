@@ -1,0 +1,9 @@
+<map id="src/imagebackend/randomimagebackend.cpp" name="src/imagebackend/randomimagebackend.cpp">
+<area shape="rect" id="node2" href="$randomimagebackend_8h.html" title="This class takes input from pre&#45;created byte array and outputs it as a QImage. " alt="" coords="339,80,499,107"/>
+<area shape="rect" id="node14" href="$timelogger_8h.html" title="This class allows to output a line along with thread number and a timestamp. " alt="" coords="529,80,622,107"/>
+<area shape="rect" id="node3" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="222,155,371,181"/>
+<area shape="rect" id="node7" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="231,229,362,256"/>
+<area shape="rect" id="node9" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="293,304,444,331"/>
+<area shape="rect" id="node11" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="469,304,613,331"/>
+<area shape="rect" id="node16" href="$config_8h.html" title="In this file different compile options are defined. " alt="" coords="633,155,701,181"/>
+</map>

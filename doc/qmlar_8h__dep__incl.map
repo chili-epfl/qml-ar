@@ -1,0 +1,6 @@
+<map id="src/qmlar.h" name="src/qmlar.h">
+<area shape="rect" id="node2" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="5,80,107,107"/>
+<area shape="rect" id="node3" href="$threadedqmlar_8h.html" title="This class is a wrapper around QMLAR object which is placed at a separate thread and controlled by th..." alt="" coords="131,80,269,107"/>
+<area shape="rect" id="node5" href="$threadedqmlar_8cpp.html" title="This class is a wrapper around QMLAR object which is placed at a separate thread and controlled by th..." alt="" coords="231,155,382,181"/>
+<area shape="rect" id="node4" href="$qmlarplugin_8cpp.html" title="This class registers QMLAR as a singleton object in QML and QMLARMarkers image provider with markers ..." alt="" coords="73,155,207,181"/>
+</map>

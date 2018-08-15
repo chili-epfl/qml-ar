@@ -1,0 +1,5 @@
+<map id="src/ar/linearposepredictor.cpp" name="src/ar/linearposepredictor.cpp">
+<area shape="rect" id="node3" href="$linearposepredictor_8h.html" title="This class implements linear Pose Predictor which assumes angular/linear velocities to be constant..." alt="" coords="124,80,267,107"/>
+<area shape="rect" id="node5" href="$posepredictor_8h.html" title="This abstract class represent a predictor for camera pose (rot., transl.) " alt="" coords="201,155,312,181"/>
+<area shape="rect" id="node7" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="271,229,333,256"/>
+</map>

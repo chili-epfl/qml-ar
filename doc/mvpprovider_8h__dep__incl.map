@@ -1,0 +1,10 @@
+<map id="src/ar/mvpprovider.h" name="src/ar/mvpprovider.h">
+<area shape="rect" id="node2" href="$imumvpdecorator_8h.html" title="This class decorates an MVP provider by adding IMU delta movement. " alt="" coords="81,80,252,107"/>
+<area shape="rect" id="node5" href="$markermvpprovider_8h.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="276,80,457,107"/>
+<area shape="rect" id="node7" href="$mvpprovider_8cpp.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="628,80,783,107"/>
+<area shape="rect" id="node8" href="$posefilter_8h.html" title="This class implements low&#45;pass filter on Pose (Rotation + Translation) " alt="" coords="481,80,604,107"/>
+<area shape="rect" id="node3" href="$imumvpdecorator_8cpp.html" title="This class decorates an MVP provider by adding IMU delta movement. " alt="" coords="5,155,189,181"/>
+<area shape="rect" id="node4" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="213,155,315,181"/>
+<area shape="rect" id="node6" href="$markermvpprovider_8cpp.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="339,155,533,181"/>
+<area shape="rect" id="node9" href="$posefilter_8cpp.html" title="This class implements low&#45;pass filter on Pose (Rotation + Translation) " alt="" coords="558,155,695,181"/>
+</map>

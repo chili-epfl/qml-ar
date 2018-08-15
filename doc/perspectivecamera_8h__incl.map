@@ -1,0 +1,6 @@
+<map id="src/ar/perspectivecamera.h" name="src/ar/perspectivecamera.h">
+<area shape="rect" id="node2" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="93,80,225,107"/>
+<area shape="rect" id="node6" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="279,155,409,181"/>
+<area shape="rect" id="node8" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="269,229,419,256"/>
+<area shape="rect" id="node10" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="444,229,588,256"/>
+</map>

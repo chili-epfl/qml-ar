@@ -1,0 +1,10 @@
+<map id="src/imagebackend/imagescaler.cpp" name="src/imagebackend/imagescaler.cpp">
+<area shape="rect" id="node2" href="$timelogger_8h.html" title="This class allows to output a line along with thread number and a timestamp. " alt="" coords="84,80,177,107"/>
+<area shape="rect" id="node5" href="$imagescaler_8h.html" title="This class scales images. " alt="" coords="239,80,342,107"/>
+<area shape="rect" id="node17" href="$qvideoframehelpers_8h.html" title="Helpers for QVideoFrame used in this project. " alt="" coords="541,80,688,107"/>
+<area shape="rect" id="node4" href="$config_8h.html" title="In this file different compile options are defined. " alt="" coords="97,155,165,181"/>
+<area shape="rect" id="node8" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="364,155,513,181"/>
+<area shape="rect" id="node11" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="559,229,689,256"/>
+<area shape="rect" id="node13" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="585,304,735,331"/>
+<area shape="rect" id="node15" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="760,304,904,331"/>
+</map>

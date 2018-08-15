@@ -1,0 +1,13 @@
+<map id="src/ar/blackenrest.h" name="src/ar/blackenrest.h">
+<area shape="rect" id="node2" href="$posepredictor_8h.html" title="This abstract class represent a predictor for camera pose (rot., transl.) " alt="" coords="341,229,452,256"/>
+<area shape="rect" id="node8" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="249,304,398,331"/>
+<area shape="rect" id="node17" href="$markerstorage_8h.html" title="This class stores the set of used markers loads them from a file and outputs the coordinates of each ..." alt="" coords="1012,80,1128,107"/>
+<area shape="rect" id="node4" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="599,304,661,331"/>
+<area shape="rect" id="node11" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="279,379,410,405"/>
+<area shape="rect" id="node13" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="125,453,276,480"/>
+<area shape="rect" id="node15" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="414,453,558,480"/>
+<area shape="rect" id="node20" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="892,155,965,181"/>
+<area shape="rect" id="node26" href="$configjson_8h.html" title="This class implements a JSON config reader It should be inherited to add JSON functionality. " alt="" coords="1024,155,1116,181"/>
+<area shape="rect" id="node24" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="674,229,773,256"/>
+<area shape="rect" id="node25" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="423,304,555,331"/>
+</map>

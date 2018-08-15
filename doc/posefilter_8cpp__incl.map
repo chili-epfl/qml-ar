@@ -1,0 +1,8 @@
+<map id="src/ar/posefilter.cpp" name="src/ar/posefilter.cpp">
+<area shape="rect" id="node2" href="$posefilter_8h.html" title="This class implements low&#45;pass filter on Pose (Rotation + Translation) " alt="" coords="219,80,305,107"/>
+<area shape="rect" id="node3" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="154,155,215,181"/>
+<area shape="rect" id="node7" href="$mvpprovider_8h.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="263,155,367,181"/>
+<area shape="rect" id="node9" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="466,229,597,256"/>
+<area shape="rect" id="node11" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="492,304,643,331"/>
+<area shape="rect" id="node13" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="667,304,811,331"/>
+</map>

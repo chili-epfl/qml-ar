@@ -1,0 +1,7 @@
+<map id="src/ar/worldimage.h" name="src/ar/worldimage.h">
+<area shape="rect" id="node4" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="357,80,489,107"/>
+<area shape="rect" id="node14" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="195,80,256,107"/>
+<area shape="rect" id="node8" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="481,155,612,181"/>
+<area shape="rect" id="node10" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="125,229,275,256"/>
+<area shape="rect" id="node12" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="475,229,619,256"/>
+</map>

@@ -117,6 +117,9 @@ Item {
      */
     property int output_type: AR.OUTPUT_CAMERA
 
+    /** Start/pause computation */
+    property bool is_running: true
+
     /** (internal) QQuickImageProvider url, used if viewfinder is unavailable. This image is updated using a Timer */
     property string output_url: ""
 
@@ -520,4 +523,7 @@ Item {
             anchors.top: fps_text.bottom
         }
     }
+
+    /** Making is_running work */
+    onIs_runningChanged: AR.running = is_running;
 }

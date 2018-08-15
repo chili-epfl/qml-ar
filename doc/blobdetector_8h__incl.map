@@ -1,0 +1,6 @@
+<map id="src/markers/blobdetector.h" name="src/markers/blobdetector.h">
+<area shape="rect" id="node5" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="367,80,517,107"/>
+<area shape="rect" id="node8" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="181,155,311,181"/>
+<area shape="rect" id="node10" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="179,229,329,256"/>
+<area shape="rect" id="node12" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="10,229,154,256"/>
+</map>

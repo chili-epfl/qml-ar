@@ -1,0 +1,10 @@
+<map id="src/markers/markerdetector.h" name="src/markers/markerdetector.h">
+<area shape="rect" id="node2" href="$markermvpprovider_8h.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="81,80,263,107"/>
+<area shape="rect" id="node5" href="$markerbackend_8h.html" title="A backend for QML for marker detection preview. " alt="" coords="287,80,519,107"/>
+<area shape="rect" id="node7" href="$markerdetector_8cpp.html" title="This class stores a common interface for marker detectors. " alt="" coords="798,80,1005,107"/>
+<area shape="rect" id="node8" href="$uchiyamarkerdetector_8h.html" title="Wrapper around C&#45;style UchiyaMarkers project obtained from main.cpp file from UchiyaMarkers project..." alt="" coords="543,80,774,107"/>
+<area shape="rect" id="node3" href="$markermvpprovider_8cpp.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="5,155,200,181"/>
+<area shape="rect" id="node4" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="224,155,325,181"/>
+<area shape="rect" id="node6" href="$markerbackend_8cpp.html" title="A backend for QML for marker detection preview. " alt="" coords="350,155,597,181"/>
+<area shape="rect" id="node9" href="$uchiyamarkerdetector_8cpp.html" title="Wrapper around C&#45;style UchiyaMarkers project obtained from main.cpp file from UchiyaMarkers project..." alt="" coords="621,155,867,181"/>
+</map>

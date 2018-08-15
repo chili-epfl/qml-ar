@@ -1,0 +1,4 @@
+<map id="CalibratedCamera" name="CalibratedCamera">
+<area shape="rect" id="node3" href="$classCalibratedCameraFileStorage.html" title="This class implements CalibratedCamera and allows to load information from a file. " alt="" coords="5,155,199,181"/>
+<area shape="rect" id="node4" href="$classPerspectiveCamera.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="223,155,360,181"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="src/camera/calibratedcamerafilestorage.cpp" name="src/camera/calibratedcamerafilestorage.cpp">
+<area shape="rect" id="node2" href="$calibratedcamerafilestorage_8h.html" title="This class implements CalibratedCamera and allows to load information from a file. " alt="" coords="237,80,429,107"/>
+<area shape="rect" id="node3" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="139,155,271,181"/>
+<area shape="rect" id="node13" href="$configjson_8h.html" title="This class implements a JSON config reader It should be inherited to add JSON functionality. " alt="" coords="467,155,559,181"/>
+<area shape="rect" id="node7" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="263,229,394,256"/>
+<area shape="rect" id="node9" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="280,304,431,331"/>
+<area shape="rect" id="node11" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="455,304,599,331"/>
+</map>

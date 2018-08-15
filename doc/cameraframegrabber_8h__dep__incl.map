@@ -1,0 +1,7 @@
+<map id="src/camera/cameraframegrabber.h" name="src/camera/cameraframegrabber.h">
+<area shape="rect" id="node2" href="$cameraframegrabber_8cpp.html" title="This class implements a Viewfinder interface for the QCamera which stores images. ..." alt="" coords="29,80,264,107"/>
+<area shape="rect" id="node3" href="$qtbackend_8h.html" title="QCamera backend for QML. " alt="" coords="288,80,491,107"/>
+<area shape="rect" id="node4" href="$portablebackendfactory_8cpp.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="5,155,256,181"/>
+<area shape="rect" id="node5" href="$qtbackend_8cpp.html" title="QCamera backend for QML. " alt="" coords="281,155,498,181"/>
+<area shape="rect" id="node6" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="523,155,624,181"/>
+</map>

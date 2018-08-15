@@ -1,0 +1,23 @@
+<map id="src/utils/timelogger.h" name="src/utils/timelogger.h">
+<area shape="rect" id="node2" href="$blackenrest_8cpp.html" title="Paints image parts not containing markers in black. " alt="" coords="5,80,156,107"/>
+<area shape="rect" id="node3" href="$imumvpdecorator_8cpp.html" title="This class decorates an MVP provider by adding IMU delta movement. " alt="" coords="181,80,365,107"/>
+<area shape="rect" id="node4" href="$markermvpprovider_8cpp.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="389,80,583,107"/>
+<area shape="rect" id="node5" href="$mvpprovider_8cpp.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="607,80,762,107"/>
+<area shape="rect" id="node6" href="$calibratedcamera_8cpp.html" title="This class stores information about a calibrated camera. " alt="" coords="787,80,1001,107"/>
+<area shape="rect" id="node7" href="$portablebackendfactory_8cpp.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="1026,80,1277,107"/>
+<area shape="rect" id="node8" href="$imagescaler_8cpp.html" title="This class scales images. " alt="" coords="1301,80,1527,107"/>
+<area shape="rect" id="node9" href="$markerbackend_8cpp.html" title="A backend for QML for marker detection preview. " alt="" coords="1552,80,1799,107"/>
+<area shape="rect" id="node10" href="$opencvbackend_8cpp.html" title="OpenCV camera backend for QML. " alt="" coords="1822,80,2070,107"/>
+<area shape="rect" id="node11" href="$qtbackend_8cpp.html" title="QCamera backend for QML. " alt="" coords="2095,80,2312,107"/>
+<area shape="rect" id="node12" href="$randomimagebackend_8cpp.html" title="This class takes input from pre&#45;created byte array and outputs it as a QImage. " alt="" coords="2336,80,2620,107"/>
+<area shape="rect" id="node13" href="$blobdetector_8cpp.html" title="This class detects blobs on a QImage and returns a QImage with white pixels at blob positions..." alt="" coords="2644,80,2835,107"/>
+<area shape="rect" id="node14" href="$hsvintervaldetector_8cpp.html" title="This class receives matched points and deduces the color interval they are in. " alt="" coords="2859,80,3089,107"/>
+<area shape="rect" id="node15" href="$huethreshold_8cpp.html" title="This class outputs binarized image taking colors in [hue&#45;delta, hue+delta]. " alt="" coords="3114,80,3309,107"/>
+<area shape="rect" id="node16" href="$markerdetector_8cpp.html" title="This class stores a common interface for marker detectors. " alt="" coords="3333,80,3540,107"/>
+<area shape="rect" id="node17" href="$markerstorage_8cpp.html" title="This class stores the set of used markers loads them from a file and outputs the coordinates of each ..." alt="" coords="3565,80,3767,107"/>
+<area shape="rect" id="node18" href="$uchiyamarkerdetector_8cpp.html" title="Wrapper around C&#45;style UchiyaMarkers project obtained from main.cpp file from UchiyaMarkers project..." alt="" coords="3791,80,4037,107"/>
+<area shape="rect" id="node19" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="4061,80,4162,107"/>
+<area shape="rect" id="node20" href="$threadedqmlar_8cpp.html" title="This class is a wrapper around QMLAR object which is placed at a separate thread and controlled by th..." alt="" coords="4187,80,4337,107"/>
+<area shape="rect" id="node21" href="$qvideoframehelpers_8cpp.html" title="Helpers for QVideoFrame used in this project. " alt="" coords="4362,80,4573,107"/>
+<area shape="rect" id="node22" href="$timelogger_8cpp.html" title="This class allows to output a line along with thread number and a timestamp. " alt="" coords="4597,80,4754,107"/>
+</map>

@@ -28,6 +28,9 @@ ImageBackend::~ImageBackend()
 
 void ImageBackend::update()
 {
+    // no action if not running
+    if(!is_active) return;
+
     qDebug() << "SENT";
     PipelineContainerInfo info(image_id++);
     emit imageAvailable(PipelineContainer<QImage>

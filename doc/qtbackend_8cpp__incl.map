@@ -1,0 +1,12 @@
+<map id="src/imagebackend/qtbackend.cpp" name="src/imagebackend/qtbackend.cpp">
+<area shape="rect" id="node2" href="$timelogger_8h.html" title="This class allows to output a line along with thread number and a timestamp. " alt="" coords="85,80,178,107"/>
+<area shape="rect" id="node5" href="$qtbackend_8h.html" title="QCamera backend for QML. " alt="" coords="759,80,853,107"/>
+<area shape="rect" id="node14" href="$voidviewfinder_8h.html" title="A ViewFinder for QCamera which does nothing when frames do arrive. " alt="" coords="1009,155,1125,181"/>
+<area shape="rect" id="node25" href="$qvideoframehelpers_8h.html" title="Helpers for QVideoFrame used in this project. " alt="" coords="1326,155,1473,181"/>
+<area shape="rect" id="node4" href="$config_8h.html" title="In this file different compile options are defined. " alt="" coords="5,155,73,181"/>
+<area shape="rect" id="node10" href="$cameraframegrabber_8h.html" title="This class implements a Viewfinder interface for the QCamera which stores images. ..." alt="" coords="1150,155,1302,181"/>
+<area shape="rect" id="node15" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="577,155,726,181"/>
+<area shape="rect" id="node19" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="363,229,494,256"/>
+<area shape="rect" id="node21" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="497,304,648,331"/>
+<area shape="rect" id="node23" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="215,304,359,331"/>
+</map>

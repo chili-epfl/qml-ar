@@ -1,0 +1,4 @@
+<map id="src/ar/linearposepredictor.h" name="src/ar/linearposepredictor.h">
+<area shape="rect" id="node2" href="$linearposepredictor_8cpp.html" title="This class implements linear Pose Predictor which assumes angular/linear velocities to be constant..." alt="" coords="5,80,199,107"/>
+<area shape="rect" id="node3" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="223,80,325,107"/>
+</map>

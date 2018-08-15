@@ -1,0 +1,8 @@
+<map id="src/ar/posepredictor.h" name="src/ar/posepredictor.h">
+<area shape="rect" id="node2" href="$blackenrest_8h.html" title="Paints image parts not containing markers in black. " alt="" coords="56,80,193,107"/>
+<area shape="rect" id="node4" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="181,155,282,181"/>
+<area shape="rect" id="node5" href="$linearposepredictor_8h.html" title="This class implements linear Pose Predictor which assumes angular/linear velocities to be constant..." alt="" coords="269,80,447,107"/>
+<area shape="rect" id="node7" href="$posepredictor_8cpp.html" title="This abstract class represent a predictor for camera pose (rot., transl.) " alt="" coords="471,80,634,107"/>
+<area shape="rect" id="node3" href="$blackenrest_8cpp.html" title="Paints image parts not containing markers in black. " alt="" coords="5,155,156,181"/>
+<area shape="rect" id="node6" href="$linearposepredictor_8cpp.html" title="This class implements linear Pose Predictor which assumes angular/linear velocities to be constant..." alt="" coords="307,155,500,181"/>
+</map>

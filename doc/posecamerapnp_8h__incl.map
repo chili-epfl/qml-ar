@@ -1,0 +1,8 @@
+<map id="src/ar/posecamerapnp.h" name="src/ar/posecamerapnp.h">
+<area shape="rect" id="node2" href="$pose_8h.html" title="This class holds the pose (Translation+Rotation) of the camera. " alt="" coords="216,155,278,181"/>
+<area shape="rect" id="node6" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="104,80,203,107"/>
+<area shape="rect" id="node8" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="316,155,448,181"/>
+<area shape="rect" id="node11" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="454,229,584,256"/>
+<area shape="rect" id="node13" href="$pipelinecontainerinfo_8h.html" title="This class contains information which travels with a pipeline container. " alt="" coords="272,304,422,331"/>
+<area shape="rect" id="node15" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="447,304,591,331"/>
+</map>

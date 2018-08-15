@@ -1,0 +1,15 @@
+<map id="src/utils/qvideoframehelpers.h" name="src/utils/qvideoframehelpers.h">
+<area shape="rect" id="node2" href="$cameraframegrabber_8cpp.html" title="This class implements a Viewfinder interface for the QCamera which stores images. ..." alt="" coords="5,80,240,107"/>
+<area shape="rect" id="node3" href="$voidviewfinder_8cpp.html" title="A ViewFinder for QCamera which does nothing when frames do arrive. " alt="" coords="263,80,462,107"/>
+<area shape="rect" id="node4" href="$androidfilter_8h.html" title="A class for fixing video output on android. " alt="" coords="485,80,696,107"/>
+<area shape="rect" id="node7" href="$delayfilter_8cpp.html" title="This class delays VideoOutput by N frames. " alt="" coords="720,80,933,107"/>
+<area shape="rect" id="node8" href="$imagescaler_8cpp.html" title="This class scales images. " alt="" coords="957,80,1184,107"/>
+<area shape="rect" id="node9" href="$markerbackend_8cpp.html" title="A backend for QML for marker detection preview. " alt="" coords="1209,80,1455,107"/>
+<area shape="rect" id="node10" href="$opencvbackend_8cpp.html" title="OpenCV camera backend for QML. " alt="" coords="1479,80,1727,107"/>
+<area shape="rect" id="node11" href="$qtbackend_8cpp.html" title="QCamera backend for QML. " alt="" coords="1751,80,1969,107"/>
+<area shape="rect" id="node12" href="$blobdetector_8cpp.html" title="This class detects blobs on a QImage and returns a QImage with white pixels at blob positions..." alt="" coords="1993,80,2183,107"/>
+<area shape="rect" id="node13" href="$hsvintervaldetector_8cpp.html" title="This class receives matched points and deduces the color interval they are in. " alt="" coords="2207,80,2438,107"/>
+<area shape="rect" id="node14" href="$qvideoframehelpers_8cpp.html" title="Helpers for QVideoFrame used in this project. " alt="" coords="2463,80,2673,107"/>
+<area shape="rect" id="node5" href="$androidfilter_8cpp.html" title="A class for fixing video output on android. " alt="" coords="376,155,600,181"/>
+<area shape="rect" id="node6" href="$qmlarplugin_8cpp.html" title="This class registers QMLAR as a singleton object in QML and QMLARMarkers image provider with markers ..." alt="" coords="625,155,759,181"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node2" href="$classCameraFrameGrabber.html" title="This class implements a Viewfinder interface for the QCamera which stores images. ..." alt="" coords="212,5,363,32"/>
+<area shape="rect" id="node3" href="$classVoidViewFinder.html" title="A ViewFinder for QCamera which does nothing when frames do arrive. " alt="" coords="231,56,344,83"/>
+</map>
