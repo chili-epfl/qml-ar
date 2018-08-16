@@ -80,8 +80,7 @@ SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
     $$PWD/src/imagebackend/framesdelaycalculator.cpp \
     $$PWD/src/utils/qlinkedlistat.cpp \
     $$PWD/src/imagebackend/nv21videofilter.cpp \
-    $$PWD/src/imagebackend/nv21videofilterrunnable.cpp \
-    $$PWD/src/imagebackend/hardwarebuffer.cpp
+    $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
 
 HEADERS += \
     $$PWD/src/imagebackend/opencvbackend.h \
@@ -134,8 +133,7 @@ HEADERS += \
     $$PWD/src/imagebackend/framesdelaycalculator.h \
     $$PWD/src/utils/qlinkedlistat.h \
     $$PWD/src/imagebackend/nv21videofilter.h \
-    $$PWD/src/imagebackend/nv21videofilterrunnable.h \
-    $$PWD/src/imagebackend/hardwarebuffer.h
+    $$PWD/src/imagebackend/nv21videofilterrunnable.h
 
 QML_SOURCES += \
     $$PWD/src/ARComponent.qml \
@@ -194,7 +192,21 @@ android {
             -lopencv_videostab\
             -Wl,--end-group\
 
-    LIBS += -lEGL -lnativewindow -lGLESv3
+    # enabling HardwareBuffer on Android API 26 and higher
+    ANDROID_API=$$(ANDROID_NDK_PLATFORM)
+
+    # adding libraries for HardwareBuffer
+    greaterThan(ANDROID_API, "android-25") {
+        LIBS += -lEGL -lnativewindow -lGLESv3
+        message("Using HardwareBuffer because Android API is >= 26");
+        message("Run $ export ANDROID_NDK_PLATFORM=android-25 (or less) before qmake to disable");
+    }
+
+    # not adding libraries and telling how to enable this just in case
+    else {
+        message("Not using HardwareBuffer because Android API is < 26");
+        message("Run $ export ANDROID_NDK_PLATFORM=android-26 (or more) before qmake to enable");
+    }
 
     LIBS += -L$${OPENCV_PATH}/sdk/native/3rdparty/libs/armeabi-v7a \
             -Wl,--start-group\
@@ -264,14 +276,5 @@ HEADERS += \
     $$PWD/qml-imu/src/ExtendedKalmanFilter.h \
     $$PWD/qml-imu/src/IMU.h \
     $$PWD/qml-imu/src/AccelerometerBiasEstimator.h
-
-# GraphicBuffer library
-SOURCES += \
-    $$PWD/GraphicBuffer/GraphicBuffer.cpp \
-    $$PWD/GraphicBuffer/DynamicLibrary.cpp
-
-HEADERS += \
-    $$PWD/GraphicBuffer/GraphicBuffer.h \
-    $$PWD/GraphicBuffer/DynamicLibrary.h
 
 INCLUDEPATH += $$PWD/qml-imu/src/
