@@ -126,8 +126,6 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 
     TimeLoggerThroughput("%s", "Received image from camera");
 
-    qDebug() << "Processing QVideoFrame";
-
     // fast GPU-based processing on Android 26 and higher
 #if __ANDROID_API__ >= 26
     // at some point viewfinder and filters should be ready, so it's safe to dereference pointer to the videofilter
@@ -137,7 +135,7 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
         probe->setSource((QMediaObject*) nullptr);
         disconnect(probe, SIGNAL(videoFrameProbed(const QVideoFrame &)), this, SLOT(processQVideoFrame(const QVideoFrame &)));
         connect(runnable, &NV21VideoFilterRunnable::imageConverted, this, &QtCameraBackend::processAndSendQImage, Qt::QueuedConnection);
-        qDebug() << "Switched to VideoFilterInput";
+        TimeLoggerLog("%s", "Switched to VideoFilterInput");
         return;
     }
 #endif

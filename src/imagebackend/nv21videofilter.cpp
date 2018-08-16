@@ -8,6 +8,7 @@
 
 #include "nv21videofilter.h"
 #include "nv21videofilterrunnable.h"
+#include "androidfilter.h"
 
 NV21VideoFilterRunnable* NV21VideoFilter::runnable = nullptr;
 
@@ -23,6 +24,6 @@ QVideoFilterRunnable *NV21VideoFilter::createFilterRunnable()
     return runnable;
 #else
     // this filter can be used only for Android API 26 and higher
-    return nullptr;
+    return new AndroidFilterRunnable;
 #endif
 }

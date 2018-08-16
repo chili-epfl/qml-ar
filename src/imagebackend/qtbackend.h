@@ -121,6 +121,7 @@ protected:
 
     /**
     * @brief Use output of VideoFilter (gpu-based)?
+    * Currently works only for Android API >= 26
     */
     bool use_gpu = false;
 

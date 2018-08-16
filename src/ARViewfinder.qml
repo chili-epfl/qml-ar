@@ -19,19 +19,15 @@ VideoOutput {
     anchors.fill: parent
 
     // enable/disable filters
-    filters: [nv21filter, androidFilter]//, delayFilter]
-
-    // AndroidFilter -- maps+unmaps the data (no change), see the C++ class for explanation
-    AndroidFilter {
-        id: androidFilter
-    }
+    filters: [nv21filter]//, delayFilter]
 
     // DelayFilter -- delays the image by the AR pipeline delay so that 3D objects and image are in sync
     DelayFilter {
         id: delayFilter
     }
 
-    // Convert NV21 to RGB
+    // Convert NV21 to RGB on API >= 26
+    // Instantiates an AndroidFilter -- maps+unmaps the data (no change), see the C++ class for explanation on API < 26
     NV21VideoFilter {
         id: nv21filter
     }
