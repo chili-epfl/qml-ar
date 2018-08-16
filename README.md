@@ -23,7 +23,7 @@ Linux:
 </p>
 
 ## Prerequisites (Common)
-1. <a href="https://www.qt.io/download">Qt 5</a> (tested with 5.10.0) and Qt Creator (tested with 4.5.0), tested on Desktop and Android kits
+1. <a href="https://www.qt.io/download">Qt 5</a> (tested with 5.10.0 and 5.11.1) and Qt Creator (tested with 4.5.0 and 5.6.2), tested on Desktop and Android kits
 2. git
 
 Example for Ubuntu Trusty:
@@ -48,8 +48,9 @@ $ sudo apt-get -qy install libopencv-dev
 
 ## Prerequisites (Android)
 1. <a href="https://sourceforge.net/projects/opencvlibrary/files/opencv-android/">OpenCV for Android</a> (tested with 3.3.1). Put the symlink pointing to the OpenCV for Android as `qml-ar/opencv-android` (inside the repo).
-2. Android SDK (tested with r22.3) and NDK (tested with r15c), need to be set up with Qt. Run `export ANDROID_NDK_ROOT=/path/to/ndk` before compilation.
-3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod). *Up to 5 cores required, GPU is used for image rendering*
+2. Android SDK (tested with r22.3) and NDK (tested with r15c and r16b), need to be set up with Qt. Run `export ANDROID_NDK_ROOT=/path/to/ndk; export ANDROID_NDK_PLATFORM=android-XX (replace with your version)` before compilation.
+3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod). *Up to 5 cores required, GPU is used for image rendering and image processing*.
+4. On API 26 and higher the HardwareBuffer is used to decrease latency of the pipeline. This functionality is not currently supported on lower APIs. Therefore, set your API version exactly to match your device to achieve optimal performance.
 
 Example for Ubuntu Trusty: *need to download things by hand in GUI, including Qt for Android.*
 
@@ -135,10 +136,11 @@ On Linux, no IMU is assumed to exist, and also the image is rendered using updat
 
 At the end, the application exports the MVP matrix to a QML component `ARComponent`, which uses it as the `Camera` parameter in Qt3D. This component is also capable of loading the user-defined scene. This is the main component for interaction with the library from QML.
 
+On Android API 26 and higher (Android 8.0) a HardwareBuffer is used to quickly obtain the camera image from the GPU, converting it to HSV and thresholding while it's still on GPU, thus reducing latency by 30% down to 40ms and CPU usage by 20%. Specify `android-26` or higher before running qmake if your device supports this API. Thus, on Android 26 and higher `ImageScaler` and `HueThreshold` are not used because their function is provided by a faster `NV21VideoFilterRunnable`. See `NV21VideoFilterRunnable`, `QMLAR::connectAll()`, `qml-ar.pri` for details. The description of this functionality and discussion of possible ways to enable it on API < 26 is temporary at https://github.com/fuyufjh/GraphicBuffer/issues/7 and https://github.com/fuyufjh/GraphicBuffer/issues/5
+
 ### Possible extensions
 1. Random-color dots instead of just red dots
 2. Hiding dots on the AR image
-3. More GPU use on Android to speed up the pipeline
 
 ## Build documentation
 ```
