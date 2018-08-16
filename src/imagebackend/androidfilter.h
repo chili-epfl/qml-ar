@@ -12,8 +12,6 @@
 #include <QAbstractVideoFilter>
 #include "qvideoframehelpers.h"
 
-class AndroidFilterRunnable;
-
 /**
  * @brief A class for fixing video output on android
  *
@@ -33,6 +31,20 @@ public:
     * @brief QAbstractVideoFilter interface
     */
     QVideoFilterRunnable *createFilterRunnable() override;
+};
+
+/** @brief The filter which maps and unmaps data
+ * see https://bugreports.qt.io/browse/QTBUG-48567
+ * response by Christoph Keller, 29 Apr '17 12:57 PM
+ */
+class AndroidFilterRunnable : public QVideoFilterRunnable
+{
+public:
+    /** @brief Constructor */
+    AndroidFilterRunnable() {}
+
+    /** @brief Map and unmap */
+    QVideoFrame run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags) override;
 };
 
 #endif // ANDROIDFILTER_H
