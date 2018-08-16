@@ -6,8 +6,6 @@
  * @date 2018-07-26
  */
 
-#if __ANDROID_API__ >= 26
-
 // GLES/GL includes
 #define EGL_EGLEXT_PROTOTYPES
 #include "EGL/egl.h"
@@ -67,7 +65,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     image_info = PipelineContainerInfo(image_id++).checkpointed("Grabbed");
 
     // variable to check for errors in functions
-    int error = 0;
+    int error __attribute__((unused)) = 0;
 
     // size of the input frame
     auto size(inputFrame->size());
@@ -344,5 +342,3 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     // returning the input frame unchanged for the preview
     return *inputFrame;
 }
-
-#endif

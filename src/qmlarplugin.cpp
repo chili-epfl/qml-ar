@@ -21,7 +21,13 @@ void QMLARQMLPlugin::registerTypes(const char *uri)
     qmlRegisterSingletonType<QMLAR>("ch.epfl.chili.qmlar", 1, 0, "AR", get_qml_ar);
     qmlRegisterType<AndroidFilter>("ch.epfl.chili.qmlar", 1, 0, "AndroidFilter");
     qmlRegisterType<DelayFilter>("ch.epfl.chili.qmlar", 1, 0, "DelayFilter");
+
+    // exporting AndroidFilter for API < 26 and the new NV21VideoFilter for API >= 26
+#if __ANDROID_API__ >= 26
     qmlRegisterType<NV21VideoFilter>("ch.epfl.chili.qmlar", 1, 0, "NV21VideoFilter");
+#else
+    qmlRegisterType<AndroidFilter>("ch.epfl.chili.qmlar", 1, 0, "NV21VideoFilter");
+#endif
 }
 
 QObject *QMLARQMLPlugin::get_qml_ar(QQmlEngine *engine, QJSEngine *scriptEngine)

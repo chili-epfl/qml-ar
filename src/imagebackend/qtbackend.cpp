@@ -14,8 +14,11 @@
 #include <QException>
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
+
+#if __ANDROID_API__ >= 26
 #include "nv21videofilter.h"
 #include "nv21videofilterrunnable.h"
+#endif
 
 QtCameraBackend::QtCameraBackend(int cam_id) : ImageProviderAsync()
 {

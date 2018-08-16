@@ -10,7 +10,6 @@
 #ifndef NV21VIDEOFILTERRUNNABLE_H
 #define NV21VIDEOFILTERRUNNABLE_H
 
-#if __ANDROID_API__ >= 26
 #include <QVideoFilterRunnable>
 #include <QtOpenGL>
 #include <QtConcurrent>
@@ -160,7 +159,5 @@ signals:
      */
     void imageConverted(PipelineContainer<QImage> img);
 };
-
-#endif
 
 #endif // NV21VIDEOFILTERRUNNABLE_H

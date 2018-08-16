@@ -78,9 +78,7 @@ SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
     $$PWD/src/utils/latencycalculator.cpp \
     $$PWD/src/imagebackend/delayfilter.cpp \
     $$PWD/src/imagebackend/framesdelaycalculator.cpp \
-    $$PWD/src/utils/qlinkedlistat.cpp \
-    $$PWD/src/imagebackend/nv21videofilter.cpp \
-    $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
+    $$PWD/src/utils/qlinkedlistat.cpp
 
 HEADERS += \
     $$PWD/src/imagebackend/opencvbackend.h \
@@ -131,9 +129,7 @@ HEADERS += \
     $$PWD/src/utils/latencycalculator.h \
     $$PWD/src/imagebackend/delayfilter.h \
     $$PWD/src/imagebackend/framesdelaycalculator.h \
-    $$PWD/src/utils/qlinkedlistat.h \
-    $$PWD/src/imagebackend/nv21videofilter.h \
-    $$PWD/src/imagebackend/nv21videofilterrunnable.h
+    $$PWD/src/utils/qlinkedlistat.h
 
 QML_SOURCES += \
     $$PWD/src/ARComponent.qml \
@@ -198,12 +194,17 @@ android {
     # adding libraries for HardwareBuffer
     greaterThan(ANDROID_API, "android-25") {
         LIBS += -lEGL -lnativewindow -lGLESv3
+        HEADERS += $$PWD/src/imagebackend/nv21videofilter.h \
+                   $$PWD/src/imagebackend/nv21videofilterrunnable.h
+        SOURCES += $$PWD/src/imagebackend/nv21videofilter.cpp \
+                   $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
         message("Using HardwareBuffer because Android API is >= 26");
         message("Run $ export ANDROID_NDK_PLATFORM=android-25 (or less) before qmake to disable");
     }
 
     # not adding libraries and telling how to enable this just in case
     else {
+        LIBS += -lc
         message("Not using HardwareBuffer because Android API is < 26");
         message("Run $ export ANDROID_NDK_PLATFORM=android-26 (or more) before qmake to enable");
     }

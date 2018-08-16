@@ -19,11 +19,6 @@ NV21VideoFilter::NV21VideoFilter(QObject *parent) : QAbstractVideoFilter(parent)
 
 QVideoFilterRunnable *NV21VideoFilter::createFilterRunnable()
 {
-#if __ANDROID_API__ >= 26
     runnable = new NV21VideoFilterRunnable(this);
     return runnable;
-#else
-    // this filter can be used only for Android API 26 and higher
-    return new AndroidFilterRunnable;
-#endif
 }

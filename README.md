@@ -51,6 +51,7 @@ $ sudo apt-get -qy install libopencv-dev
 2. Android SDK (tested with r22.3) and NDK (tested with r15c and r16b), need to be set up with Qt. Run `export ANDROID_NDK_ROOT=/path/to/ndk; export ANDROID_NDK_PLATFORM=android-XX (replace with your version)` before compilation.
 3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod). *Up to 5 cores required, GPU is used for image rendering and image processing*.
 4. On API 26 and higher the HardwareBuffer is used to decrease latency of the pipeline. This functionality is not currently supported on lower APIs. Therefore, set your API version exactly to match your device to achieve optimal performance.
+5. Qt 5.11.1 worked with API 27, and Qt 5.10.0 worked with API 25. Qt 5.11.1 did not work with API 25.
 
 Example for Ubuntu Trusty: *need to download things by hand in GUI, including Qt for Android.*
 
