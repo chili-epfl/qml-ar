@@ -39,6 +39,9 @@ Scene3D {
     /** delta MVP x axis (in mm?) */
     property double delta_x: 0
 
+    /** Speed up the rendering (if false) @see https://forum.qt.io/topic/84698/why-is-scene3d-so-slow/2 */
+    multisample: false
+
     // entity with camera which creates user's components inside
     Entity {
         id: activity
