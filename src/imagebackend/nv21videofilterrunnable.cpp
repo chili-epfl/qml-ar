@@ -6,6 +6,8 @@
  * @date 2018-07-26
  */
 
+#if __ANDROID_API__ >= 26
+
 // GLES/GL includes
 #define EGL_EGLEXT_PROTOTYPES
 #include "EGL/egl.h"
@@ -342,3 +344,5 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     // returning the input frame unchanged for the preview
     return *inputFrame;
 }
+
+#endif

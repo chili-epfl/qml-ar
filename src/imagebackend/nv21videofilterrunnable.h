@@ -1,6 +1,7 @@
 /**
  * @file nv21videofilterrunnable.h
- * @brief This class converts NV21 input QVideoFrame(texture) to RGB888, also doing downscaling and HSV thresholding
+ * @brief This class converts NV21 input QVideoFrame(texture) to RGB888, also doing downscaling and HSV thresholding.
+ * Only for Android API 26 and higher.
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-26
@@ -9,6 +10,7 @@
 #ifndef NV21VIDEOFILTERRUNNABLE_H
 #define NV21VIDEOFILTERRUNNABLE_H
 
+#if __ANDROID_API__ >= 26
 #include <QVideoFilterRunnable>
 #include <QtOpenGL>
 #include <QtConcurrent>
@@ -158,4 +160,7 @@ signals:
      */
     void imageConverted(PipelineContainer<QImage> img);
 };
+
+#endif
+
 #endif // NV21VIDEOFILTERRUNNABLE_H

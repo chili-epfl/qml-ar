@@ -128,6 +128,8 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 
     qDebug() << "Processing QVideoFrame";
 
+    // fast GPU-based processing on Android 26 and higher
+#if __ANDROID_API__ >= 26
     // at some point viewfinder and filters should be ready, so it's safe to dereference pointer to the videofilter
     NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
     if(runnable && use_gpu) {
@@ -138,6 +140,7 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
         qDebug() << "Switched to VideoFilterInput";
         return;
     }
+#endif
 
     // not converting frame if thread is busy
     if(!watcher.isRunning())

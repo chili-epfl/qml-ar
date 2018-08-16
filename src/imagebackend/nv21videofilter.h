@@ -1,6 +1,6 @@
 /**
  * @file nv21videofilter.h
- * @brief This class manages NV21VideoFilterRunnable
+ * @brief This class manages NV21VideoFilterRunnable. Only for Android API 26 and higher.
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-07-25
@@ -15,7 +15,7 @@
 class NV21VideoFilterRunnable;
 
 /**
- * @brief The NV21VideoFilter class manages NV21VideoFilterRunnable
+ * @brief The NV21VideoFilter class manages NV21VideoFilterRunnable.  Only for Android API 26 and higher.
  *
  * Based on https://github.com/aseba-community/thymio-ar/blob/eb942a5e96761303512a07dc6e5057749ff8939e/vision-video-filter.h
  */
