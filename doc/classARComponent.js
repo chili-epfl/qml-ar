@@ -15,6 +15,7 @@ var classARComponent =
     [ "image_filename", "classARComponent.html#a8923442249702d57b26b2b966d05f791", null ],
     [ "image_width", "classARComponent.html#a3d1c2cb42413bb52f525a6fe40f090ce", null ],
     [ "init_type", "classARComponent.html#a356dccf1b5f8ebd2d6a18a2ecec0640d", null ],
+    [ "is_running", "classARComponent.html#a0cf80fa238e4e80816233e3991efe80b", null ],
     [ "markers_visible", "classARComponent.html#a85a69a6e151703bd50ab69d01346b53a", null ],
     [ "mvp_matrix", "classARComponent.html#a4a817a319ae0cf25e9ab76bfb03256ef", null ],
     [ "output_type", "classARComponent.html#a84dd6bae71f490e5ccc9c03f51e6123c", null ],

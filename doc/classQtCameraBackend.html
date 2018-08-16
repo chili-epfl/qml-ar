@@ -106,6 +106,10 @@ Public Slots</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQtCameraBackend.html#ac6aae303b95fa252d9e362b670c135d2">processQImage</a> (QImage img)</td></tr>
 <tr class="memdesc:ac6aae303b95fa252d9e362b670c135d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this image as buffer. <br /></td></tr>
 <tr class="separator:ac6aae303b95fa252d9e362b670c135d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2af2dc2522039bc537f93bfabc21e292"><td class="memItemLeft" align="right" valign="top"><a id="a2af2dc2522039bc537f93bfabc21e292"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQtCameraBackend.html#a2af2dc2522039bc537f93bfabc21e292">processAndSendQImage</a> (<a class="el" href="classPipelineContainer.html">PipelineContainer</a>&lt; QImage &gt; img)</td></tr>
+<tr class="memdesc:a2af2dc2522039bc537f93bfabc21e292"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this image as buffer and send it to listeners. <br /></td></tr>
+<tr class="separator:a2af2dc2522039bc537f93bfabc21e292"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af75292515bc72d0560d98e733a6548dd"><td class="memItemLeft" align="right" valign="top"><a id="af75292515bc72d0560d98e733a6548dd"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQtCameraBackend.html#af75292515bc72d0560d98e733a6548dd">processQVideoFrame</a> (const QVideoFrame &amp;frame)</td></tr>
 <tr class="memdesc:af75292515bc72d0560d98e733a6548dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process frame in thread. <br /></td></tr>
@@ -114,6 +118,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQtCameraBackend.html#a8e3d4b06e1d7fdf95d56826aec9d8211">handleFinished</a> ()</td></tr>
 <tr class="memdesc:a8e3d4b06e1d7fdf95d56826aec9d8211"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called on thread finish. <br /></td></tr>
 <tr class="separator:a8e3d4b06e1d7fdf95d56826aec9d8211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_slots_classImageProviderAsync"><td colspan="2" onclick="javascript:toggleInherit('pub_slots_classImageProviderAsync')"><img src="closed.png" alt="-"/>&#160;Public Slots inherited from <a class="el" href="classImageProviderAsync.html">ImageProviderAsync</a></td></tr>
+<tr class="memitem:a13b2a432b2ae5e8bf55df804f960f08f inherit pub_slots_classImageProviderAsync"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#a13b2a432b2ae5e8bf55df804f960f08f">setActive</a> (bool active)</td></tr>
+<tr class="memdesc:a13b2a432b2ae5e8bf55df804f960f08f inherit pub_slots_classImageProviderAsync"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make this object active/inactive.  <a href="classImageProviderAsync.html#a13b2a432b2ae5e8bf55df804f960f08f">More...</a><br /></td></tr>
+<tr class="separator:a13b2a432b2ae5e8bf55df804f960f08f inherit pub_slots_classImageProviderAsync"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -196,6 +204,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 QFutureWatcher&lt; QImage &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQtCameraBackend.html#a8d2656dab3590fdcc97ce5946bbdea58">watcher</a></td></tr>
 <tr class="memdesc:a8d2656dab3590fdcc97ce5946bbdea58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread result. <br /></td></tr>
 <tr class="separator:a8d2656dab3590fdcc97ce5946bbdea58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5543edcf13c6b6940ef0d47e3e0ff617"><td class="memItemLeft" align="right" valign="top"><a id="a5543edcf13c6b6940ef0d47e3e0ff617"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQtCameraBackend.html#a5543edcf13c6b6940ef0d47e3e0ff617">use_gpu</a> = false</td></tr>
+<tr class="memdesc:a5543edcf13c6b6940ef0d47e3e0ff617"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use output of VideoFilter (gpu-based)? Currently works only for Android API &gt;= 26. <br /></td></tr>
+<tr class="separator:a5543edcf13c6b6940ef0d47e3e0ff617"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classImageProviderAsync"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classImageProviderAsync')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classImageProviderAsync.html">ImageProviderAsync</a></td></tr>
+<tr class="memitem:a1307a59e60c02a4a1912869c2a94e9d9 inherit pro_attribs_classImageProviderAsync"><td class="memItemLeft" align="right" valign="top"><a id="a1307a59e60c02a4a1912869c2a94e9d9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#a1307a59e60c02a4a1912869c2a94e9d9">is_active</a> = true</td></tr>
+<tr class="memdesc:a1307a59e60c02a4a1912869c2a94e9d9 inherit pro_attribs_classImageProviderAsync"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes if the object is currently active. <br /></td></tr>
+<tr class="separator:a1307a59e60c02a4a1912869c2a94e9d9 inherit pro_attribs_classImageProviderAsync"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['watcher',['watcher',['../classQtCameraBackend.html#a8d2656dab3590fdcc97ce5946bbdea58',1,'QtCameraBackend']]]
+  ['use_5fgpu',['use_gpu',['../classQtCameraBackend.html#a5543edcf13c6b6940ef0d47e3e0ff617',1,'QtCameraBackend']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['voidviewfinder',['VoidViewFinder',['../classVoidViewFinder.html',1,'']]]
+  ['uchiyamarkerdetector',['UchiyaMarkerDetector',['../classUchiyaMarkerDetector.html',1,'']]]
 ];

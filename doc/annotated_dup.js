@@ -36,6 +36,8 @@ var annotated_dup =
     [ "MeanStdCalculator", "classMeanStdCalculator.html", "classMeanStdCalculator" ],
     [ "MVPProvider", "classMVPProvider.html", "classMVPProvider" ],
     [ "MyMatConverter", "classMyMatConverter.html", "classMyMatConverter" ],
+    [ "NV21VideoFilter", "classNV21VideoFilter.html", "classNV21VideoFilter" ],
+    [ "NV21VideoFilterRunnable", "classNV21VideoFilterRunnable.html", "classNV21VideoFilterRunnable" ],
     [ "OpenCVCameraBackend", "classOpenCVCameraBackend.html", "classOpenCVCameraBackend" ],
     [ "PerspectiveCamera", "classPerspectiveCamera.html", "classPerspectiveCamera" ],
     [ "PipelineContainer", "classPipelineContainer.html", "classPipelineContainer" ],

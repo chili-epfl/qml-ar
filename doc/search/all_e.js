@@ -16,7 +16,7 @@ var searchData=
   ['portablebackendfactory_2ecpp',['portablebackendfactory.cpp',['../portablebackendfactory_8cpp.html',1,'']]],
   ['portablebackendfactory_2eh',['portablebackendfactory.h',['../portablebackendfactory_8h.html',1,'']]],
   ['portablecamerabackendfactory',['PortableCameraBackendFactory',['../classPortableCameraBackendFactory.html',1,'']]],
-  ['pose',['Pose',['../classPose.html',1,'Pose'],['../classTimeStampedIMUPose.html#a259aa662f5444a8b39082003ffba5b09',1,'TimeStampedIMUPose::pose()'],['../classPose.html#a8a4171c8a6b09e37fb011997da9ea2ad',1,'Pose::Pose()'],['../classPose.html#a660ee777fd4179627666e73f95be9d9c',1,'Pose::Pose(QMatrix4x4 map)'],['../classPose.html#a61c360aa2da5b014c017d3aeba03f4b2',1,'Pose::Pose(QVector3D t, QMatrix3x3 r)']]],
+  ['pose',['Pose',['../classPose.html',1,'Pose'],['../classPose.html#a8a4171c8a6b09e37fb011997da9ea2ad',1,'Pose::Pose()'],['../classPose.html#a660ee777fd4179627666e73f95be9d9c',1,'Pose::Pose(QMatrix4x4 map)'],['../classPose.html#a61c360aa2da5b014c017d3aeba03f4b2',1,'Pose::Pose(QVector3D t, QMatrix3x3 r)'],['../classTimeStampedIMUPose.html#a259aa662f5444a8b39082003ffba5b09',1,'TimeStampedIMUPose::pose()']]],
   ['pose_2ecpp',['pose.cpp',['../pose_8cpp.html',1,'']]],
   ['pose_2eh',['pose.h',['../pose_8h.html',1,'']]],
   ['pose_5fvalid',['pose_valid',['../classThreadedQMLAR.html#a65137d9f976d6b40ccd4c7004ba5cbb9',1,'ThreadedQMLAR']]],
@@ -34,6 +34,8 @@ var searchData=
   ['previewupdated',['previewUpdated',['../classMarkerDetector.html#a6953c411f50604debe19f33b8d876890',1,'MarkerDetector']]],
   ['probe',['probe',['../classQtCameraBackend.html#a40bff40f0d069c3e4c4f285820dd160e',1,'QtCameraBackend']]],
   ['process',['process',['../classMarkerDetector.html#ac5aa39268a189b61555ce86acf687c3f',1,'MarkerDetector::process()'],['../classUchiyaMarkerDetector.html#a5f61abb85a86044f7daa02842c83c287',1,'UchiyaMarkerDetector::process()']]],
+  ['processandsendqimage',['processAndSendQImage',['../classQtCameraBackend.html#a2af2dc2522039bc537f93bfabc21e292',1,'QtCameraBackend']]],
   ['processqimage',['processQImage',['../classQtCameraBackend.html#ac6aae303b95fa252d9e362b670c135d2',1,'QtCameraBackend']]],
-  ['processqvideoframe',['processQVideoFrame',['../classQtCameraBackend.html#af75292515bc72d0560d98e733a6548dd',1,'QtCameraBackend']]]
+  ['processqvideoframe',['processQVideoFrame',['../classQtCameraBackend.html#af75292515bc72d0560d98e733a6548dd',1,'QtCameraBackend']]],
+  ['profile_5fpipeline_5flatency',['PROFILE_PIPELINE_LATENCY',['../config_8h.html#a42c26cce76c00006a4e70c7581671b3b',1,'config.h']]]
 ];

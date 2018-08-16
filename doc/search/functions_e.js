@@ -13,6 +13,7 @@ var searchData=
   ['present',['present',['../classCameraFrameGrabber.html#aad72a22bcd60402973a153aa0d32b940',1,'CameraFrameGrabber::present()'],['../classVoidViewFinder.html#abbaaf79385afec3266b99a34be68385f',1,'VoidViewFinder::present()']]],
   ['previewupdated',['previewUpdated',['../classMarkerDetector.html#a6953c411f50604debe19f33b8d876890',1,'MarkerDetector']]],
   ['process',['process',['../classMarkerDetector.html#ac5aa39268a189b61555ce86acf687c3f',1,'MarkerDetector::process()'],['../classUchiyaMarkerDetector.html#a5f61abb85a86044f7daa02842c83c287',1,'UchiyaMarkerDetector::process()']]],
+  ['processandsendqimage',['processAndSendQImage',['../classQtCameraBackend.html#a2af2dc2522039bc537f93bfabc21e292',1,'QtCameraBackend']]],
   ['processqimage',['processQImage',['../classQtCameraBackend.html#ac6aae303b95fa252d9e362b670c135d2',1,'QtCameraBackend']]],
   ['processqvideoframe',['processQVideoFrame',['../classQtCameraBackend.html#af75292515bc72d0560d98e733a6548dd',1,'QtCameraBackend']]]
 ];

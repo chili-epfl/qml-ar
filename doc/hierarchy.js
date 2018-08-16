@@ -24,7 +24,8 @@ var hierarchy =
     ] ],
     [ "QAbstractVideoFilter", null, [
       [ "AndroidFilter", "classAndroidFilter.html", null ],
-      [ "DelayFilter", "classDelayFilter.html", null ]
+      [ "DelayFilter", "classDelayFilter.html", null ],
+      [ "NV21VideoFilter", "classNV21VideoFilter.html", null ]
     ] ],
     [ "QAbstractVideoSurface", null, [
       [ "CameraFrameGrabber", "classCameraFrameGrabber.html", null ],
@@ -60,6 +61,7 @@ var hierarchy =
         [ "MarkerMVPProvider", "classMarkerMVPProvider.html", null ],
         [ "PoseFilter", "classPoseFilter.html", null ]
       ] ],
+      [ "NV21VideoFilterRunnable", "classNV21VideoFilterRunnable.html", null ],
       [ "PosePredictor", "classPosePredictor.html", [
         [ "LinearPosePredictor", "classLinearPosePredictor.html", null ]
       ] ],
@@ -75,7 +77,8 @@ var hierarchy =
     ] ],
     [ "QVideoFilterRunnable", null, [
       [ "AndroidFilterRunnable", "classAndroidFilterRunnable.html", null ],
-      [ "DelayFilterRunnable", "classDelayFilterRunnable.html", null ]
+      [ "DelayFilterRunnable", "classDelayFilterRunnable.html", null ],
+      [ "NV21VideoFilterRunnable", "classNV21VideoFilterRunnable.html", null ]
     ] ],
     [ "QVideoFrameHelpers", "classQVideoFrameHelpers.html", null ],
     [ "Scene3D", null, [

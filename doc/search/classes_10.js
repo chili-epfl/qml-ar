@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['worldimagecorrespondences',['WorldImageCorrespondences',['../classWorldImageCorrespondences.html',1,'']]]
+  ['voidviewfinder',['VoidViewFinder',['../classVoidViewFinder.html',1,'']]]
 ];

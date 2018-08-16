@@ -28,8 +28,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AR3DScene_8qml.html",
-"classMarkerDetector.html#aaba633e1bf2d6b83b98951397870f962",
-"classWorldImageCorrespondences.html#a403169a70583f94c908dca0c0ab03a91"
+"classMarkerDetector.html#a6b2f7cb8185a5273779d9ea87eabbf62",
+"classTimeLogger.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

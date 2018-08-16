@@ -21,6 +21,7 @@ var searchData=
   ['markerstorage_2ecpp',['markerstorage.cpp',['../markerstorage_8cpp.html',1,'']]],
   ['markerstorage_2eh',['markerstorage.h',['../markerstorage_8h.html',1,'']]],
   ['markersupdated',['markersUpdated',['../classMarkerDetector.html#a2b2431bbb701f1fb2e65987888cf492d',1,'MarkerDetector']]],
+  ['max_5finput_5fsize',['MAX_INPUT_SIZE',['../nv21videofilterrunnable_8h.html#a479e2087967dffd589c1b8b65c8e65e6',1,'nv21videofilterrunnable.h']]],
   ['mean',['mean',['../classFPSCalculator.html#a466be4d3ac993b92c749913dfa0b0b7e',1,'FPSCalculator::mean()'],['../classLatencyCalculator.html#ab2a680e176fdb47149a1a5c0ed461031',1,'LatencyCalculator::mean()']]],
   ['meanhue',['meanHue',['../classHSVMeanColor.html#a6477bc5d53121b52afe507790f746c43',1,'HSVMeanColor']]],
   ['meanstdcalculator',['MeanStdCalculator',['../classMeanStdCalculator.html',1,'']]],

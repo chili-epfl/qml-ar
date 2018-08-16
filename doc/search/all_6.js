@@ -33,6 +33,7 @@ var searchData=
   ['getpointer',['getPointer',['../classMarkerStorage.html#a0c85d7afcda8e7b3834ae15f42572ac4',1,'MarkerStorage']]],
   ['getpositionmm',['getPositionMM',['../classMarker.html#a66bdd54b56e870462e4a98c5f4a123ee',1,'Marker']]],
   ['getrotation',['getRotation',['../classPose.html#a84a3ee32783a5a652017f161208ca4b6',1,'Pose']]],
+  ['getrunning',['getRunning',['../classThreadedQMLAR.html#a969e75ed58fbda3036a90cfa8db7f5eb',1,'ThreadedQMLAR']]],
   ['getsizemm',['getSizeMM',['../classMarker.html#a8392fd49aec9367b8e5e85c845112428',1,'Marker']]],
   ['getstd',['getStd',['../classMeanStdCalculator.html#a666587bc28ec5ee28385d55509553f5b',1,'MeanStdCalculator']]],
   ['gettranslation',['getTranslation',['../classPose.html#a57365f99935c1cf8ec043b4c04b8c30f',1,'Pose']]],

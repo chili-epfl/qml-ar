@@ -1,51 +1,51 @@
 <map id="src/utils/pipelinecontainerinfo.h" name="src/utils/pipelinecontainerinfo.h">
-<area shape="rect" id="node2" href="$latencycalculator_8h.html" title="This class calculates latency based on PipelineContainerInfos. " alt="" coords="1365,80,1547,107"/>
-<area shape="rect" id="node5" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="2909,80,3089,107"/>
-<area shape="rect" id="node50" href="$pipelinecontainerinfo_8cpp.html" title="This class contains information which travels with a pipeline container. " alt="" coords="3113,80,3327,107"/>
-<area shape="rect" id="node3" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="2455,379,2556,405"/>
-<area shape="rect" id="node4" href="$latencycalculator_8cpp.html" title="This class calculates latency based on PipelineContainerInfos. " alt="" coords="1224,155,1419,181"/>
-<area shape="rect" id="node6" href="$mvpprovider_8h.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="3093,229,3235,256"/>
-<area shape="rect" id="node14" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="4482,155,4683,181"/>
-<area shape="rect" id="node26" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="1500,229,1759,256"/>
-<area shape="rect" id="node45" href="$hsvintervaldetector_8h.html" title="This class receives matched points and deduces the color interval they are in. " alt="" coords="2448,155,2664,181"/>
-<area shape="rect" id="node47" href="$markerdetector_8h.html" title="This class stores a common interface for marker detectors. " alt="" coords="3738,229,3931,256"/>
-<area shape="rect" id="node49" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="2969,155,3164,181"/>
-<area shape="rect" id="node7" href="$imumvpdecorator_8h.html" title="This class decorates an MVP provider by adding IMU delta movement. " alt="" coords="3079,304,3249,331"/>
-<area shape="rect" id="node9" href="$markermvpprovider_8h.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="3975,304,4156,331"/>
-<area shape="rect" id="node11" href="$mvpprovider_8cpp.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="2593,304,2748,331"/>
-<area shape="rect" id="node12" href="$posefilter_8h.html" title="This class implements low&#45;pass filter on Pose (Rotation + Translation) " alt="" coords="3273,304,3396,331"/>
-<area shape="rect" id="node8" href="$imumvpdecorator_8cpp.html" title="This class decorates an MVP provider by adding IMU delta movement. " alt="" coords="3072,379,3256,405"/>
-<area shape="rect" id="node10" href="$markermvpprovider_8cpp.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="4497,379,4692,405"/>
-<area shape="rect" id="node13" href="$posefilter_8cpp.html" title="This class implements low&#45;pass filter on Pose (Rotation + Translation) " alt="" coords="3281,379,3418,405"/>
-<area shape="rect" id="node15" href="$perspectivecamera_8h.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="4222,229,4402,256"/>
-<area shape="rect" id="node17" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="4515,229,4651,256"/>
-<area shape="rect" id="node18" href="$posecamerapnp_8h.html" title="This class converts camera + 3D&#45;2D correspondences to a camera pose. " alt="" coords="4897,304,5060,331"/>
-<area shape="rect" id="node20" href="$worldimage_8cpp.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="4722,304,4873,331"/>
-<area shape="rect" id="node23" href="$calibratedcamera_8cpp.html" title="This class stores information about a calibrated camera. " alt="" coords="4726,229,4941,256"/>
-<area shape="rect" id="node24" href="$calibratedcamerafilestorage_8h.html" title="This class implements CalibratedCamera and allows to load information from a file. " alt="" coords="3427,229,3688,256"/>
-<area shape="rect" id="node16" href="$perspectivecamera_8cpp.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="4281,304,4476,331"/>
-<area shape="rect" id="node21" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="4551,304,4697,331"/>
-<area shape="rect" id="node19" href="$posecamerapnp_8cpp.html" title="This class converts camera + 3D&#45;2D correspondences to a camera pose. " alt="" coords="4891,379,5067,405"/>
-<area shape="rect" id="node22" href="$markerdetector_8cpp.html" title="This class stores a common interface for marker detectors. " alt="" coords="4178,379,4385,405"/>
-<area shape="rect" id="node25" href="$calibratedcamerafilestorage_8cpp.html" title="This class implements CalibratedCamera and allows to load information from a file. " alt="" coords="3420,304,3695,331"/>
-<area shape="rect" id="node27" href="$blackenrest_8h.html" title="Paints image parts not containing markers in black. " alt="" coords="542,304,679,331"/>
-<area shape="rect" id="node29" href="$portablebackendfactory_8h.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="955,304,1192,331"/>
-<area shape="rect" id="node31" href="$imagebackend_8h.html" title="This class implements a QQuickImageProvider showing a constant image from a file. ..." alt="" coords="704,304,931,331"/>
-<area shape="rect" id="node33" href="$imageproviderasync_8cpp.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="1990,304,2263,331"/>
-<area shape="rect" id="node34" href="$imagescaler_8h.html" title="This class scales images. " alt="" coords="304,304,517,331"/>
-<area shape="rect" id="node36" href="$markerbackend_8h.html" title="A backend for QML for marker detection preview. " alt="" coords="2823,304,3055,331"/>
-<area shape="rect" id="node38" href="$opencvbackend_8h.html" title="OpenCV camera backend for QML. " alt="" coords="45,304,280,331"/>
-<area shape="rect" id="node40" href="$qtbackend_8h.html" title="QCamera backend for QML. " alt="" coords="1216,304,1419,331"/>
-<area shape="rect" id="node42" href="$randomimagebackend_8h.html" title="This class takes input from pre&#45;created byte array and outputs it as a QImage. " alt="" coords="1494,304,1765,331"/>
-<area shape="rect" id="node43" href="$blobdetector_8h.html" title="This class detects blobs on a QImage and returns a QImage with white pixels at blob positions..." alt="" coords="1789,304,1966,331"/>
-<area shape="rect" id="node44" href="$huethreshold_8h.html" title="This class outputs binarized image taking colors in [hue&#45;delta, hue+delta]. " alt="" coords="2287,304,2467,331"/>
-<area shape="rect" id="node28" href="$blackenrest_8cpp.html" title="Paints image parts not containing markers in black. " alt="" coords="529,379,679,405"/>
-<area shape="rect" id="node30" href="$portablebackendfactory_8cpp.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="969,379,1220,405"/>
-<area shape="rect" id="node32" href="$imagebackend_8cpp.html" title="This class implements a QQuickImageProvider showing a constant image from a file. ..." alt="" coords="703,379,945,405"/>
-<area shape="rect" id="node35" href="$imagescaler_8cpp.html" title="This class scales images. " alt="" coords="277,379,504,405"/>
-<area shape="rect" id="node37" href="$markerbackend_8cpp.html" title="A backend for QML for marker detection preview. " alt="" coords="2801,379,3047,405"/>
-<area shape="rect" id="node39" href="$opencvbackend_8cpp.html" title="OpenCV camera backend for QML. " alt="" coords="5,379,253,405"/>
-<area shape="rect" id="node41" href="$qtbackend_8cpp.html" title="QCamera backend for QML. " alt="" coords="1245,379,1462,405"/>
-<area shape="rect" id="node46" href="$hsvintervaldetector_8cpp.html" title="This class receives matched points and deduces the color interval they are in. " alt="" coords="2287,229,2518,256"/>
-<area shape="rect" id="node48" href="$uchiyamarkerdetector_8h.html" title="Wrapper around C&#45;style UchiyaMarkers project obtained from main.cpp file from UchiyaMarkers project..." alt="" coords="3719,304,3950,331"/>
+<area shape="rect" id="node2" href="$latencycalculator_8h.html" title="This class calculates latency based on PipelineContainerInfos. " alt="" coords="758,80,939,107"/>
+<area shape="rect" id="node5" href="$pipelinecontainer_8h.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="3204,80,3384,107"/>
+<area shape="rect" id="node50" href="$pipelinecontainerinfo_8cpp.html" title="This class contains information which travels with a pipeline container. " alt="" coords="3408,80,3623,107"/>
+<area shape="rect" id="node3" href="$qmlar_8cpp.html" title="This class is the C++/QML interface to the QML AR library. " alt="" coords="2627,379,2729,405"/>
+<area shape="rect" id="node4" href="$latencycalculator_8cpp.html" title="This class calculates latency based on PipelineContainerInfos. " alt="" coords="315,155,510,181"/>
+<area shape="rect" id="node6" href="$mvpprovider_8h.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="3618,229,3759,256"/>
+<area shape="rect" id="node14" href="$calibratedcamera_8h.html" title="This class stores information about a calibrated camera. " alt="" coords="4601,155,4803,181"/>
+<area shape="rect" id="node26" href="$imageproviderasync_8h.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="1634,229,1893,256"/>
+<area shape="rect" id="node44" href="$nv21videofilterrunnable_8h.html" title="This class converts NV21 format to RGB888. " alt="" coords="535,155,811,181"/>
+<area shape="rect" id="node45" href="$hsvintervaldetector_8h.html" title="This class receives matched points and deduces the color interval they are in. " alt="" coords="3041,155,3257,181"/>
+<area shape="rect" id="node47" href="$markerdetector_8h.html" title="This class stores a common interface for marker detectors. " alt="" coords="3400,229,3593,256"/>
+<area shape="rect" id="node49" href="$pipelinecontainer_8cpp.html" title="This template class wraps an object adding additional information: id, timestamp. ..." alt="" coords="3331,155,3526,181"/>
+<area shape="rect" id="node7" href="$imumvpdecorator_8h.html" title="This class decorates an MVP provider by adding IMU delta movement. " alt="" coords="3777,304,3947,331"/>
+<area shape="rect" id="node9" href="$markermvpprovider_8h.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="4022,304,4203,331"/>
+<area shape="rect" id="node11" href="$mvpprovider_8cpp.html" title="This class represents a QML interface to provide ModelViewProjection matrix. " alt="" coords="3401,304,3555,331"/>
+<area shape="rect" id="node12" href="$posefilter_8h.html" title="This class implements low&#45;pass filter on Pose (Rotation + Translation) " alt="" coords="3579,304,3702,331"/>
+<area shape="rect" id="node8" href="$imumvpdecorator_8cpp.html" title="This class decorates an MVP provider by adding IMU delta movement. " alt="" coords="3770,379,3954,405"/>
+<area shape="rect" id="node10" href="$markermvpprovider_8cpp.html" title="This class implements MVPProvider using pose from a detected markers,. " alt="" coords="4778,379,4973,405"/>
+<area shape="rect" id="node13" href="$posefilter_8cpp.html" title="This class implements low&#45;pass filter on Pose (Rotation + Translation) " alt="" coords="3572,379,3709,405"/>
+<area shape="rect" id="node15" href="$perspectivecamera_8h.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="4484,229,4664,256"/>
+<area shape="rect" id="node17" href="$worldimage_8h.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="4979,229,5115,256"/>
+<area shape="rect" id="node18" href="$posecamerapnp_8h.html" title="This class converts camera + 3D&#45;2D correspondences to a camera pose. " alt="" coords="5193,304,5355,331"/>
+<area shape="rect" id="node20" href="$worldimage_8cpp.html" title="This class stores the correspondences between Real World 3D points and projected points on camera ima..." alt="" coords="4796,304,4947,331"/>
+<area shape="rect" id="node23" href="$calibratedcamera_8cpp.html" title="This class stores information about a calibrated camera. " alt="" coords="4740,229,4955,256"/>
+<area shape="rect" id="node24" href="$calibratedcamerafilestorage_8h.html" title="This class implements CalibratedCamera and allows to load information from a file. " alt="" coords="4198,229,4459,256"/>
+<area shape="rect" id="node16" href="$perspectivecamera_8cpp.html" title="This class extends CalibratedCamera by allowing to get Perspective Projection matrix. " alt="" coords="4577,304,4771,331"/>
+<area shape="rect" id="node21" href="$marker_8h.html" title="This class holds the position in the sheet of a single marker. " alt="" coords="5022,304,5169,331"/>
+<area shape="rect" id="node19" href="$posecamerapnp_8cpp.html" title="This class converts camera + 3D&#45;2D correspondences to a camera pose. " alt="" coords="5186,379,5362,405"/>
+<area shape="rect" id="node22" href="$markerdetector_8cpp.html" title="This class stores a common interface for marker detectors. " alt="" coords="4168,379,4375,405"/>
+<area shape="rect" id="node25" href="$calibratedcamerafilestorage_8cpp.html" title="This class implements CalibratedCamera and allows to load information from a file. " alt="" coords="4227,304,4502,331"/>
+<area shape="rect" id="node27" href="$blackenrest_8h.html" title="Paints image parts not containing markers in black. " alt="" coords="1375,304,1512,331"/>
+<area shape="rect" id="node29" href="$portablebackendfactory_8h.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="1113,304,1350,331"/>
+<area shape="rect" id="node31" href="$imagebackend_8h.html" title="This class implements a QQuickImageProvider showing a constant image from a file. ..." alt="" coords="1537,304,1763,331"/>
+<area shape="rect" id="node33" href="$imageproviderasync_8cpp.html" title="This class is an interface for image providers which emit a signal on new image. " alt="" coords="2193,304,2467,331"/>
+<area shape="rect" id="node34" href="$imagescaler_8h.html" title="This class scales images. " alt="" coords="598,304,811,331"/>
+<area shape="rect" id="node36" href="$markerbackend_8h.html" title="A backend for QML for marker detection preview. " alt="" coords="2838,304,3070,331"/>
+<area shape="rect" id="node37" href="$nv21videofilter_8h.html" title="This class manages NV21VideoFilterRunnable. Only for Android API 26 and higher. " alt="" coords="89,304,315,331"/>
+<area shape="rect" id="node39" href="$opencvbackend_8h.html" title="OpenCV camera backend for QML. " alt="" coords="339,304,574,331"/>
+<area shape="rect" id="node40" href="$qtbackend_8h.html" title="QCamera backend for QML. " alt="" coords="886,304,1089,331"/>
+<area shape="rect" id="node41" href="$randomimagebackend_8h.html" title="This class takes input from pre&#45;created byte array and outputs it as a QImage. " alt="" coords="2543,304,2813,331"/>
+<area shape="rect" id="node42" href="$blobdetector_8h.html" title="This class detects blobs on a QImage and returns a QImage with white pixels at blob positions..." alt="" coords="1788,304,1965,331"/>
+<area shape="rect" id="node43" href="$huethreshold_8h.html" title="This class outputs binarized image taking colors in [hue&#45;delta, hue+delta]. " alt="" coords="1989,304,2169,331"/>
+<area shape="rect" id="node28" href="$blackenrest_8cpp.html" title="Paints image parts not containing markers in black. " alt="" coords="1361,379,1512,405"/>
+<area shape="rect" id="node30" href="$portablebackendfactory_8cpp.html" title="This class returns a camera backend that runs both on Android and Linux. " alt="" coords="862,379,1113,405"/>
+<area shape="rect" id="node32" href="$imagebackend_8cpp.html" title="This class implements a QQuickImageProvider showing a constant image from a file. ..." alt="" coords="1536,379,1777,405"/>
+<area shape="rect" id="node35" href="$imagescaler_8cpp.html" title="This class scales images. " alt="" coords="591,379,818,405"/>
+<area shape="rect" id="node38" href="$nv21videofilter_8cpp.html" title="This class manages NV21VideoFilterRunnable. " alt="" coords="5,379,247,405"/>
+<area shape="rect" id="node46" href="$hsvintervaldetector_8cpp.html" title="This class receives matched points and deduces the color interval they are in. " alt="" coords="3145,229,3376,256"/>
+<area shape="rect" id="node48" href="$uchiyamarkerdetector_8h.html" title="Wrapper around C&#45;style UchiyaMarkers project obtained from main.cpp file from UchiyaMarkers project..." alt="" coords="3145,304,3376,331"/>
 </map>

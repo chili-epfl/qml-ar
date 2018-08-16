@@ -80,8 +80,10 @@ $(document).ready(function(){initNavTree('classImageProviderAsync.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
 <a href="#signals">Signals</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classImageProviderAsync-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ImageProviderAsync Class Reference</div>  </div>
@@ -109,6 +111,12 @@ Inheritance diagram for ImageProviderAsync:</div>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a13b2a432b2ae5e8bf55df804f960f08f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#a13b2a432b2ae5e8bf55df804f960f08f">setActive</a> (bool active)</td></tr>
+<tr class="memdesc:a13b2a432b2ae5e8bf55df804f960f08f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make this object active/inactive.  <a href="#a13b2a432b2ae5e8bf55df804f960f08f">More...</a><br /></td></tr>
+<tr class="separator:a13b2a432b2ae5e8bf55df804f960f08f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
 Signals</h2></td></tr>
 <tr class="memitem:ad29e124ff6e30391a6bb1be88b60ecb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#ad29e124ff6e30391a6bb1be88b60ecb8">imageAvailable</a> (<a class="el" href="classPipelineContainer.html">PipelineContainer</a>&lt; QImage &gt; image)</td></tr>
@@ -121,6 +129,13 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#a1e142f7ea1ea27d7a2e3619882682975">ImageProviderAsync</a> ()</td></tr>
 <tr class="memdesc:a1e142f7ea1ea27d7a2e3619882682975"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classImageProviderAsync.html" title="This class is an interface for image providers which emit a signal on new image. ">ImageProviderAsync</a> constructor. <br /></td></tr>
 <tr class="separator:a1e142f7ea1ea27d7a2e3619882682975"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a1307a59e60c02a4a1912869c2a94e9d9"><td class="memItemLeft" align="right" valign="top"><a id="a1307a59e60c02a4a1912869c2a94e9d9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#a1307a59e60c02a4a1912869c2a94e9d9">is_active</a> = true</td></tr>
+<tr class="memdesc:a1307a59e60c02a4a1912869c2a94e9d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes if the object is currently active. <br /></td></tr>
+<tr class="separator:a1307a59e60c02a4a1912869c2a94e9d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is an interface for image providers which emit a signal on new image. </p>
@@ -153,6 +168,40 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">image</td><td>the ready image </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a13b2a432b2ae5e8bf55df804f960f08f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13b2a432b2ae5e8bf55df804f960f08f">&#9670;&nbsp;</a></span>setActive</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ImageProviderAsync::setActive </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>active</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Make this object active/inactive. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">active</td><td>The new active/inactive parameter </td></tr>
   </table>
   </dd>
 </dl>

@@ -15,5 +15,5 @@ var searchData=
   ['convert',['convert',['../classQtCameraBackend.html#a348256e3c5a07da0b30f54444a4b8d85',1,'QtCameraBackend']]],
   ['convert3x1',['convert3x1',['../classMyMatConverter.html#a0a29563b16bae026240b15219b18011d',1,'MyMatConverter']]],
   ['convert3x3',['convert3x3',['../classMyMatConverter.html#ac331a9e18e91fd8a80fdb467420ccf2c',1,'MyMatConverter']]],
-  ['createfilterrunnable',['createFilterRunnable',['../classAndroidFilter.html#a6d9f1a8bb176432cb87f4ee20480cbf2',1,'AndroidFilter::createFilterRunnable()'],['../classDelayFilter.html#a28a7fbb1bd0b7a717479c114e8d74c50',1,'DelayFilter::createFilterRunnable()']]]
+  ['createfilterrunnable',['createFilterRunnable',['../classAndroidFilter.html#a6d9f1a8bb176432cb87f4ee20480cbf2',1,'AndroidFilter::createFilterRunnable()'],['../classDelayFilter.html#a28a7fbb1bd0b7a717479c114e8d74c50',1,'DelayFilter::createFilterRunnable()'],['../classNV21VideoFilter.html#a74e009b85da50cb1c6c40dbfd2d9a31a',1,'NV21VideoFilter::createFilterRunnable()']]]
 ];

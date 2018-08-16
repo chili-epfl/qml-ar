@@ -6,6 +6,7 @@ var classQtCameraBackend =
     [ "getCamera", "classQtCameraBackend.html#a844ebf3f2d5cabd2824871c5c12dceb6", null ],
     [ "handleFinished", "classQtCameraBackend.html#a8e3d4b06e1d7fdf95d56826aec9d8211", null ],
     [ "init", "classQtCameraBackend.html#adc1111a76ca509788a09021f912b324b", null ],
+    [ "processAndSendQImage", "classQtCameraBackend.html#a2af2dc2522039bc537f93bfabc21e292", null ],
     [ "processQImage", "classQtCameraBackend.html#ac6aae303b95fa252d9e362b670c135d2", null ],
     [ "processQVideoFrame", "classQtCameraBackend.html#af75292515bc72d0560d98e733a6548dd", null ],
     [ "requestImage", "classQtCameraBackend.html#a7d5d849774ded03aeb4b9ece0b9da2f4", null ],
@@ -19,6 +20,7 @@ var classQtCameraBackend =
     [ "last_frame", "classQtCameraBackend.html#a2063e2d0a8b546aed275753fd16a99eb", null ],
     [ "need_viewfinder", "classQtCameraBackend.html#ac2b69e4752e5963a05cb7a8ad36c19c3", null ],
     [ "probe", "classQtCameraBackend.html#a40bff40f0d069c3e4c4f285820dd160e", null ],
+    [ "use_gpu", "classQtCameraBackend.html#a5543edcf13c6b6940ef0d47e3e0ff617", null ],
     [ "viewfinder", "classQtCameraBackend.html#a872ebb713957f62e8b81306a66a1581e", null ],
     [ "watcher", "classQtCameraBackend.html#a8d2656dab3590fdcc97ce5946bbdea58", null ]
 ];

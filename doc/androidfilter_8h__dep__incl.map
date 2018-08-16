@@ -1,4 +1,5 @@
 <map id="src/imagebackend/androidfilter.h" name="src/imagebackend/androidfilter.h">
 <area shape="rect" id="node2" href="$androidfilter_8cpp.html" title="A class for fixing video output on android. " alt="" coords="5,80,229,107"/>
-<area shape="rect" id="node3" href="$qmlarplugin_8cpp.html" title="This class registers QMLAR as a singleton object in QML and QMLARMarkers image provider with markers ..." alt="" coords="254,80,389,107"/>
+<area shape="rect" id="node3" href="$nv21videofilter_8cpp.html" title="This class manages NV21VideoFilterRunnable. " alt="" coords="254,80,495,107"/>
+<area shape="rect" id="node4" href="$qmlarplugin_8cpp.html" title="This class registers QMLAR as a singleton object in QML and QMLARMarkers image provider with markers ..." alt="" coords="519,80,654,107"/>
 </map>

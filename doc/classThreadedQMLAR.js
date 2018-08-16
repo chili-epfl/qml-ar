@@ -18,6 +18,7 @@ var classThreadedQMLAR =
     [ "getMVMatrix", "classThreadedQMLAR.html#acb8494e319794be93d7e625e966c754c", null ],
     [ "getMVPMatrix", "classThreadedQMLAR.html#a5e5f98c07d36cefdba85be4ba1d5d415", null ],
     [ "getPMatrix", "classThreadedQMLAR.html#af7d6849c67d78083d7cc7af421d75271", null ],
+    [ "getRunning", "classThreadedQMLAR.html#a969e75ed58fbda3036a90cfa8db7f5eb", null ],
     [ "imageUpdated", "classThreadedQMLAR.html#a418d77151718e44b4f6af00d41d6c603", null ],
     [ "markers_visible", "classThreadedQMLAR.html#a2c120675121676d8f33ab63411630225", null ],
     [ "newBlobs", "classThreadedQMLAR.html#a4b9db04db19029cb844dd70e5f87747d", null ],
@@ -39,6 +40,7 @@ var classThreadedQMLAR =
     [ "setMVMatrix", "classThreadedQMLAR.html#a68f7346c99c8003bdcb4335c30d8f4a0", null ],
     [ "setMVPMatrix", "classThreadedQMLAR.html#a4d8b4b2003a8d8c8bc785d769ac4e8b5", null ],
     [ "setPMatrix", "classThreadedQMLAR.html#a2fb699cfde7313da25efd60401218990", null ],
+    [ "setRunning", "classThreadedQMLAR.html#a693256e1340c4821e15603416c0d103a", null ],
     [ "startCamera", "classThreadedQMLAR.html#a2c47b4bf1a978d1beb057a893f503fe5", null ],
     [ "startCameraSignal", "classThreadedQMLAR.html#a51c5c8d46b8e3d54fe6a475bd797a9cf", null ],
     [ "blobs", "classThreadedQMLAR.html#a04d41c962dd198124b47ca727e1976b3", null ],
@@ -58,5 +60,6 @@ var classThreadedQMLAR =
     [ "mv_matrix", "classThreadedQMLAR.html#a048b98509296c1215e91eee251429c22", null ],
     [ "mvp_matrix", "classThreadedQMLAR.html#a4f4a55c59d58909fd0adf176f47c5094", null ],
     [ "p_matrix", "classThreadedQMLAR.html#a4a28bd67293642f0508d511013dcaa00", null ],
-    [ "pose_valid", "classThreadedQMLAR.html#a65137d9f976d6b40ccd4c7004ba5cbb9", null ]
+    [ "pose_valid", "classThreadedQMLAR.html#a65137d9f976d6b40ccd4c7004ba5cbb9", null ],
+    [ "running", "classThreadedQMLAR.html#aa9bb67a0ebb339bb0f82faa4fa16b084", null ]
 ];
