@@ -69,6 +69,14 @@ QMLAR::QMLAR()
     delay = NULL;
     n_frames_received = 0;
 
+    // set dots color (red)
+    mean_h = 0;
+    delta_h = 20;
+    min_v = 50;
+    max_v = 255;
+    min_s = 50;
+    max_s = 255;
+
     is_running = true;
 }
 
@@ -317,7 +325,7 @@ void QMLAR::connectAll()
     // updating is_running
     raw_provider->setActive(is_running);
 
-    hue_threshold->setColor(0, 20);
+    // registering types used to allow them in Qt::QueuedConnection
     qRegisterMetaType<PipelineContainer<QImage>>("PipelineContainer<QImage>");
     qRegisterMetaType<PipelineContainer<QPair<QImage, QVector<QVector2D>>>>("PipelineContainer<QPair<QImage, QVector<QVector2D>>>");
     qRegisterMetaType<PipelineContainer<QVector<QVector2D>>>("PipelineContainer<QVector<QVector2D>>");
@@ -328,6 +336,20 @@ void QMLAR::connectAll()
 // Using shader+hardwarebuffer on Android 26 and higher
 #if __ANDROID_API__ >= 26
 
+    // enable marker corners output
+    blacken_rest->setUsePolygon(true);
+
+    if(init_type == INIT_CAMERA)
+    {
+        // sending marker corners to raw provider (it's QtCameraBackend)
+        connect(blacken_rest, &BlackenRest::newPolygon, (QtCameraBackend*) raw_provider, &QtCameraBackend::setPolygon);
+
+        // set thresholding parameters
+        ((QtCameraBackend*) raw_provider)->setColor(mean_h, delta_h);
+        ((QtCameraBackend*) raw_provider)->setVMinMax(min_v, max_v);
+        ((QtCameraBackend*) raw_provider)->setSMinMax(min_s, max_s);
+    }
+
     connect(raw_provider, &ImageProviderAsync::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
     connect(raw_provider, &ImageProviderAsync::imageAvailable, this, &QMLAR::imageUpdated);
 
@@ -335,17 +357,22 @@ void QMLAR::connectAll()
     connect(raw_provider, &ImageProviderAsync::imageAvailable, marker_backend, &MarkerBackEnd::setCamera);
 
     // camera -> blacken_rest
-    connect(raw_provider, &ImageProviderAsync::imageAvailable, blacken_rest, &BlackenRest::setInput);
+    //connect(raw_provider, &ImageProviderAsync::imageAvailable, blacken_rest, &BlackenRest::setInput);
 
     // camera -> resolution
     connect(raw_provider, &ImageProviderAsync::imageAvailable, perspective_camera, &CalibratedCamera::setResolutionImage);
 
-    // blacken -> markers
-    connect(blacken_rest, &BlackenRest::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+    // camera -> markers
+    connect(raw_provider, &ImageProviderAsync::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
 
 // Using the old QVideoFrame::map()+Scaler+HueThreshold on other versions
 // on Desktop it will be OpenCVBackend+Scaler+HueThreshold
 #else
+
+    // configuring the HSV threshold (no effect on Android API >= 26)
+    hue_threshold->setColor(mean_h, delta_h);
+    hue_threshold->setVMinMax(min_v, max_v);
+    hue_threshold->setSMinMax(min_s, max_s);
 
     connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
     connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);

@@ -63,6 +63,16 @@ private:
      */
 
     QImage blacken(QImage source);
+
+    /**
+     * @brief Calculate marker corners at this moment, range 0-1
+     */
+    void calculatePolygon();
+
+    /**
+     * @brief Emit the newPolygon signal?
+     */
+    bool usePolygon;
 public:
 
     /**
@@ -79,8 +89,13 @@ signals:
      * @brief Blackened image (output)
      * @param image The resulting image
      */
-
     void imageAvailable(PipelineContainer<QImage> image);
+
+
+    /** @brief Calculated current marker corners
+     * @see setUsePolygon()
+     */
+    void newPolygon(QPolygonF marker);
 
 public slots:
 
@@ -88,27 +103,30 @@ public slots:
      * @brief To be called to set/update P (projection) matrix
      * @param p P matrix
      */
-
     void onNewPMatrix(PipelineContainer<QMatrix4x4> p);
 
     /**
      * @brief To be called to set/update MV (ModelView) matrix
      * @param mv MV matrix
      */
-
     void onNewMVMatrix(PipelineContainer<QMatrix4x4> mv);
 
     /**
      * @brief To be called on new available detected markers
      */
-
     void onNewMarkers(PipelineContainer<MarkerStorage> storage);
 
     /**
      * @brief Set input and process it. Calls imageAvailable at the end.
      */
-
     void setInput(PipelineContainer<QImage> img);
+
+    /**
+     * @brief Enable/disable newPolygon signal
+     * @see newPolygon()
+     * @param value If true, signal will be enabled, disabled otherwise
+     */
+    void setUsePolygon(bool value);
 };
 
 #endif // TRACKINGMVPDECORATOR_H

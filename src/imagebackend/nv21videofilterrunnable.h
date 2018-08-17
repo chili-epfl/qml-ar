@@ -31,6 +31,7 @@
 #undef DEBUG_NV21_FILTER
 
 class NV21VideoFilter;
+class QtCameraBackend;
 
 /**
  * @brief The NV21VideoFilterRunnable class converts NV21 format to RGB888
@@ -46,6 +47,7 @@ class NV21VideoFilter;
 
 class NV21VideoFilterRunnable : public QObject, public QVideoFilterRunnable
 { Q_OBJECT
+friend class QtCameraBackend;
 public:
     /**
      * @brief VisionVideoFilterRunnable constructor
@@ -96,6 +98,11 @@ private:
      * @brief source image
      */
     GLint imageLocation;
+
+    /**
+     * @brief HSV threshold shader part uniform locations
+     */
+    GLint mean_h_, delta_h_, min_s_, max_s_, min_v_, max_v_;
 
     /**
      * @brief The current number of the image
@@ -151,6 +158,28 @@ private:
      * @brief Buffer for reading from EGLImage to CPU
      */
     unsigned char readBuffer[MAX_INPUT_SIZE];
+
+    /**
+     * @brief Draw output image from top-left corner on the input frame
+     */
+    bool show_processed;
+
+protected:
+
+    /**
+     * @brief HSV Mean/+- Hue (Full scale: 0-1)
+     */
+    double mean_h, delta_h;
+
+    /**
+     * @brief HSV Min/MAX SV (Full scale: 0-1)
+     */
+    double min_s, max_s, min_v, max_v;
+
+    /**
+     * Current marker corners for blackening
+     */
+    QPolygonF marker;
 
 signals:
     /**

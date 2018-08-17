@@ -59,13 +59,14 @@ private:
     QFutureWatcher<QImage> watcher;
 
     /**
-    * @brief Minimum and maximum values for thresholding
-    */
-    QVector<cv::Scalar> min_hsv;
-    QVector<cv::Scalar> max_hsv;
+     * @brief Mean hue (0-360)
+     */
+    int mean_h;
 
-    // min/max hue
-    int mean_h, delta_h;
+    /** @brief +- value for Mean Hue
+     * @see mean_h
+     */
+    int delta_h;
 
     /**
     * @brief True if image is pending processing
@@ -78,29 +79,15 @@ private:
     PipelineContainer<QImage> input_buffer;
 
     /**
-    * @brief Minimal and maximal SV values
+    * @brief Minimal and maximal SV values (0-255)
     */
     int min_s, max_s, min_v, max_v;
 
-    // set min/max hue values in 0..360
-    void addMaxHue(double hue);
-    void addMinHue(double hue);
 public slots:
     /**
-    * @brief Set color to threshold on
+    * @brief Set Hue to threshold on (Full scale: 0-360)
     */
-    void setColor(double mean, double std);
-
-    /**
-    * @brief Set V distribution
-    */
-    void setV(double mean, double std);
-
-
-    /**
-    * @brief Set S distribution
-    */
-    void setS(double mean, double std);
+    void setColor(double mean, double delta);
 
     /**
     * @brief Set input image
@@ -113,28 +100,23 @@ public slots:
     void handleFinished();
 
     /**
-    * @brief Loop implementation
-    */
-    QImage thresholdManual(QImage source);
-
-    /**
-    * @brief CV implementation
-    */
-    QImage threshold(QImage source);
-
-    /**
-     * @brief Set min/max Value
+     * @brief Set min/max Value (Full scale: 0-255)
      * @param min_ min value
      * @param max_ max value
      */
     void setVMinMax(double min_, double max_);
 
     /**
-     * @brief Set min/max Saturation
+     * @brief Set min/max Saturation (Full scale: 0-255)
      * @param min_ min saturation
      * @param max_ max saturation
      */
     void setSMinMax(double min_, double max_);
+
+    /**
+    * @brief Loop implementation
+    */
+    QImage threshold(QImage source);
 };
 
 #endif // HUETHRESHOLD_H

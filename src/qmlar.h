@@ -391,6 +391,16 @@ private:
      * @brief is QML running or paused?
      */
     bool is_running;
+
+    /**
+     * @brief HSV Mean/+- Hue (Full scale: 0-360)
+     */
+    double mean_h, delta_h;
+
+    /**
+     * @brief HSV Min/MAX SV (Full scale: 0-255)
+     */
+    double min_s, max_s, min_v, max_v;
 signals:
     /**
     * @brief Notify QML part when new matrix is available

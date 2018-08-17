@@ -41,8 +41,9 @@
 #endif
 
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr), image_id(0),
-    graphicBuf(nullptr), clientBuf(nullptr), disp(nullptr), imageEGL(0)
+    graphicBuf(nullptr), clientBuf(nullptr), disp(nullptr), imageEGL(nullptr)
 {
+    show_processed = true;
 }
 
 NV21VideoFilterRunnable::~NV21VideoFilterRunnable()
@@ -61,6 +62,9 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame, const QVideoSu
 
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 {
+    qDebug() << mean_h << delta_h << min_v << max_v << min_s << max_s;
+    qDebug() << marker;
+
     // setting current time to the container to measure latency
     image_info = PipelineContainerInfo(image_id++).checkpointed("Grabbed");
 
@@ -111,7 +115,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         // see https://github.com/aseba-community/thymio-ar/blob/eb942a5e96761303512a07dc6e5057749ff8939e/vision-video-filter.h
         // this is for averaging the image
         auto sampleByPixelF(float(height) / float(outputHeight));
-        unsigned int sampleByPixelI(std::ceil(sampleByPixelF));
+        unsigned int sampleByPixelI(uint(std::ceil(sampleByPixelF)));
         auto uvDelta(QVector2D(1, 1) / QVector2D(width, height));
 
         // vertex shader for NV21->RGB conversion
@@ -141,6 +145,19 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                     const uint sampleByPixel = %1u;
                     const lowp vec2 uvDelta = vec2(%2, %3);
                     //out lowp float fragment;
+
+                    // want this mean hue (0-1)
+                    uniform lowp float mean_h_;
+                    // maximal deviation in HUE (0-1)
+                    uniform lowp float delta_h_;
+                    // min saturation (0-1)
+                    uniform lowp float min_s_;
+                    // max saturation (0-1)
+                    uniform lowp float max_s_;
+                    // min value (0-1)
+                    uniform lowp float min_v_;
+                    // max value (0-1)
+                    uniform lowp float max_v_;
 
                     // output RGBA
                     out lowp vec4 fragment;
@@ -187,24 +204,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                         // difference in HUE (0-1)
                         lowp float diff;
 
-                        // want this mean hue (0-1)
-                        lowp float mean_h_ = 0.0;
-
-                        // maximal deviation in HUE (0-1)
-                        lowp float delta_h_ = 20.0 / 360.0;
-
-                        // min saturation (0-1)
-                        lowp float min_s_ = 50. / 255.0;
-
-                        // max saturation (0-1)
-                        lowp float max_s_ = 1.0;
-
-                        // min value (0-1)
-                        lowp float min_v_ = min_s_;
-
-                        // max value (0-1)
-                        lowp float max_v_ = 1.0;
-
                         // calculating shortest distance between angles
                         if(h > 0.0) { diff = h - mean_h_; }
                         else { diff = mean_h_ - h; }
@@ -232,8 +231,21 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                                         arg(sampleByPixelI).
                                         arg(uvDelta.x()).
                                         arg(uvDelta.y()));
+
+        // linking the shader
         program.link();
+
+        // the input image location for shader
         imageLocation = program.uniformLocation("image");
+
+        mean_h_ = program.uniformLocation("mean_h_");
+        delta_h_ = program.uniformLocation("delta_h_");
+        min_s_ = program.uniformLocation("min_s_");
+        max_s_ = program.uniformLocation("max_s_");
+        min_v_ = program.uniformLocation("min_v_");
+        max_v_ = program.uniformLocation("max_v_");
+
+        qDebug() << "Attr loc" << mean_h_ << delta_h_ << min_s_ << max_s_ << min_v_ << max_v_;
 
         // creating output framebuffer
         out_fbo = new QOpenGLFramebufferObject(outputWidth, outputHeight);
@@ -291,6 +303,14 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     program.setUniformValue(imageLocation, 0);
     program.enableAttributeArray(0);
 
+    // configuring the shader: setting hue threshold parameters
+    program.setUniformValue(mean_h_, GLfloat(mean_h));
+    program.setUniformValue(delta_h_, GLfloat(delta_h));
+    program.setUniformValue(min_s_, GLfloat(min_s));
+    program.setUniformValue(max_s_, GLfloat(max_s));
+    program.setUniformValue(min_v_, GLfloat(min_v));
+    program.setUniformValue(max_v_, GLfloat(max_v));
+
     // binding OUTPUT framebuffer
     gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle()); GL_CHECK_ERROR();
 
@@ -306,6 +326,11 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     // attaching an EGLImage to OUTPUT texture
     glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, imageEGL); EGL_CHECK_ERROR();
 
+    // drawing output image on input frame, if requested
+    if(show_processed) gl->glCopyImageSubData(outTex, GL_TEXTURE_2D, 0, 0, 0, 0,
+                                              inputFrame->handle().toUInt(), GL_TEXTURE_2D,
+                                              0, 0, 0, 0, outputWidth, outputHeight, 1);
+
     // pointer to READ from EGLImage
     unsigned char *readPtr;
 
@@ -313,11 +338,11 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     unsigned char *writePtr = readBuffer;
 
     // locking the buffer
-    error = AHardwareBuffer_lock(graphicBuf, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, NULL, (void**) &readPtr);
+    error = AHardwareBuffer_lock(graphicBuf, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, nullptr, (void**) &readPtr);
     HWB_CHECK_ERROR();
 
     // obtaining real stride
-    int stride = usage1.stride;
+    unsigned int stride = usage1.stride;
 
     // copying all rows from EGLImage to readBuffer
     for (int row = 0; row < outputHeight; row++) {
@@ -328,7 +353,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     }
 
     // unlocking the buffer
-    error = AHardwareBuffer_unlock(graphicBuf, NULL); HWB_CHECK_ERROR();
+    error = AHardwareBuffer_unlock(graphicBuf, nullptr); HWB_CHECK_ERROR();
 
     // wrapping the buffer inside a QImage
     image = QImage(readBuffer, outputWidth, outputHeight, QImage::Format_RGBA8888);

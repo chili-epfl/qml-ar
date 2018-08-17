@@ -110,6 +110,12 @@ protected:
     void init();
 
     /**
+     * @brief Send HSV values to NV21VideoFilter
+     * Only for Android API >= 26
+     */
+    void updateHSVThreshold();
+
+    /**
     * @brief If set to true, will install a void viewfinder
     */
     bool need_viewfinder;
@@ -124,6 +130,20 @@ protected:
     * Currently works only for Android API >= 26
     */
     bool use_gpu = false;
+
+    /**
+     * @brief HSV Mean/+- Hue (Full scale: 0-360) for GPU thresholding
+     * Only for Android API >= 26.
+     * Use HueThreshold class (CPU) on other platforms
+     */
+    double mean_h, delta_h;
+
+    /**
+     * @brief HSV Min/MAX SV (Full scale: 0-255) for GPU thresholding
+     * Only for Android API >= 26
+     * Use HueThreshold class (CPU) on other platforms
+     */
+    double min_s, max_s, min_v, max_v;
 
 public slots:
     /**
@@ -145,6 +165,31 @@ public slots:
     * @brief Called on thread finish
     */
     void handleFinished();
+
+    /**
+    * @brief Set Hue to threshold on (Full scale: 0-360)
+    * mean +- std will be kept
+    */
+    void setColor(double mean, double delta);
+
+    /**
+     * @brief Set min/max Value (Full scale: 0-255)
+     * @param min_ min value
+     * @param max_ max value
+     */
+    void setVMinMax(double min_, double max_);
+
+    /**
+     * @brief Set min/max Saturation (Full scale: 0-255)
+     * @param min_ min saturation
+     * @param max_ max saturation
+     */
+    void setSMinMax(double min_, double max_);
+
+    /**
+     * @brief Calculated current marker corners, range 0-1
+     */
+    void setPolygon(QPolygonF marker);
 };
 
 #endif // QTBACKEND_H

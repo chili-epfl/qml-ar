@@ -57,6 +57,21 @@ void QtCameraBackend::init()
     connect(&watcher, SIGNAL(finished()), this, SLOT(handleFinished()));
 }
 
+void QtCameraBackend::updateHSVThreshold()
+{
+#if __ANDROID_API__ >= 26
+    NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
+    if(runnable && use_gpu) {
+        runnable->mean_h = mean_h / 360.;
+        runnable->delta_h = delta_h / 360.;
+        runnable->min_v = min_v / 255.;
+        runnable->max_v = max_v / 255.;
+        runnable->min_s = min_s / 255.;
+        runnable->max_s = max_s / 255.;
+    }
+#endif
+}
+
 void QtCameraBackend::start()
 {
 #if defined Q_OS_ANDROID || defined QT_BACKEND_FORCE_VIDEOPROBE
@@ -122,6 +137,37 @@ void QtCameraBackend::handleFinished()
     TimeLoggerThroughput("%s", "[ANALYZE] Begin QtCamera");
 }
 
+void QtCameraBackend::setColor(double mean, double delta)
+{
+    mean_h = mean;
+    delta_h = delta;
+    updateHSVThreshold();
+}
+
+void QtCameraBackend::setVMinMax(double min_, double max_)
+{
+    min_v = min_;
+    max_v = max_;
+    updateHSVThreshold();
+}
+
+void QtCameraBackend::setSMinMax(double min_, double max_)
+{
+    min_s = min_;
+    max_s = max_;
+    updateHSVThreshold();
+}
+
+void QtCameraBackend::setPolygon(QPolygonF marker)
+{ Q_UNUSED(marker)
+#if __ANDROID_API__ >= 26
+    NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
+    if(runnable && use_gpu) {
+        runnable->marker = marker;
+    }
+#endif
+}
+
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     // doing nothing if deactivated
@@ -137,6 +183,7 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
         // switching to videofilter output and disabling videoprobe
         probe->setSource((QMediaObject*) nullptr);
         disconnect(probe, SIGNAL(videoFrameProbed(const QVideoFrame &)), this, SLOT(processQVideoFrame(const QVideoFrame &)));
+        updateHSVThreshold();
         connect(runnable, &NV21VideoFilterRunnable::imageConverted, this, &QtCameraBackend::processAndSendQImage, Qt::QueuedConnection);
         TimeLoggerLog("%s", "Switched to VideoFilterInput");
         return;
