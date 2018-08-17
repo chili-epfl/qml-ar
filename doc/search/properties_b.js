@@ -6,5 +6,6 @@ var searchData=
   ['scene3d_5fright',['scene3d_right',['../classARComponent.html#aa132b6ca42d39a7be2cd4508df775af8',1,'ARComponent']]],
   ['show_5fblobs',['show_blobs',['../classARComponent.html#aa61d643ca367be29fa482a5d44556169',1,'ARComponent']]],
   ['show_5ffps',['show_fps',['../classARComponent.html#a1cf3c40b17d0cb24df7abd1f00f89a40',1,'ARComponent']]],
-  ['show_5fmarkers',['show_markers',['../classARComponent.html#a0b702edd162f5ba913331639cad2a3a5',1,'ARComponent']]]
+  ['show_5fmarkers',['show_markers',['../classARComponent.html#a0b702edd162f5ba913331639cad2a3a5',1,'ARComponent']]],
+  ['show_5fshader_5foutput',['show_shader_output',['../classThreadedQMLAR.html#a90573acee207f096972acb493dd5c377',1,'ThreadedQMLAR']]]
 ];

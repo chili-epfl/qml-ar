@@ -42,6 +42,7 @@ var classQMLAR =
     [ "setMVP", "classQMLAR.html#ad4dbe4f825edd7a579ade5031c0b0d02", null ],
     [ "setP", "classQMLAR.html#a4c25a215ca1ec3b10d247fdcedfa8936", null ],
     [ "setRunning", "classQMLAR.html#a8a24191f89a6b4af990e637655ea575c", null ],
+    [ "setShowShader", "classQMLAR.html#a832624ee0a807f586032c5e499259947", null ],
     [ "startCamera", "classQMLAR.html#a3984770f6eda78855eef6c9c13344e85", null ],
     [ "init_type", "classQMLAR.html#a2e9d997ba5bc6c745c71d2fd5a631ea9", null ]
 ];

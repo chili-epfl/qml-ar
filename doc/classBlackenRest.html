@@ -118,6 +118,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlackenRest.html#aa1e0e09e0f74997e102270b80e0e2709">setInput</a> (<a class="el" href="classPipelineContainer.html">PipelineContainer</a>&lt; QImage &gt; img)</td></tr>
 <tr class="memdesc:aa1e0e09e0f74997e102270b80e0e2709"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set input and process it. Calls imageAvailable at the end. <br /></td></tr>
 <tr class="separator:aa1e0e09e0f74997e102270b80e0e2709"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bf77f8c6e4af7ab02469556c7d9fe40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlackenRest.html#a0bf77f8c6e4af7ab02469556c7d9fe40">setUsePolygon</a> (bool value)</td></tr>
+<tr class="memdesc:a0bf77f8c6e4af7ab02469556c7d9fe40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable/disable newPolygon signal.  <a href="#a0bf77f8c6e4af7ab02469556c7d9fe40">More...</a><br /></td></tr>
+<tr class="separator:a0bf77f8c6e4af7ab02469556c7d9fe40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_slots_classImageProviderAsync"><td colspan="2" onclick="javascript:toggleInherit('pub_slots_classImageProviderAsync')"><img src="closed.png" alt="-"/>&#160;Public Slots inherited from <a class="el" href="classImageProviderAsync.html">ImageProviderAsync</a></td></tr>
 <tr class="memitem:a13b2a432b2ae5e8bf55df804f960f08f inherit pub_slots_classImageProviderAsync"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#a13b2a432b2ae5e8bf55df804f960f08f">setActive</a> (bool active)</td></tr>
 <tr class="memdesc:a13b2a432b2ae5e8bf55df804f960f08f inherit pub_slots_classImageProviderAsync"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make this object active/inactive.  <a href="classImageProviderAsync.html#a13b2a432b2ae5e8bf55df804f960f08f">More...</a><br /></td></tr>
@@ -128,6 +131,9 @@ Signals</h2></td></tr>
 <tr class="memitem:a2281ffb8cfaf660aefc3542a93c694ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlackenRest.html#a2281ffb8cfaf660aefc3542a93c694ce">imageAvailable</a> (<a class="el" href="classPipelineContainer.html">PipelineContainer</a>&lt; QImage &gt; image)</td></tr>
 <tr class="memdesc:a2281ffb8cfaf660aefc3542a93c694ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blackened image (output)  <a href="#a2281ffb8cfaf660aefc3542a93c694ce">More...</a><br /></td></tr>
 <tr class="separator:a2281ffb8cfaf660aefc3542a93c694ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49663366d6050cc43e99fc93ec2a39fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlackenRest.html#a49663366d6050cc43e99fc93ec2a39fb">newPolygon</a> (QPolygonF marker)</td></tr>
+<tr class="memdesc:a49663366d6050cc43e99fc93ec2a39fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculated current marker corners.  <a href="#a49663366d6050cc43e99fc93ec2a39fb">More...</a><br /></td></tr>
+<tr class="separator:a49663366d6050cc43e99fc93ec2a39fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header signals_classImageProviderAsync"><td colspan="2" onclick="javascript:toggleInherit('signals_classImageProviderAsync')"><img src="closed.png" alt="-"/>&#160;Signals inherited from <a class="el" href="classImageProviderAsync.html">ImageProviderAsync</a></td></tr>
 <tr class="memitem:ad29e124ff6e30391a6bb1be88b60ecb8 inherit signals_classImageProviderAsync"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#ad29e124ff6e30391a6bb1be88b60ecb8">imageAvailable</a> (<a class="el" href="classPipelineContainer.html">PipelineContainer</a>&lt; QImage &gt; image)</td></tr>
 <tr class="memdesc:ad29e124ff6e30391a6bb1be88b60ecb8 inherit signals_classImageProviderAsync"><td class="mdescLeft">&#160;</td><td class="mdescRight">imageAvailable emitted when new image is ready  <a href="classImageProviderAsync.html#ad29e124ff6e30391a6bb1be88b60ecb8">More...</a><br /></td></tr>
@@ -218,6 +224,35 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a id="a49663366d6050cc43e99fc93ec2a39fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49663366d6050cc43e99fc93ec2a39fb">&#9670;&nbsp;</a></span>newPolygon</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BlackenRest::newPolygon </td>
+          <td>(</td>
+          <td class="paramtype">QPolygonF&#160;</td>
+          <td class="paramname"><em>marker</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculated current marker corners. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classBlackenRest.html#a0bf77f8c6e4af7ab02469556c7d9fe40" title="Enable/disable newPolygon signal. ">setUsePolygon()</a> </dd></dl>
+
+</div>
+</div>
 <a id="ae6a5baf03e9678b3498f7cde349cdf1a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae6a5baf03e9678b3498f7cde349cdf1a">&#9670;&nbsp;</a></span>onNewMVMatrix</h2>
 
@@ -280,6 +315,41 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p</td><td>P matrix </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0bf77f8c6e4af7ab02469556c7d9fe40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bf77f8c6e4af7ab02469556c7d9fe40">&#9670;&nbsp;</a></span>setUsePolygon</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BlackenRest::setUsePolygon </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enable/disable newPolygon signal. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classBlackenRest.html#a49663366d6050cc43e99fc93ec2a39fb" title="Calculated current marker corners. ">newPolygon()</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>If true, signal will be enabled, disabled otherwise </td></tr>
   </table>
   </dd>
 </dl>

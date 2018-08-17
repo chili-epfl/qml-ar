@@ -5,7 +5,6 @@ var searchData=
   ['threadedqmlar_2ecpp',['threadedqmlar.cpp',['../threadedqmlar_8cpp.html',1,'']]],
   ['threadedqmlar_2eh',['threadedqmlar.h',['../threadedqmlar_8h.html',1,'']]],
   ['threshold',['threshold',['../classHueThreshold.html#a539971003af86938efd0593cfd29372b',1,'HueThreshold']]],
-  ['thresholdmanual',['thresholdManual',['../classHueThreshold.html#a9cfb0d631be4a19be055e8816c25da8f',1,'HueThreshold']]],
   ['timelogger',['TimeLogger',['../classTimeLogger.html',1,'']]],
   ['timelogger_2ecpp',['timelogger.cpp',['../timelogger_8cpp.html',1,'']]],
   ['timelogger_2eh',['timelogger.h',['../timelogger_8h.html',1,'']]],

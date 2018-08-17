@@ -103,18 +103,10 @@ Inheritance diagram for HueThreshold:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
 Public Slots</h2></td></tr>
-<tr class="memitem:af145b56d0e2fe89d6144924bdaa2851c"><td class="memItemLeft" align="right" valign="top"><a id="af145b56d0e2fe89d6144924bdaa2851c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#af145b56d0e2fe89d6144924bdaa2851c">setColor</a> (double mean, double std)</td></tr>
-<tr class="memdesc:af145b56d0e2fe89d6144924bdaa2851c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set color to threshold on. <br /></td></tr>
-<tr class="separator:af145b56d0e2fe89d6144924bdaa2851c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0e6d12224c193107a3c8202229ec29b"><td class="memItemLeft" align="right" valign="top"><a id="ad0e6d12224c193107a3c8202229ec29b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#ad0e6d12224c193107a3c8202229ec29b">setV</a> (double mean, double std)</td></tr>
-<tr class="memdesc:ad0e6d12224c193107a3c8202229ec29b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set V distribution. <br /></td></tr>
-<tr class="separator:ad0e6d12224c193107a3c8202229ec29b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46313be6a97e529599b9d59f6f827f89"><td class="memItemLeft" align="right" valign="top"><a id="a46313be6a97e529599b9d59f6f827f89"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#a46313be6a97e529599b9d59f6f827f89">setS</a> (double mean, double std)</td></tr>
-<tr class="memdesc:a46313be6a97e529599b9d59f6f827f89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set S distribution. <br /></td></tr>
-<tr class="separator:a46313be6a97e529599b9d59f6f827f89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a456d61333d77a95342c6bc5d1911768a"><td class="memItemLeft" align="right" valign="top"><a id="a456d61333d77a95342c6bc5d1911768a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#a456d61333d77a95342c6bc5d1911768a">setColor</a> (double mean, double delta)</td></tr>
+<tr class="memdesc:a456d61333d77a95342c6bc5d1911768a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set Hue to threshold on (Full scale: 0-360) <br /></td></tr>
+<tr class="separator:a456d61333d77a95342c6bc5d1911768a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36f3acdd5a020fe71466c462af8ad9fc"><td class="memItemLeft" align="right" valign="top"><a id="a36f3acdd5a020fe71466c462af8ad9fc"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#a36f3acdd5a020fe71466c462af8ad9fc">setInput</a> (<a class="el" href="classPipelineContainer.html">PipelineContainer</a>&lt; QImage &gt; input)</td></tr>
 <tr class="memdesc:a36f3acdd5a020fe71466c462af8ad9fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set input image. <br /></td></tr>
@@ -123,20 +115,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#ad77c4e8377590ee7f612a52a45cfcc3b">handleFinished</a> ()</td></tr>
 <tr class="memdesc:ad77c4e8377590ee7f612a52a45cfcc3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle result from thread. <br /></td></tr>
 <tr class="separator:ad77c4e8377590ee7f612a52a45cfcc3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cfb0d631be4a19be055e8816c25da8f"><td class="memItemLeft" align="right" valign="top"><a id="a9cfb0d631be4a19be055e8816c25da8f"></a>
-QImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#a9cfb0d631be4a19be055e8816c25da8f">thresholdManual</a> (QImage source)</td></tr>
-<tr class="memdesc:a9cfb0d631be4a19be055e8816c25da8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loop implementation. <br /></td></tr>
-<tr class="separator:a9cfb0d631be4a19be055e8816c25da8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a539971003af86938efd0593cfd29372b"><td class="memItemLeft" align="right" valign="top"><a id="a539971003af86938efd0593cfd29372b"></a>
-QImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#a539971003af86938efd0593cfd29372b">threshold</a> (QImage source)</td></tr>
-<tr class="memdesc:a539971003af86938efd0593cfd29372b"><td class="mdescLeft">&#160;</td><td class="mdescRight">CV implementation. <br /></td></tr>
-<tr class="separator:a539971003af86938efd0593cfd29372b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab40a8680b7d9484bafea12588d3d5fd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#ab40a8680b7d9484bafea12588d3d5fd7">setVMinMax</a> (double min_, double max_)</td></tr>
-<tr class="memdesc:ab40a8680b7d9484bafea12588d3d5fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set min/max Value.  <a href="#ab40a8680b7d9484bafea12588d3d5fd7">More...</a><br /></td></tr>
+<tr class="memdesc:ab40a8680b7d9484bafea12588d3d5fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set min/max Value (Full scale: 0-255)  <a href="#ab40a8680b7d9484bafea12588d3d5fd7">More...</a><br /></td></tr>
 <tr class="separator:ab40a8680b7d9484bafea12588d3d5fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4865c283542ff4b2da5dbbc9fbbf51c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#a4865c283542ff4b2da5dbbc9fbbf51c0">setSMinMax</a> (double min_, double max_)</td></tr>
-<tr class="memdesc:a4865c283542ff4b2da5dbbc9fbbf51c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set min/max Saturation.  <a href="#a4865c283542ff4b2da5dbbc9fbbf51c0">More...</a><br /></td></tr>
+<tr class="memdesc:a4865c283542ff4b2da5dbbc9fbbf51c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set min/max Saturation (Full scale: 0-255)  <a href="#a4865c283542ff4b2da5dbbc9fbbf51c0">More...</a><br /></td></tr>
 <tr class="separator:a4865c283542ff4b2da5dbbc9fbbf51c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a539971003af86938efd0593cfd29372b"><td class="memItemLeft" align="right" valign="top"><a id="a539971003af86938efd0593cfd29372b"></a>
+QImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHueThreshold.html#a539971003af86938efd0593cfd29372b">threshold</a> (QImage source)</td></tr>
+<tr class="memdesc:a539971003af86938efd0593cfd29372b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loop implementation. <br /></td></tr>
+<tr class="separator:a539971003af86938efd0593cfd29372b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_slots_classImageProviderAsync"><td colspan="2" onclick="javascript:toggleInherit('pub_slots_classImageProviderAsync')"><img src="closed.png" alt="-"/>&#160;Public Slots inherited from <a class="el" href="classImageProviderAsync.html">ImageProviderAsync</a></td></tr>
 <tr class="memitem:a13b2a432b2ae5e8bf55df804f960f08f inherit pub_slots_classImageProviderAsync"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classImageProviderAsync.html#a13b2a432b2ae5e8bf55df804f960f08f">setActive</a> (bool active)</td></tr>
 <tr class="memdesc:a13b2a432b2ae5e8bf55df804f960f08f inherit pub_slots_classImageProviderAsync"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make this object active/inactive.  <a href="classImageProviderAsync.html#a13b2a432b2ae5e8bf55df804f960f08f">More...</a><br /></td></tr>
@@ -207,7 +195,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table>
 </div><div class="memdoc">
 
-<p>Set min/max Saturation. </p>
+<p>Set min/max Saturation (Full scale: 0-255) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">min_</td><td>min saturation </td></tr>
@@ -252,7 +240,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table>
 </div><div class="memdoc">
 
-<p>Set min/max Value. </p>
+<p>Set min/max Value (Full scale: 0-255) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">min_</td><td>min value </td></tr>

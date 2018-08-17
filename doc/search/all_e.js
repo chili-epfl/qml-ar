@@ -36,6 +36,5 @@ var searchData=
   ['process',['process',['../classMarkerDetector.html#ac5aa39268a189b61555ce86acf687c3f',1,'MarkerDetector::process()'],['../classUchiyaMarkerDetector.html#a5f61abb85a86044f7daa02842c83c287',1,'UchiyaMarkerDetector::process()']]],
   ['processandsendqimage',['processAndSendQImage',['../classQtCameraBackend.html#a2af2dc2522039bc537f93bfabc21e292',1,'QtCameraBackend']]],
   ['processqimage',['processQImage',['../classQtCameraBackend.html#ac6aae303b95fa252d9e362b670c135d2',1,'QtCameraBackend']]],
-  ['processqvideoframe',['processQVideoFrame',['../classQtCameraBackend.html#af75292515bc72d0560d98e733a6548dd',1,'QtCameraBackend']]],
-  ['profile_5fpipeline_5flatency',['PROFILE_PIPELINE_LATENCY',['../config_8h.html#a42c26cce76c00006a4e70c7581671b3b',1,'config.h']]]
+  ['processqvideoframe',['processQVideoFrame',['../classQtCameraBackend.html#af75292515bc72d0560d98e733a6548dd',1,'QtCameraBackend']]]
 ];
