@@ -224,7 +224,7 @@ android {
             -Wl,--end-group\
 
 # neon instructions (for yuv2rgb)
-    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions -DANDROID_NDK
+    QMAKE_CXXFLAGS += -mfloat-abi=softfp -mfpu=neon -flax-vector-conversions -ftree-vectorize -DANDROID_NDK
     DEFINES += ARM_NEON_ENABLE
 }
 
