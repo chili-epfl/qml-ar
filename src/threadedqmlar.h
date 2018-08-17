@@ -81,6 +81,9 @@ class ThreadedQMLAR : public QObject
     /** @brief Pause/stop QMLAR */
     Q_PROPERTY(int running READ getRunning WRITE setRunning)
 
+    /** @brief Show shader output on top-left of the input frame? Android API >= 26 only. */
+    Q_PROPERTY(bool show_shader_output READ getShowShader WRITE setShowShader)
+
 private:
     /**
     * @brief Instance to QMLAR object
@@ -189,6 +192,12 @@ public:
     */
     bool getRunning();
 
+    /**
+     * @brief Show shader output (Android API >= 26)
+     * @return dummy value
+     */
+    bool getShowShader() {return false;}
+
 public slots:
     /**
     * @brief Initialize from camera id (default value -1)
@@ -244,6 +253,13 @@ public slots:
     * @brief Set running/paused
     */
     void setRunning(bool);
+
+    /**
+     * @brief Show shader output on top-left of input frame?
+     * Only for Android API >= 26
+     * @param value Show or not
+     */
+    void setShowShader(bool value);
 
 signals:
     /**

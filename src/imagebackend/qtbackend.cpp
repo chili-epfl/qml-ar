@@ -168,6 +168,27 @@ void QtCameraBackend::setPolygon(QPolygonF marker)
 #endif
 }
 
+void QtCameraBackend::setActive(bool active)
+{
+    is_active = active;
+#if __ANDROID_API__ >= 26
+    NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
+    if(runnable && use_gpu) {
+        runnable->active = active;
+    }
+#endif
+}
+
+void QtCameraBackend::setShowOutput(bool show)
+{ Q_UNUSED(show)
+#if __ANDROID_API__ >= 26
+    NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
+    if(runnable && use_gpu) {
+        runnable->show_processed = show;
+    }
+#endif
+}
+
 void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 {
     // doing nothing if deactivated

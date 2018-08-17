@@ -221,3 +221,8 @@ void ThreadedQMLAR::setRunning(bool value)
     is_running = value;
     instance->setRunning(is_running);
 }
+
+void ThreadedQMLAR::setShowShader(bool value)
+{
+    instance->setShowShader(value);
+}

@@ -190,6 +190,18 @@ public slots:
      * @brief Calculated current marker corners, range 0-1
      */
     void setPolygon(QPolygonF marker);
+
+    /**
+     * @brief Make this object active/inactive
+     * @param active The new active/inactive parameter
+     */
+    void setActive(bool active);
+
+    /**
+     * @brief Enable/disable shader output on top-left corner.
+     * Only for Android API 26 and higher
+     */
+    void setShowOutput(bool show);
 };
 
 #endif // QTBACKEND_H

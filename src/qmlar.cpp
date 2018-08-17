@@ -204,6 +204,13 @@ void QMLAR::setRunning(bool running)
     }
 }
 
+void QMLAR::setShowShader(bool value)
+{ Q_UNUSED(value)
+#if __ANDROID_API__ >= 26
+    ((QtCameraBackend*) raw_provider)->setShowOutput(value);
+#endif
+}
+
 QVariantList QMLAR::getMarkers()
 {
     QVariantList result{};

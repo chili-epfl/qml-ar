@@ -98,6 +98,36 @@ Item {
         }
     }
 
+    // show shader output?
+    Rectangle {
+        id: shader_menu
+        anchors.left: fps_menu.right
+        anchors.top: parent.top
+        width: root.width * 0.33
+        height: parent.height * 0.5
+        color: "green"
+        opacity: 0.5
+        radius: height*0.4
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: "Helvetica"
+            font.pixelSize: 0.2*parent.height
+            font.bold: true
+            text: "Shader"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            property bool show_: false;
+            onClicked: {
+                show_ = !show_;
+                AR.show_shader_output = show_;
+            }
+        }
+    }
+
     // filtering alpha coefficient
     Rectangle {
         id: filtering_param

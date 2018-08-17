@@ -43,7 +43,8 @@
 NV21VideoFilterRunnable::NV21VideoFilterRunnable(NV21VideoFilter *f) : filter(f), gl(nullptr), image_id(0),
     graphicBuf(nullptr), clientBuf(nullptr), disp(nullptr), imageEGL(nullptr)
 {
-    show_processed = true;
+    show_processed = false;
+    active = true;
 }
 
 NV21VideoFilterRunnable::~NV21VideoFilterRunnable()
@@ -57,7 +58,9 @@ NV21VideoFilterRunnable::~NV21VideoFilterRunnable()
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame, const QVideoSurfaceFormat &surfaceFormat, QVideoFilterRunnable::RunFlags flags)
 {
     Q_UNUSED(surfaceFormat); Q_UNUSED(flags);
-    return run(inputFrame);
+
+    // implementation of active
+    return active ? run(inputFrame) : *inputFrame;
 }
 
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)

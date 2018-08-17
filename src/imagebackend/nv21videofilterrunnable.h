@@ -169,6 +169,11 @@ private:
      */
     bool show_processed;
 
+    /**
+     * @brief If false, no processing will be done
+     */
+    bool active;
+
 protected:
 
     /**

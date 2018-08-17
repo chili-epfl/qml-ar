@@ -210,6 +210,13 @@ public slots:
     */
     void setRunning(bool running);
 
+    /**
+     * @brief Show shader output on input frame?
+     * Android API >= 26 only
+     * @param value Show?
+     */
+    void setShowShader(bool value);
+
 private:
     /**
     * @brief Initialization semaphore
