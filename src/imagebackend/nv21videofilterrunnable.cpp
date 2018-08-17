@@ -159,6 +159,12 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                     // max value (0-1)
                     uniform lowp float max_v_;
 
+                    // marker X points
+                    uniform lowp vec4 marker_x;
+
+                    // marker X points
+                    uniform lowp vec4 marker_y;
+
                     // output RGBA
                     out lowp vec4 fragment;
 
@@ -172,6 +178,20 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                         lowp float d = q.x - min(q.w, q.y);
                         lowp float e = 1.0e-10;
                         return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+                    }
+
+                    // check if point is inside a polygon https://stackoverflow.com/questions/11716268/point-in-polygon-algorithm
+                    bool pnpoly(lowp vec4 vertx, lowp vec4 verty, lowp float testx, lowp float testy)
+                    {
+                      const int nvert = 4;
+                      int i, j;
+                      bool c = false;
+                      for (i = 0, j = nvert-1; i < nvert; j = i++) {
+                        if ( ((verty[i]>testy) != (verty[j]>testy)) &&
+                         (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+                           c = !c;
+                      }
+                      return c;
                     }
 
                     // main function
@@ -218,6 +238,11 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                                 diff < delta_h_) { value = 1.0; }
                         else value = 0.0;
 
+                        // blackening output if outside marker
+                        if(!pnpoly(marker_x, marker_y, uvBase.x, uvBase.y)) {
+                            value = 0.0;
+                        }
+
                         // output: white or black
                         fragment = vec4(value, value, value, 1.0);
                     }
@@ -238,14 +263,15 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         // the input image location for shader
         imageLocation = program.uniformLocation("image");
 
+        // obtaining shader uniform locations
         mean_h_ = program.uniformLocation("mean_h_");
         delta_h_ = program.uniformLocation("delta_h_");
         min_s_ = program.uniformLocation("min_s_");
         max_s_ = program.uniformLocation("max_s_");
         min_v_ = program.uniformLocation("min_v_");
         max_v_ = program.uniformLocation("max_v_");
-
-        qDebug() << "Attr loc" << mean_h_ << delta_h_ << min_s_ << max_s_ << min_v_ << max_v_;
+        marker_x_ = program.uniformLocation("marker_x");
+        marker_y_ = program.uniformLocation("marker_y");
 
         // creating output framebuffer
         out_fbo = new QOpenGLFramebufferObject(outputWidth, outputHeight);
@@ -310,6 +336,19 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     program.setUniformValue(max_s_, GLfloat(max_s));
     program.setUniformValue(min_v_, GLfloat(min_v));
     program.setUniformValue(max_v_, GLfloat(max_v));
+
+    // setting marker location (blackening everything else)
+    if(marker.size() == 4)
+    {
+        program.setUniformValue(marker_x_, marker.at(0).x(), marker.at(1).x(), marker.at(2).x(), marker.at(3).x());
+        program.setUniformValue(marker_y_, marker.at(0).y(), marker.at(1).y(), marker.at(2).y(), marker.at(3).y());
+    }
+
+    // otherwise, showing all
+    else {
+        program.setUniformValue(marker_x_, 0, 1, 1, 0);
+        program.setUniformValue(marker_y_, 0, 0, 1, 1);
+    }
 
     // binding OUTPUT framebuffer
     gl->glBindFramebuffer(GL_FRAMEBUFFER, out_fbo->handle()); GL_CHECK_ERROR();

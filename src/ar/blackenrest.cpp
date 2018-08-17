@@ -99,8 +99,19 @@ void BlackenRest::onNewMarkers(PipelineContainer<MarkerStorage> storage)
 {
     use_region = storage.o().markersDetected();
     this->storage = storage.o();
-    if(use_region && usePolygon)
-        calculatePolygon();
+
+    // if need to send polygon data
+    if(usePolygon)
+    {
+        // send it if it's valid
+        if(use_region)
+            calculatePolygon();
+
+        // otherwise, send empty polygon, which means "no markers"
+        else {
+            emit newPolygon(QPolygonF());
+        }
+    }
 }
 
 QImage BlackenRest::blacken(QImage source)

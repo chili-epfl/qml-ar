@@ -105,6 +105,11 @@ private:
     GLint mean_h_, delta_h_, min_s_, max_s_, min_v_, max_v_;
 
     /**
+     * @brief Marker coordinates for blacken, uniform locations
+     */
+    GLint marker_x_, marker_y_;
+
+    /**
      * @brief The current number of the image
      */
     int image_id;
