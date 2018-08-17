@@ -62,9 +62,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame, const QVideoSu
 
 QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 {
-    qDebug() << mean_h << delta_h << min_v << max_v << min_s << max_s;
-    qDebug() << marker;
-
     // setting current time to the container to measure latency
     image_info = PipelineContainerInfo(image_id++).checkpointed("Grabbed");
 
@@ -144,7 +141,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
                     uniform sampler2D image;
                     const uint sampleByPixel = %1u;
                     const lowp vec2 uvDelta = vec2(%2, %3);
-                    //out lowp float fragment;
 
                     // want this mean hue (0-1)
                     uniform lowp float mean_h_;
@@ -283,7 +279,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         gl->glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, outTex, 0); GL_CHECK_ERROR();
 
         // filling in the usage for HardwareBuffer
-        usage.format = AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
+        usage.format = AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM;
         usage.height = outputHeight;
         usage.width = outputWidth;
         usage.layers = 1;
@@ -388,7 +384,6 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         memcpy(writePtr, readPtr, outputWidth * 4);
         readPtr = (unsigned char *)(int(readPtr) + stride * 4);
         writePtr = (unsigned char *)(int(writePtr) + outputWidth * 4);
-
     }
 
     // unlocking the buffer
