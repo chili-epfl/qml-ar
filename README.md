@@ -72,6 +72,7 @@ Example for Ubuntu Trusty for step 2: `mkdir build_linux; cd build_linux; qmake 
 2. Download and print a pdf file with markers:<br /><a href="/examples/00_chest/demo_sheet/ar_demo_sheet.pdf"><img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/demo_sheet/ar_demo_sheet.png" width="200" /></a>
 3. Attach camera to your PC (device 1 is used by default). Point camera towards the printed sheet
 4. A chest from Qt examples and a cuboid should appear, like on the screenshots above.
+5. It's possible to open/close the AR menu by clicking at the center of the screen. It allows to display markers, dots, change low-pass pose filter coefficient and show shader output on Android API >= 26.
 
 ## The simplest demo
 The project `01_simplest` is specifically designed to show how easy it is to obtain minimal functionality:
@@ -117,7 +118,7 @@ The application relies heavily on the Qt-specific tools, such as signals and slo
 The performance of the current version is about **30FPS / 30ms latency** on Linux, **30FPS / 30ms Latency on Android API >= 26** and  **25FPS / 60ms Latency on Android API < 26** (Samsung SM-T810 used in both tests).
 On newer phones with API >= 26 latency of **15ms** was registered.
 The main bottlenecks on Android API < 26 are the NV21&rArr;RGB conversion on CPU and the HSV threshold, which take together more than a half of frame processing time.
-The Uchiya module takes a few dozen milliseconds to run and now it's the main bottleneck on Android API >= 28 and Linux.
+The Uchiya module takes a few dozen milliseconds to run and now it's the main bottleneck on Android API >= 26 and Linux.
 To analyze performance, the corresponding defines inside the `config.h` file should be turned on, then the logs from the device are collected and analyzed using tools in the `/performance` folder.
 The scripts produce the output similar to this, which allows to find the component which is the bottleneck:
 
