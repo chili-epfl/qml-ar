@@ -204,9 +204,15 @@ android {
 
     # not adding libraries and telling how to enable this just in case
     else {
-        LIBS += -lc
+        LIBS += -lc -lEGL
+        HEADERS += $$PWD/src/imagebackend/nv21videofilter.h \
+                   $$PWD/src/imagebackend/nv21videofilterrunnable.h
+        SOURCES += $$PWD/src/imagebackend/nv21videofilter.cpp \
+                   $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
         message("Not using HardwareBuffer because Android API is < 26");
         message("Run $ export ANDROID_NDK_PLATFORM=android-26 (or more) before qmake to enable");
+        HEADERS += $$PWD/GraphicBuffer/GraphicBuffer.h $$PWD/GraphicBuffer/DynamicLibrary.h
+        SOURCES += $$PWD/GraphicBuffer/GraphicBuffer.cpp $$PWD/GraphicBuffer/DynamicLibrary.cpp
     }
 
     LIBS += -L$${OPENCV_PATH}/sdk/native/3rdparty/libs/armeabi-v7a \

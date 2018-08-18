@@ -206,7 +206,7 @@ void QMLAR::setRunning(bool running)
 
 void QMLAR::setShowShader(bool value)
 { Q_UNUSED(value)
-#if __ANDROID_API__ >= 26
+#if __ANDROID_API__ >= 16
     ((QtCameraBackend*) raw_provider)->setShowOutput(value);
 #endif
 }
@@ -341,7 +341,7 @@ void QMLAR::connectAll()
     qRegisterMetaType<PipelineContainerInfo>("PipelineContainerInfo");
 
 // Using shader+hardwarebuffer on Android 26 and higher
-#if __ANDROID_API__ >= 26
+#if __ANDROID_API__ >= 16
 
     // enable marker corners output
     blacken_rest->setUsePolygon(true);

@@ -16,6 +16,7 @@
 
 // Hardware buffer
 #include "android/hardware_buffer.h"
+#include "GraphicBuffer/GraphicBuffer.h"
 
 // QMLAR includes
 #include "nv21videofilterrunnable.h"
@@ -137,7 +138,7 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         // 3. Thresholds HSV based on parameters
         QString fragment(version);
         fragment += R"(
-                    #extension GL_OES_EGL_image_external_essl3 : require
+                    //#extension GL_OES_EGL_image_external_essl3 : require
                     #extension GL_OES_EGL_image_external : require
 
                     in lowp vec2 uvBase;
@@ -281,25 +282,32 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         // attaching the created texture as to the framebuffer (texture will contain output RGBA data)
         gl->glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, outTex, 0); GL_CHECK_ERROR();
 
-        // filling in the usage for HardwareBuffer
-        usage.format = AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM;
-        usage.height = outputHeight;
-        usage.width = outputWidth;
-        usage.layers = 1;
-        usage.rfu0 = 0;
-        usage.rfu1 = 0;
-        usage.stride = 10;
-        usage.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_NEVER
-                | AHARDWAREBUFFER_USAGE_GPU_COLOR_OUTPUT;
+//        // filling in the usage for HardwareBuffer
+//        usage.format = AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM;
+//        usage.height = outputHeight;
+//        usage.width = outputWidth;
+//        usage.layers = 1;
+//        usage.rfu0 = 0;
+//        usage.rfu1 = 0;
+//        usage.stride = 10;
+//        usage.usage = AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_WRITE_NEVER
+//                | AHARDWAREBUFFER_USAGE_GPU_COLOR_OUTPUT;
+
+        graphicBuf = new GraphicBuffer(outputWidth, outputHeight, PixelFormat::PIXEL_FORMAT_RGBA_8888,
+                                       GraphicBuffer::USAGE_SW_READ_OFTEN | GraphicBuffer::USAGE_SW_WRITE_NEVER |
+                                       GraphicBuffer::USAGE_HW_RENDER);
 
         // creating an Android 8 HardwareBuffer
-        error = AHardwareBuffer_allocate(&usage, &graphicBuf); HWB_CHECK_ERROR();
+        //error = AHardwareBuffer_allocate(&usage, &graphicBuf); HWB_CHECK_ERROR();
 
         // obtaining buffer description -> can get real stride in the code which follows
-        AHardwareBuffer_describe(graphicBuf, &usage1);
+        //AHardwareBuffer_describe(graphicBuf, &usage1);
 
         // obtaining native buffer
-        clientBuf = eglGetNativeClientBufferANDROID(graphicBuf); EGL_CHECK_ERROR();
+        //clientBuf = eglGetNativeClientBufferANDROID(graphicBuf); EGL_CHECK_ERROR();
+        clientBuf = graphicBuf->getNativeBuffer();
+
+        qDebug() << "GraphicBuf" << graphicBuf << "clientBuf" << clientBuf;
 
         // obtaining the EGL display
         disp = eglGetDisplay(EGL_DEFAULT_DISPLAY); EGL_CHECK_ERROR();
@@ -376,11 +384,13 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     unsigned char *writePtr = readBuffer;
 
     // locking the buffer
-    error = AHardwareBuffer_lock(graphicBuf, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, nullptr, (void**) &readPtr);
+    //error = AHardwareBuffer_lock(graphicBuf, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, nullptr, (void**) &readPtr);
+    error = graphicBuf->lock(GraphicBuffer::USAGE_SW_READ_OFTEN, (void**) &readPtr);
     HWB_CHECK_ERROR();
 
     // obtaining real stride
-    unsigned int stride = usage1.stride;
+    //unsigned int stride = usage1.stride;
+    unsigned int stride = graphicBuf->getStride();
 
     // copying all rows from EGLImage to readBuffer
     for (int row = 0; row < outputHeight; row++) {
@@ -390,7 +400,8 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
     }
 
     // unlocking the buffer
-    error = AHardwareBuffer_unlock(graphicBuf, nullptr); HWB_CHECK_ERROR();
+    //error = AHardwareBuffer_unlock(graphicBuf, nullptr); HWB_CHECK_ERROR();
+    error = graphicBuf->unlock();
 
     // wrapping the buffer inside a QImage
     image = QImage(readBuffer, outputWidth, outputHeight, QImage::Format_RGBA8888);
