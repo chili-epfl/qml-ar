@@ -84,6 +84,26 @@ class ThreadedQMLAR : public QObject
     /** @brief Show shader output on top-left of the input frame? Android API >= 26 only. */
     Q_PROPERTY(bool show_shader_output READ getShowShader WRITE setShowShader)
 
+    // HSV Threshold
+
+    /** @brief Mean Hue (HSV Threshold), degrees 0-360 */
+    Q_PROPERTY(double hsv_mean_h READ getMeanH WRITE setMeanH NOTIFY never)
+
+    /** @brief Delta Hue (HSV Threshold), degrees 0-360 */
+    Q_PROPERTY(double hsv_delta_h READ getDeltaH WRITE setDeltaH NOTIFY never)
+
+    /** @brief Min S (HSV Threshold), 0-255 */
+    Q_PROPERTY(double hsv_min_s READ getMinS WRITE setMinS NOTIFY never)
+
+    /** @brief Max S (HSV Threshold), 0-255 */
+    Q_PROPERTY(double hsv_max_s READ getMaxS WRITE setMaxS NOTIFY never)
+
+    /** @brief Min V (HSV Threshold), 0-255 */
+    Q_PROPERTY(double hsv_min_v READ getMinV WRITE setMinV NOTIFY never)
+
+    /** @brief Max V (HSV Threshold), 0-255 */
+    Q_PROPERTY(double hsv_max_v READ getMaxV WRITE setMaxV NOTIFY never)
+
 private:
     /**
     * @brief Instance to QMLAR object
@@ -198,6 +218,36 @@ public:
      */
     bool getShowShader() {return false;}
 
+    /**
+     * @brief Mean Hue (HSV Threshold), degrees 0-360
+     */
+    double getMeanH();
+
+    /**
+     * @brief Delta Hue (HSV Threshold), degrees 0-360
+     */
+    double getDeltaH();
+
+    /**
+     * @brief Min S (HSV Threshold), 0-255
+     */
+    double getMinS();
+
+    /**
+     * @brief Max S (HSV Threshold), 0-255
+     */
+    double getMaxS();
+
+    /**
+     * @brief Min V (HSV Threshold), 0-255
+     */
+    double getMinV();
+
+    /**
+     * @brief Max V (HSV Threshold), 0-255
+     */
+    double getMaxV();
+
 public slots:
     /**
     * @brief Initialize from camera id (default value -1)
@@ -261,6 +311,42 @@ public slots:
      */
     void setShowShader(bool value);
 
+    /**
+     * @brief Mean Hue (HSV Threshold), degrees 0-360
+     * @param value Value of Hue in degrees (0-360)
+     */
+    void setMeanH(double value);
+
+    /**
+     * @brief Delta Hue (HSV Threshold), degrees 0-360
+     * @param value Value of Delta Hue in degrees (0-360)
+     */
+    void setDeltaH(double value);
+
+    /**
+     * @brief Min S (HSV Threshold), 0-255
+     * @param value Min value of S
+     */
+    void setMinS(double value);
+
+    /**
+     * @brief Max S (HSV Threshold), 0-255
+     * @param value Max value of S
+     */
+    void setMaxS(double value);
+
+    /**
+     * @brief Min V (HSV Threshold), 0-255
+     * @param value Min value of V
+     */
+    void setMinV(double value);
+
+    /**
+     * @brief Max V (HSV Threshold), 0-255
+     * @param value Max value of V
+     */
+    void setMaxV(double value);
+
 signals:
     /**
     * @brief Notify QML part when new matrix is available
@@ -316,6 +402,11 @@ signals:
     * @brief Set filtering alpha
     */
     void setFilterAlphaSignal(double alpha);
+
+    /**
+     * @brief Never called
+     */
+    void never();
 };
 
 #endif // THREADEDQMLAR_H

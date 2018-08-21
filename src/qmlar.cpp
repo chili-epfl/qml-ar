@@ -211,6 +211,29 @@ void QMLAR::setShowShader(bool value)
 #endif
 }
 
+void QMLAR::updateThreshold()
+{
+#if __ANDROID_API__ >= 26
+    if(init_type == INIT_CAMERA) {
+        // set thresholding parameters
+        if(!raw_provider) {
+            return;
+        }
+        ((QtCameraBackend*) raw_provider)->setColor(mean_h, delta_h);
+        ((QtCameraBackend*) raw_provider)->setVMinMax(min_v, max_v);
+        ((QtCameraBackend*) raw_provider)->setSMinMax(min_s, max_s);
+    }
+#else
+    if(!hue_threshold) {
+        return;
+    }
+    // configuring the HSV threshold (no effect on Android API >= 26)
+    hue_threshold->setColor(mean_h, delta_h);
+    hue_threshold->setVMinMax(min_v, max_v);
+    hue_threshold->setSMinMax(min_s, max_s);
+#endif
+}
+
 QVariantList QMLAR::getMarkers()
 {
     QVariantList result{};
@@ -348,13 +371,11 @@ void QMLAR::connectAll()
 
     if(init_type == INIT_CAMERA)
     {
+        // updating color threshold
+        updateThreshold();
+
         // sending marker corners to raw provider (it's QtCameraBackend)
         connect(blacken_rest, &BlackenRest::newPolygon, (QtCameraBackend*) raw_provider, &QtCameraBackend::setPolygon);
-
-        // set thresholding parameters
-        ((QtCameraBackend*) raw_provider)->setColor(mean_h, delta_h);
-        ((QtCameraBackend*) raw_provider)->setVMinMax(min_v, max_v);
-        ((QtCameraBackend*) raw_provider)->setSMinMax(min_s, max_s);
     }
 
     connect(raw_provider, &ImageProviderAsync::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
@@ -375,11 +396,8 @@ void QMLAR::connectAll()
 // Using the old QVideoFrame::map()+Scaler+HueThreshold on other versions
 // on Desktop it will be OpenCVBackend+Scaler+HueThreshold
 #else
-
-    // configuring the HSV threshold (no effect on Android API >= 26)
-    hue_threshold->setColor(mean_h, delta_h);
-    hue_threshold->setVMinMax(min_v, max_v);
-    hue_threshold->setSMinMax(min_s, max_s);
+    // updating color threshold
+    updateThreshold();
 
     connect(hue_threshold, &HueThreshold::imageAvailable, marker_backend, &MarkerBackEnd::setPreview);
     connect(hue_threshold, &HueThreshold::imageAvailable, this, &QMLAR::imageUpdated);

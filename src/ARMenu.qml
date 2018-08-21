@@ -167,4 +167,115 @@ Item {
             onValueChanged: {AR.filter_alpha = value;}
         }
     }
+
+    Rectangle {
+        anchors.left: parent.left
+        anchors.top: filtering_param_slider.bottom
+        width: root.width * 0.7
+        height: root.height * 0.5
+
+        Column {
+            Row {
+                Text {
+                    text: "MeanH " + mean_h_slider.value
+                }
+
+                Slider {
+                    id: mean_h_slider
+                    onValueChanged: {AR.hsv_mean_h = value;}
+                    activeFocusOnPress: true
+                    tickmarksEnabled: true
+                    minimumValue: 0.0
+                    stepSize: 1
+                    maximumValue: 360.
+                    styleHints: 1
+                }
+            }
+
+            Row {
+                Text {
+                    text: "DeltaH " + delta_h_slider.value
+                }
+
+                Slider {
+                    id: delta_h_slider
+                    onValueChanged: {AR.hsv_delta_h = value;}
+                    activeFocusOnPress: true
+                    tickmarksEnabled: true
+                    minimumValue: 0.0
+                    stepSize: 1
+                    maximumValue: 360.
+                    styleHints: 1
+                }
+            }
+
+            Row {
+                Text {
+                    text: "MinS " + min_s_slider.value
+                }
+
+                Slider {
+                    id: min_s_slider
+                    onValueChanged: {AR.hsv_min_s = value;}
+                    activeFocusOnPress: true
+                    tickmarksEnabled: true
+                    minimumValue: 0.0
+                    stepSize: 1
+                    maximumValue: 360.
+                    styleHints: 1
+                }
+            }
+
+            Row {
+                Text {
+                    text: "MaxS " + max_s_slider.value
+                }
+
+                Slider {
+                    id: max_s_slider
+                    onValueChanged: {AR.hsv_max_s = value;}
+                    activeFocusOnPress: true
+                    tickmarksEnabled: true
+                    minimumValue: 0.0
+                    stepSize: 1
+                    maximumValue: 360.
+                    styleHints: 1
+                }
+            }
+
+            Row {
+                Text {
+                    text: "MinV " + min_v_slider.value
+                }
+
+                Slider {
+                    id: min_v_slider
+                    onValueChanged: {AR.hsv_min_v = value;}
+                    activeFocusOnPress: true
+                    tickmarksEnabled: true
+                    minimumValue: 0.0
+                    stepSize: 1
+                    maximumValue: 360.
+                    styleHints: 1
+                }
+            }
+
+            Row {
+                Text {
+                    text: "MaxV " + max_v_slider.value
+                }
+
+                Slider {
+                    id: max_v_slider
+                    onValueChanged: {AR.hsv_max_v = value;}
+                    activeFocusOnPress: true
+                    tickmarksEnabled: true
+                    minimumValue: 0.0
+                    stepSize: 1
+                    maximumValue: 360.
+                    styleHints: 1
+                }
+            }
+        }
+    }
 }
