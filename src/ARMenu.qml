@@ -157,7 +157,7 @@ Item {
         Slider {
             anchors.fill: parent
             id: filtering_param_slider_
-            activeFocusOnPress: false
+            activeFocusOnPress: true
             tickmarksEnabled: true
             minimumValue: 0.0
             stepSize: 0.01
@@ -169,6 +169,7 @@ Item {
     }
 
     Rectangle {
+        z: 1000
         anchors.left: parent.left
         anchors.top: filtering_param_slider.bottom
         width: root.width * 0.7
@@ -186,6 +187,7 @@ Item {
                     activeFocusOnPress: true
                     tickmarksEnabled: true
                     minimumValue: 0.0
+                    width: root.width * 0.5
                     stepSize: 1
                     maximumValue: 360.
                     styleHints: 1
@@ -203,6 +205,7 @@ Item {
                     activeFocusOnPress: true
                     tickmarksEnabled: true
                     minimumValue: 0.0
+                    width: root.width * 0.5
                     stepSize: 1
                     maximumValue: 360.
                     styleHints: 1
@@ -220,6 +223,7 @@ Item {
                     activeFocusOnPress: true
                     tickmarksEnabled: true
                     minimumValue: 0.0
+                    width: root.width * 0.5
                     stepSize: 1
                     maximumValue: 360.
                     styleHints: 1
@@ -237,6 +241,7 @@ Item {
                     activeFocusOnPress: true
                     tickmarksEnabled: true
                     minimumValue: 0.0
+                    width: root.width * 0.5
                     stepSize: 1
                     maximumValue: 360.
                     styleHints: 1
@@ -255,6 +260,7 @@ Item {
                     tickmarksEnabled: true
                     minimumValue: 0.0
                     stepSize: 1
+                    width: root.width * 0.5
                     maximumValue: 360.
                     styleHints: 1
                 }
@@ -273,6 +279,7 @@ Item {
                     minimumValue: 0.0
                     stepSize: 1
                     maximumValue: 360.
+                    width: root.width * 0.5
                     styleHints: 1
                 }
             }
