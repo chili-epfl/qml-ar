@@ -29,8 +29,10 @@ Entity {
             rotation: fromAxisAndAngle(Qt.vector3d(1, 0, 0), 90)
         },
 
+        // simple black color
         PerVertexColorMaterial {},
 
+        // cuboid
         Mesh {
             id: mesh
             source: "/assets/cuboid.obj"

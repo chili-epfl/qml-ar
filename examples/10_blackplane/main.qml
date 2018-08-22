@@ -18,6 +18,7 @@ Window {
     height: 800
     width: 1300
 
+    // make the cuboid big
     Button {
         anchors.left: parent.left
         anchors.top: parent.top
@@ -25,6 +26,7 @@ Window {
         onClicked: arComponent.arSceneObject.isBig = true;
     }
 
+    // make the cuboid small
     Button {
         anchors.right: parent.right
         anchors.top: parent.top
