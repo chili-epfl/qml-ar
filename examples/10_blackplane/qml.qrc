@@ -4,5 +4,6 @@
         <file>Activity.qml</file>
         <file>assets/markers.json</file>
         <file>assets/camera_matrix.json</file>
+        <file>assets/cuboid.obj</file>
     </qresource>
 </RCC>

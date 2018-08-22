@@ -14,19 +14,26 @@ import Qt3D.Extras 2.0
 Entity {
     id: root
 
-    /** Translation of the cube (x, y, z) */
-    property vector3d translation: Qt.vector3d(500, 500, 0)
+    /** Make big/small */
+    property bool isBig: false
+
+    /** Side of the cuboid */
+    property real scale: isBig ? 50 : 2
 
     components: [
-        // adding a translation
+        // adding a scale
         // @disable-check M300
         Transform {
-            translation: root.translation
+            scale: root.scale
+            translation: Qt.vector3d(210. / 2, 297. / 2, 0)
+            rotation: fromAxisAndAngle(Qt.vector3d(1, 0, 0), 90)
         },
 
         PerVertexColorMaterial {},
 
-        // adding 5cm^3 cube
-        CuboidMesh { xExtent: 1000; yExtent: 1000; zExtent: 10 }
+        Mesh {
+            id: mesh
+            source: "/assets/cuboid.obj"
+        }
     ]
 }

@@ -15,8 +15,22 @@ import ch.epfl.chili.qmlar 1.0
 Window {
     // some window parameters
     visible: true
-    height: 1000
-    width: 1500
+    height: 800
+    width: 1300
+
+    Button {
+        anchors.left: parent.left
+        anchors.top: parent.top
+        text: "Big"
+        onClicked: arComponent.arSceneObject.isBig = true;
+    }
+
+    Button {
+        anchors.right: parent.right
+        anchors.top: parent.top
+        text: "Small"
+        onClicked: arComponent.arSceneObject.isBig = false;
+    }
 
     // crearing AR component
     ARComponent {
@@ -26,6 +40,6 @@ Window {
         arSceneComponent: Qt.createComponent("Activity.qml");
 
         // setting width
-        width: 1500
+        width: 1300
     }
 }
