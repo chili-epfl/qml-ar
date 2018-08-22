@@ -13,5 +13,7 @@ Note that you need to print the `ar_demo_sheet.pdf` on A4
 7. `06_mvp`: This project renders a cube at (0, 0, 0) using qml-ar. Moreover, it show how to obtain the raw MVP matrix from AR lib.
 8. `07_property_setting`: This project shows how to manage properties of your the 3D scene by dynamically changing the cube position.
 8. `08_pause`: This project shows how to pause and restart QMLAR
-9. `98_test_image`: This project is similar to `02_image`, but it exits right after it can detect markers. Useful for testing the library after installation.
-10. `99_cpp_only`: This project shows how to use QML-AR w/o QML (using only Qt GUI).
+9. `09_cam0`: This project shows how to use camera 0 for AR
+10. `10_blackplane`: This project shows a big black plane in place of marker sheet to test performance with big objects on Android
+11. `98_test_image`: This project is similar to `02_image`, but it exits right after it can detect markers. Useful for testing the library after installation.
+12. `99_cpp_only`: This project shows how to use QML-AR w/o QML (using only Qt GUI).
