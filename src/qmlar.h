@@ -41,6 +41,7 @@ class FPSCalculator;
 class PoseFilter;
 class LatencyCalculator;
 class FramesDelayCalculator;
+class ThreadedQMLAR;
 
 /**
  * @brief This class is the C++/QML interface to the
@@ -49,6 +50,7 @@ class FramesDelayCalculator;
 
 class QMLAR : public QObject
 { Q_OBJECT
+    friend class ThreadedQMLAR;
 public:
     /**
     * @brief Enum for initialization type
@@ -216,6 +218,11 @@ public slots:
      * @param value Show?
      */
     void setShowShader(bool value);
+
+    /**
+     * @brief Updates the HSV threshold parameters from local variables
+     */
+    void updateThreshold();
 
 private:
     /**

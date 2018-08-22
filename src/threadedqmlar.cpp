@@ -160,6 +160,42 @@ bool ThreadedQMLAR::getRunning()
     return is_running;
 }
 
+double ThreadedQMLAR::getMeanH()
+{
+    if(!instance) return 0;
+    return instance->mean_h;
+}
+
+double ThreadedQMLAR::getDeltaH()
+{
+    if(!instance) return 0;
+    return instance->delta_h;
+}
+
+double ThreadedQMLAR::getMinS()
+{
+    if(!instance) return 0;
+    return instance->min_s;
+}
+
+double ThreadedQMLAR::getMaxS()
+{
+    if(!instance) return 0;
+    return instance->max_s;
+}
+
+double ThreadedQMLAR::getMinV()
+{
+    if(!instance) return 0;
+    return instance->min_v;
+}
+
+double ThreadedQMLAR::getMaxV()
+{
+    if(!instance) return 0;
+    return instance->max_v;
+}
+
 void ThreadedQMLAR::setCameraId(int camera_id)
 {
     emit setCameraIdSignal(camera_id);
@@ -225,4 +261,47 @@ void ThreadedQMLAR::setRunning(bool value)
 void ThreadedQMLAR::setShowShader(bool value)
 {
     instance->setShowShader(value);
+}
+
+void ThreadedQMLAR::setMeanH(double value)
+{
+    if(!instance) return;
+    instance->mean_h = value;
+    instance->updateThreshold();
+}
+
+void ThreadedQMLAR::setDeltaH(double value)
+{
+    if(!instance) return;
+    instance->delta_h = value;
+    instance->updateThreshold();
+}
+
+void ThreadedQMLAR::setMinS(double value)
+{
+    if(!instance) return;
+    instance->min_s = value;
+    instance->updateThreshold();
+}
+
+void ThreadedQMLAR::setMaxS(double value)
+{
+    if(!instance) return;
+    instance->max_s = value;
+    instance->updateThreshold();
+}
+
+void ThreadedQMLAR::setMinV(double value)
+{
+    if(!instance) return;
+    instance->min_v = value;
+    instance->updateThreshold();
+}
+
+
+void ThreadedQMLAR::setMaxV(double value)
+{
+    if(!instance) return;
+    instance->max_v = value;
+    instance->updateThreshold();
 }

@@ -415,8 +415,8 @@ Item {
         // the hidden menu
         ARMenu {
             z: 15
-            anchors.top: hiddenMenuEnabler.bottom
-            anchors.left: hiddenMenuEnabler.left
+            anchors.top: parent.bottom
+            anchors.left: parent.left
             width: root.width * 0.5
             activity: root
             height: root.height * 0.1
