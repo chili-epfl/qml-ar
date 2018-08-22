@@ -213,7 +213,7 @@ void QMLAR::setShowShader(bool value)
 
 void QMLAR::updateThreshold()
 {
-#if __ANDROID_API__ >= 26
+#if __ANDROID_API__ >= 16
     if(init_type == INIT_CAMERA) {
         // set thresholding parameters
         if(!raw_provider) {
