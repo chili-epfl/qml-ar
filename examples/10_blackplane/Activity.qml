@@ -15,7 +15,7 @@ Entity {
     id: root
 
     /** Translation of the cube (x, y, z) */
-    property vector3d translation: Qt.vector3d(100, 100, 0)
+    property vector3d translation: Qt.vector3d(500, 500, 0)
 
     components: [
         // adding a translation
@@ -24,10 +24,9 @@ Entity {
             translation: root.translation
         },
 
-        // adding material
-        PhongMaterial { ambient: Qt.rgba(0.5, 0.5, 0.5, 1); },
+        PerVertexColorMaterial {},
 
         // adding 5cm^3 cube
-        CuboidMesh { xExtent: 50; yExtent: 50; zExtent: 50 }
+        CuboidMesh { xExtent: 1000; yExtent: 1000; zExtent: 10 }
     ]
 }
