@@ -15,5 +15,6 @@ Note that you need to print the `ar_demo_sheet.pdf` on A4
 8. `08_pause`: This project shows how to pause and restart QMLAR
 9. `09_cam0`: This project shows how to use camera 0 for AR
 10. `10_blackplane`: This project shows a big black plane in place of marker sheet to test performance with big objects on Android
-11. `98_test_image`: This project is similar to `02_image`, but it exits right after it can detect markers. Useful for testing the library after installation.
-12. `99_cpp_only`: This project shows how to use QML-AR w/o QML (using only Qt GUI).
+11. `11_draw`: Draw spheres on the scene with your finger
+12. `98_test_image`: This project is similar to `02_image`, but it exits right after it can detect markers. Useful for testing the library after installation.
+13. `99_cpp_only`: This project shows how to use QML-AR w/o QML (using only Qt GUI).
