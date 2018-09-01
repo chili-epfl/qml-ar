@@ -2,7 +2,7 @@
 # Name of the application
 TEMPLATE = app
 
-TARGET=ar-clicked
+TARGET=ar-draw
 
 # Qt configuration for Quick applications
 QT += quick multimedia opengl multimediawidgets 3dinput 3drender
