@@ -91,6 +91,11 @@ void OpenCVCameraBackend::setupCV() {
     // cannot continue on error
     // check if video device has been initialised
     if (!stream->isOpened()) {
-        qFatal("cannot open camera");
+        QString s;
+        QTextStream ts(&s);
+        ts << "Cannot open camera id=" << camera_id << " using OpenCV. Make sure it's plugged in and not in use. "
+           << "If you want to use another camera, specify camera_id parameter for the ARComponent or ThreadedQMLAR. "
+           << "See README of qml-ar project for more details.";
+        qFatal(s.toStdString().c_str());
     }
 }
