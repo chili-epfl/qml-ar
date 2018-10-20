@@ -14,8 +14,13 @@
 #include <QtOpenGL>
 #include <QtConcurrent>
 #include "pipelinecontainer.h"
-//#include "android/hardware_buffer.h"
+
+#ifdef USEGRAPHICBUFFER
 #include "GraphicBuffer/GraphicBuffer.h"
+#else
+#include "android/hardware_buffer.h"
+#endif
+
 #include "EGL/egl.h"
 #include "EGL/eglext.h"
 
@@ -130,21 +135,24 @@ private:
      */
     GLuint outTex;
 
+#ifndef USEGRAPHICBUFFER
     /**
      * @brief Input usage for the hardware buffer
      */
-    //AHardwareBuffer_Desc usage;
+    AHardwareBuffer_Desc usage;
 
     /**
      * @brief Output usage for the hardware buffer
      */
-    //AHardwareBuffer_Desc usage1;
+    AHardwareBuffer_Desc usage1;
 
     /**
      * @brief Android 8 HardwareBuffer
      */
-    //AHardwareBuffer* graphicBuf;
+    AHardwareBuffer* graphicBuf;
+#else
     GraphicBuffer* graphicBuf;
+#endif
 
     /**
      * @brief Android Native buffer

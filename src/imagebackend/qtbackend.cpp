@@ -15,7 +15,7 @@
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
 
-#if __ANDROID_API__ >= 16
+#ifdef USEGRAPHICBUFFER
 #include "nv21videofilter.h"
 #include "nv21videofilterrunnable.h"
 #endif
@@ -59,7 +59,7 @@ void QtCameraBackend::init()
 
 void QtCameraBackend::updateHSVThreshold()
 {
-#if __ANDROID_API__ >= 16
+#ifdef USENV21FILTER
     NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
     if(runnable && use_gpu) {
         runnable->mean_h = mean_h / 360.;
@@ -160,7 +160,7 @@ void QtCameraBackend::setSMinMax(double min_, double max_)
 
 void QtCameraBackend::setPolygon(QPolygonF marker)
 { Q_UNUSED(marker)
-#if __ANDROID_API__ >= 16
+#ifdef USENV21FILTER
     NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
     if(runnable && use_gpu) {
         runnable->marker = marker;
@@ -171,7 +171,7 @@ void QtCameraBackend::setPolygon(QPolygonF marker)
 void QtCameraBackend::setActive(bool active)
 {
     is_active = active;
-#if __ANDROID_API__ >= 16
+#ifdef USENV21FILTER
     NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
     if(runnable && use_gpu) {
         runnable->active = active;
@@ -181,7 +181,7 @@ void QtCameraBackend::setActive(bool active)
 
 void QtCameraBackend::setShowOutput(bool show)
 { Q_UNUSED(show)
-#if __ANDROID_API__ >= 16
+#ifdef USENV21FILTER
     NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
     if(runnable && use_gpu) {
         runnable->show_processed = show;
@@ -196,8 +196,9 @@ void QtCameraBackend::processQVideoFrame(const QVideoFrame &frame)
 
     TimeLoggerThroughput("%s", "Received image from camera");
 
-    // fast GPU-based processing on Android 16 and higher
-#if __ANDROID_API__ >= 16
+    // fast GPU-based processing on Android 26 and higher
+    // Or with GraphicBuffer (API 23, 24, 25)
+#ifdef USENV21FILTER
     // at some point viewfinder and filters should be ready, so it's safe to dereference pointer to the videofilter
     NV21VideoFilterRunnable* runnable = NV21VideoFilter::runnable;
     if(runnable && use_gpu) {

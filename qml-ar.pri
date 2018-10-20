@@ -160,6 +160,8 @@ linux:!android {
     PKGCONFIG += opencv
 }
 
+USE_GRAPHICBUFFER=$$(USE_GRAPHICBUFFER)
+
 # OpenCV for Android library
 android {
     # full path to OpenCV Android SDK
@@ -193,6 +195,7 @@ android {
 
     # adding libraries for HardwareBuffer
     greaterThan(ANDROID_API, "android-25") {
+        DEFINES += "USENV21FILTER=1"
         LIBS += -lEGL -lnativewindow -lGLESv3
         HEADERS += $$PWD/src/imagebackend/nv21videofilter.h \
                    $$PWD/src/imagebackend/nv21videofilterrunnable.h
@@ -204,15 +207,29 @@ android {
 
     # not adding libraries and telling how to enable this just in case
     else {
-        LIBS += -lc -lEGL
-        HEADERS += $$PWD/src/imagebackend/nv21videofilter.h \
-                   $$PWD/src/imagebackend/nv21videofilterrunnable.h
-        SOURCES += $$PWD/src/imagebackend/nv21videofilter.cpp \
-                   $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
         message("Not using HardwareBuffer because Android API is < 26");
         message("Run $ export ANDROID_NDK_PLATFORM=android-26 (or more) before qmake to enable");
-        HEADERS += $$PWD/GraphicBuffer/GraphicBuffer.h $$PWD/GraphicBuffer/DynamicLibrary.h
-        SOURCES += $$PWD/GraphicBuffer/GraphicBuffer.cpp $$PWD/GraphicBuffer/DynamicLibrary.cpp
+
+        equals(USE_GRAPHICBUFFER, "1") {
+            DEFINES += "USEGRAPHICBUFFER=1"
+            DEFINES += "USENV21FILTER=1"
+            message("Using GraphicBuffer because USE_GRAPHICBUFFER = 1 and Android API < 26");
+            message("Run $ export USE_GRAPHICBUFFER=0 to disable");
+
+            LIBS += -lc -lEGL
+            HEADERS += $$PWD/src/imagebackend/nv21videofilter.h \
+                       $$PWD/src/imagebackend/nv21videofilterrunnable.h
+            SOURCES += $$PWD/src/imagebackend/nv21videofilter.cpp \
+                       $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
+
+            HEADERS += $$PWD/GraphicBuffer/GraphicBuffer.h $$PWD/GraphicBuffer/DynamicLibrary.h
+            SOURCES += $$PWD/GraphicBuffer/GraphicBuffer.cpp $$PWD/GraphicBuffer/DynamicLibrary.cpp
+        }
+        else {
+            LIBS += -lc
+            message("Not using GraphicBuffer because USE_GRAPHICBUFFER = 0 and Android API < 26");
+            message("Run $ export USE_GRAPHICBUFFER=1 to enable");
+        }
     }
 
     LIBS += -L$${OPENCV_PATH}/sdk/native/3rdparty/libs/armeabi-v7a \
