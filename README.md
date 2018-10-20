@@ -48,9 +48,9 @@ $ sudo apt-get -qy install libopencv-dev
 
 ## Prerequisites (Android)
 1. <a href="https://sourceforge.net/projects/opencvlibrary/files/opencv-android/">OpenCV for Android</a> (tested with 3.3.1). Put the symlink pointing to the OpenCV for Android as `qml-ar/opencv-android` (inside the repo).
-2. Android SDK (tested with r22.3) and NDK (tested with r15c and r16b), need to be set up with Qt. Run before `qmake`: `export ANDROID_NDK_ROOT=/path/to/ndk; export ANDROID_NDK_PLATFORM=android-XX`. Replace `XX` with your device's API version if it is at least 26 or set it to 16 otherwise.
+2. Android SDK (tested with r22.3) and NDK (tested with r15c and r16b), need to be set up with Qt. Run before `qmake`: `export ANDROID_NDK_ROOT=/path/to/ndk; export ANDROID_NDK_PLATFORM=android-XX`. Replace `XX` with your device's API version. Another parameter is `export USE_GRAPHICBUFFER=1` which enables the GraphicBuffer acceleration (replaces `HardwareBuffer` on lower APIs).
 3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod). *Up to 5 cores required, GPU is used for image rendering and image processing*.
-4. On API 26 and higher the HardwareBuffer is used to decrease latency of the pipeline (see details below). This functionality is not currently supported on lower APIs.
+4. On API 26 and higher the HardwareBuffer is used to decrease latency of the pipeline (see details below).
 
 Example for Ubuntu Trusty: *need to download things by hand in GUI, including Qt for Android.*
 
@@ -142,7 +142,7 @@ On Linux, no IMU is assumed to exist, and also the image is rendered using updat
 
 At the end, the application exports the MVP matrix to a QML component `ARComponent`, which uses it as the `Camera` parameter in Qt3D. This component is also capable of loading the user-defined scene. This is the main component for interaction with the library from QML.
 
-On Android API 26 and higher (Android 8.0) a HardwareBuffer is used to quickly obtain the camera image from the GPU, converting it to HSV and thresholding while it's still on GPU, thus reducing latency by 30% down to 40ms and CPU usage by 20%. Specify `android-26` or higher before running qmake if your device supports this API. Thus, on Android 26 and higher `ImageScaler`, `BlackenRest` and `HueThreshold` are not used because their function is provided by a faster shader- and HardwareBuffer-based `NV21VideoFilterRunnable`. See `NV21VideoFilterRunnable`, `QMLAR::connectAll()`, `qml-ar.pri` for details. The description of this functionality and discussion of possible ways to enable it on API < 26 is at https://github.com/chili-epfl/GraphicBuffer. The branch `GraphicBufferAPI` uses that GraphicBuffer version and it works for API 23-25. However due to restrictions mentioned in the repo's README, API 25 support is not included in the master branch.
+On Android API 26 and higher (Android 8.0) a HardwareBuffer is used to quickly obtain the camera image from the GPU, converting it to HSV and thresholding while it's still on GPU, thus reducing latency by 30% down to 40ms and CPU usage by 20%. Specify `android-26` or higher before running qmake if your device supports this API. Thus, on Android 26 and higher `ImageScaler`, `BlackenRest` and `HueThreshold` are not used because their function is provided by a faster shader- and HardwareBuffer-based `NV21VideoFilterRunnable`. See `NV21VideoFilterRunnable`, `QMLAR::connectAll()`, `qml-ar.pri` for details. The description of this functionality and discussion of possible ways to enable it on API < 26 is at https://github.com/chili-epfl/GraphicBuffer. This project uses that GraphicBuffer version and it works for API 23-25. However due to restrictions mentioned in the repo's README, API 24-25 support requires root access and requires making the application a system application.
 
 ### Possible extensions
 1. Random-color dots instead of just red dots
