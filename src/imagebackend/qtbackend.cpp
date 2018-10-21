@@ -15,7 +15,7 @@
 #include "qvideoframehelpers.h"
 #include "voidviewfinder.h"
 
-#ifdef USEGRAPHICBUFFER
+#ifdef USENV21FILTER
 #include "nv21videofilter.h"
 #include "nv21videofilterrunnable.h"
 #endif
