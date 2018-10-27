@@ -1,3 +1,11 @@
+/**
+ * @file uchiyaprinter.cpp
+ * @brief This class returns the list of detected dots
+ * @author Sergei Volodin
+ * @version 1.0
+ * @date 2018-10-27
+ */
+
 #include "uchiyaprinter.h"
 
 UchiyaPrinter::UchiyaPrinter()
