@@ -38,6 +38,9 @@ int main(int argc, char *argv[])
         // reading filename
         in >> s;
 
+        // exit
+        if(s == "exit") return 0;
+
         // reading image
         img = QImage(s).convertToFormat(QImage::Format_Grayscale8);
 
