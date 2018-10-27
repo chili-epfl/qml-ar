@@ -1,5 +1,5 @@
 /**
- * @file uchiyaprinter.cpp
+ * @file main.cpp
  * @brief This project prints the list of detected dots
  * @author Sergei Volodin
  * @version 1.0
