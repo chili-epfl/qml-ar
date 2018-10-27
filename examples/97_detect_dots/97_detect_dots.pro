@@ -36,7 +36,8 @@ SOURCES += \
     $$PWD/../../src/imagebackend/opencvbackend.cpp \
     $$PWD/../../src/markers/marker.cpp \
     $$PWD/../../src/markers/markerdetector.cpp \
-    $$PWD/../../src/markers/markerstorage.cpp
+    $$PWD/../../src/markers/markerstorage.cpp \
+    uchiyaprinter.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -56,7 +57,8 @@ HEADERS += \
     $$PWD/../../src/imagebackend/opencvbackend.h \
     $$PWD/../../src/markers/marker.h \
     $$PWD/../../src/markers/markerdetector.h \
-    $$PWD/../../src/markers/markerstorage.h
+    $$PWD/../../src/markers/markerstorage.h \
+    uchiyaprinter.h
 
 # UchiyaMarkers library
 SOURCES += $$PWD/../../uchiya/blob.cpp \

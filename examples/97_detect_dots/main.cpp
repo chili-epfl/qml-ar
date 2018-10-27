@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include "uchiyaprinter.h"
 
 int main(int argc, char *argv[])
 {
