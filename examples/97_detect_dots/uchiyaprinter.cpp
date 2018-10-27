@@ -12,8 +12,8 @@ void UchiyaPrinter::getDots(QImage img)
 
 }
 
-void UchiyaPrinter::updateDots(PipelineContainer<QVector<QVector2D> > data)
+void UchiyaPrinter::updateDots(PipelineContainer<QPair<QImage, QVector<QVector2D>>> data)
 {
-    QVector<QVector2D> points = data.o();
+    auto points = data.o();
     qDebug() << points;
 }

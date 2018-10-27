@@ -13,7 +13,7 @@ public:
     UchiyaPrinter();
     void getDots(QImage img);
 public slots:
-    void updateDots(PipelineContainer<QVector<QVector2D> >);
+    void updateDots(PipelineContainer<QPair<QImage, QVector<QVector2D> > >);
 };
 
 #endif // UCHIYAPRINTER_H
