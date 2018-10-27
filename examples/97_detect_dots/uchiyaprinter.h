@@ -8,10 +8,11 @@
 class UchiyaPrinter : public QObject
 { Q_OBJECT
 private:
+    QVector<QVector2D> buffer;
     UchiyaMarkerDetector* detector;
 public:
     UchiyaPrinter();
-    void getDots(QImage img);
+    QVector<QVector2D> getDots(QImage img);
 public slots:
     void updateDots(PipelineContainer<QPair<QImage, QVector<QVector2D> > >);
 };

@@ -4,16 +4,17 @@ UchiyaPrinter::UchiyaPrinter()
 {
     detector = new UchiyaMarkerDetector;
     connect(detector, &UchiyaMarkerDetector::dotsFound, this, &UchiyaPrinter::updateDots);
+    detector->loadMarkerPositions("./markers.json");
 }
 
-void UchiyaPrinter::getDots(QImage img)
+QVector<QVector2D> UchiyaPrinter::getDots(QImage img)
 {
     detector->process(img);
+    return buffer;
 
 }
 
 void UchiyaPrinter::updateDots(PipelineContainer<QPair<QImage, QVector<QVector2D>>> data)
 {
-    auto points = data.o();
-    qDebug() << points;
+    buffer = data.o().second;
 }

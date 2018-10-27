@@ -33,11 +33,19 @@ SOURCES += \
     $$PWD/../../src/utils/pipelinecontainerinfo.cpp \
     $$PWD/../../src/utils/timelogger.cpp \
     $$PWD/../../src/ar/markermvpprovider.cpp \
-    $$PWD/../../src/imagebackend/opencvbackend.cpp \
     $$PWD/../../src/markers/marker.cpp \
     $$PWD/../../src/markers/markerdetector.cpp \
     $$PWD/../../src/markers/markerstorage.cpp \
-    uchiyaprinter.cpp
+    uchiyaprinter.cpp \
+    $$PWD/../../src/imagebackend/imageproviderasync.cpp \
+    $$PWD/../../src/ar/mvpprovider.cpp \
+    $$PWD/../../src/ar/pose.cpp \
+    $$PWD/../../src/camera/calibratedcamera.cpp \
+    $$PWD/../../src/camera/calibratedcamerafilestorage.cpp \
+    $$PWD/../../src/ar/worldimage.cpp \
+    $$PWD/../../src/ar/posecamerapnp.cpp \
+    $$PWD/../../src/ar/perspectivecamera.cpp \
+    $$PWD/../../src/utils/mymatconverter.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -54,11 +62,19 @@ HEADERS += \
     $$PWD/../../src/utils/timelogger.h \
     $$PWD/../../src/config.h \
     $$PWD/../../src/ar/markermvpprovider.h \
-    $$PWD/../../src/imagebackend/opencvbackend.h \
     $$PWD/../../src/markers/marker.h \
     $$PWD/../../src/markers/markerdetector.h \
     $$PWD/../../src/markers/markerstorage.h \
-    uchiyaprinter.h
+    uchiyaprinter.h \
+    $$PWD/../../src/imagebackend/imageproviderasync.h \
+    $$PWD/../../src/ar/mvpprovider.h \
+    $$PWD/../../src/ar/pose.h \
+    $$PWD/../../src/camera/calibratedcamera.h \
+    $$PWD/../../src/camera/calibratedcamerafilestorage.h \
+    $$PWD/../../src/ar/worldimage.h \
+    $$PWD/../../src/ar/posecamerapnp.h \
+    $$PWD/../../src/ar/perspectivecamera.h \
+    $$PWD/../../src/utils/mymatconverter.h
 
 # UchiyaMarkers library
 SOURCES += $$PWD/../../uchiya/blob.cpp \
