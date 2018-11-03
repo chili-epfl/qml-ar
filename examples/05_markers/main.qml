@@ -28,6 +28,11 @@ Window {
 
         // setting width
         width: 500
+
+        // time after which to discard pose
+        Component.onCompleted: {
+            arComponent.reset_ms = 5000;
+        }
     }
 
     // showing a huge text when no markers are visible

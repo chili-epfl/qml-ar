@@ -154,6 +154,10 @@ public:
 
     };
 
+    /** @brief Time w/o markers after which pose is discarded
+     * And the scene is hidden */
+    unsigned getResetMs();
+
 public slots:
     /**
     * @brief Update resulting MVP matrix
@@ -189,6 +193,14 @@ public slots:
     * @param imu_rotation rotation by IMU now
     */
     void IMUUpdated(QQuaternion imu_rotation);
+
+    /**
+     * @brief setResetMs Set the time in ms after which
+     * the pose is considered invalid if no MVP updates
+     * from markers are given
+     * @param reset_ms The delay in ms
+     */
+    void setResetMs(unsigned reset_ms);
 };
 
 #endif // IMUMVPDECORATOR_H

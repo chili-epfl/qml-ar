@@ -120,6 +120,13 @@ Item {
     /** Start/pause computation */
     property bool is_running: true
 
+    /** @brief Reset pose if no markers are visible for
+     * this amount of time, in ms */
+    property int reset_ms: AR.reset_ms
+
+    // updating reset_ms
+    onReset_msChanged: AR.reset_ms = reset_ms
+
     /** (internal) QQuickImageProvider url, used if viewfinder is unavailable. This image is updated using a Timer */
     property string output_url: ""
 

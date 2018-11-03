@@ -104,6 +104,9 @@ class ThreadedQMLAR : public QObject
     /** @brief Max V (HSV Threshold), 0-255 */
     Q_PROPERTY(double hsv_max_v READ getMaxV WRITE setMaxV NOTIFY never)
 
+    /** @brief Time in ms after which pose is discarded if no markers are present */
+    Q_PROPERTY(unsigned reset_ms READ getResetMs WRITE setResetMs NOTIFY never)
+
 private:
     /**
     * @brief Instance to QMLAR object
@@ -248,6 +251,10 @@ public:
      */
     double getMaxV();
 
+    /** @brief Time w/o markers after which pose is discarded
+     * And the scene is hidden */
+    unsigned getResetMs();
+
 public slots:
     /**
     * @brief Initialize from camera id (default value -1)
@@ -347,6 +354,10 @@ public slots:
      */
     void setMaxV(double value);
 
+    /** @brief Time w/o markers after which pose is discarded
+     * And the scene is hidden */
+    void setResetMs(unsigned reset_ms);
+
 signals:
     /**
     * @brief Notify QML part when new matrix is available
@@ -407,6 +418,9 @@ signals:
      * @brief Never called
      */
     void never();
+
+    /** @brief Called on setResetMs call */
+    void setResetMs_signal(unsigned);
 };
 
 #endif // THREADEDQMLAR_H

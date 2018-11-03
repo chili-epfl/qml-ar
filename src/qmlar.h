@@ -146,6 +146,10 @@ public:
     * @brief Delay in frames to compensate for latency
     */
     int getFrameDelay();
+
+    /** @brief Time w/o markers after which pose is discarded
+     * And the scene is hidden */
+    unsigned getResetMs();
 public slots:
     /**
     * @brief Initialize from camera id (default value -1)
@@ -450,6 +454,10 @@ signals:
     * @brief Set filter alpha
     */
     void newFilterAlpha(double alpha);
+
+    /** @brief Time w/o markers after which pose is discarded
+     * And the scene is hidden */
+    void setResetMs_signal(unsigned reset_ms);
 };
 
 #endif // CELLULOAR_H

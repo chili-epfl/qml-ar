@@ -31,6 +31,7 @@ ThreadedQMLAR::ThreadedQMLAR()
     connect(this, SIGNAL(setImageWidthSignal(int)), instance, SLOT(setImageWidth(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(startCameraSignal(void)), instance, SLOT(startCamera()), Qt::QueuedConnection);
     connect(this, SIGNAL(setFilterAlphaSignal(double)), instance, SIGNAL(newFilterAlpha(double)));
+    connect(this, SIGNAL(setResetMs_signal(unsigned)), instance, SIGNAL(setResetMs_signal(unsigned)));
 
     // events from AR -> this object
     connect(instance, SIGNAL(imageUpdated(void)), this, SIGNAL(imageUpdated(void)), Qt::QueuedConnection);
@@ -196,6 +197,12 @@ double ThreadedQMLAR::getMaxV()
     return instance->max_v;
 }
 
+unsigned ThreadedQMLAR::getResetMs()
+{
+    if(!instance) return 0;
+    return instance->getResetMs();
+}
+
 void ThreadedQMLAR::setCameraId(int camera_id)
 {
     emit setCameraIdSignal(camera_id);
@@ -304,4 +311,10 @@ void ThreadedQMLAR::setMaxV(double value)
     if(!instance) return;
     instance->max_v = value;
     instance->updateThreshold();
+}
+
+void ThreadedQMLAR::setResetMs(unsigned reset_ms)
+{
+    if(!instance) return;
+    setResetMs_signal(reset_ms);
 }

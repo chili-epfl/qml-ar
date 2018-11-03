@@ -39,6 +39,11 @@ IMUMVPDecorator::IMUMVPDecorator(IMU *imu, int delay_mode)
     timer.start(500);
 }
 
+unsigned IMUMVPDecorator::getResetMs()
+{
+    return reset_ms;
+}
+
 void IMUMVPDecorator::setP(PipelineContainer<QMatrix4x4> p)
 {
     last_p = p;
@@ -126,6 +131,11 @@ void IMUMVPDecorator::IMUUpdated(QQuaternion imu_rotation)
 
     // updating output
     updatePose();
+}
+
+void IMUMVPDecorator::setResetMs(unsigned reset_ms)
+{
+    this->reset_ms = reset_ms;
 }
 
 QMatrix4x4 IMUMVPDecorator::getLatencyCorrectedIMUPose()

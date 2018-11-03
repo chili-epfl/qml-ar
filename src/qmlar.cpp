@@ -290,6 +290,12 @@ int QMLAR::getFrameDelay()
         return 0;
 }
 
+unsigned QMLAR::getResetMs()
+{
+    if(!mvp_imu_decorated) return 0;
+    return mvp_imu_decorated->getResetMs();
+}
+
 void QMLAR::startCamera()
 {
     init_sem.acquire();
@@ -486,6 +492,9 @@ void QMLAR::connectAll()
     connect(latency, &LatencyCalculator::newMean, delay, &FramesDelayCalculator::setMeanLatency);
     connect(fps, &FPSCalculator::newMean, delay, &FramesDelayCalculator::setMeanFPS);
     connect(delay, &FramesDelayCalculator::newDelay, marker_backend, &MarkerBackEnd::setDelay);
+
+    // connect reset_ms
+    connect(this, &QMLAR::setResetMs_signal, mvp_imu_decorated, &IMUMVPDecorator::setResetMs, Qt::QueuedConnection);
 }
 
 QString QMLAR::getImageFilename()
