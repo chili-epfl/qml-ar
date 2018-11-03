@@ -50,6 +50,7 @@ QMLAR::QMLAR()
     raw_provider = NULL;
     perspective_camera = NULL;
     camera_wrapper = NULL;
+    mvp_imu_decorated = NULL;
     marker_backend = new MarkerBackEnd(true);
     marker_storage = new MarkerStorage();
     last_info = new PipelineContainerInfo();
@@ -494,7 +495,7 @@ void QMLAR::connectAll()
     connect(delay, &FramesDelayCalculator::newDelay, marker_backend, &MarkerBackEnd::setDelay);
 
     // connect reset_ms
-    connect(this, &QMLAR::setResetMs_signal, mvp_imu_decorated, &IMUMVPDecorator::setResetMs, Qt::QueuedConnection);
+    connect(this, &QMLAR::setResetMsSignal, mvp_imu_decorated, &IMUMVPDecorator::setResetMs, Qt::QueuedConnection);
 }
 
 QString QMLAR::getImageFilename()

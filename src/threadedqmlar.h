@@ -420,7 +420,7 @@ signals:
     void never();
 
     /** @brief Called on setResetMs call */
-    void setResetMs_signal(unsigned);
+    void setResetMsSignal(unsigned);
 };
 
 #endif // THREADEDQMLAR_H

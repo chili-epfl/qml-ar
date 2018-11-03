@@ -457,7 +457,7 @@ signals:
 
     /** @brief Time w/o markers after which pose is discarded
      * And the scene is hidden */
-    void setResetMs_signal(unsigned reset_ms);
+    void setResetMsSignal(unsigned reset_ms);
 };
 
 #endif // CELLULOAR_H
