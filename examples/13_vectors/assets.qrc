@@ -3,5 +3,6 @@
         <file>assets/camera_matrix.json</file>
         <file>assets/arrow.obj</file>
         <file>assets/markers.json</file>
+        <file>assets/ar_demo_sheet.png</file>
     </qresource>
 </RCC>

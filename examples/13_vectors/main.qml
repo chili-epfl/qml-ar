@@ -40,7 +40,7 @@ Window {
         arSceneComponent: Qt.createComponent("Activity.qml");
 
         // no menu in this demo
-        disable_menu: true
+        //disable_menu: true
 
         // setting width
         width: 500
@@ -90,8 +90,8 @@ Window {
             var delta = Qt.vector3d(x_mm - clickPoint.x, y_mm - clickPoint.y, 0);
             if(selected >= 0)
             {
-            arSceneObject.d.lst[selected].lvector.to = arSceneObject.d.lst[selected].lvector.to.plus(delta);
-            arSceneObject.d.lst[selected].lvector.from = arSceneObject.d.lst[selected].lvector.from.plus(delta);
+                arSceneObject.d.lst[selected].lvector.to = arSceneObject.d.lst[selected].lvector.to.plus(delta);
+                arSceneObject.d.lst[selected].lvector.from = arSceneObject.d.lst[selected].lvector.from.plus(delta);
             }
 
             clickPoint = Qt.vector2d(x_mm, y_mm)
@@ -107,7 +107,6 @@ Window {
         }
 
         init_type: AR.INIT_IMAGE
-
-        image_filename: "/home/sergei/arsheet.jpg"
+        image_filename: "://assets/ar_demo_sheet.png"
     }
 }
