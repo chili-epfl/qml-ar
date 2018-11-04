@@ -31,7 +31,7 @@ Window {
 
         // time after which to discard pose
         Component.onCompleted: {
-            arComponent.reset_ms = 5000;
+            arComponent.reset_ms = 1000;
         }
     }
 

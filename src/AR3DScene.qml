@@ -42,6 +42,9 @@ Scene3D {
     /** Speed up the rendering (if false) @see https://forum.qt.io/topic/84698/why-is-scene3d-so-slow/2 */
     multisample: false
 
+    // graceful show/hide
+    Behavior on opacity { PropertyAnimation {} }
+
     // entity with camera which creates user's components inside
     Entity {
         id: activity
@@ -57,13 +60,45 @@ Scene3D {
             InputSettings { }
         ]
 
+        // Show the 3D scene objects
+        property bool show_objects: false
+
+        // hide objects after timeout
+        Timer {
+            id: hide_objects_timer
+            interval: 1000
+            repeat: false
+            onTriggered: activity.show_objects = false;
+        }
+
+        // hide/show objects
+        Connections {
+            target: AR
+            onPose_validChanged: {
+                // Markers are now visibie, show objects
+                if(AR.pose_valid && !activity.show_objects)
+                {
+                    activity.show_objects = true;
+                    scene3d.opacity = 1.0;
+                }
+
+                // Markers invisible for some time now, starting the
+                // hide timer and decreasing opacity gradually
+                // (see Behavior above)
+                else if(!AR.pose_valid && activity.show_objects) {
+                    scene3d.opacity = 0.0;
+                    hide_objects_timer.start();
+                }
+            }
+        }
+
         // set ModelViewProjection matrix as camera matrix
         Camera {
             id: camera
 
             // pose valid -> P * Delta_X * MV
             // pose invalid -> zero
-            projectionMatrix: AR.pose_valid ?
+            projectionMatrix: activity.show_objects ?
                                   AR.p_matrix.times(Qt.matrix4x4(1, 0, 0, delta_x,
                                                                  0, 1, 0, 0,
                                                                  0, 0, 1, 0,
