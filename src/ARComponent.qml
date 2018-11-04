@@ -176,6 +176,15 @@ Item {
      * Emitted only of markers are visible now.*/
     signal clickedOnActivity(real x_mm, real y_mm);
 
+    /** @brief Signal called when mouse moves when on AR component
+     * Running only if mouseHover is enabled
+     * @see mouseHover */
+    signal movedOnActivity(real x_mm, real y_mm);
+
+    /** @brief Enable the movedOnActivity signal
+     * @see movedOnActivity */
+    property alias mouseHover: scene_mouse_area.hoverEnabled
+
     /** A signal which is called when the arSceneComponent has finished loading
      * @see arSceneComponent
      * @see arSceneObject */
@@ -286,6 +295,27 @@ Item {
         console.log("End loading viewfinder");
     }
 
+    /** @brief Convert xy in MOUSE coordinates to xy in millimeters asuming z = 0 */
+    function get_xy_mm(mouseX, mouseY) {
+        // register the click
+        var x_ndc = +2. * mouseX / width  - 1;
+        var y_ndc = -2. * mouseY / height + 1;
+
+        // MVP matrix from AR
+        var mat = AR.mvp_matrix;
+
+        // inverse transformation
+        var world_xyz1 = Qt.matrix4x4(mat.m11, mat.m12, mat.m14, 0,
+                                mat.m21, mat.m22, mat.m24, 0,
+                                mat.m31, mat.m32, mat.m34, 0,
+                                0      , 0      , 0      , 1).inverted().times(Qt.vector4d(x_ndc, y_ndc, 1, 1));
+
+        // outputtting
+        var x_mm = world_xyz1.x / world_xyz1.z;
+        var y_mm = world_xyz1.y / world_xyz1.z
+        return Qt.vector2d(x_mm, y_mm);
+    }
+
     // scene which displays camera image and OpenGL scene
     Rectangle {
         id: scene
@@ -296,6 +326,26 @@ Item {
         MouseArea {
             id: scene_mouse_area
             anchors.fill: parent
+            onPositionChanged: {
+                // send it still to others
+                // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
+                mouse.accepted = false;
+
+                // checking if the pose is valid
+                if(!AR.pose_valid) {
+                    console.log('Mouse on AR component, but no pose available');
+                    return;
+                }
+
+                // obtaining the position
+                var vect = get_xy_mm(mouseX, mouseY);
+
+                // debug output
+                console.log("Mouse at " + vect.x + ", " + vect.y);
+
+                // calling the signal
+                movedOnActivity(vect.x, vect.y);
+            }
             onClicked: {
                 // send it still to others
                 // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
@@ -307,28 +357,14 @@ Item {
                     return;
                 }
 
-                // register the click
-                var x_ndc = +2. * mouseX / width  - 1;
-                var y_ndc = -2. * mouseY / height + 1;
-
-                // MVP matrix from AR
-                var mat = AR.mvp_matrix;
-
-                // inverse transformation
-                var world_xyz1 = Qt.matrix4x4(mat.m11, mat.m12, mat.m14, 0,
-                                        mat.m21, mat.m22, mat.m24, 0,
-                                        mat.m31, mat.m32, mat.m34, 0,
-                                        0      , 0      , 0      , 1).inverted().times(Qt.vector4d(x_ndc, y_ndc, 1, 1));
-
-                // outputtting
-                var x_mm = world_xyz1.x / world_xyz1.z;
-                var y_mm = world_xyz1.y / world_xyz1.z
+                // obtaining the position
+                var vect = get_xy_mm(mouseX, mouseY);
 
                 // debug output
-                console.log("Clicked at " + x_mm + ", " + y_mm);
+                console.log("Clicked at " + vect.x + ", " + vect.y);
 
                 // calling the signal
-                clickedOnActivity(x_mm, y_mm);
+                clickedOnActivity(vect.x, vect.y);
             }
             z: 20
             propagateComposedEvents: true
