@@ -48,16 +48,55 @@ Window {
         // added spheres
         property var spheres: ([]);
 
+        property vector2d clickPoint: Qt.vector2d(0, 0)
+        property int selected: -1
+
         // do an action when clicked on the plane with the markers
         onClickedOnActivity: {
             var component = Qt.createComponent("SphereEntity.qml");
             var obj = component.createObject(arSceneObject, {'x': x_mm, 'y': y_mm})
             spheres.push(obj);
-            arSceneObject.clicked(x_mm, y_mm);
             mouseHover = true;
+
+            var z_mm = 0;
+            var closest_i = -1;
+            var found = 0;
+
+            var vec = Qt.vector3d(x_mm, y_mm, z_mm);
+            var threshold = 5;
+
+            var demo = arSceneObject.d;
+
+            for(var i = 0; i < demo.lst.length; i++)
+            {
+                var arrow = demo.lst[i];
+                var from = arrow.lvector.from;
+                var to = arrow.lvector.to;
+                console.log(from.minus(vec).length());
+                if(from.minus(vec).length() <= threshold)
+                {
+                    console.log("Clicked at FROM", i);
+                }
+                else if(to.minus(vec).length() <= threshold)
+                {
+                    console.log("Clicked at TO", i);
+                    clickPoint = Qt.vector2d(x_mm, y_mm)
+                    selected = i
+                }
+            }
         }
 
-        onMovedOnActivity: console.log(x_mm, y_mm)
+        onMovedOnActivity: {
+            var delta = Qt.vector3d(x_mm - clickPoint.x, y_mm - clickPoint.y, 0);
+            if(selected >= 0)
+            {
+            arSceneObject.d.lst[selected].lvector.to = arSceneObject.d.lst[selected].lvector.to.plus(delta);
+            arSceneObject.d.lst[selected].lvector.from = arSceneObject.d.lst[selected].lvector.from.plus(delta);
+            }
+
+            clickPoint = Qt.vector2d(x_mm, y_mm)
+            //arSceneObject.d.lst[0].lvector.to = Qt.vector3d(x_mm, y_mm, 0);
+        }
 
         function clearSpheres() {
             for(var i = 0; i < spheres.length; i++) {
