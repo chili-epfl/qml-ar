@@ -1,2 +1,7 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/">
+        <file>assets/camera_matrix.json</file>
+        <file>assets/arrow.obj</file>
+        <file>assets/markers.json</file>
+    </qresource>
+</RCC>

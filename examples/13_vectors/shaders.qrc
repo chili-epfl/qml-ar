@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/gl33/poly.frag</file>
+        <file>shaders/gl33/poly.vert</file>
+        <file>shaders/es20/poly.frag</file>
+        <file>shaders/es20/poly.vert</file>
+    </qresource>
+</RCC>
