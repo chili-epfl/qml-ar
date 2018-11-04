@@ -16,7 +16,7 @@ ImageBackend::ImageBackend(QString filename) : ImageProviderAsync()
     image_id = 0;
     Q_ASSERT(!img.isNull());
     buffer = img.convertToFormat(QImage::Format_RGB888);
-    timer.setInterval(100);
+    timer.setInterval(1000);
     connect(&timer, &QTimer::timeout, this, &ImageBackend::update);
     timer.start();
 }
@@ -31,10 +31,19 @@ void ImageBackend::update()
     // no action if not running
     if(!is_active) return;
 
-    qDebug() << "SENT";
+    // scale image?
+    static bool scale = false;
+    QImage buf1 = buffer;
+
+    // scale image to make it a bit different
+    if(scale) buf1 = buffer.scaled(buf1.width() * 0.9, buf1.height() * 0.9);
+
     PipelineContainerInfo info(image_id++);
     emit imageAvailable(PipelineContainer<QImage>
-                        (buffer, info.checkpointed("Sent")));
+                        (buf1, info.checkpointed("Sent")));
+
+    // toggling scale
+    scale = !scale;
 }
 
 QImage ImageBackend::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
