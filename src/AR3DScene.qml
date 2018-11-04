@@ -44,6 +44,7 @@ Scene3D {
 
     // graceful show/hide
     Behavior on opacity { PropertyAnimation {} }
+    opacity: 1.0
 
     // entity with camera which creates user's components inside
     Entity {
@@ -78,6 +79,7 @@ Scene3D {
                 // Markers are now visibie, show objects
                 if(AR.pose_valid && !activity.show_objects)
                 {
+                    hide_objects_timer.stop();
                     activity.show_objects = true;
                     scene3d.opacity = 1.0;
                 }
