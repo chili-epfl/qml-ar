@@ -207,6 +207,10 @@ void QMLAR::setRunning(bool running)
 
 void QMLAR::setShowShader(bool value)
 { Q_UNUSED(value)
+    // if using image, NV21 video filter is not used at all
+    // so the cast ((QtCameraBackend*) raw_provider) is not valid
+    if(init_type == INIT_IMAGE)
+        return;
 #ifdef USENV21FILTER
     ((QtCameraBackend*) raw_provider)->setShowOutput(value);
 #endif
