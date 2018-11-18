@@ -181,6 +181,14 @@ Item {
      * @see mouseHover */
     signal movedOnActivity(real x_mm, real y_mm);
 
+    /** @brief Signal called when mouse is pressed inside the AR component
+     * @see mouseHover */
+    signal pressedOnActivity(real x_mm, real y_mm);
+
+    /** @brief Signal called when mouse is pressed inside the AR component
+     * @see mouseHover */
+    signal releasedOnActivity(real x_mm, real y_mm);
+
     /** @brief Enable the movedOnActivity signal
      * @see movedOnActivity */
     property alias mouseHover: scene_mouse_area.hoverEnabled
@@ -253,9 +261,9 @@ Item {
         else {
             if(avr_mode) {
                 scene3d_left = component.createObject(scene, {'arSceneComponent': arSceneComponent,
-                                           'arSceneParameters': arSceneParameters});
+                                                          'arSceneParameters': arSceneParameters});
                 scene3d_right = component.createObject(scene, {'arSceneComponent': arSceneComponent,
-                                           'arSceneParameters': arSceneParameters});
+                                                           'arSceneParameters': arSceneParameters});
                 var eye_delta = 10; //(mm)
                 scene3d_left.anchors.left = scene.left;
                 scene3d_left.anchors.bottom = scene.bottom
@@ -306,9 +314,9 @@ Item {
 
         // inverse transformation
         var world_xyz1 = Qt.matrix4x4(mat.m11, mat.m12, mat.m14, 0,
-                                mat.m21, mat.m22, mat.m24, 0,
-                                mat.m31, mat.m32, mat.m34, 0,
-                                0      , 0      , 0      , 1).inverted().times(Qt.vector4d(x_ndc, y_ndc, 1, 1));
+                                      mat.m21, mat.m22, mat.m24, 0,
+                                      mat.m31, mat.m32, mat.m34, 0,
+                                      0      , 0      , 0      , 1).inverted().times(Qt.vector4d(x_ndc, y_ndc, 1, 1));
 
         // outputtting
         var x_mm = world_xyz1.x / world_xyz1.z;
@@ -326,11 +334,12 @@ Item {
         MouseArea {
             id: scene_mouse_area
             anchors.fill: parent
-            onPositionChanged: {
-                // send it still to others
-                // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
-                mouse.accepted = false;
+            z: 20
+            propagateComposedEvents: true
 
+            // process an event 'action' by calling a function 'fcn'
+            function processMEvent(mouseX, mouseY, fcn, action)
+            {
                 // checking if the pose is valid
                 if(!AR.pose_valid) {
                     console.log('Mouse on AR component, but no pose available');
@@ -341,33 +350,37 @@ Item {
                 var vect = get_xy_mm(mouseX, mouseY);
 
                 // debug output
-                console.log("Mouse at " + vect.x + ", " + vect.y);
+                console.log("Mouse at " + vect.x + ", " + vect.y + " action=" + action);
 
                 // calling the signal
-                movedOnActivity(vect.x, vect.y);
+                fcn(vect.x, vect.y);
             }
+
+            onPositionChanged: {
+                // send it still to others
+                // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
+                mouse.accepted = false;
+                processMEvent(mouseX, mouseY, root.movedOnActivity, "Moved")
+            }
+
             onClicked: {
                 // send it still to others
                 // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
                 mouse.accepted = false;
-
-                // checking if the pose is valid
-                if(!AR.pose_valid) {
-                    console.log('Clicked on AR component, but no pose available');
-                    return;
-                }
-
-                // obtaining the position
-                var vect = get_xy_mm(mouseX, mouseY);
-
-                // debug output
-                console.log("Clicked at " + vect.x + ", " + vect.y);
-
-                // calling the signal
-                clickedOnActivity(vect.x, vect.y);
+                processMEvent(mouseX, mouseY, root.clickedOnActivity, "Clicked")
             }
-            z: 20
-            propagateComposedEvents: true
+
+            onReleased: {
+                // send it still to others
+                // see https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
+                mouse.accepted = false;
+                processMEvent(mouseX, mouseY, root.releasedOnActivity, "Released")
+            }
+
+            // adding mouse.accepted = false results in events other than Pressed not being delivered at all
+            onPressed: {
+                processMEvent(mouseX, mouseY, root.pressedOnActivity, "Pressed")
+            }
         }
 
         // indicator showing loading circle
