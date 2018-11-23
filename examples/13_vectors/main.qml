@@ -68,11 +68,11 @@ Window {
             var vec = Qt.vector3d(x_mm, y_mm, z_mm);
             var threshold = 5;
 
-            var demo = arSceneObject.d;
+            var lst = arSceneObject.lst;
 
-            for(var i = 0; i < demo.lst.length; i++)
+            for(var i = 0; i < lst.length; i++)
             {
-                var arrow = demo.lst[i];
+                var arrow = lst[i];
                 var from = arrow.lvector.from;
                 var to = arrow.lvector.to;
                 console.log(from.minus(vec).length());
@@ -93,12 +93,12 @@ Window {
             var delta = Qt.vector3d(x_mm - clickPoint.x, y_mm - clickPoint.y, 0);
             if(selected >= 0)
             {
-                arSceneObject.d.lst[selected].lvector.to = arSceneObject.d.lst[selected].lvector.to.plus(delta);
-                arSceneObject.d.lst[selected].lvector.from = arSceneObject.d.lst[selected].lvector.from.plus(delta);
+                arSceneObject.lst[selected].lvector.to = arSceneObject.lst[selected].lvector.to.plus(delta);
+                arSceneObject.lst[selected].lvector.from = arSceneObject.lst[selected].lvector.from.plus(delta);
             }
 
             clickPoint = Qt.vector2d(x_mm, y_mm)
-            //arSceneObject.d.lst[0].lvector.to = Qt.vector3d(x_mm, y_mm, 0);
+            //arSceneObject.lst[0].lvector.to = Qt.vector3d(x_mm, y_mm, 0);
         }
 
         init_type: AR.INIT_IMAGE

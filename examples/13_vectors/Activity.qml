@@ -13,9 +13,11 @@ import Qt3D.Extras 2.0
 /** @brief a cube at (0, 0, 0) */
 Entity {
     id: root
-    property alias d: demo
 
-    Item {
+    /** List of ARArrows */
+    property alias lst: vector_list.lst
+
+    Entity {
         id: vector_list
 
         // list of arrows
