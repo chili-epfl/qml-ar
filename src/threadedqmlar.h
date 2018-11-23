@@ -24,6 +24,13 @@
 
 class ThreadedQMLAR : public QObject
 { Q_OBJECT
+
+    /** @brief Marker configuration JSON file name, can be set only before setting the camera_id or image_filename, "assets/markers.json" by default */
+    Q_PROPERTY(QString markersFilename WRITE setMarkersFilename READ getMarkersFilename)
+
+    /** @brief Camera matrix configuration JSON file name, can be set only before setting the camera_id or image_filename, "assets/camera_matrix.json" by default */
+    Q_PROPERTY(QString cameraMatrixFilename WRITE setCameraMatrixFilename READ getCameraMatrixFilename)
+
     /** @brief Number of the camera to use. If set, using camera input */
     Q_PROPERTY(int camera_id WRITE setCameraId READ getCameraId)
 
@@ -108,6 +115,10 @@ class ThreadedQMLAR : public QObject
     Q_PROPERTY(unsigned reset_ms READ getResetMs WRITE setResetMs NOTIFY never)
 
 private:
+
+    QString markersFilename;      ///< Markers configuration JSON file name
+    QString cameraMatrixFilename; ///< Camera matrix configuration JSON file name
+
     /**
     * @brief Instance to QMLAR object
     */
@@ -140,6 +151,16 @@ private:
 public:
     /** @brief Empty constructor */
     ThreadedQMLAR();
+
+    /**
+    * @brief Gets markers description filename
+    */
+    QString getMarkersFilename();
+
+    /**
+    * @brief Gets camera matrix description filename
+    */
+    QString getCameraMatrixFilename();
 
     /**
     * @brief Get camera ID
@@ -256,6 +277,17 @@ public:
     unsigned getResetMs();
 
 public slots:
+
+    /**
+    * @brief Sets markers description filename
+    */
+    void setMarkersFilename(QString filename);
+
+    /**
+    * @brief Sets camera matrix description filename
+    */
+    void setCameraMatrixFilename(QString filename);
+
     /**
     * @brief Initialize from camera id (default value -1)
     */
@@ -388,6 +420,16 @@ signals:
     * @brief On new markers
     */
     void newMarkers(QVariantList);
+
+    /**
+    * @brief Emitted when markers description filename is set
+    */
+    void setMarkersFilenameSignal(QString filename);
+
+    /**
+    * @brief Emitted when camera matrix description filename is set
+    */
+    void setCameraMatrixFilenameSignal(QString filename);
 
     /**
     * @brief Initialize from camera id (default value -1)

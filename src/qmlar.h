@@ -150,7 +150,19 @@ public:
     /** @brief Time w/o markers after which pose is discarded
      * And the scene is hidden */
     unsigned getResetMs();
+
 public slots:
+
+    /**
+    * @brief Sets markers description filename
+    */
+    void setMarkersFilename(QString filename);
+
+    /**
+    * @brief Sets camera matrix description filename
+    */
+    void setCameraMatrixFilename(QString filename);
+
     /**
     * @brief Initialize from camera id (default value -1)
     */
@@ -229,6 +241,10 @@ public slots:
     void updateThreshold();
 
 private:
+
+    QString markersFilename;        ///< Marker description JSON file, assets/markers.json by default
+    QString cameraMatrixFilename;   ///< Camera matrix description JSON file, assets/camera_matrix.json by default
+
     /**
     * @brief Initialization semaphore
     */
