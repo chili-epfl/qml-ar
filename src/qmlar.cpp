@@ -533,7 +533,7 @@ void QMLAR::initialize()
     imu = new IMU();
 
     // setting Accelerometer bias (TODO: fix hardcode)
-    imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
+    //imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
 
     // loading camera matrix
     camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");

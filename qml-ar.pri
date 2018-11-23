@@ -21,132 +21,130 @@ QMAKE_CXXFLAGS_RELEASE *= -O3
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DEPENDSPATH += $$PWD
-
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 ##### SOURCES/HEADERS (this project)
-INCLUDEPATH += $$PWD/src/markers $$PWD/src/utils $$PWD/src/imagebackend $$PWD/src/ar $$PWD/src/camera $$PWD/src $$PWD
+INCLUDEPATH += src/markers src/utils src/imagebackend src/ar src/camera src
 
-SOURCES += $$PWD/src/imagebackend/opencvbackend.cpp \
-    $$PWD/src/imagebackend/qtbackend.cpp \
-    $$PWD/src/camera/cameraframegrabber.cpp \
-    $$PWD/src/camera/voidviewfinder.cpp \
-    $$PWD/src/utils/qvideoframehelpers.cpp \
-    $$PWD/src/markers/marker.cpp \
-    $$PWD/src/markers/markerstorage.cpp \
-    $$PWD/src/camera/portablebackendfactory.cpp \
-    $$PWD/src/markers/markerdetector.cpp \
-    $$PWD/src/markers/uchiyamarkerdetector.cpp \
-    $$PWD/src/imagebackend/markerbackend.cpp \
-    $$PWD/src/imagebackend/imagebackend.cpp \
-    $$PWD/src/camera/calibratedcamera.cpp \
-    $$PWD/src/camera/calibratedcamerafilestorage.cpp \
-    $$PWD/src/utils/configjson.cpp \
-    $$PWD/src/ar/mvpprovider.cpp \
-    $$PWD/src/ar/markermvpprovider.cpp \
-    $$PWD/src/utils/mymatconverter.cpp \
-    $$PWD/src/ar/perspectivecamera.cpp \
-    $$PWD/src/ar/pose.cpp \
-    $$PWD/src/ar/posecamerapnp.cpp \
-    $$PWD/src/ar/worldimage.cpp \
-    $$PWD/src/qmlar.cpp \
-    $$PWD/src/qmlarplugin.cpp \
-    $$PWD/src/utils/timelogger.cpp \
-    $$PWD/src/ar/imumvpdecorator.cpp \
-    $$PWD/src/ar/posepredictor.cpp \
-    $$PWD/src/ar/linearposepredictor.cpp \
-    $$PWD/src/markers/blobdetector.cpp \
-    $$PWD/src/imagebackend/qtcamera2qml.cpp \
-    $$PWD/src/imagebackend/androidfilter.cpp \
-    $$PWD/src/imagebackend/imageproviderasync.cpp \
-    $$PWD/src/imagebackend/imagescaler.cpp \
-    $$PWD/src/markers/hsvintervaldetector.cpp \
-    $$PWD/src/markers/hsvmeancolor.cpp \
-    $$PWD/src/markers/huethreshold.cpp \
-    $$PWD/src/markers/meanstdcalculator.cpp \
-    $$PWD/src/imagebackend/randomimagebackend.cpp \
-    $$PWD/src/threadedqmlar.cpp \
-    $$PWD/src/utils/fpscalculator.cpp \
-    $$PWD/src/ar/posefilter.cpp \
-    $$PWD/src/utils/pipelinecontainer.cpp \
-    $$PWD/src/ar/blackenrest.cpp \
-    $$PWD/src/utils/pipelinecontainerinfo.cpp \
-    $$PWD/src/utils/latencycalculator.cpp \
-    $$PWD/src/imagebackend/delayfilter.cpp \
-    $$PWD/src/imagebackend/framesdelaycalculator.cpp \
-    $$PWD/src/utils/qlinkedlistat.cpp
+SOURCES += src/imagebackend/opencvbackend.cpp \
+    src/imagebackend/qtbackend.cpp \
+    src/camera/cameraframegrabber.cpp \
+    src/camera/voidviewfinder.cpp \
+    src/utils/qvideoframehelpers.cpp \
+    src/markers/marker.cpp \
+    src/markers/markerstorage.cpp \
+    src/camera/portablebackendfactory.cpp \
+    src/markers/markerdetector.cpp \
+    src/markers/uchiyamarkerdetector.cpp \
+    src/imagebackend/markerbackend.cpp \
+    src/imagebackend/imagebackend.cpp \
+    src/camera/calibratedcamera.cpp \
+    src/camera/calibratedcamerafilestorage.cpp \
+    src/utils/configjson.cpp \
+    src/ar/mvpprovider.cpp \
+    src/ar/markermvpprovider.cpp \
+    src/utils/mymatconverter.cpp \
+    src/ar/perspectivecamera.cpp \
+    src/ar/pose.cpp \
+    src/ar/posecamerapnp.cpp \
+    src/ar/worldimage.cpp \
+    src/qmlar.cpp \
+    src/qmlarplugin.cpp \
+    src/utils/timelogger.cpp \
+    src/ar/imumvpdecorator.cpp \
+    src/ar/posepredictor.cpp \
+    src/ar/linearposepredictor.cpp \
+    src/markers/blobdetector.cpp \
+    src/imagebackend/qtcamera2qml.cpp \
+    src/imagebackend/androidfilter.cpp \
+    src/imagebackend/imageproviderasync.cpp \
+    src/imagebackend/imagescaler.cpp \
+    src/markers/hsvintervaldetector.cpp \
+    src/markers/hsvmeancolor.cpp \
+    src/markers/huethreshold.cpp \
+    src/markers/meanstdcalculator.cpp \
+    src/imagebackend/randomimagebackend.cpp \
+    src/threadedqmlar.cpp \
+    src/utils/fpscalculator.cpp \
+    src/ar/posefilter.cpp \
+    src/utils/pipelinecontainer.cpp \
+    src/ar/blackenrest.cpp \
+    src/utils/pipelinecontainerinfo.cpp \
+    src/utils/latencycalculator.cpp \
+    src/imagebackend/delayfilter.cpp \
+    src/imagebackend/framesdelaycalculator.cpp \
+    src/utils/qlinkedlistat.cpp
 
 HEADERS += \
-    $$PWD/src/imagebackend/opencvbackend.h \
-    $$PWD/src/imagebackend/qtbackend.h \
-    $$PWD/src/camera/cameraframegrabber.h \
-    $$PWD/src/camera/voidviewfinder.h \
-    $$PWD/src/utils/qvideoframehelpers.h \
-    $$PWD/src/markers/marker.h \
-    $$PWD/src/markers/markerstorage.h \
-    $$PWD/src/camera/portablebackendfactory.h \
-    $$PWD/src/markers/markerdetector.h \
-    $$PWD/src/markers/uchiyamarkerdetector.h \
-    $$PWD/src/imagebackend/markerbackend.h \
-    $$PWD/src/imagebackend/imagebackend.h \
-    $$PWD/src/camera/calibratedcamera.h \
-    $$PWD/src/camera/calibratedcamerafilestorage.h \
-    $$PWD/src/utils/configjson.h \
-    $$PWD/src/ar/mvpprovider.h \
-    $$PWD/src/ar/markermvpprovider.h \
-    $$PWD/src/utils/mymatconverter.h \
-    $$PWD/src/ar/perspectivecamera.h \
-    $$PWD/src/ar/pose.h \
-    $$PWD/src/ar/posecamerapnp.h \
-    $$PWD/src/ar/worldimage.h \
-    $$PWD/src/qmlar.h \
-    $$PWD/src/qmlarplugin.h \
-    $$PWD/src/config.h \
-    $$PWD/src/utils/timelogger.h \
-    $$PWD/src/ar/imumvpdecorator.h \
-    $$PWD/src/ar/posepredictor.h \
-    $$PWD/src/ar/linearposepredictor.h \
-    $$PWD/src/markers/blobdetector.h \
-    $$PWD/src/imagebackend/qtcamera2qml.h \
-    $$PWD/src/imagebackend/androidfilter.h \
-    $$PWD/src/imagebackend/imageproviderasync.h \
-    $$PWD/src/imagebackend/imagescaler.h \
-    $$PWD/src/markers/hsvintervaldetector.h \
-    $$PWD/src/markers/hsvmeancolor.h \
-    $$PWD/src/markers/huethreshold.h \
-    $$PWD/src/markers/meanstdcalculator.h \
-    $$PWD/src/imagebackend/randomimagebackend.h \
-    $$PWD/src/threadedqmlar.h \
-    $$PWD/src/utils/fpscalculator.h \
-    $$PWD/src/ar/posefilter.h \
-    $$PWD/src/utils/pipelinecontainer.h \
-    $$PWD/src/ar/blackenrest.h \
-    $$PWD/src/utils/pipelinecontainerinfo.h \
-    $$PWD/src/utils/latencycalculator.h \
-    $$PWD/src/imagebackend/delayfilter.h \
-    $$PWD/src/imagebackend/framesdelaycalculator.h \
-    $$PWD/src/utils/qlinkedlistat.h
+    src/imagebackend/opencvbackend.h \
+    src/imagebackend/qtbackend.h \
+    src/camera/cameraframegrabber.h \
+    src/camera/voidviewfinder.h \
+    src/utils/qvideoframehelpers.h \
+    src/markers/marker.h \
+    src/markers/markerstorage.h \
+    src/camera/portablebackendfactory.h \
+    src/markers/markerdetector.h \
+    src/markers/uchiyamarkerdetector.h \
+    src/imagebackend/markerbackend.h \
+    src/imagebackend/imagebackend.h \
+    src/camera/calibratedcamera.h \
+    src/camera/calibratedcamerafilestorage.h \
+    src/utils/configjson.h \
+    src/ar/mvpprovider.h \
+    src/ar/markermvpprovider.h \
+    src/utils/mymatconverter.h \
+    src/ar/perspectivecamera.h \
+    src/ar/pose.h \
+    src/ar/posecamerapnp.h \
+    src/ar/worldimage.h \
+    src/qmlar.h \
+    src/qmlarplugin.h \
+    src/config.h \
+    src/utils/timelogger.h \
+    src/ar/imumvpdecorator.h \
+    src/ar/posepredictor.h \
+    src/ar/linearposepredictor.h \
+    src/markers/blobdetector.h \
+    src/imagebackend/qtcamera2qml.h \
+    src/imagebackend/androidfilter.h \
+    src/imagebackend/imageproviderasync.h \
+    src/imagebackend/imagescaler.h \
+    src/markers/hsvintervaldetector.h \
+    src/markers/hsvmeancolor.h \
+    src/markers/huethreshold.h \
+    src/markers/meanstdcalculator.h \
+    src/imagebackend/randomimagebackend.h \
+    src/threadedqmlar.h \
+    src/utils/fpscalculator.h \
+    src/ar/posefilter.h \
+    src/utils/pipelinecontainer.h \
+    src/ar/blackenrest.h \
+    src/utils/pipelinecontainerinfo.h \
+    src/utils/latencycalculator.h \
+    src/imagebackend/delayfilter.h \
+    src/imagebackend/framesdelaycalculator.h \
+    src/utils/qlinkedlistat.h
 
 QML_SOURCES += \
-    $$PWD/src/ARComponent.qml \
-    $$PWD/src/AR3DScene.qml \
-    $$PWD/src/ARViewfinder.qml \
-    $$PWD/src/ARBlobs.qml \
-    $$PWD/src/ARMarkers.qml \
-    $$PWD/src/ARMenu.qml \
+    src/ARComponent.qml \
+    src/AR3DScene.qml \
+    src/ARViewfinder.qml \
+    src/ARBlobs.qml \
+    src/ARMarkers.qml \
+    src/ARMenu.qml \
 
 DISTFILES = $$QML_SOURCES
 
 RESOURCES += \
-    $$PWD/ch_epfl_chili_qmlar.qrc
+    ch_epfl_chili_qmlar.qrc
 
 ##### LIBRARIES
 # QtOpenCV library
-QT_OPENCV_PATH = $$PWD/QtOpenCV
+QT_OPENCV_PATH = QtOpenCV
 INCLUDEPATH += $${QT_OPENCV_PATH}/
 DEPENDPATH += $${QT_OPENCV_PATH}/
 HEADERS += $${QT_OPENCV_PATH}/cvmatandqimage.h
@@ -165,11 +163,12 @@ USE_GRAPHICBUFFER=$$(USE_GRAPHICBUFFER)
 # OpenCV for Android library
 android {
     # full path to OpenCV Android SDK
-    OPENCV_PATH = $$PWD/opencv-android
+    OPENCV_PATH = opencv-android
+    OPENCV_PATH_ABSOLUTE = $$PWD/opencv-android
 
     INCLUDEPATH += $${OPENCV_PATH}/sdk/native/jni/include/
 
-    LIBS += -L$${OPENCV_PATH}/sdk/native/libs/armeabi-v7a \
+    LIBS += -L$${OPENCV_PATH_ABSOLUTE}/sdk/native/libs/armeabi-v7a \
             -Wl,--start-group\
             -lopencv_calib3d\
             -lopencv_core\
@@ -197,10 +196,10 @@ android {
     greaterThan(ANDROID_API, "android-25") {
         DEFINES += "USENV21FILTER=1"
         LIBS += -lEGL -lnativewindow -lGLESv3
-        HEADERS += $$PWD/src/imagebackend/nv21videofilter.h \
-                   $$PWD/src/imagebackend/nv21videofilterrunnable.h
-        SOURCES += $$PWD/src/imagebackend/nv21videofilter.cpp \
-                   $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
+        HEADERS += src/imagebackend/nv21videofilter.h \
+                   src/imagebackend/nv21videofilterrunnable.h
+        SOURCES += src/imagebackend/nv21videofilter.cpp \
+                   src/imagebackend/nv21videofilterrunnable.cpp
         message("Using HardwareBuffer because Android API is >= 26");
         message("Run $ export ANDROID_NDK_PLATFORM=android-25 (or less) before qmake to disable");
     }
@@ -217,13 +216,13 @@ android {
             message("Run $ export USE_GRAPHICBUFFER=0 to disable");
 
             LIBS += -lc -lEGL
-            HEADERS += $$PWD/src/imagebackend/nv21videofilter.h \
-                       $$PWD/src/imagebackend/nv21videofilterrunnable.h
-            SOURCES += $$PWD/src/imagebackend/nv21videofilter.cpp \
-                       $$PWD/src/imagebackend/nv21videofilterrunnable.cpp
+            HEADERS += src/imagebackend/nv21videofilter.h \
+                       src/imagebackend/nv21videofilterrunnable.h
+            SOURCES += src/imagebackend/nv21videofilter.cpp \
+                       src/imagebackend/nv21videofilterrunnable.cpp
 
-            HEADERS += $$PWD/GraphicBuffer/GraphicBuffer.h $$PWD/GraphicBuffer/DynamicLibrary.h
-            SOURCES += $$PWD/GraphicBuffer/GraphicBuffer.cpp $$PWD/GraphicBuffer/DynamicLibrary.cpp
+            HEADERS += GraphicBuffer/GraphicBuffer.h GraphicBuffer/DynamicLibrary.h
+            SOURCES += GraphicBuffer/GraphicBuffer.cpp GraphicBuffer/DynamicLibrary.cpp
         }
         else {
             LIBS += -lc
@@ -232,7 +231,7 @@ android {
         }
     }
 
-    LIBS += -L$${OPENCV_PATH}/sdk/native/3rdparty/libs/armeabi-v7a \
+    LIBS += -L$${OPENCV_PATH_ABSOLUTE}/sdk/native/3rdparty/libs/armeabi-v7a \
             -Wl,--start-group\
             -lcpufeatures\
             -lIlmImf\
@@ -252,53 +251,53 @@ android {
 }
 
 # YUV2RGB library
-SOURCES += $$PWD/yuv2rgb/yuv2rgb.cpp
-HEADERS += $$PWD/yuv2rgb/yuv2rgb.h
-INCLUDEPATH += $$PWD/yuv2rgb
+SOURCES += yuv2rgb/yuv2rgb.cpp
+HEADERS += yuv2rgb/yuv2rgb.h
+INCLUDEPATH += yuv2rgb
 
 # UchiyaMarkers library
-SOURCES += $$PWD/uchiya/blob.cpp \
-    $$PWD/uchiya/bloblist.cpp \
-    $$PWD/uchiya/hashtable.cpp \
-    $$PWD/uchiya/llah.cpp \
-    $$PWD/uchiya/llahparam.cpp \
-    $$PWD/uchiya/paper.cpp \
-    $$PWD/uchiya/paperlist.cpp \
-    $$PWD/uchiya/window.cpp \
-    $$PWD/uchiya/mylib/combination.cpp \
-    $$PWD/uchiya/mylib/mycam.cpp \
-    $$PWD/uchiya/mylib/myimage.cpp \
-    $$PWD/uchiya/mylib/mylabel.cpp \
-    $$PWD/uchiya/mylib/mymat.cpp \
-    $$PWD/uchiya/mylib/mytimer.cpp
+SOURCES += uchiya/blob.cpp \
+    uchiya/bloblist.cpp \
+    uchiya/hashtable.cpp \
+    uchiya/llah.cpp \
+    uchiya/llahparam.cpp \
+    uchiya/paper.cpp \
+    uchiya/paperlist.cpp \
+    uchiya/window.cpp \
+    uchiya/mylib/combination.cpp \
+    uchiya/mylib/mycam.cpp \
+    uchiya/mylib/myimage.cpp \
+    uchiya/mylib/mylabel.cpp \
+    uchiya/mylib/mymat.cpp \
+    uchiya/mylib/mytimer.cpp
 
-HEADERS += $$PWD/uchiya/blob.h \
-    $$PWD/uchiya/bloblist.h \
-    $$PWD/uchiya/hashtable.h \
-    $$PWD/uchiya/llah.h \
-    $$PWD/uchiya/llahparam.h \
-    $$PWD/uchiya/paper.h \
-    $$PWD/uchiya/paperlist.h \
-    $$PWD/uchiya/window.h \
-    $$PWD/uchiya/mylib/combination.h \
-    $$PWD/uchiya/mylib/mycam.h \
-    $$PWD/uchiya/mylib/myimage.h \
-    $$PWD/uchiya/mylib/mylabel.h \
-    $$PWD/uchiya/mylib/mymat.h \
-    $$PWD/uchiya/mylib/mytimer.h \
-    $$PWD/uchiya/mylib/opencvpath.h
+HEADERS += uchiya/blob.h \
+    uchiya/bloblist.h \
+    uchiya/hashtable.h \
+    uchiya/llah.h \
+    uchiya/llahparam.h \
+    uchiya/paper.h \
+    uchiya/paperlist.h \
+    uchiya/window.h \
+    uchiya/mylib/combination.h \
+    uchiya/mylib/mycam.h \
+    uchiya/mylib/myimage.h \
+    uchiya/mylib/mylabel.h \
+    uchiya/mylib/mymat.h \
+    uchiya/mylib/mytimer.h \
+    uchiya/mylib/opencvpath.h
 
-INCLUDEPATH += $$PWD/uchiya
+INCLUDEPATH += uchiya
 
 # QML-IMU library
 SOURCES += \
-    $$PWD/qml-imu/src/ExtendedKalmanFilter.cpp \
-    $$PWD/qml-imu/src/IMU.cpp \
-    $$PWD/qml-imu/src/AccelerometerBiasEstimator.cpp
+    qml-imu/src/ExtendedKalmanFilter.cpp \
+    qml-imu/src/IMU.cpp \
+    qml-imu/src/AccelerometerBiasEstimator.cpp
 
 HEADERS += \
-    $$PWD/qml-imu/src/ExtendedKalmanFilter.h \
-    $$PWD/qml-imu/src/IMU.h \
-    $$PWD/qml-imu/src/AccelerometerBiasEstimator.h
+    qml-imu/src/ExtendedKalmanFilter.h \
+    qml-imu/src/IMU.h \
+    qml-imu/src/AccelerometerBiasEstimator.h
 
-INCLUDEPATH += $$PWD/qml-imu/src/
+INCLUDEPATH += qml-imu/src/
