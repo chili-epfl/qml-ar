@@ -11,7 +11,6 @@ import ch.epfl.chili.qmlar 1.0
 import QtQuick 2.6
 import QtQuick.Controls 2.3
 
-
 /** @brief Draw vectors and move them on a virtual canvas */
 Window {
     // some window parameters
@@ -20,16 +19,26 @@ Window {
     width: 500
     id: root
 
-    Text {
-        anchors.top: parent.top
-        text: "Click on the scene to add a sphere at that point"
-    }
+    Row {
+        width: parent.width
+        Button {
+            width: 50
+            text: "Add"
+        }
 
-    Button {
-        text: "Clear"
-        anchors.top: parent.top
-        anchors.right: parent.right
-        onClicked: arComponent.clearSpheres()
+        Text {
+            width: 400
+            wrapMode: Text.WrapAnywhere
+            fontSizeMode: Text.Fit
+            minimumPixelSize: 10
+            font.pixelSize: 20
+            text: "Click in the middle of a vector to move it, click at the beginning or end to edit that point"
+        }
+
+        Button {
+            width: 50
+            text: "Clear"
+        }
     }
 
     // crearing AR component
@@ -40,22 +49,16 @@ Window {
         arSceneComponent: Qt.createComponent("Activity.qml");
 
         // no menu in this demo
-        //disable_menu: true
+        disable_menu: true
 
         // setting width
         width: 500
-
-        // added spheres
-        property var spheres: ([]);
 
         property vector2d clickPoint: Qt.vector2d(0, 0)
         property int selected: -1
 
         // do an action when clicked on the plane with the markers
         onClickedOnActivity: {
-            var component = Qt.createComponent("SphereEntity.qml");
-            var obj = component.createObject(arSceneObject, {'x': x_mm, 'y': y_mm})
-            spheres.push(obj);
             mouseHover = true;
 
             var z_mm = 0;
@@ -96,14 +99,6 @@ Window {
 
             clickPoint = Qt.vector2d(x_mm, y_mm)
             //arSceneObject.d.lst[0].lvector.to = Qt.vector3d(x_mm, y_mm, 0);
-        }
-
-        function clearSpheres() {
-            for(var i = 0; i < spheres.length; i++) {
-                var sphere = spheres[i];
-                sphere.destroy();
-            }
-            spheres = [];
         }
 
         init_type: AR.INIT_IMAGE

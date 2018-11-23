@@ -2,9 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Activity.qml</file>
-        <file>SphereEntity.qml</file>
         <file>ARVectorInput.qml</file>
-        <file>DemoVectors.qml</file>
         <file>LocalizedVector.qml</file>
         <file>ARArrow.qml</file>
         <file>PolygonVertices.qml</file>
