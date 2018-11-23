@@ -45,6 +45,16 @@ Item {
      */
     property int init_type: AR.INIT_CAMERA
 
+    /**
+     * Path to markers configuration json file
+     */
+    property string markersFilename: ":/assets/markers.json"
+
+    /**
+     * Path to camera matrix configuration json file
+     */
+    property string cameraMatrixFilename: ":/assets/camera_matrix.json"
+
     /** ID of the camera to use. Set to -1 to use the default value.
      * Usually the builtin webcam is 0 and the USB cam is 1.
      * Default value is -1.
@@ -201,6 +211,11 @@ Item {
     // initialize AR component on loading
     // properties must be set beforehand
     Component.onCompleted: {
+
+        // Parameter files, assumed to be correct paths
+        AR.markersFilename = root.markersFilename;
+        AR.cameraMatrixFilename = root.cameraMatrixFilename;
+
         // Set image width in pixels
         AR.image_width = root.image_width
         console.log("Set image width to " + root.image_width);

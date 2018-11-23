@@ -16,6 +16,15 @@ ThreadedQMLAR::ThreadedQMLAR()
 {
     TimeLoggerLog("%s", "Starting Threaded QMLAR");
 
+    // Parametric input files
+    #ifdef Q_OS_ANDROID
+        QString ASSETS_PATH = "assets:/";
+    #else
+        QString ASSETS_PATH = ":/assets/";
+    #endif
+    markersFilename = ASSETS_PATH + "markers.json";
+    cameraMatrixFilename = ASSETS_PATH + "camera_matrix.json";
+
     // creating AR object and a thread
     instance = new QMLAR();
     thread = new QThread();
@@ -26,6 +35,8 @@ ThreadedQMLAR::ThreadedQMLAR()
     instance->moveToThread(thread);
 
     // calls to this object -> another thread
+    connect(this, SIGNAL(setMarkersFilenameSignal(QString)), instance, SLOT(setMarkersFilename(QString)), Qt::QueuedConnection);
+    connect(this, SIGNAL(setCameraMatrixFilenameSignal(QString)), instance, SLOT(setCameraMatrixFilename(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(setCameraIdSignal(int)), instance, SLOT(setCameraId(int)), Qt::QueuedConnection);
     connect(this, SIGNAL(setImageFilenameSignal(QString)), instance, SLOT(setImageFilename(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(setImageWidthSignal(int)), instance, SLOT(setImageWidth(int)), Qt::QueuedConnection);
@@ -46,6 +57,14 @@ ThreadedQMLAR::ThreadedQMLAR()
 
     // starting AR
     thread->start();
+}
+
+QString ThreadedQMLAR::getMarkersFilename(){
+    return markersFilename;
+}
+
+QString ThreadedQMLAR::getCameraMatrixFilename(){
+    return cameraMatrixFilename;
 }
 
 int ThreadedQMLAR::getCameraId()
@@ -201,6 +220,26 @@ unsigned ThreadedQMLAR::getResetMs()
 {
     if(!instance) return 0;
     return instance->getResetMs();
+}
+
+void ThreadedQMLAR::setMarkersFilename(QString filename)
+{
+    if(instance->is_initialized)
+        qWarning() << "ThreadedQMLAR::setMarkersFilename(): QMLAR is already initialized, cannot set marker config file!";
+    else{
+        markersFilename = filename;
+        emit setMarkersFilenameSignal(filename);
+    }
+}
+
+void ThreadedQMLAR::setCameraMatrixFilename(QString filename)
+{
+    if(instance->is_initialized)
+        qWarning() << "ThreadedQMLAR::setCameraMatrixFilename(): QMLAR is already initialized, cannot set marker config file!";
+    else{
+        cameraMatrixFilename = filename;
+        emit setCameraMatrixFilenameSignal(filename);
+    }
 }
 
 void ThreadedQMLAR::setCameraId(int camera_id)
