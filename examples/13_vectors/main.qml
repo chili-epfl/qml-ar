@@ -1,6 +1,6 @@
 /**
  * @file main.qml
- * @brief Draw spheres on the scene with your finger
+ * @brief Draw vectors and move them on a virtual canvas
  * @author Sergei Volodin
  * @version 1.0
  * @date 2018-08-03
@@ -12,7 +12,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.3
 
 
-/** @brief Draw spheres on the scene with your finger */
+/** @brief Draw vectors and move them on a virtual canvas */
 Window {
     // some window parameters
     visible: true
