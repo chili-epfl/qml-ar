@@ -54,42 +54,59 @@ Window {
         // setting width
         width: 500
 
-        property vector2d clickPoint: Qt.vector2d(0, 0)
+        // the selected item to change in the lst array
         property int selected: -1
+
+        // which point to move?
+        // "start", "end", "middle"
+        property string type: "start"
+
+        // the original position for the point selected, type
+        property vector2d lastPoint: Qt.vector2d(0, 0)
 
         // do an action when clicked on the plane with the markers
         onClickedOnActivity: {
             mouseHover = true;
 
+            // z position of the click
             var z_mm = 0;
+
+            // closest vector
             var closest_i = -1;
+
+            // found the vector?
             var found = 0;
 
+            // current click point
             var vec = Qt.vector3d(x_mm, y_mm, z_mm);
+
+            // threshold for which the click is registered
             var threshold = 5;
 
+            // list of arArrows
             var lst = arSceneObject.lst;
 
-            for(var i = 0; i < lst.length; i++)
-            {
+            // loop over the list of arrows
+            for(var i = 0; i < lst.length; i++) {
+                // current arrow
                 var arrow = lst[i];
-                var from = arrow.lvector.from;
-                var to = arrow.lvector.to;
-                console.log(from.minus(vec).length());
-                if(from.minus(vec).length() <= threshold)
-                {
-                    console.log("Clicked at FROM", i);
-                }
-                else if(to.minus(vec).length() <= threshold)
-                {
-                    console.log("Clicked at TO", i);
-                    clickPoint = Qt.vector2d(x_mm, y_mm)
-                    selected = i
-                }
+
+                // from, to pts
+                var from   = arrow.lvector.from;
+                var to     = arrow.lvector.to;
+                var middle = arrow.lvector.middle;
+
+                // distance to FROM
+                var d_from   = from.minus(vec).length();
+                var d_to     = to.minus(vec).length();
+                var d_middle = middle.minus(vec).length();
+
+                console.log(d_from, d_to, d_middle);
             }
         }
 
         onMovedOnActivity: {
+            return;
             var delta = Qt.vector3d(x_mm - clickPoint.x, y_mm - clickPoint.y, 0);
             if(selected >= 0)
             {
