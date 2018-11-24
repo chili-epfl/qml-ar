@@ -95,14 +95,25 @@ Window {
         property int type: 0
 
         // the original position for the point selected, type
-        property vector3d lastPoint: Qt.vector3d(0, 0, 0)
+        property vector3d lastPointFrom: Qt.vector3d(0, 0, 0)
+        property vector3d lastPointTo: Qt.vector3d(0, 0, 0)
+
+        // z plane with the vectors
+        property real z_mm: 0
 
         // do an action when clicked on the plane with the markers
         onClickedOnActivity: {
-            mouseHover = true;
-
-            // z position of the click
-            var z_mm = 0;
+            // if nothing is selected, select the closest point
+            if(selected == -1)
+            {
+                mouseHover = true;
+            }
+            // otherwise, de-select current point
+            else {
+                mouseHover = false;
+                selected = -1;
+                return;
+            }
 
             // closest vector
             var closest_i = -1;
@@ -119,6 +130,7 @@ Window {
             // list of arArrows
             var lst = arSceneObject.lst;
 
+            // calculate distances to from, to, middle points of the arrow
             function distances(arrow) {
                 // from, to pts
                 var from   = arrow.lvector.from;
@@ -155,24 +167,44 @@ Window {
                 return;
             }
 
+            // selected point
             selected = closest_arrow;
-            type = argmin(dst);
-            lastPoint = arrow.lvector.points[type];
 
-            console.log(selected, type, lastPoint);
+            // type of the point selected
+            type = argmin(dst);
+
+            // the current position of the point
+            lastPointFrom = arrow.lvector.from;
+            lastPointTo = arrow.lvector.to;
+
+            console.log(selected, type, lastPointFrom, lastPointTo);
         }
 
         onMovedOnActivity: {
-            return;
-            var delta = Qt.vector3d(x_mm - clickPoint.x, y_mm - clickPoint.y, 0);
-            if(selected >= 0)
-            {
-                arSceneObject.lst[selected].lvector.to = arSceneObject.lst[selected].lvector.to.plus(delta);
-                arSceneObject.lst[selected].lvector.from = arSceneObject.lst[selected].lvector.from.plus(delta);
-            }
+            // do nothing if nothing is selected
+            if(selected == -1) return;
 
-            clickPoint = Qt.vector2d(x_mm, y_mm)
-            //arSceneObject.lst[0].lvector.to = Qt.vector3d(x_mm, y_mm, 0);
+            // current clicked point
+            var vec = Qt.vector3d(x_mm, y_mm, z_mm);
+
+            // LocalizedVector instance to change
+            var vector = arSceneObject.lst[selected].lvector;
+
+            // moving FROM
+            if(type == 0)
+            {
+                vector.from = vec;
+            }
+            else if(type == 1)
+            {
+                vector.to = vec;
+            }
+            else if(type == 2)
+            {
+                var m_to_to = lastPointTo.minus(lastPointFrom).times(0.5)
+                vector.from = vec.minus(m_to_to);
+                vector.to   = vec.plus(m_to_to);
+            }
         }
 
         init_type: AR.INIT_IMAGE
