@@ -20,14 +20,28 @@ Window {
     id: root
 
     Row {
+        id: row
         width: parent.width
+
+        // Add a red vector
         Button {
             width: 50
             text: "Add"
+            onClicked: addArrow(Qt.rgba(1, 0, 0, 1))
+            background: Rectangle {color: "red"}
         }
 
+        // Add a green vector
+        Button {
+            width: 50
+            text: "Add"
+            onClicked: addArrow(Qt.rgba(0, 1, 0, 1))
+            background: Rectangle {color: "green"}
+        }
+
+        // HowTo
         Text {
-            width: 400
+            width: 350
             wrapMode: Text.WrapAnywhere
             fontSizeMode: Text.Fit
             minimumPixelSize: 10
@@ -35,10 +49,34 @@ Window {
             text: "Click in the middle of a vector to move it, click at the beginning or end to edit that point"
         }
 
+        // Clear vectors
         Button {
             width: 50
             text: "Clear"
+            onClicked: {
+                // deselecting
+                arComponent.selected = -1;
+
+                argminFcn(arComponent.arSceneObject.lst, function(elem) {
+                    elem.visible = false;
+                });
+
+                // flushing the list
+                arComponent.arSceneObject.lst = [];
+            }
         }
+    }
+
+    /** Add an arrow to the list */
+    function addArrow(color) {
+        var obj = Qt.createComponent("LocalizedVector.qml");
+        obj = obj.createObject(root, {'from': Qt.vector3d(100, 0, 0),
+                         'to': Qt.vector3d(100, 100, 0)});
+        var arrow = Qt.createComponent("ARArrow.qml");
+        arrow = arrow.createObject(arComponent.arSceneObject, {'lvector': obj,
+                           'color': color})
+        arComponent.arSceneObject.lst.push(arrow);
+        console.log(arComponent.arSceneObject.lst)
     }
 
     /** Return the minimal value */
@@ -125,7 +163,7 @@ Window {
             var vec = Qt.vector3d(x_mm, y_mm, z_mm);
 
             // threshold for which the click is registered
-            var threshold = 5;
+            var threshold = 15;
 
             // list of arArrows
             var lst = arSceneObject.lst;
@@ -153,6 +191,9 @@ Window {
                 // return minimal distance to best arrow
                 return min(distances(arrow));
             });
+
+            // no arrow at all
+            if(closest_arrow === -1) return;
 
             console.log("Closest arrow: ", closest_arrow);
 
