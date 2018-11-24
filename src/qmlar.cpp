@@ -43,6 +43,15 @@
 
 QMLAR::QMLAR()
 {
+    // Parametric input files
+    #ifdef Q_OS_ANDROID
+        QString ASSETS_PATH = "assets:/";
+    #else
+        QString ASSETS_PATH = ":/assets/";
+    #endif
+    markersFilename = ASSETS_PATH + "markers.json";
+    cameraMatrixFilename = ASSETS_PATH + "camera_matrix.json";
+
     // initially, object is not initialized
     is_initialized = false;
     camera_id = -2; // invalid id at first
@@ -85,6 +94,14 @@ int QMLAR::getCameraId()
 {
     Q_ASSERT(is_initialized);
     return camera_id;
+}
+
+void QMLAR::setMarkersFilename(QString filename){
+    markersFilename = filename;
+}
+
+void QMLAR::setCameraMatrixFilename(QString filename){
+    cameraMatrixFilename = filename;
 }
 
 void QMLAR::setCameraId(int camera_id)
@@ -516,27 +533,20 @@ void QMLAR::initialize()
     // creating Uchiya marker detector
     detector = new UchiyaMarkerDetector;
 
-    // setting up assets path (os-dependent)
-#ifdef Q_OS_ANDROID
-    QString ASSETS_PATH = "assets:/";
-#else
-    QString ASSETS_PATH = ":/assets/";
-#endif
-
     // creating blob detector
     blob_detector = new BlobDetector(max_dots);
 
     // loading marker positions
-    detector->loadMarkerPositions(ASSETS_PATH + "markers.json");
+    detector->loadMarkerPositions(markersFilename);
 
     // connecting to IMU
     imu = new IMU();
 
     // setting Accelerometer bias (TODO: fix hardcode)
-    imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
+    //imu->setProperty("accBias", QVector3D(0.397, -0.008, -0.005));
 
     // loading camera matrix
-    camera_matrix = new CalibratedCameraFileStorage(ASSETS_PATH + "camera_matrix.json");
+    camera_matrix = new CalibratedCameraFileStorage(cameraMatrixFilename);
 
     // decorating camera matrix object
     // allowing to obtain perspective matrix

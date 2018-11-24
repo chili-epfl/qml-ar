@@ -48,7 +48,7 @@ $ sudo apt-get -qy install libopencv-dev
 
 ## Prerequisites (Android)
 1. <a href="https://sourceforge.net/projects/opencvlibrary/files/opencv-android/">OpenCV for Android</a> (tested with 3.3.1). Put the symlink pointing to the OpenCV for Android as `qml-ar/opencv-android` (inside the repo).
-2. Android SDK (tested with r22.3) and NDK (tested with r15c and r16b), need to be set up with Qt. Run before `qmake`: `export ANDROID_NDK_ROOT=/path/to/ndk; export ANDROID_NDK_PLATFORM=android-XX`. Replace `XX` with your device's API version. Another parameter is `export USE_GRAPHICBUFFER=1` which enables the GraphicBuffer acceleration (replaces `HardwareBuffer` on lower APIs).
+2. Android SDK (tested with r22.3) and NDK (tested with r15c and r16b), need to be set up with Qt. Run before `qmake`: `export ANDROID_NDK_ROOT=/path/to/ndk; export ANDROID_NDK_PLATFORM=android-XX`. Replace `XX` with your device's API version. Another parameter is `export USE_GRAPHICBUFFER=1` which enables the GraphicBuffer acceleration (replaces `HardwareBuffer` on lower APIs). **Important note:** `android-25` does not work with NDK r15*, you must use `android-24` instead, see https://stackoverflow.com/a/43560663/1525238
 3. Android device (tested with Samsung Galaxy SM-T810 running on cyanogenmod). *Up to 5 cores required, GPU is used for image rendering and image processing*.
 4. On API 26 and higher the HardwareBuffer is used to decrease latency of the pipeline (see details below).
 
