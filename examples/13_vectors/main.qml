@@ -41,6 +41,39 @@ Window {
         }
     }
 
+    /** Return the minimal value */
+    function min(arr) {
+        var imin = 0;
+        for(var i = 0; i < arr.length; i++) {
+            if(arr[i] < arr[imin]) {
+                imin = i;
+            }
+        }
+        return arr[imin];
+    }
+
+    /** Return the index with minimal value */
+    function argmin(arr) {
+        var imin = -1;
+        for(var i = 0; i < arr.length; i++) {
+            if(imin == -1 || arr[i] < arr[imin]) {
+                imin = i;
+            }
+        }
+        return imin;
+    }
+
+    /** Return the index with minimal value */
+    function argminFcn(arr, fcn) {
+        var imin = -1;
+        for(var i = 0; i < arr.length; i++) {
+            if(imin == -1 || fcn(arr[i]) < fcn(arr[imin])) {
+                imin = i;
+            }
+        }
+        return imin;
+    }
+
     // crearing AR component
     ARComponent {
         id: arComponent
@@ -59,10 +92,10 @@ Window {
 
         // which point to move?
         // "start", "end", "middle"
-        property string type: "start"
+        property int type: 0
 
         // the original position for the point selected, type
-        property vector2d lastPoint: Qt.vector2d(0, 0)
+        property vector3d lastPoint: Qt.vector3d(0, 0, 0)
 
         // do an action when clicked on the plane with the markers
         onClickedOnActivity: {
@@ -86,11 +119,7 @@ Window {
             // list of arArrows
             var lst = arSceneObject.lst;
 
-            // loop over the list of arrows
-            for(var i = 0; i < lst.length; i++) {
-                // current arrow
-                var arrow = lst[i];
-
+            function distances(arrow) {
                 // from, to pts
                 var from   = arrow.lvector.from;
                 var to     = arrow.lvector.to;
@@ -101,8 +130,36 @@ Window {
                 var d_to     = to.minus(vec).length();
                 var d_middle = middle.minus(vec).length();
 
-                console.log(d_from, d_to, d_middle);
+                // distances: from, to, middle
+                var dst = [d_from, d_to, d_middle];
+
+                return dst;
             }
+
+            // closest arrow point
+            var closest_arrow = argminFcn(lst, function (arrow) {
+                // return minimal distance to best arrow
+                return min(distances(arrow));
+            });
+
+            console.log("Closest arrow: ", closest_arrow);
+
+            // closest arrow
+            var arrow = lst[closest_arrow];
+
+            // distances to that arrow
+            var dst = distances(arrow);
+
+            // the closest point is too far, doing nothing
+            if(min(dst) > threshold) {
+                return;
+            }
+
+            selected = closest_arrow;
+            type = argmin(dst);
+            lastPoint = arrow.lvector.points[type];
+
+            console.log(selected, type, lastPoint);
         }
 
         onMovedOnActivity: {

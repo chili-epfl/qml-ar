@@ -25,6 +25,9 @@ Item {
     // middle -> to
     property vector3d m_to_to: to.minus(middle)
 
+    // list of points
+    property var points: [from, to, middle]
+
     // vector3d as string
     function vec2str(vec) {
         return '(' + vec.x + ', ' + vec.y + ', ' + vec.z + ')';
