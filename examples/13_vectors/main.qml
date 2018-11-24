@@ -19,6 +19,7 @@ Window {
     width: 500
     id: root
 
+    // row with controls
     Row {
         id: row
         width: parent.width
@@ -57,6 +58,8 @@ Window {
                 // deselecting
                 arComponent.selected = -1;
 
+                // just making the objects invisible, they are still in memory
+                /// @todo this is a memory leak
                 argminFcn(arComponent.arSceneObject.lst, function(elem) {
                     elem.visible = false;
                 });
@@ -236,10 +239,12 @@ Window {
             {
                 vector.from = vec;
             }
+            // moving TO
             else if(type == 1)
             {
                 vector.to = vec;
             }
+            // moving the whole vector
             else if(type == 2)
             {
                 var m_to_to = lastPointTo.minus(lastPointFrom).times(0.5)
@@ -248,6 +253,7 @@ Window {
             }
         }
 
+        // using the image instead of camera
         init_type: AR.INIT_IMAGE
         image_filename: "://assets/ar_demo_sheet.png"
     }

@@ -17,6 +17,14 @@ Entity {
     /** List of ARArrows */
     property alias lst: vector_list.lst
 
+    // displaying a polygon
+    Polygon {
+        id: poly
+        vertices: [[100, 100, 0], [200, 100, 0], [200, 200, 0], [100, 200, 0]]
+        Component.onCompleted: poly.update()
+    }
+
+    // entity with some vectors
     Entity {
         id: vector_list
 
