@@ -80,4 +80,4 @@ The resulting file `~/markers.json` (in the home directory) has the following st
 ```
 
 # Screenshots
-<img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar-inkscape/master/notebooks/inks1.png" /> <img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar-inkscape/master/notebooks/inks2.png" />
+<img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/marker-tool/notebooks/inks1.png" /> <img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/marker-tool/notebooks/inks2.png" />
