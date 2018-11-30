@@ -132,7 +132,7 @@ After obtaining the image in the main memory, the part of it which does not cont
 
 After blackening, the image is binarized using a `HueThreshold` instance. The app supports dynamic calibration of the HSV values, however, at this point it is hardcoded to detect only <font color="red">red</font> dots. This can be changed inside the `qmlar.cpp` file. Then the image is fed inside the Uchiya library which outputs the homography mapping an undistorted marker image with dots to the actual camera shot. These are used to calculate the four marker corners for each detected marker. This data is then fed inside the `MarkerMVPProvider` which obtains the extrinsic camera parameters (or the ModelView matrix) using a `cv::solvePnP` call.
 
-The marker parameters (coordinates of dots and the location of the marker) are contained inside the `/assets/markers.json` file of the *application*, see the <a href="https://github.com/chili-epfl/qml-ar-inkscape">repository of the tool which creates markers</a> for format description. The camera parameters are inside the `/assets/camera_matrix.json` with `camera_matrix` containing the flattened matrix components along with `width` and `height` of the image at calibration time. See `/examples/00_chest/assets/camera_matrix.json` in this repository for an example. Camera is calibrated using standard OpenCV tools.
+The marker parameters (coordinates of dots and the location of the marker) are contained inside the `/assets/markers.json` file of the *application*, see the README in the `marker-tool` folder for format description. The camera parameters are inside the `/assets/camera_matrix.json` with `camera_matrix` containing the flattened matrix components along with `width` and `height` of the image at calibration time. See `/examples/00_chest/assets/camera_matrix.json` in this repository for an example. Camera is calibrated using standard OpenCV tools.
 
 On Android, there is also an additional step which makes the use of the IMU pose to correct the MVP in between camera frames to increase the frequency of updates and decrease the latency, thus making the AR view more smooth. Since the onboard phone's inertial sensors don't have enough precision for the position to be estimate (it drifts significantly even during the small time between camera frames), only the angle is corrected using the `IMUMVPDecorator` class. This class simply modifies the MVP by rotating it additionally by the &Delta;MVP estimated from the IMU, thus, increasing the perceived FPS of pose updates.
 
@@ -157,9 +157,9 @@ $ doxygen
 The docs will be updated inside the `doc/` folder.
 
 ## Adding markers to your scene
-You can add random dot markers to your `svg` file by using our tool: <a href="https://github.com/chili-epfl/qml-ar-inkscape">qml-ar-inkscape</a>
+You can add random dot markers to your `svg` file by using our tool in the `marker-tool` folder.
 
-<img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar-inkscape/master/notebooks/inks1.png" /> <img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar-inkscape/master/notebooks/inks2.png" />
+<img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/marker-tool/notebooks/inks1.png" /> <img height="300px" src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/marker-tool/notebooks/inks2.png" />
 
 ## Mixed reality
 <img src="https://raw.githubusercontent.com/chili-epfl/qml-ar/master/examples/00_chest/screenshots/android_mixed.jpg" height="300" alt="Mixed reality output" />
