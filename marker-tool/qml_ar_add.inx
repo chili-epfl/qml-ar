@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <_name>Add marker</_name>
+  <id>org.ekips.filter.qml-ar-add</id>
+  <dependency type="executable" location="extensions">qml_ar_add.py</dependency>
+  <dependency type="executable" location="extensions">inkex.py</dependency>
+  <param name="ndots" type="int" min="10" max="500" gui-text="Number of dots" appearance="full">40</param>
+  <param name="radius" type="float" min="0.01" max="10" gui-text="Dot radius (mm)" appearance="full">0.5</param>
+  <param name="margin" type="float" min="0" max="20" gui-text="Min distance between (mm)" appearance="full">5</param>
+  <param name="color" type="color" gui-text="Color">ff0000ff</param>
+  <effect>
+    <object-type>all</object-type>
+    <effects-menu>
+       <submenu _name="QML-AR"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command reldir="extensions" interpreter="python">qml_ar_add.py</command>
+  </script>
+</inkscape-extension>

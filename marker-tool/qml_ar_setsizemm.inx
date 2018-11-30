@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <_name>Set document size in mm</_name>
+  <id>org.ekips.filter.qml-ar-setsize</id>
+  <dependency type="executable" location="extensions">qml_ar_setsizemm.py</dependency>
+  <dependency type="executable" location="extensions">inkex.py</dependency>
+  <param name="width"  type="float" min="0" max="100000" gui-text="Width  (mm)">0</param>
+  <param name="height" type="float" min="0" max="100000" gui-text="Height (mm)">0</param>
+  <effect>
+    <object-type>all</object-type>
+    <effects-menu>
+       <submenu _name="QML-AR"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command reldir="extensions" interpreter="python">qml_ar_setsizemm.py</command>
+  </script>
+</inkscape-extension>
