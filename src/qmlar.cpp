@@ -442,11 +442,18 @@ void QMLAR::connectAll()
     // scaler -> resolution
     connect(scaler, &ImageScaler::imageAvailable, perspective_camera, &CalibratedCamera::setResolutionImage);
 
-    // blacken_rest -> threshold
-    connect(blacken_rest, &BlackenRest::imageAvailable, hue_threshold, &HueThreshold::setInput);
+    if(init_type == INIT_CAMERA)
+    {
+        // blacken_rest -> threshold
+        connect(blacken_rest, &BlackenRest::imageAvailable, hue_threshold, &HueThreshold::setInput);
 
-    // threshold -> markers
-    connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+        // threshold -> markers
+        connect(hue_threshold, &HueThreshold::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+    }
+    else // INIT_IMAGE -> expecting black-and-white input
+    {
+        connect(blacken_rest, &BlackenRest::imageAvailable, detector, &UchiyaMarkerDetector::setInput);
+    }
 #endif
 
 //    // blacken_rest -> blobs
