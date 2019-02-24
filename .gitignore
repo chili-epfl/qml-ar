@@ -1,3 +1,4 @@
+*.pro.user.20
 build*
 *.a
 .ipynb_checkpoints

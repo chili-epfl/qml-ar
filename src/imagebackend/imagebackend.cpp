@@ -40,7 +40,7 @@ void ImageBackend::update()
 
     PipelineContainerInfo info(image_id++);
     emit imageAvailable(PipelineContainer<QImage>
-                        (buf1, info.checkpointed("Sent")));
+                        (buf1.convertToFormat(QImage::Format_Grayscale8), info.checkpointed("Sent")));
 
     // toggling scale
     scale = !scale;

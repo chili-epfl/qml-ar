@@ -126,7 +126,7 @@ Window {
         disable_menu: true
 
         // setting width
-        width: 500
+        width: 1000
 
         // the selected item to change in the lst array
         property int selected: -1
