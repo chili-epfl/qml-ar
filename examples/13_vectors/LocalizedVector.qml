@@ -27,6 +27,9 @@ Item {
         return '(' + vec.x + ', ' + vec.y + ', ' + vec.z + ')';
     }
 
+    // can direction/length be edited?
+    property bool editable: false
+
     // localized vector as string
     property string text: vec2str(from) + "->" + vec2str(to)
 }

@@ -60,7 +60,7 @@ Window {
 
                 // just making the objects invisible, they are still in memory
                 /// @todo this is a memory leak
-                argminFcn(arComponent.arSceneObject.lst, function(elem) {
+                indexminFcn(arComponent.arSceneObject.lst, function(elem) {
                     elem.visible = false;
                 });
 
@@ -74,7 +74,7 @@ Window {
     function addArrow(color) {
         var obj = Qt.createComponent("LocalizedVector.qml");
         obj = obj.createObject(root, {'from': Qt.vector3d(100, 0, 0),
-                         'to': Qt.vector3d(100, 100, 0)});
+                         'to': Qt.vector3d(100, 100, 0), 'editable': true});
         var arrow = Qt.createComponent("ARArrow.qml");
         arrow = arrow.createObject(arComponent.arSceneObject, {'lvector': obj,
                            'color': color})
@@ -104,8 +104,21 @@ Window {
         return imin;
     }
 
-    /** Return the index with minimal value */
+    /** Return the element with minimal value */
     function argminFcn(arr, fcn) {
+        var imin = -1;
+        var elem_min = null;
+        for(var i = 0; i < arr.length; i++) {
+            if(imin == -1 || fcn(arr[i]) < fcn(arr[imin])) {
+                imin = i;
+                elem_min = arr[i];
+            }
+        }
+        return elem_min;
+    }
+
+    /** Return the index with minimal value */
+    function indexminFcn(arr, fcn) {
         var imin = -1;
         for(var i = 0; i < arr.length; i++) {
             if(imin == -1 || fcn(arr[i]) < fcn(arr[imin])) {
@@ -126,7 +139,7 @@ Window {
         disable_menu: true
 
         // setting width
-        width: 1000
+        width: 500
 
         // the selected item to change in the lst array
         property int selected: -1
@@ -141,6 +154,29 @@ Window {
 
         // z plane with the vectors
         property real z_mm: 0
+
+        // calculate distances to from, to, middle points of the arrow
+        function distances(point, lvector) {
+            // from, to pts
+            var from   = lvector.from;
+            var to     = lvector.to;
+            var middle = lvector.middle;
+
+            // distance to FROM
+            var d_from   = from.minus(point).length();
+            var d_to     = to.minus(point).length();
+            var d_middle = middle.minus(point).length();
+
+            // distances: from, to, middle
+            var dst = [d_from, d_to, d_middle];
+
+            return dst;
+        }
+
+        // range 0..n-1
+        function range(n) {
+            return Array.apply(null, new Array(n)).map(function (_, i) {return i;})
+        }
 
         // do an action when clicked on the plane with the markers
         onClickedOnActivity: {
@@ -171,28 +207,10 @@ Window {
             // list of arArrows
             var lst = arSceneObject.lst;
 
-            // calculate distances to from, to, middle points of the arrow
-            function distances(arrow) {
-                // from, to pts
-                var from   = arrow.lvector.from;
-                var to     = arrow.lvector.to;
-                var middle = arrow.lvector.middle;
-
-                // distance to FROM
-                var d_from   = from.minus(vec).length();
-                var d_to     = to.minus(vec).length();
-                var d_middle = middle.minus(vec).length();
-
-                // distances: from, to, middle
-                var dst = [d_from, d_to, d_middle];
-
-                return dst;
-            }
-
             // closest arrow point
-            var closest_arrow = argminFcn(lst, function (arrow) {
+            var closest_arrow = indexminFcn(lst, function (arrow) {
                 // return minimal distance to best arrow
-                return min(distances(arrow));
+                return min(distances(vec, arrow.lvector));
             });
 
             // no arrow at all
@@ -204,7 +222,7 @@ Window {
             var arrow = lst[closest_arrow];
 
             // distances to that arrow
-            var dst = distances(arrow);
+            var dst = distances(vec, arrow.lvector);
 
             // the closest point is too far, doing nothing
             if(min(dst) > threshold) {
@@ -224,6 +242,8 @@ Window {
             console.log(selected, type, lastPointFrom, lastPointTo);
         }
 
+        property var lst: arSceneObject.lst
+
         onMovedOnActivity: {
             // do nothing if nothing is selected
             if(selected == -1) return;
@@ -232,17 +252,64 @@ Window {
             var vec = Qt.vector3d(x_mm, y_mm, z_mm);
 
             // LocalizedVector instance to change
-            var vector = arSceneObject.lst[selected].lvector;
+            var vector = lst[selected].lvector;
+
+            // return minimal distance to start/end of best arrow
+            function minFromTo(idx) {
+                var vect = lst[idx].lvector;
+                var dist = distances(vec, vect);
+                return min([dist[0], dist[1]]);
+            }
+
+            // closest arrow point for all but current
+            var closest_arrow = argminFcn(range(lst.length).filter(function(idx) {return idx !== selected}), minFromTo);
+
+            var snap = 0; // 0 nothing 1 to start 2 to end
+
+            if(closest_arrow >= 0 && type != 2) {
+                if(minFromTo(closest_arrow) <= 10)
+                {
+                    var dst = distances(vec, lst[closest_arrow].lvector)
+                    var dpoint = 0;
+                    if(dst[0] < dst[1]) // snap to beginning
+                    {
+                        console.log('Snap to beginning of ', closest_arrow)
+                        snap = 1;
+                    }
+                    else {
+                        console.log('Snap to end of ', closest_arrow)
+                        snap = 2;
+                    }
+                }
+            }
+
+            console.log('Moving', selected)
 
             // moving FROM
-            if(type == 0)
+            if(type == 0 && vector.editable)
             {
-                vector.from = vec;
+                if(snap == 0) {
+                    vector.from = vec;
+                }
+                else if(snap == 1) {
+                    vector.from = Qt.binding(function() { return lst[closest_arrow].lvector.from })
+                }
+                else if(snap == 2) {
+                    vector.from = Qt.binding(function() { return lst[closest_arrow].lvector.to })
+                }
             }
             // moving TO
-            else if(type == 1)
+            else if(type == 1 && vector.editable)
             {
-                vector.to = vec;
+                if(snap == 0) {
+                    vector.to = vec;
+                }
+                if(snap == 1) {
+                    vector.to = Qt.binding(function() { return lst[closest_arrow].lvector.from })
+                }
+                else if(snap == 2) {
+                    vector.to = Qt.binding(function() { return lst[closest_arrow].lvector.to })
+                }
             }
             // moving the whole vector
             else if(type == 2)
