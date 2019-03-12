@@ -31,41 +31,59 @@ Entity {
     // color of the arrow
     property color color: Qt.rgba( 1, 1, 0, 1.0 )
 
-    // render
-    components: [
-        // @disable-check M300
-        Transform {
-            // do two rotations at the same time (around Y')
-            rotation: fromAxisAndAngle(Qt.vector3d(
-                                           -Math.sin(yaw_rad),
-                                           Math.cos(yaw_rad),
-                                           0),
-                                       roll_deg)
+    function scaleColor(c, howMuch) {
+        return Qt.rgba(c.r * howMuch, c.g * howMuch, c.b * howMuch, c.a);
+    }
 
-            // scale and visible implementation
-            scale3D: visible ? Qt.vector3d(arrow.scale, arrow.scale, vector.length() / 5) :
-                               Qt.vector3d(0, 0, 0)
+    ARText {
+        position: lvector.from
+        text: "A"
+        color: arrow.color
+    }
 
-            // translate to 'from'
-            translation: lvector.from
-        },
+    ARText {
+        position: lvector.to
+        text: "B"
+        color: arrow.color
+    }
 
-        PhongMaterial {
-            // material for the arrow
-            id: mat1
+    Entity {
+        // render
+        components: [
+            // @disable-check M300
+            Transform {
+                // do two rotations at the same time (around Y')
+                rotation: fromAxisAndAngle(Qt.vector3d(
+                                               -Math.sin(yaw_rad),
+                                               Math.cos(yaw_rad),
+                                               0),
+                                           roll_deg)
 
-            // react to external light
-            shininess: 1.0
+                // scale and visible implementation
+                scale3D: visible ? Qt.vector3d(arrow.scale, arrow.scale, vector.length() / 5) :
+                                   Qt.vector3d(0, 0, 0)
 
-            // color implementation
-            ambient: arrow.color
-        },
+                // translate to 'from'
+                translation: lvector.from
+            },
 
-        Mesh {
-            // points to +z, depth [0,5], width=height=[-0.5, 0.5]
-            source: "/assets/arrow.obj"
-        }
-    ]
+            PhongMaterial {
+                // material for the arrow
+                id: mat1
+
+                // react to external light
+                shininess: 1.0
+
+                // color implementation
+                ambient: scaleColor(arrow.color, lvector.colorScale)
+            },
+
+            Mesh {
+                // points to +z, depth [0,5], width=height=[-0.5, 0.5]
+                source: "/assets/arrow.obj"
+            }
+        ]
+    }
 
     //Component.onCompleted: logger.log(lvector + " " + scale + " " + vector + " " + yaw_rad + " " + roll_deg)
 }

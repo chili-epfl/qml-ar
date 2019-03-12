@@ -264,6 +264,22 @@ Window {
             return checkNoLoop(lst[starting].lvector.snappedTo, never_see);
         }
 
+        function recomputeDepth() {
+            var i = 0;
+            while(i < lst.length) {
+                lst[i].lvector.depth = depth(i);
+                i += 1;
+            }
+        }
+
+        // on how many vectors does this one depend?
+        function depth(starting) {
+            if(lst[starting].lvector.snappedTo === -1) {
+                return 0;
+            }
+            return 1 + depth(lst[starting].lvector.snappedTo);
+        }
+
         onMovedOnActivity: {
             // do nothing if nothing is selected
             if(selected == -1) return;
@@ -304,6 +320,12 @@ Window {
                             snap = 2;
                         }
                     }
+                    else {
+                        closest_arrow = -1;
+                    }
+                }
+                else {
+                    closest_arrow = -1;
                 }
 
                 // 0 -- no snap, 1 -- to beginning, 2 -- to end
@@ -320,32 +342,32 @@ Window {
             {
                 if(scl.snap === 0) {
                     vector.from = vec;
-                    vector.snappedTo = -1;
                 }
                 else if(scl.snap === 1) {
                     vector.from = Qt.binding(function() { return lst[scl.closest_arrow].lvector.from })
-                    vector.snappedTo = scl.closest_arrow;
+
                 }
                 else if(scl.snap === 2) {
                     vector.from = Qt.binding(function() { return lst[scl.closest_arrow].lvector.to })
-                    vector.snappedTo = scl.closest_arrow;
                 }
+                vector.snappedTo = scl.closest_arrow;
+                recomputeDepth();
             }
             // moving TO
             else if(type == 1 && vector.editable)
             {
                 if(scl.snap === 0) {
                     vector.to = vec;
-                    vector.snappedTo = -1;
                 }
                 if(scl.snap === 1) {
                     vector.to = Qt.binding(function() { return lst[scl.closest_arrow].lvector.from })
-                    vector.snappedTo = scl.closest_arrow;
                 }
                 else if(scl.snap === 2) {
                     vector.to = Qt.binding(function() { return lst[scl.closest_arrow].lvector.to })
-                    vector.snappedTo = scl.closest_arrow;
                 }
+
+                vector.snappedTo = scl.closest_arrow;
+                recomputeDepth();
             }
             // moving the whole vector
             else if(type == 2)
@@ -360,20 +382,18 @@ Window {
                 scl = snapTo(from_new);
                 console.log(from_new, scl.snap, scl.closest_arrow)
                 if(scl.snap === 1) {
-                    console.log("FromFrom")
                     // mapping my from to other from
                     vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from})
                     vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from.plus(delta);})
-                    vector.snappedTo = scl.closest_arrow;
-                    return;
                 }
                 else if(scl.snap === 2) {
                     // mapping my from to other to
                     vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to})
                     vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to.plus(delta)})
-                    vector.snappedTo = scl.closest_arrow;
-                    return;
                 }
+                vector.snappedTo = scl.closest_arrow;
+                recomputeDepth();
+                if(scl.snap) { return };
 
                 // trying to snap my to to something
                 scl = snapTo(to_new);
@@ -381,20 +401,19 @@ Window {
                     // mapping my to to other from
                     vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from.minus(delta)})
                     vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from;})
-                    vector.snappedTo = scl.closest_arrow;
-                    return;
                 }
                 else if(scl.snap === 2) {
                     // mapping my to to other to
                     vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to.minus(delta)})
                     vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to})
-                    vector.snappedTo = scl.closest_arrow;
-                    return;
                 }
+                vector.snappedTo = scl.closest_arrow;
+                recomputeDepth();
+
+                if(scl.snap) { return };
 
                 vector.from = vec.minus(m_to_to);
                 vector.to   = vec.plus(m_to_to);
-                vector.snappedTo = -1;
             }
         }
 

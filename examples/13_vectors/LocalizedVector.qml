@@ -35,4 +35,10 @@ Item {
 
     // snapped to which?
     property int snappedTo: -1
+
+    // on how many does this depend?
+    property int depth: 0
+
+    // how much scale the color?
+    property real colorScale: 1. / (0.3 * Math.min(depth, 5) + 1)
 }

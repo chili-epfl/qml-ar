@@ -7,5 +7,6 @@
         <file>ARArrow.qml</file>
         <file>PolygonVertices.qml</file>
         <file>Polygon.qml</file>
+        <file>ARText.qml</file>
     </qresource>
 </RCC>
