@@ -32,4 +32,7 @@ Item {
 
     // localized vector as string
     property string text: vec2str(from) + "->" + vec2str(to)
+
+    // snapped to which?
+    property int snappedTo: -1
 }

@@ -178,8 +178,13 @@ Window {
             return Array.apply(null, new Array(n)).map(function (_, i) {return i;})
         }
 
+        onReleasedOnActivity: {
+            mouseHover = false;
+            selected = -1;
+        }
+
         // do an action when clicked on the plane with the markers
-        onClickedOnActivity: {
+        onPressedOnActivity: {
             // if nothing is selected, select the closest point
             if(selected == -1)
             {
@@ -244,6 +249,21 @@ Window {
 
         property var lst: arSceneObject.lst
 
+        // check that starting from given vector, given vector never appears
+        function checkNoLoop(starting, never_see) {
+            if(starting === never_see) {
+                // current is never_see -> a trivial loop
+                return false;
+            }
+            if(lst[starting].lvector.snappedTo === -1) {
+                // current has no descendants -> OK
+                return true;
+            }
+
+            // recursive case
+            return checkNoLoop(lst[starting].lvector.snappedTo, never_see);
+        }
+
         onMovedOnActivity: {
             // do nothing if nothing is selected
             if(selected == -1) return;
@@ -254,69 +274,127 @@ Window {
             // LocalizedVector instance to change
             var vector = lst[selected].lvector;
 
-            // return minimal distance to start/end of best arrow
-            function minFromTo(idx) {
-                var vect = lst[idx].lvector;
-                var dist = distances(vec, vect);
-                return min([dist[0], dist[1]]);
-            }
+            // to which part to snap the vector??
+            function snapTo(vec) {
 
-            // closest arrow point for all but current
-            var closest_arrow = argminFcn(range(lst.length).filter(function(idx) {return idx !== selected}), minFromTo);
+                // return minimal distance to start/end of best arrow
+                function minFromTo(idx) {
+                    var vect = lst[idx].lvector;
+                    var dist = distances(vec, vect);
+                    return min([dist[0], dist[1]]);
+                }
 
-            var snap = 0; // 0 nothing 1 to start 2 to end
+                // closest arrow point for all but current
+                var closest_arrow = argminFcn(range(lst.length).filter(function(idx) {return checkNoLoop(idx, selected)}), minFromTo);
+                var snap = 0; // 0 nothing 1 to start 2 to end
 
-            if(closest_arrow >= 0 && type != 2) {
-                if(minFromTo(closest_arrow) <= 10)
-                {
-                    var dst = distances(vec, lst[closest_arrow].lvector)
-                    var dpoint = 0;
-                    if(dst[0] < dst[1]) // snap to beginning
+                if(closest_arrow !== null && closest_arrow >= 0) {
+
+                    if(minFromTo(closest_arrow) <= 10)
                     {
-                        console.log('Snap to beginning of ', closest_arrow)
-                        snap = 1;
-                    }
-                    else {
-                        console.log('Snap to end of ', closest_arrow)
-                        snap = 2;
+                        var dst = distances(vec, lst[closest_arrow].lvector)
+                        var dpoint = 0;
+                        if(dst[0] < dst[1]) // snap to beginning
+                        {
+                            console.log('Snap to beginning of ', closest_arrow)
+                            snap = 1;
+                        }
+                        else {
+                            console.log('Snap to end of ', closest_arrow)
+                            snap = 2;
+                        }
                     }
                 }
+
+                // 0 -- no snap, 1 -- to beginning, 2 -- to end
+                // closest arrow -- ID of arrow to snap to
+                return {snap: snap, closest_arrow: closest_arrow};
             }
+
+            var scl = snapTo(vec);
 
             console.log('Moving', selected)
 
             // moving FROM
             if(type == 0 && vector.editable)
             {
-                if(snap == 0) {
+                if(scl.snap === 0) {
                     vector.from = vec;
+                    vector.snappedTo = -1;
                 }
-                else if(snap == 1) {
-                    vector.from = Qt.binding(function() { return lst[closest_arrow].lvector.from })
+                else if(scl.snap === 1) {
+                    vector.from = Qt.binding(function() { return lst[scl.closest_arrow].lvector.from })
+                    vector.snappedTo = scl.closest_arrow;
                 }
-                else if(snap == 2) {
-                    vector.from = Qt.binding(function() { return lst[closest_arrow].lvector.to })
+                else if(scl.snap === 2) {
+                    vector.from = Qt.binding(function() { return lst[scl.closest_arrow].lvector.to })
+                    vector.snappedTo = scl.closest_arrow;
                 }
             }
             // moving TO
             else if(type == 1 && vector.editable)
             {
-                if(snap == 0) {
+                if(scl.snap === 0) {
                     vector.to = vec;
+                    vector.snappedTo = -1;
                 }
-                if(snap == 1) {
-                    vector.to = Qt.binding(function() { return lst[closest_arrow].lvector.from })
+                if(scl.snap === 1) {
+                    vector.to = Qt.binding(function() { return lst[scl.closest_arrow].lvector.from })
+                    vector.snappedTo = scl.closest_arrow;
                 }
-                else if(snap == 2) {
-                    vector.to = Qt.binding(function() { return lst[closest_arrow].lvector.to })
+                else if(scl.snap === 2) {
+                    vector.to = Qt.binding(function() { return lst[scl.closest_arrow].lvector.to })
+                    vector.snappedTo = scl.closest_arrow;
                 }
             }
             // moving the whole vector
             else if(type == 2)
             {
-                var m_to_to = lastPointTo.minus(lastPointFrom).times(0.5)
+                var delta = lastPointTo.minus(lastPointFrom);
+                var m_to_to = delta.times(0.5)
+
+                var from_new = vec.minus(m_to_to);
+                var to_new   = vec.plus(m_to_to);
+
+                // trying to snap my from to something
+                scl = snapTo(from_new);
+                console.log(from_new, scl.snap, scl.closest_arrow)
+                if(scl.snap === 1) {
+                    console.log("FromFrom")
+                    // mapping my from to other from
+                    vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from})
+                    vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from.plus(delta);})
+                    vector.snappedTo = scl.closest_arrow;
+                    return;
+                }
+                else if(scl.snap === 2) {
+                    // mapping my from to other to
+                    vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to})
+                    vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to.plus(delta)})
+                    vector.snappedTo = scl.closest_arrow;
+                    return;
+                }
+
+                // trying to snap my to to something
+                scl = snapTo(to_new);
+                if(scl.snap === 1) {
+                    // mapping my to to other from
+                    vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from.minus(delta)})
+                    vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from;})
+                    vector.snappedTo = scl.closest_arrow;
+                    return;
+                }
+                else if(scl.snap === 2) {
+                    // mapping my to to other to
+                    vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to.minus(delta)})
+                    vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to})
+                    vector.snappedTo = scl.closest_arrow;
+                    return;
+                }
+
                 vector.from = vec.minus(m_to_to);
                 vector.to   = vec.plus(m_to_to);
+                vector.snappedTo = -1;
             }
         }
 
