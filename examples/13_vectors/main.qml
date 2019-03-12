@@ -280,6 +280,14 @@ Window {
             return 1 + depth(lst[starting].lvector.snappedTo);
         }
 
+        property var letters: "ABCDEFGHIJKL";
+        property int lett: 0
+        function nextLetter() {
+            var l = letters[lett];
+            lett += 1;
+            return l;
+        }
+
         onMovedOnActivity: {
             // do nothing if nothing is selected
             if(selected == -1) return;
@@ -346,9 +354,12 @@ Window {
                 else if(scl.snap === 1) {
                     vector.from = Qt.binding(function() { return lst[scl.closest_arrow].lvector.from })
 
+                    // TODO: parse fromText
+                    vector.fromText = lst[scl.closest_arrow].lvector.fromText;
                 }
                 else if(scl.snap === 2) {
                     vector.from = Qt.binding(function() { return lst[scl.closest_arrow].lvector.to })
+                    vector.fromText = lst[scl.closest_arrow].lvector.toText;
                 }
                 vector.snappedTo = scl.closest_arrow;
                 recomputeDepth();

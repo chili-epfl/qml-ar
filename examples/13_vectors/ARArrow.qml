@@ -35,16 +35,19 @@ Entity {
         return Qt.rgba(c.r * howMuch, c.g * howMuch, c.b * howMuch, c.a);
     }
 
+    // start/end text
     ARText {
         position: lvector.from
-        text: "A"
+        text: lvector.fromText
         color: arrow.color
+        visible: arrow.visible
     }
 
     ARText {
         position: lvector.to
-        text: "B"
+        text: lvector.toText
         color: arrow.color
+        visible: arrow.visible
     }
 
     Entity {
