@@ -33,19 +33,23 @@ Item {
     // localized vector as string
     property string text: vec2str(from) + "->" + vec2str(to)
 
-    // TO snapped to which?
+    // TO snapped to which vector?
     property int snappedTo: -1
 
-    // TODO: add snappedFrom
+    // FROM snapped to which vector?
     property int snappedFrom: -1
 
     // on how many does this depend?
     property int depth: 0
 
     // how much scale the color?
-    property real colorScale: 1. / (0.3 * Math.min(depth, 5) + 1)
+    property real colorScale: 1. / (0.5 * Math.min(depth - 1, 5) + 1)
 
     // starting text
     property string fromText: "Start"
     property string toText: "End"
+
+    // starting text when not snapped
+    property string fromTextOrig: "Start"
+    property string toTextOrig: "End"
 }

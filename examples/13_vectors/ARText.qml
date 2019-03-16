@@ -17,7 +17,7 @@ Entity {
     property vector3d position: Qt.vector3d(0, 0, 0)
 
     // scaling factor (thickness in mm)
-    property real scale: 10
+    property real scale: 20
 
     // rotation (I) around Z
     property real yaw_rad: 0

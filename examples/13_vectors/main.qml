@@ -15,8 +15,8 @@ import QtQuick.Controls 2.3
 Window {
     // some window parameters
     visible: true
-    height: 500
-    width: 500
+    height: 800
+    width: 800
     id: root
 
     // row with controls
@@ -28,7 +28,7 @@ Window {
         Button {
             width: 50
             text: "Add"
-            onClicked: addArrow(Qt.rgba(1, 0, 0, 1))
+            onClicked: addArrow(Qt.rgba(1, 0, 0, 1), Qt.vector3d(100, 0, 0), Qt.vector3d(100, 100, 0), true)
             background: Rectangle {color: "red"}
         }
 
@@ -36,7 +36,7 @@ Window {
         Button {
             width: 50
             text: "Add"
-            onClicked: addArrow(Qt.rgba(0, 1, 0, 1))
+            onClicked: addArrow(Qt.rgba(0, 1, 0, 1), Qt.vector3d(50, 0, 0), Qt.vector3d(50, 50, 0), true)
             background: Rectangle {color: "green"}
         }
 
@@ -70,11 +70,34 @@ Window {
         }
     }
 
+    // list of letters
+    property string letters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // current letter
+    property int lett: 0
+
+    // next letter
+    function nextLetter() {
+        var l = letters[lett];
+        lett += 1;
+        lett %= letters.length;
+        return l;
+    }
+
     /** Add an arrow to the list */
-    function addArrow(color) {
+    function addArrow(color, from, to, editable) {
         var obj = Qt.createComponent("LocalizedVector.qml");
-        obj = obj.createObject(root, {'from': Qt.vector3d(100, 0, 0),
-                         'to': Qt.vector3d(100, 100, 0), 'editable': true});
+
+        // letters for vector
+        var lett1 = nextLetter();
+        var lett2 = nextLetter();
+        obj = obj.createObject(root, {'from': from,
+                         'to': to, 'editable': editable,
+                               'fromText': lett1,
+                               'toText': lett2,
+                               'fromTextOrig': lett1,
+                               'toTextOrig': lett2,
+                               });
         var arrow = Qt.createComponent("ARArrow.qml");
         arrow = arrow.createObject(arComponent.arSceneObject, {'lvector': obj,
                            'color': color})
@@ -128,6 +151,20 @@ Window {
         return imin;
     }
 
+
+    Timer {
+        interval: 500
+        running: true
+        repeat: true
+        onTriggered: {
+            if(arComponent.lst) {
+                addArrow(Qt.rgba(1,0,0,1), Qt.vector3d(100, 60, 0), Qt.vector3d(80, 90, 0), false);
+                addArrow(Qt.rgba(0,1,0,1), Qt.vector3d(100, 30, 0), Qt.vector3d(40, 50, 0), false)
+                running = false;
+            }
+        }
+    }
+
     // crearing AR component
     ARComponent {
         id: arComponent
@@ -139,7 +176,7 @@ Window {
         disable_menu: true
 
         // setting width
-        width: 500
+        width: 800
 
         // the selected item to change in the lst array
         property int selected: -1
@@ -247,23 +284,28 @@ Window {
             console.log(selected, type, lastPointFrom, lastPointTo);
         }
 
+        // list with vector arrows
         property var lst: arSceneObject.lst
 
         // check that starting from given vector, given vector never appears
         function checkNoLoop(starting, never_see) {
+            if(starting === -1) {
+                return true;
+            }
+
             if(starting === never_see) {
                 // current is never_see -> a trivial loop
                 return false;
             }
-            if(lst[starting].lvector.snappedTo === -1) {
-                // current has no descendants -> OK
-                return true;
-            }
+
+            var toOk = checkNoLoop(lst[starting].lvector.snappedTo, never_see);
+            var fromOk = checkNoLoop(lst[starting].lvector.snappedFrom, never_see);
 
             // recursive case
-            return checkNoLoop(lst[starting].lvector.snappedTo, never_see);
+            return toOk && fromOk;
         }
 
+        // update depth for all vectors to update color
         function recomputeDepth() {
             var i = 0;
             while(i < lst.length) {
@@ -273,19 +315,15 @@ Window {
         }
 
         // on how many vectors does this one depend?
+        // length of maximal chain
         function depth(starting) {
-            if(lst[starting].lvector.snappedTo === -1) {
+            if(starting === -1) {
                 return 0;
             }
-            return 1 + depth(lst[starting].lvector.snappedTo);
-        }
 
-        property var letters: "ABCDEFGHIJKL";
-        property int lett: 0
-        function nextLetter() {
-            var l = letters[lett];
-            lett += 1;
-            return l;
+            //1 + max(left, right)
+            return 1 + Math.max(depth(lst[starting].lvector.snappedTo),
+                                depth(lst[starting].lvector.snappedFrom));
         }
 
         onMovedOnActivity: {
@@ -350,18 +388,17 @@ Window {
             {
                 if(scl.snap === 0) {
                     vector.from = vec;
+                    vector.fromText = vector.fromTextOrig;
                 }
                 else if(scl.snap === 1) {
                     vector.from = Qt.binding(function() { return lst[scl.closest_arrow].lvector.from })
-
-                    // TODO: parse fromText
-                    vector.fromText = lst[scl.closest_arrow].lvector.fromText;
+                    vector.fromText = Qt.binding(function() { return lst[scl.closest_arrow].lvector.fromText; });
                 }
                 else if(scl.snap === 2) {
                     vector.from = Qt.binding(function() { return lst[scl.closest_arrow].lvector.to })
-                    vector.fromText = lst[scl.closest_arrow].lvector.toText;
+                    vector.fromText = Qt.binding(function() { return lst[scl.closest_arrow].lvector.toText; });
                 }
-                vector.snappedTo = scl.closest_arrow;
+                vector.snappedFrom = scl.closest_arrow;
                 recomputeDepth();
             }
             // moving TO
@@ -369,12 +406,15 @@ Window {
             {
                 if(scl.snap === 0) {
                     vector.to = vec;
+                    vector.toText = vector.toTextOrig;
                 }
                 if(scl.snap === 1) {
-                    vector.to = Qt.binding(function() { return lst[scl.closest_arrow].lvector.from })
+                    vector.to = Qt.binding(function() { return lst[scl.closest_arrow].lvector.from });
+                    vector.toText = Qt.binding(function() { return lst[scl.closest_arrow].lvector.fromText; });
                 }
                 else if(scl.snap === 2) {
                     vector.to = Qt.binding(function() { return lst[scl.closest_arrow].lvector.to })
+                    vector.toText = Qt.binding(function() { return lst[scl.closest_arrow].lvector.toText; });
                 }
 
                 vector.snappedTo = scl.closest_arrow;
@@ -396,13 +436,16 @@ Window {
                     // mapping my from to other from
                     vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from})
                     vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from.plus(delta);})
+                    vector.fromText = Qt.binding(function() { return lst[scl.closest_arrow].lvector.fromText; });
                 }
                 else if(scl.snap === 2) {
                     // mapping my from to other to
                     vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to})
                     vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to.plus(delta)})
+                    vector.fromText = Qt.binding(function() { return lst[scl.closest_arrow].lvector.toText; });
                 }
                 vector.snappedTo = scl.closest_arrow;
+                vector.snappedFrom = scl.closest_arrow;
                 recomputeDepth();
                 if(scl.snap) { return };
 
@@ -412,24 +455,30 @@ Window {
                     // mapping my to to other from
                     vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from.minus(delta)})
                     vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.from;})
+                    vector.toText = Qt.binding(function() { return lst[scl.closest_arrow].lvector.fromText; });
                 }
                 else if(scl.snap === 2) {
                     // mapping my to to other to
                     vector.from = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to.minus(delta)})
                     vector.to = Qt.binding(function() {return lst[scl.closest_arrow].lvector.to})
+                    vector.toText = Qt.binding(function() { return lst[scl.closest_arrow].lvector.toText; });
                 }
                 vector.snappedTo = scl.closest_arrow;
+                vector.snappedFrom = scl.closest_arrow;
                 recomputeDepth();
 
                 if(scl.snap) { return };
 
                 vector.from = vec.minus(m_to_to);
                 vector.to   = vec.plus(m_to_to);
+
+                vector.fromText = vector.fromTextOrig;
+                vector.toText = vector.toTextOrig;
             }
         }
 
         // using the image instead of camera
-        init_type: AR.INIT_IMAGE
+        //init_type: AR.INIT_IMAGE
         image_filename: "://assets/ar_demo_sheet.png"
     }
 }
