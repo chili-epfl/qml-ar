@@ -15,8 +15,11 @@ import QtQuick.Controls 2.3
 Window {
     // some window parameters
     visible: true
-    height: 800
-    width: 800
+
+    property int wsize: Qt.platform.os == 'android' ? 1500 : 500
+
+    height: wsize
+    width: wsize
     id: root
 
     // row with controls
@@ -26,7 +29,8 @@ Window {
 
         // Add a red vector
         Button {
-            width: 50
+            width: Qt.platform.os == 'android' ? 250 : 80
+            height: 100
             text: "Add"
             onClicked: addArrow(Qt.rgba(1, 0, 0, 1), Qt.vector3d(100, 0, 0), Qt.vector3d(100, 100, 0), true)
             background: Rectangle {color: "red"}
@@ -34,7 +38,8 @@ Window {
 
         // Add a green vector
         Button {
-            width: 50
+            width: Qt.platform.os == 'android' ? 250 : 80
+            height: 100
             text: "Add"
             onClicked: addArrow(Qt.rgba(0, 1, 0, 1), Qt.vector3d(50, 0, 0), Qt.vector3d(50, 50, 0), true)
             background: Rectangle {color: "green"}
@@ -42,17 +47,19 @@ Window {
 
         // HowTo
         Text {
-            width: 350
+            width: Qt.platform.os == 'android' ? 400 : 250
+            height: 100
             wrapMode: Text.WrapAnywhere
             fontSizeMode: Text.Fit
-            minimumPixelSize: 10
-            font.pixelSize: 20
+            minimumPixelSize: 20
+            font.pixelSize: 30
             text: "Click in the middle of a vector to move it, click at the beginning or end to edit that point"
         }
 
         // Clear vectors
         Button {
-            width: 50
+            width: Qt.platform.os == 'android' ? 250 : 80
+            height: 100
             text: "Clear"
             onClicked: {
                 // deselecting
@@ -151,7 +158,7 @@ Window {
         return imin;
     }
 
-
+    // initializer
     Timer {
         interval: 500
         running: true
@@ -176,7 +183,7 @@ Window {
         disable_menu: true
 
         // setting width
-        width: 800
+        width: wsize
 
         // the selected item to change in the lst array
         property int selected: -1
@@ -478,7 +485,7 @@ Window {
         }
 
         // using the image instead of camera
-        //init_type: AR.INIT_IMAGE
+        init_type: AR.INIT_IMAGE
         image_filename: "://assets/ar_demo_sheet.png"
     }
 }
