@@ -130,6 +130,9 @@ void QtCameraBackend::handleFinished()
     // saving to buffer
     processQImage(watcher.result());
 
+    static int i = 0;
+    buf.save(QString("/storage/emulated/0/qimage%1.png").arg(++i));
+
     // sending image
     emit imageAvailable(PipelineContainer<QImage>
                         (buf.copy(), image_info.checkpointed("Camera")));
