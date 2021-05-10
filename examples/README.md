@@ -18,6 +18,7 @@ Note that you need to print the `ar_demo_sheet.pdf` on A4
 12. `11_draw`: Draw spheres on the scene with your finger
 13. `12_orange`: This project renders a Chest and a cuboid using qml-ar, using ORANGE sheet
 14. `13_vectors`: Draw vectors and move them on a virtual canvas
+14. `13_pose`: The project shows the pose of the device w.r.t. the markers.
 14. `98_test_image`: This project is similar to `02_image`, but it exits right after it can detect markers. Useful for testing the library after installation.
 15. `99_cpp_only`: This project shows how to use QML-AR w/o QML (using only Qt GUI).
 16. `97_detect_dots`: This project prints the list of detected dots
