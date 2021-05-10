@@ -158,7 +158,9 @@ linux:!android {
     PKGCONFIG += opencv
 }
 
+# environment variables
 USE_GRAPHICBUFFER=$$(USE_GRAPHICBUFFER)
+PRINT_SHADER_INFO=$$(PRINT_SHADER_INFO)
 
 # OpenCV for Android library
 android {
