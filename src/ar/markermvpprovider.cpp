@@ -11,6 +11,7 @@
 #include "posecamerapnp.h"
 #include <QCameraLens>
 #include "timelogger.h"
+#include <QDebug>
 
 MarkerMVPProvider::MarkerMVPProvider(PerspectiveCamera* c) : MVPProvider()
 {
@@ -85,6 +86,10 @@ void MarkerMVPProvider::recompute(PipelineContainer<MarkerStorage> storage)
     // obtain Projection matrix
     p_matrix = getP();
 
+#ifdef DEBUG_SHADER
+    qDebug() << "P matrix" << p_matrix;
+#endif
+
     // if P matrix is invalid
     if(p_matrix.isIdentity())
     {
@@ -96,8 +101,16 @@ void MarkerMVPProvider::recompute(PipelineContainer<MarkerStorage> storage)
     // obtain ModelView matrix
     mv_matrix = getMV(storage);
 
+#ifdef DEBUG_SHADER
+    qDebug() << "MV matrix" << mv_matrix;
+#endif
+
     // calculate new MVP matrix
     QMatrix4x4 new_mvp_matrix = p_matrix * mv_matrix;
+
+#ifdef DEBUG_SHADER
+    qDebug() << "MVP matrix" << new_mvp_matrix;
+#endif
 
     // notify listeners
     setMVPMatrix(new_mvp_matrix);

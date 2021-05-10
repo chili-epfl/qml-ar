@@ -55,6 +55,9 @@ void CalibratedCamera::setResolution(int new_width, int new_height)
     Q_ASSERT(new_height != 0);
     image_w = new_width;
     image_h = new_height;
+#ifdef DEBUG_SHADER
+    qDebug() << "camera h=" << image_h << " w=" << image_w;
+#endif
 }
 
 int CalibratedCamera::width()

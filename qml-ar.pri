@@ -250,6 +250,15 @@ android {
     DEFINES += ARM_NEON_ENABLE
 }
 
+# shader info
+equals(PRINT_SHADER_INFO, "1") {
+    message("Printing shader information because PRINT_SHADER_INFO=1");
+    DEFINES += "DEBUG_SHADER=1";
+}
+else {
+    message("Not printing shader information because PRINT_SHADER_INFO!=1");
+}
+
 # YUV2RGB library
 SOURCES += yuv2rgb/yuv2rgb.cpp
 HEADERS += yuv2rgb/yuv2rgb.h

@@ -26,6 +26,7 @@
 #include "timelogger.h"
 
 // Qt includes
+#include <QDebug>
 #include <QImage>
 #include <QOpenGLContext>
 
@@ -319,7 +320,9 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
         clientBuf = eglGetNativeClientBufferANDROID(graphicBuf); EGL_CHECK_ERROR();
 #endif
 
+#ifdef DEBUG_SHADER
         qDebug() << "GraphicBuf" << graphicBuf << "clientBuf" << clientBuf;
+#endif
 
         // obtaining the EGL display
         disp = eglGetDisplay(EGL_DEFAULT_DISPLAY); EGL_CHECK_ERROR();
@@ -426,6 +429,10 @@ QVideoFrame NV21VideoFilterRunnable::run(QVideoFrame *inputFrame)
 
     // wrapping the buffer inside a QImage
     image = QImage(readBuffer, outputWidth, outputHeight, QImage::Format_RGBA8888);
+
+#ifdef DEBUG_SHADER
+    qDebug() << "SHADER " << "outputWidth=" << outputWidth << " outputHeight=" << outputHeight;
+#endif
 
     // converting the image to Grayscale
     image = image.convertToFormat(QImage::Format_Grayscale8);

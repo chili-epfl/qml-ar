@@ -9,6 +9,7 @@
 
 #include "perspectivecamera.h"
 #include <QCameraLens>
+#include <QDebug>
 
 PerspectiveCamera::PerspectiveCamera(CalibratedCamera *camera) : CalibratedCamera(camera)
 {
@@ -40,5 +41,8 @@ QMatrix4x4 PerspectiveCamera::getPerspectiveMatrix(double n, double f)
 
     res(2, 2) = (f + n) / (f - n);
     res(2, 3) = -2 * n * f / (f - n);
+#ifdef DEBUG_SHADER
+    qDebug() << "fn" << f << n << camera_matrix;
+#endif
     return res;
 }
