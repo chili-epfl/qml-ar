@@ -255,7 +255,7 @@ android {
 # shader info
 equals(PRINT_SHADER_INFO, "1") {
     message("Printing shader information because PRINT_SHADER_INFO=1");
-    DEFINES += "DEBUG_SHADER=1";
+    DEFINES += "DEBUG_SHADER=1"
 }
 else {
     message("Not printing shader information because PRINT_SHADER_INFO!=1");
