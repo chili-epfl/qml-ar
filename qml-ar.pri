@@ -161,6 +161,7 @@ linux:!android {
 # environment variables
 USE_GRAPHICBUFFER=$$(USE_GRAPHICBUFFER)
 PRINT_SHADER_INFO=$$(PRINT_SHADER_INFO)
+FORCE_CPU=$$(FORCE_CPU)
 
 # OpenCV for Android library
 android {
@@ -196,14 +197,20 @@ android {
 
     # adding libraries for HardwareBuffer
     greaterThan(ANDROID_API, "android-25") {
-        DEFINES += "USENV21FILTER=1"
-        LIBS += -lEGL -lnativewindow -lGLESv3
-        HEADERS += src/imagebackend/nv21videofilter.h \
-                   src/imagebackend/nv21videofilterrunnable.h
-        SOURCES += src/imagebackend/nv21videofilter.cpp \
-                   src/imagebackend/nv21videofilterrunnable.cpp
-        message("Using HardwareBuffer because Android API is >= 26");
-        message("Run $ export ANDROID_NDK_PLATFORM=android-25 (or less) before qmake to disable");
+        equals(FORCE_CPU, "1") {
+            message("HardwareBuffer disabled because FORCE_CPU=1");
+        }
+        else {
+            DEFINES += "USENV21FILTER=1"
+            LIBS += -lEGL -lnativewindow -lGLESv3
+            HEADERS += src/imagebackend/nv21videofilter.h \
+                       src/imagebackend/nv21videofilterrunnable.h
+            SOURCES += src/imagebackend/nv21videofilter.cpp \
+                       src/imagebackend/nv21videofilterrunnable.cpp
+            message("Using HardwareBuffer because Android API is >= 26");
+            message("Run $ export ANDROID_NDK_PLATFORM=android-25 (or less) before qmake to disable");
+            message("Or, set FORCE_CPU=1 to disable");
+        }
     }
 
     # not adding libraries and telling how to enable this just in case
