@@ -1,4 +1,5 @@
 *.pro.user.20
+qrc_ch_epfl_chili_qmlar.cpp
 build*
 *.a
 .ipynb_checkpoints
